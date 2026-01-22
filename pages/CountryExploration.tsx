@@ -1,5 +1,5 @@
 
-import { AlertCircle, ArrowLeft, BrainCircuit, ChevronLeft, ChevronRight, Compass, Globe, HelpCircle, ImageOff, MapPin, Plane, RotateCcw, Trophy, Navigation, Scroll, X, Sparkles } from 'lucide-react';
+import { AlertCircle, ArrowLeft, BrainCircuit, ChevronLeft, ChevronRight, Compass, Globe, HelpCircle, ImageOff, MapPin, Plane, RotateCcw, Trophy, Navigation, Scroll, X } from 'lucide-react';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
-import { getCountryTour, getGeneratedImage, triggerAIImageGeneration } from '../services/geminiService';
+import { getCountryTour, getGeneratedImage } from '../services/geminiService';
 import { TourData } from '../types';
 
 const getCountryCode = (emoji: string) => {
@@ -29,9 +29,6 @@ const PhotoPrint: React.FC<{
   className?: string;
 }> = ({ src, alt, imageKeyword, caption, region, rotation = "rotate-0", className = "" }) => {
   const [currentSrc, setCurrentSrc] = React.useState(src);
-  const [isGenerating, setIsGenerating] = React.useState(false);
-  const [generationProgress, setGenerationProgress] = React.useState(0);
-  const [generationStep, setGenerationStep] = React.useState("");
   const [hasError, setHasError] = React.useState(!src);
 
   React.useEffect(() => {
@@ -42,64 +39,6 @@ const PhotoPrint: React.FC<{
   const handleImgError = () => {
     setHasError(true);
     setCurrentSrc(null);
-  };
-
-  const generationSteps = [
-    { threshold: 10, label: "Initializing Neural Engine..." },
-    { threshold: 25, label: "Analyzing Geographical Context..." },
-    { threshold: 45, label: "Synthesizing Vector Geometry..." },
-    { threshold: 65, label: "Applying Flat Color Palette..." },
-    { threshold: 85, label: "Finalizing Render..." },
-    { threshold: 95, label: "Securing Data Packet..." }
-  ];
-
-  const handleManualGenerate = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!imageKeyword || isGenerating) return;
-    
-    setIsGenerating(true);
-    setGenerationProgress(0);
-    setGenerationStep("Establishing Link...");
-    
-    // Progress Animation Simulation
-    const progressInterval = setInterval(() => {
-      setGenerationProgress(prev => {
-        if (prev >= 98) return prev;
-        const next = prev + (prev < 40 ? 1.5 : prev < 80 ? 0.8 : 0.3);
-        
-        // Update Label
-        const step = [...generationSteps].reverse().find(s => next >= s.threshold);
-        if (step) setGenerationStep(step.label);
-        
-        return next;
-      });
-    }, 150);
-    
-    try {
-      const aiImage = await triggerAIImageGeneration(imageKeyword);
-      if (aiImage) {
-        clearInterval(progressInterval);
-        setGenerationProgress(100);
-        setGenerationStep("Visual Materialized");
-        setTimeout(() => {
-          setCurrentSrc(aiImage);
-          setHasError(false);
-          setIsGenerating(false);
-        }, 500);
-      }
-    } catch (e: any) {
-      clearInterval(progressInterval);
-      console.error("Manual AI Generation failed:", e);
-      // Extract the actual error message from the service
-      const errorMsg = e.message || "Unknown Failure";
-      setGenerationStep(errorMsg.includes('429') ? "Quota Exceeded" : errorMsg);
-      
-      // Keep the error visible for a bit longer so the user can read it
-      setTimeout(() => {
-        setIsGenerating(false);
-      }, 4000);
-    }
   };
 
   return (
@@ -115,74 +54,14 @@ const PhotoPrint: React.FC<{
               src={currentSrc} 
               alt={alt} 
               onError={handleImgError}
-              className={`w-full h-full object-cover brightness-[1.05] contrast-[1.05] transition-all duration-1000 ${isGenerating ? 'opacity-30 blur-sm' : 'opacity-100'}`} 
+              className="w-full h-full object-cover brightness-[1.05] contrast-[1.05] transition-all duration-1000" 
             />
           ) : (
             <div className="flex flex-col items-center justify-center text-white/20 w-full h-full bg-[#0A0A0A] p-6 text-center">
-              {isGenerating ? (
-                <div className="w-full max-w-xs flex flex-col items-center gap-6 animate-in fade-in duration-500">
-                   {/* Progress Visual */}
-                   <div className="relative w-20 h-20">
-                      <svg className="w-full h-full -rotate-90 transform">
-                        <circle
-                          cx="40"
-                          cy="40"
-                          r="36"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          fill="transparent"
-                          className="text-white/5"
-                        />
-                        <circle
-                          cx="40"
-                          cy="40"
-                          r="36"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          fill="transparent"
-                          strokeDasharray={226}
-                          strokeDashoffset={226 - (226 * generationProgress) / 100}
-                          className="text-sky transition-all duration-500 ease-out drop-shadow-glow-sky"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                         <Sparkles className="text-sky-light animate-pulse" size={24} />
-                      </div>
-                   </div>
-
-                   <div className="space-y-3 w-full">
-                      <div className="flex justify-between items-end mb-1">
-                        <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.3em] animate-pulse">
-                          {generationStep}
-                        </span>
-                        <span className="text-[12px] font-display font-black text-white">
-                          {Math.round(generationProgress)}%
-                        </span>
-                      </div>
-                      <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/10">
-                        <div 
-                          className="h-full bg-gradient-to-r from-sky to-sky-light transition-all duration-300 shadow-glow-sky"
-                          style={{ width: `${generationProgress}%` }}
-                        />
-                      </div>
-                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
-                  <ImageOff size={40} strokeWidth={1} className="opacity-40" />
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="text-[10px] font-black tracking-[0.2em] uppercase opacity-40">Visual Data Unreachable</span>
-                    <button 
-                      onClick={handleManualGenerate}
-                      className="group/gen inline-flex items-center gap-2 px-6 py-2 bg-sky/10 hover:bg-sky/20 border border-sky/30 hover:border-sky-light rounded-full transition-all duration-300 transform"
-                    >
-                      <Sparkles size={12} className="text-sky-light group-hover/gen:animate-pulse" />
-                      <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.2em]">Generate Image</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
+                <ImageOff size={40} strokeWidth={1} className="opacity-40" />
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase opacity-40">Image Unavailable</span>
+              </div>
             </div>
           )}
           

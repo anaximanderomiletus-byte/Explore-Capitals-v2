@@ -12,12 +12,6 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   plugins: [react()],
-  define: {
-    // Gemini API key removed for security - AI image generation disabled
-    // To re-enable, use a backend serverless function instead of client-side key
-    'process.env.API_KEY': JSON.stringify(''),
-    'process.env.GEMINI_API_KEY': JSON.stringify('')
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),

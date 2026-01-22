@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.30.0",
     "firebase": "^10.12.4",
     "firebase-admin": "^13.6.0",
     "framer-motion": "^12.23.26",
