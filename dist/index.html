@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#77B6EA" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ExploreCapitals" />
+    
+    <!-- Primary SEO -->
+    <title>ExploreCapitals.com | Master World Geography & Capitals</title>
+    <meta name="description" content="ExploreCapitals is a premium geography education platform offering interactive maps, quizzes, and data to help you master world capitals and national demographics." />
+    <meta name="keywords" content="world capitals, geography games, interactive world map, country database, educational geography, capital city quiz" />
+    <link rel="canonical" href="https://explorecapitals.com/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="manifest" href="./assets/manifest-Bl2P3K4f.json" />
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997"
+     crossorigin="anonymous"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NEFW5WL3V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8NEFW5WL3V');
+    </script>
+
+    <!-- Google Fonts: Inter (Variable) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+              display: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+            },
+            colors: {
+              primary: '#007AFF', // iOS Blue
+              secondary: '#5856D6', // iOS Purple
+              accent: '#34C759', // iOS Green
+              warning: '#FF9500', // iOS Orange
+              error: '#FF3B30', // iOS Red
+              sky: '#00C2FF', // Vibrant Frutiger Sky Blue
+              'sky-light': '#BFE6FF',
+              surface: '#0F172A', // Changed to dark to prevent flashes
+              'surface-dark': '#0F172A', // Deep Midnight
+              text: '#000000',
+              'text-dark': '#FFFFFF',
+              glass: 'rgba(255, 255, 255, 0.7)',
+              'glass-dark': 'rgba(15, 23, 42, 0.7)',
+            },
+            boxShadow: {
+              'premium': '0 8px 32px 0 rgba(0, 122, 255, 0.1)',
+              'premium-hover': '0 12px 48px 0 rgba(0, 122, 255, 0.15)',
+              'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+              'glass-bubble': '0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.2), inset 0 2px 15px rgba(255, 255, 255, 0.3)',
+              'inner-gloss': 'inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(0, 0, 0, 0.05)',
+              'glow-primary': '0 0 15px rgba(0, 122, 255, 0.4)',
+              'glow-sky': '0 0 20px rgba(0, 194, 255, 0.4)',
+              'glow-accent': '0 0 15px rgba(52, 199, 89, 0.4)',
+              'glow-white': '0 0 15px rgba(255, 255, 255, 0.3)',
+              'logo-glow': '0 0 30px rgba(0, 191, 255, 0.35)',
+            },
+            backgroundImage: {
+              'glossy-gradient': 'linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%)',
+              'frutiger-gradient': 'linear-gradient(135deg, #00C2FF 0%, #007AFF 50%, #34C759 100%)',
+              'frutiger-glass': 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%)',
+              'aurora': 'radial-gradient(circle at 50% -20%, #00C2FF, transparent), radial-gradient(circle at -20% 50%, #34C759, transparent)',
+              'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)',
+              'gel-blue': 'linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%)',
+              'sky-gradient': 'linear-gradient(180deg, #00C2FF 0%, #BFE6FF 100%)',
+            },
+            animation: {
+              'color-pulse': 'color-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'wipe-screen': 'wipe-screen 1s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+              'float': 'float 6s ease-in-out infinite',
+              'float-delayed': 'float 6s ease-in-out 3s infinite',
+              'shimmer': 'shimmer 2s linear infinite',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 20s linear infinite',
+              'bounce-slow': 'bounce 3s infinite',
+              'aero-wipe-in': 'aero-wipe-in 1s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+              'aero-wipe-out': 'aero-wipe-out 1s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+              'aero-wipe-full-forward': 'aero-wipe-full-forward 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+              'aero-wipe-full-backward': 'aero-wipe-full-backward 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+              'shake': 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both',
+              'timer-panic': 'timer-panic 0.5s ease-in-out infinite',
+            },
+            keyframes: {
+              'timer-panic': {
+                '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 15px rgba(255, 59, 48, 0.4)' },
+                '50%': { transform: 'scale(1.08)', boxShadow: '0 0 30px rgba(255, 59, 48, 0.8)' },
+              },
+              'aero-wipe-full-forward': {
+                '0%': { transform: 'translateX(100%)', opacity: '1' },
+                '35%, 65%': { transform: 'translateX(0)', opacity: '1' },
+                '100%': { transform: 'translateX(-100%)', opacity: '1' },
+              },
+              'aero-wipe-full-backward': {
+                '0%': { transform: 'translateX(-100%)', opacity: '1' },
+                '35%, 65%': { transform: 'translateX(0)', opacity: '1' },
+                '100%': { transform: 'translateX(100%)', opacity: '1' },
+              },
+              'shake': {
+                '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
+                '10%, 30%, 50%, 70%, 90%': { transform: 'translate3d(-20px, 0, 0)' },
+                '20%, 40%, 60%, 80%': { transform: 'translate3d(20px, 0, 0)' },
+              },
+              'aero-wipe-in': {
+                '0%': { transform: 'translateX(100%)', opacity: '0', filter: 'blur(20px)' },
+                '100%': { transform: 'translateX(0)', opacity: '1', filter: 'blur(0)' },
+              },
+              'aero-wipe-out': {
+                '0%': { transform: 'translateX(0)', opacity: '1', filter: 'blur(0)' },
+                '100%': { transform: 'translateX(-100%)', opacity: '0', filter: 'blur(20px)' },
+              },
+              'float': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              'shimmer': {
+                '0%': { backgroundPosition: '-200% 0' },
+                '100%': { backgroundPosition: '200% 0' },
+              },
+              'color-pulse': {
+                '0%, 100%': { color: '#007AFF' },
+                '50%': { color: '#00BFFF' },
+              },
+              'wipe-screen': {
+                '0%': { transform: 'translateX(100%)', opacity: '0', filter: 'blur(20px)' },
+                '35%': { transform: 'translateX(0)', opacity: '1', filter: 'blur(0)' },
+                '65%': { transform: 'translateX(0)', opacity: '1', filter: 'blur(0)' },
+                '100%': { transform: 'translateX(-100%)', opacity: '0', filter: 'blur(20px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* ===== CROSS-BROWSER NORMALIZATION ===== */
+      
+      /* Inter (Variable) Enhancements */
+      @supports (font-variation-settings: normal) {
+        html { font-family: 'Inter', sans-serif; }
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        background-color: #0F172A;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+        overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
+      }
+      
+      /* Consistent box-sizing */
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      
+      /* Font smoothing for all browsers */
+      body { 
+        -webkit-font-smoothing: antialiased; 
+        -moz-osx-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+        overflow-x: hidden;
+        font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+        background-color: #0F172A;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        max-width: 100vw;
+        width: 100%;
+      }
+      
+      /* Root container overflow fix */
+      #root {
+        overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
+      }
+      
+      /* Frutiger Aero Glossy Highlights */
+      .frutiger-gloss {
+        position: relative;
+        overflow: hidden;
+      }
+      .frutiger-gloss::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+        pointer-events: none;
+      }
+
+      /* Better Leaflet Popups */
+      .leaflet-popup-content-wrapper { 
+        border-radius: 2.5rem !important; 
+        padding: 0 !important; 
+        box-shadow: none !important; 
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+      }
+      .leaflet-popup-content { margin: 0 !important; width: auto !important; }
+      .leaflet-container { font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important; }
+      .leaflet-popup-tip-container {
+        margin-top: -1px; /* Bring tip closer to content */
+        z-index: 20;
+      }
+      
+      /* Specific fix for Map Page popups to hide the join line */
+      .custom-popup .leaflet-popup-content-wrapper {
+        background: #0F172A !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-radius: 1.5rem !important;
+        padding: 0 !important;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
+        border: none !important;
+        width: 320px !important;
+      }
+      
+      .custom-popup .leaflet-popup-content {
+        margin: 0 !important;
+        padding: 24px !important;
+        width: 320px !important;
+        box-sizing: border-box !important;
+      }
+
+      .custom-popup .leaflet-popup-tip-container {
+        margin-top: -2px !important; /* Overlap slightly to hide the seam */
+        z-index: 1;
+      }
+
+      .custom-popup .leaflet-popup-tip {
+        background: #0F172A !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      .leaflet-popup-tip { 
+        background: #0F172A !important; 
+        box-shadow: none !important;
+        border: none !important;
+      }
+      
+      /* Hide scrollbars globally */
+      ::-webkit-scrollbar { display: none; }
+      * { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      /* Custom Selection */
+      ::selection {
+        background-color: #00C2FF;
+        color: white;
+      }
+      
+      /* Scrollbar styles */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+      ::-webkit-scrollbar-thumb { 
+        background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 100%);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover { background: #007AFF; background-clip: content-box; }
+      
+      /* ===== BACKDROP FILTER CROSS-BROWSER ===== */
+      .backdrop-blur-md {
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+      }
+      .backdrop-blur-sm {
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+      }
+      .backdrop-blur-lg {
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+      }
+      .backdrop-blur-xl {
+        -webkit-backdrop-filter: blur(24px);
+        backdrop-filter: blur(24px);
+      }
+      .backdrop-blur {
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+      }
+      
+      /* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */
+      /* Use dvh (dynamic viewport height) with fallback */
+      .h-screen, .min-h-screen {
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+      .h-\[100dvh\] {
+        height: 100vh;
+        height: 100dvh;
+      }
+      
+      /* ===== TRANSFORM/ANIMATION CROSS-BROWSER ===== */
+      .transform-gpu {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      
+      /* ===== FLEXBOX SAFARI FIXES ===== */
+      /* Fix Safari flexbox min-height bug */
+      .flex-col {
+        -webkit-flex-direction: column;
+        flex-direction: column;
+      }
+      
+      /* Fix Safari flex-shrink issue */
+      .shrink-0 {
+        -webkit-flex-shrink: 0;
+        flex-shrink: 0;
+      }
+      
+      /* ===== GRADIENT TEXT CROSS-BROWSER ===== */
+      .bg-clip-text {
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+      
+      /* ===== SELECTION COLOR ===== */
+      ::selection {
+        background-color: #77B6EA;
+        color: white;
+      }
+      ::-moz-selection {
+        background-color: #77B6EA;
+        color: white;
+      }
+      
+      /* ===== FIX BORDER-RADIUS CLIPPING IN SAFARI ===== */
+      .overflow-hidden {
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+      }
+      
+      /* Updated Marker Styles for Performance */
+      .custom-map-marker { 
+        background: transparent; 
+        border: none; 
+        display: -webkit-flex;
+        display: flex; 
+        -webkit-align-items: center;
+        align-items: center; 
+        -webkit-justify-content: center;
+        justify-content: center;
+        /* GPU Acceleration - Cross Browser */
+        will-change: transform;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      
+      .marker-pin { 
+        width: 10px; 
+        height: 10px; 
+        background: #00C2FF; 
+        border: 2px solid #FFFFFF; 
+        border-radius: 50%; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+        -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        cursor: pointer; 
+        will-change: transform;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+      
+      .marker-pin.territory { background: #22c55e; }
+      .marker-pin.defacto { background: #EAB308; } /* Yellow for De Facto */
+      
+      /* Only apply heavy shadows on hover */
+      .custom-map-marker:hover .marker-pin { 
+        transform: scale(1.4); 
+        background: #5ba4e5; 
+        box-shadow: 0 4px 12px rgba(119, 182, 234, 0.5); 
+      }
+      
+      .custom-map-marker:hover .marker-pin.territory { 
+        background: #16a34a; 
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5); 
+      }
+
+      .custom-map-marker:hover .marker-pin.defacto { 
+        background: #d97706; 
+        box-shadow: 0 4px 12px rgba(234, 179, 8, 0.5); 
+      }
+      
+      .marker-active .marker-pin { 
+        transform: scale(1.4); 
+        background: #5ba4e5; 
+        z-index: 1000; 
+      }
+      
+      .marker-active .marker-pin.territory { background: #16a34a; }
+      .marker-active .marker-pin.defacto { background: #EAB308; }
+      
+      @-webkit-keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
+      @keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
+      @-webkit-keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
+      @keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
+      @-webkit-keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
+      @keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
+      
+      .marker-active::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #00C2FF; -webkit-animation: marker-ripple 1.5s infinite; animation: marker-ripple 1.5s infinite; pointer-events: none; }
+      .territory-marker.marker-active::after { background: #22c55e; -webkit-animation: marker-ripple-green 1.5s infinite; animation: marker-ripple-green 1.5s infinite; }
+      .defacto-marker.marker-active::after { background: #EAB308; -webkit-animation: marker-ripple-yellow 1.5s infinite; animation: marker-ripple-yellow 1.5s infinite; }
+      
+      /* ===== ADDITIONAL SAFARI/iOS FIXES ===== */
+      
+      /* Fix Safari gradient rendering */
+      .bg-gradient-to-r, .bg-gradient-to-t, .bg-gradient-to-b, .bg-gradient-to-l {
+        -webkit-background-size: cover;
+        background-size: cover;
+      }
+      
+      /* Ensure smooth scrolling works on iOS */
+      html {
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Fix position:fixed on iOS with keyboard */
+      .fixed {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+      
+      /* Prevent pull-to-refresh on iOS when not wanted */
+      body.no-pull-refresh {
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: auto;
+      }
+      
+      /* Fix Windows high contrast mode */
+      @media (forced-colors: active) {
+        .marker-pin {
+          forced-color-adjust: none;
+        }
+      }
+      
+      /* Ensure emoji flags render consistently */
+      .select-none {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      /* Fix Firefox button inner focus ring */
+      button::-moz-focus-inner {
+        border: 0;
+      }
+      
+      /* Ensure consistent line-height across browsers */
+      .leading-none { line-height: 1; }
+      .leading-tight { line-height: 1.25; }
+      .leading-snug { line-height: 1.375; }
+      .leading-normal { line-height: 1.5; }
+      .leading-relaxed { line-height: 1.625; }
+      .leading-loose { line-height: 2; }
+    </style>
+  <script type="module" crossorigin src="./assets/index-D_1kEGD7.js"></script>
+</head>
+  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full"></div>
+    <div id="modal-root"></div>
+  </body>
+</html>
