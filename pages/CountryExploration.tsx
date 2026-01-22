@@ -1515,7 +1515,7 @@ const CountryExploration: React.FC = () => {
                <div className="w-44 h-44 rounded-full bg-white/15 backdrop-blur-3xl border-2 border-white/40 flex items-center justify-center shadow-glass-bubble overflow-hidden relative">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
                   <img 
-                    src="/logo.png" 
+                    src={`${import.meta.env.BASE_URL}logo.png`} 
                     alt="Loading" 
                     className="w-44 h-44 drop-shadow-[0_0_20px_rgba(0,194,255,0.5)] relative z-10 animate-pulse-scale"
                   />

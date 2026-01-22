@@ -488,7 +488,7 @@ const Auth: React.FC = () => {
         <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[150px] animate-pulse-slow opacity-80" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-[120px] animate-pulse-slow opacity-50" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.12] pointer-events-none">
-          <img src="/logo.png" alt="Globe" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] object-contain animate-spin-slow" />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Globe" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] object-contain animate-spin-slow" />
         </div>
       </div>
 
@@ -541,7 +541,7 @@ const Auth: React.FC = () => {
             </div>
 
             {/* Background Decorative Logo */}
-            <img src="/logo.png" alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 -rotate-12 pointer-events-none animate-spin-slow drop-shadow-[0_0_80px_rgba(0,194,255,0.7)]" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 -rotate-12 pointer-events-none animate-spin-slow drop-shadow-[0_0_80px_rgba(0,194,255,0.7)]" />
           </div>
 
           {/* Form Content */}

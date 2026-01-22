@@ -166,7 +166,7 @@ const Home: React.FC = () => {
               >
                 <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 shadow-glass-bubble flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img 
-                    src="/logo.png" 
+                    src={`${import.meta.env.BASE_URL}logo.png`} 
                     alt="Globe - Click to explore the map" 
                     className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,194,255,0.2)] scale-[1.35]"
                   />
