@@ -2,9 +2,6 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// The Engine Key
-const API_KEY = "AIzaSyB89-8rjw3tX8wBVCwJ5COB2xCCM9I0MUc"; 
-
 export default defineConfig({
   base: './', // <--- The "GPS" Fix for custom domains
   build: {
@@ -16,8 +13,10 @@ export default defineConfig({
   },
   plugins: [react()],
   define: {
-    'process.env.API_KEY': JSON.stringify(API_KEY),
-    'process.env.GEMINI_API_KEY': JSON.stringify(API_KEY)
+    // Gemini API key removed for security - AI image generation disabled
+    // To re-enable, use a backend serverless function instead of client-side key
+    'process.env.API_KEY': JSON.stringify(''),
+    'process.env.GEMINI_API_KEY': JSON.stringify('')
   },
   resolve: {
     alias: {
