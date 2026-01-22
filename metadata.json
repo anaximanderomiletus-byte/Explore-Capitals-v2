@@ -1,0 +1,7 @@
+{
+  "name": "ExploreCapitals.com",
+  "description": "A premium, gamified geography education platform blending institutional authority with modern SaaS aesthetics.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
