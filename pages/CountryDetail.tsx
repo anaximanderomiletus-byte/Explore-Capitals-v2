@@ -164,11 +164,11 @@ const CountryDetail: React.FC = () => {
     badges?: { isTerritory?: boolean; isDeFacto?: boolean; sovereignty?: string };
   }) => (
     <div className="flex justify-center w-full py-2">
-      <div className={`bg-[#FCFCFC] p-4 pb-12 sm:pb-14 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-xs sm:max-w-sm ${type === 'flag' ? '-rotate-1' : 'rotate-2'}`}>
+      <div className={`bg-[#FCFCFC] p-3 sm:p-4 pb-10 sm:pb-14 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-sm ${type === 'flag' ? '-rotate-1' : 'rotate-2'}`}>
         {/* Subtle Paper Texture */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
         
-        <div className="w-full aspect-square bg-[#F5F5F0] overflow-hidden relative shadow-inner">
+        <div className={`w-full ${type === 'flag' ? 'aspect-[4/3]' : 'aspect-square'} bg-[#F5F5F0] overflow-hidden relative shadow-inner`}>
           {type === 'flag' ? (
             <>
               {/* Static Ink Stamp for flag */}
@@ -273,7 +273,7 @@ const CountryDetail: React.FC = () => {
                         {/* Subtle Paper Texture */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
                         
-                        <div className="w-full h-64 md:h-80 bg-[#F5F5F0] overflow-hidden relative group/image shadow-inner">
+                        <div className="w-full h-52 md:h-64 bg-[#F5F5F0] overflow-hidden relative group/image shadow-inner">
                             {/* Static Ink Stamp */}
                             <div className="absolute top-6 right-6 z-20 transform rotate-12 opacity-[0.15] pointer-events-none flex items-center justify-center scale-75 md:scale-90">
                                 <div className="border-[2.5px] border-black rounded-full p-1 flex items-center justify-center">
