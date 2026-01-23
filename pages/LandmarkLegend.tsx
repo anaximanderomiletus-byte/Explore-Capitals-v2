@@ -17,12 +17,6 @@ const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
 };
 
-const getCountryCode = (emoji: string) => {
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
-};
-
 interface Question {
     country: Country;
     landmarkName: string;
@@ -281,7 +275,7 @@ export default function LandmarkLegend() {
                    className="flex-1 flex flex-col min-h-0"
                  >
                    {/* Centered image area */}
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:py-4 overflow-hidden relative z-10">
+                   <div className="flex flex-col items-center justify-center md:justify-start flex-1 min-h-0 py-2 md:pt-2 md:pb-6 overflow-hidden relative z-10">
                       <p className="text-sky-light font-black text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
                       <div 
                        className="relative w-full max-w-sm md:max-w-md h-48 md:h-64 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20"
@@ -331,11 +325,6 @@ export default function LandmarkLegend() {
                             className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
                             style={{ WebkitTapHighlightColor: 'transparent' }}
                           >
-                            <img 
-                              src={`https://flagcdn.com/w80/${getCountryCode(option.flag)}.png`}
-                              alt={`${option.name} Flag`}
-                              className="h-4 md:h-5 w-auto relative z-10 drop-shadow-lg object-contain shrink-0 mr-2"
-                            />
                             <span className="text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
                           </button>
                         );
