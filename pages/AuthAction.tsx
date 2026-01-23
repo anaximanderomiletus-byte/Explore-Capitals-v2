@@ -146,9 +146,9 @@ const AuthAction: React.FC = () => {
       </div>
 
       <div className="relative z-10 flex-grow flex items-center justify-center px-6 py-24">
-        <div className="w-full max-w-[600px] bg-white/20 backdrop-blur-3xl rounded-[4rem] shadow-glow-sky border-2 border-white/40 overflow-hidden relative">
+        <div className="w-full max-w-[600px] bg-white/20 backdrop-blur-3xl rounded-[4rem] border-2 border-white/40 overflow-hidden relative">
           <div className="p-10 sm:p-16 text-center">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/30 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-white mb-10 border-2 border-white/40 shadow-glow-sky">
+            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/30 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-white mb-10 border-2 border-white/40">
               <Compass size={14} className="animate-spin-slow text-sky-light" />
               <span>SECURITY PORTAL</span>
             </div>
@@ -221,7 +221,7 @@ const AuthAction: React.FC = () => {
                   <RequirementItem met={passwordCriteria.special} label="Special char (!@#$)" />
                 </div>
 
-                <Button type="submit" disabled={busy || !isPasswordValid} className="w-full h-16 shadow-glow-sky mt-6 uppercase tracking-widest font-black">
+                <Button type="submit" disabled={busy || !isPasswordValid} className="w-full h-16 mt-6 uppercase tracking-widest font-black">
                   {busy ? 'UPDATING...' : 'RESET PASSWORD'}
                 </Button>
               </form>
@@ -229,7 +229,7 @@ const AuthAction: React.FC = () => {
 
             {status === 'success' && (
               <div className="space-y-6 text-center">
-                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mx-auto shadow-glow-accent">
+                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mx-auto">
                   <CheckCircle2 size={48} />
                 </div>
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter">SUCCESS!</h2>
@@ -262,7 +262,7 @@ const AuthAction: React.FC = () => {
 
 const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label }) => (
   <div className={`flex items-center gap-1.5 transition-colors duration-300 ${met ? 'text-green-400' : 'text-white/20'}`}>
-    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400 shadow-[0_0_5px_rgba(74,222,128,0.5)]' : 'bg-white/20'}`} />
+    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400' : 'bg-white/20'}`} />
     <span className="text-[8px] font-black uppercase tracking-widest leading-none text-left">{label}</span>
   </div>
 );

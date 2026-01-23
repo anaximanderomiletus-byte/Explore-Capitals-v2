@@ -493,7 +493,7 @@ const Auth: React.FC = () => {
       </div>
 
       <div className="relative z-10 flex-grow flex items-center justify-center px-4 pt-20 pb-8 sm:pt-32 sm:pb-12">
-        <div className="w-full max-w-[1000px] grid lg:grid-cols-2 bg-white/20 backdrop-blur-3xl rounded-[3rem] shadow-[0_40px_100px_rgba(0,194,255,0.3)] border-2 border-white/40 overflow-hidden relative">
+        <div className="w-full max-w-[1000px] grid lg:grid-cols-2 bg-white/20 backdrop-blur-3xl rounded-[3rem] border-2 border-white/40 overflow-hidden relative">
           <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
           
           {/* Visual Content - Hidden on small screens */}
@@ -501,14 +501,14 @@ const Auth: React.FC = () => {
             <div className="absolute inset-0 bg-aurora opacity-30 group-hover:opacity-40 transition-opacity pointer-events-none" />
             
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-white/30 backdrop-blur-3xl rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white mb-6 border-2 border-white/40 shadow-glow-sky relative overflow-hidden">
+              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-white/30 backdrop-blur-3xl rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white mb-6 border-2 border-white/40 relative overflow-hidden">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                 <Compass size={12} className="animate-spin-slow relative z-10 text-sky-light" />
                 <span className="relative z-10 drop-shadow-md">MASTER THE MAP</span>
               </div>
             <h1 className="text-5xl font-display font-black text-white leading-tight tracking-tighter mb-4 uppercase drop-shadow-lg">
               Master the <br />
-              <span className="bg-clip-text bg-gradient-to-b from-white via-sky-light to-sky drop-shadow-[0_0_20px_rgba(0,194,255,0.5)] [-webkit-text-fill-color:transparent]">Capitals.</span>
+              <span className="bg-clip-text bg-gradient-to-b from-white via-sky-light to-sky [-webkit-text-fill-color:transparent]">Capitals.</span>
             </h1>
               <p className="text-[11px] text-white font-black uppercase tracking-[0.2em] max-w-xs leading-relaxed drop-shadow-lg opacity-90">
                 Sign up to track your progress and earn rewards.
@@ -527,9 +527,9 @@ const Auth: React.FC = () => {
                 </div>
               </div>
               
-              <div className="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-glass-bubble flex items-center gap-4 group hover:bg-white/15 transition-all relative overflow-hidden">
+              <div className="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center gap-4 group hover:bg-white/15 transition-all relative overflow-hidden">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
-                <div className="w-10 h-10 bg-gel-blue rounded-full flex items-center justify-center text-white shadow-glow-sky relative overflow-hidden shrink-0 border border-white/30">
+                <div className="w-10 h-10 bg-gel-blue rounded-full flex items-center justify-center text-white relative overflow-hidden shrink-0 border border-white/30">
                   <ShieldCheck size={24} className="relative z-10 drop-shadow-lg" />
                   <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                 </div>
@@ -541,7 +541,7 @@ const Auth: React.FC = () => {
             </div>
 
             {/* Background Decorative Logo */}
-            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 -rotate-12 pointer-events-none animate-spin-slow drop-shadow-[0_0_80px_rgba(0,194,255,0.7)]" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 -rotate-12 pointer-events-none animate-spin-slow" />
           </div>
 
           {/* Form Content */}
@@ -583,7 +583,7 @@ const Auth: React.FC = () => {
               )}
 
               {error && (
-                <div className="flex items-start gap-3 bg-red-500/20 p-4 rounded-xl border border-red-500/30 mb-8 animate-in zoom-in-95 shadow-glass-bubble relative overflow-hidden">
+                <div className="flex items-start gap-3 bg-red-500/20 p-4 rounded-xl border border-red-500/30 mb-8 animate-in zoom-in-95 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                   <AlertCircle className="text-red-500 shrink-0 mt-0.5 relative z-10" size={16} />
                   <p className="text-[9px] font-black text-red-500 uppercase tracking-widest leading-snug relative z-10">{error}</p>
@@ -591,7 +591,7 @@ const Auth: React.FC = () => {
               )}
 
               {success && (
-                <div className="flex items-start gap-3 bg-green-500/20 p-4 rounded-xl border border-green-500/30 mb-8 animate-in zoom-in-95 shadow-glass-bubble relative overflow-hidden">
+                <div className="flex items-start gap-3 bg-green-500/20 p-4 rounded-xl border border-green-500/30 mb-8 animate-in zoom-in-95 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                   <CheckCircle2 className="text-green-500 shrink-0 mt-0.5 relative z-10" size={16} />
                   <p className="text-[9px] font-black text-green-500 uppercase tracking-widest leading-snug relative z-10">{success}</p>
@@ -611,9 +611,9 @@ const Auth: React.FC = () => {
                   >
                     {mfaStep === 1 ? (
                       <div className="space-y-6">
-                        <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-glass-bubble text-center relative overflow-hidden">
+                        <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-center relative overflow-hidden">
                           <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-                          <ShieldCheck size={48} className="mx-auto text-sky-light mb-4 drop-shadow-glow-sky relative z-10" />
+                          <ShieldCheck size={48} className="mx-auto text-sky-light mb-4 relative z-10" />
                           <p className="text-xs font-bold text-white uppercase tracking-widest mb-2 relative z-10">Two-Factor Authentication</p>
                           <p className="text-[10px] text-white/60 font-medium relative z-10">
                             Verify your identity via SMS sent to •••• {(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}.
@@ -623,7 +623,7 @@ const Auth: React.FC = () => {
                         {/* Visible reCAPTCHA container for MFA */}
                         <div className="flex justify-center" ref={recaptchaRef} id="recaptcha-container-mfa" />
 
-                        <Button onClick={handleStartMfa} disabled={busy} className="w-full h-14 shadow-glow-sky uppercase tracking-widest font-black">
+                        <Button onClick={handleStartMfa} disabled={busy} className="w-full h-14 uppercase tracking-widest font-black">
                           {busy ? 'INITIALIZING...' : 'VERIFY VIA SMS'}
                         </Button>
                         <button onClick={() => { setMfaResolver(null); setBusy(false); setError(null); }} className="w-full text-[9px] font-black text-white/40 hover:text-sky uppercase tracking-[0.3em] py-2">Cancel</button>
@@ -639,7 +639,7 @@ const Auth: React.FC = () => {
                           required 
                           error={fieldErrors.mfaCode}
                         />
-                        <Button type="submit" disabled={busy} className="w-full h-14 shadow-glow-sky uppercase tracking-widest font-black">
+                        <Button type="submit" disabled={busy} className="w-full h-14 uppercase tracking-widest font-black">
                           {busy ? 'VERIFYING...' : 'VERIFY & SIGN IN'}
                         </Button>
                         <button onClick={() => { setMfaStep(1); setBusy(false); setError(null); }} className="w-full text-[9px] font-black text-white/40 hover:text-sky uppercase tracking-[0.3em] py-2">Go Back</button>
@@ -672,7 +672,7 @@ const Auth: React.FC = () => {
                           <RequirementItem met={passwordCriteria.special} label="Special char (!@#$)" />
                         </div>
 
-                        <Button type="submit" className="w-full h-14 text-lg mt-4 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy || !isPasswordValid}>
+                        <Button type="submit" className="w-full h-14 text-lg mt-4 uppercase tracking-widest border border-white/20" disabled={busy || !isPasswordValid}>
                           {busy ? <span className="animate-pulse text-sm">LOADING...</span> : 
                           <span className="flex items-center gap-2 text-sm">SIGN UP <ArrowRight size={20} /></span>}
                         </Button>
@@ -689,7 +689,7 @@ const Auth: React.FC = () => {
                               animate={{ opacity: 1, scale: 1 }}
                               className="py-12 flex flex-col items-center justify-center text-center space-y-4"
                             >
-                              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 shadow-glow-accent border border-green-500/30">
+                              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 border border-green-500/30">
                                 <CheckCircle2 size={48} />
                               </div>
                               <h3 className="text-xl font-black text-white uppercase tracking-tighter">Verified</h3>
@@ -697,7 +697,7 @@ const Auth: React.FC = () => {
                             </motion.div>
                           ) : (
                             <motion.div key="input" className="space-y-6 text-center">
-                              <div className="w-20 h-20 bg-sky/10 rounded-full flex items-center justify-center text-sky-light mx-auto border-2 border-white/20 shadow-glow-sky">
+                              <div className="w-20 h-20 bg-sky/10 rounded-full flex items-center justify-center text-sky-light mx-auto border-2 border-white/20">
                                 <Mail size={32} />
                               </div>
                               <div className="space-y-2">
@@ -709,7 +709,7 @@ const Auth: React.FC = () => {
                               </div>
 
                               <div className="flex flex-col gap-3 pt-4">
-                                <Button onClick={handleCheckVerification} disabled={busy} className="w-full h-14 shadow-glow-sky uppercase tracking-widest">
+                                <Button onClick={handleCheckVerification} disabled={busy} className="w-full h-14 uppercase tracking-widest">
                                   {busy ? 'CHECKING...' : "I'VE VERIFIED MY EMAIL"}
                                 </Button>
                                 <button type="button" onClick={handleResendVerification} disabled={busy} className="w-full text-[9px] font-black text-white/40 hover:text-sky transition-all uppercase tracking-widest py-2">
@@ -775,7 +775,7 @@ const Auth: React.FC = () => {
                                 FORGOT PASSWORD?
                               </button>
                             </div>
-                            <Button type="submit" className="w-full h-14 text-lg mt-2 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy}>
+                            <Button type="submit" className="w-full h-14 text-lg mt-2 uppercase tracking-widest border border-white/20" disabled={busy}>
                               {busy ? <span className="text-sm">SIGNING IN...</span> : <span className="text-sm">SIGN IN</span>}
                             </Button>
                           </form>
@@ -788,14 +788,14 @@ const Auth: React.FC = () => {
                                 {/* Visible reCAPTCHA container for Signin Phone Auth */}
                                 <div className="flex justify-center py-2" ref={recaptchaRef} id="recaptcha-container-signin" />
 
-                                <Button type="submit" className="w-full h-14 text-lg mt-4 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy}>
+                                <Button type="submit" className="w-full h-14 text-lg mt-4 uppercase tracking-widest border border-white/20" disabled={busy}>
                                   {busy ? <span className="text-sm">SENDING...</span> : <span className="text-sm">SIGN IN</span>}
                                 </Button>
                               </form>
                             ) : (
                               <form className="space-y-4" onSubmit={handleConfirmSignInSms} noValidate>
                                 <PremiumInput icon={<CheckCircle2 size={16} />} label="Code" value={smsCode} onChange={(v) => { setSmsCode(v); setFieldErrors({ ...fieldErrors, signinCode: false }); }} placeholder="000 000" required error={fieldErrors.signinCode} />
-                                <Button type="submit" className="w-full h-14 text-lg mt-4 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy}>
+                                <Button type="submit" className="w-full h-14 text-lg mt-4 uppercase tracking-widest border border-white/20" disabled={busy}>
                                   {busy ? <span className="text-sm">VERIFYING...</span> : <span className="text-sm">SIGN IN</span>}
                                 </Button>
                                 <button type="button" onClick={() => { setStep(1); setBusy(false); setError(null); }} className="w-full text-[9px] font-black text-white/40 hover:text-sky transition-all uppercase tracking-widest py-3">
@@ -822,7 +822,7 @@ const Auth: React.FC = () => {
                     {step === 1 ? (
                       <form className="space-y-4" onSubmit={handleForgotPassword} noValidate>
                         <PremiumInput icon={<Mail size={16} />} label="Email" type="email" value={email} onChange={(v) => { setEmail(v); setFieldErrors({ ...fieldErrors, email: false }); }} placeholder="Email" required error={fieldErrors.email} />
-                        <Button type="submit" className="w-full h-14 text-lg mt-4 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy}>
+                        <Button type="submit" className="w-full h-14 text-lg mt-4 uppercase tracking-widest border border-white/20" disabled={busy}>
                           {busy ? <span className="text-sm">SENDING...</span> : <span className="text-sm">SEND RESET LINK</span>}
                         </Button>
                         <button 
@@ -837,7 +837,7 @@ const Auth: React.FC = () => {
                       <form className="space-y-4" onSubmit={handleConfirmReset} noValidate>
                         <PremiumInput icon={<CheckCircle2 size={16} />} label="Reset Code" value={resetCode} onChange={(v) => { setResetCode(v); setFieldErrors({ ...fieldErrors, resetCode: false }); }} placeholder="Enter code from email" required error={fieldErrors.resetCode} />
                         <PremiumInput icon={<Lock size={16} />} label="New Password" type="password" value={password} onChange={(v) => { setPassword(v); setFieldErrors({ ...fieldErrors, password: false }); }} placeholder="••••••••" required error={fieldErrors.password} />
-                        <Button type="submit" className="w-full h-14 text-lg mt-4 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy}>
+                        <Button type="submit" className="w-full h-14 text-lg mt-4 uppercase tracking-widest border border-white/20" disabled={busy}>
                           {busy ? <span className="text-sm">UPDATING...</span> : <span className="text-sm">RESET PASSWORD</span>}
                         </Button>
                         <button 
@@ -871,7 +871,7 @@ const Auth: React.FC = () => {
 
 const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label }) => (
   <div className={`flex items-center gap-1.5 transition-colors duration-300 ${met ? 'text-green-400' : 'text-white/20'}`}>
-    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400 shadow-[0_0_5px_rgba(74,222,128,0.5)]' : 'bg-white/20'}`} />
+    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400' : 'bg-white/20'}`} />
     <span className="text-[8px] font-black uppercase tracking-widest leading-none">{label}</span>
   </div>
 );
@@ -888,7 +888,7 @@ const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label
     {active && (
       <motion.div
         layoutId={layoutId}
-        className="absolute inset-0 bg-white rounded-full shadow-glow-sky overflow-hidden"
+        className="absolute inset-0 bg-white rounded-full overflow-hidden"
         transition={{ type: 'spring', bounce: 0.15, duration: 0.6 }}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-40 pointer-events-none" />
@@ -919,7 +919,7 @@ const PremiumInput: React.FC<{
           {icon}
         </div>
         <input
-          className={`w-full bg-white/5 border ${error ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.1)]' : 'border-white/20'} rounded-2xl pl-14 ${isPassword ? 'pr-12' : 'pr-5'} py-3.5 focus:ring-4 ${error ? 'focus:ring-red-500/10 focus:border-red-500' : 'focus:ring-sky/10 focus:border-sky/40'} outline-none transition-all duration-300 font-black text-[11px] text-white placeholder:text-white/10 tracking-wider shadow-inner`}
+          className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/20'} rounded-2xl pl-14 ${isPassword ? 'pr-12' : 'pr-5'} py-3.5 focus:ring-4 ${error ? 'focus:ring-red-500/10 focus:border-red-500' : 'focus:ring-sky/10 focus:border-sky/40'} outline-none transition-all duration-300 font-black text-[11px] text-white placeholder:text-white/10 tracking-wider shadow-inner`}
           value={value}
           type={inputType}
           placeholder={placeholder}
@@ -938,7 +938,7 @@ const PremiumInput: React.FC<{
         )}
         
         {/* Visual Error Underline */}
-        <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full transition-all duration-500 ${error ? 'bg-red-500 opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-transparent opacity-0'}`} />
+        <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full transition-all duration-500 ${error ? 'bg-red-500 opacity-100' : 'bg-transparent opacity-0'}`} />
       </div>
     </div>
   );

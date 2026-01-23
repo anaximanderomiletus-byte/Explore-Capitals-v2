@@ -146,10 +146,8 @@ export default function CapitalQuiz() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
         </div>
 
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass p-8 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none rounded-[inherit]" />
+            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
           <div className="w-20 h-20 bg-gel-blue rounded-full flex items-center justify-center mx-auto mb-8 text-white border border-white/40 relative overflow-hidden transition-transform duration-700">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-60 rounded-[inherit]" />
             <Globe2 size={36} className="relative z-10 drop-shadow-lg" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Quiz</h1>
@@ -188,8 +186,7 @@ export default function CapitalQuiz() {
       </div>
 
       {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
-         <div className="absolute inset-0 bg-glossy-gradient opacity-10 rounded-[inherit]" />
+      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 relative overflow-hidden z-10">
          <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
@@ -200,37 +197,24 @@ export default function CapitalQuiz() {
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
-         {/* Desktop only: points and timer in top bar */}
-         <div className="hidden md:flex items-center gap-6 relative z-10">
-           <div className="flex items-center gap-2">
-              <Trophy size={18} className="text-warning drop-shadow-md" />
-              <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
-           </div>
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-             <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-             <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-          </div>
-         </div>
+         {/* Desktop only: spacer to keep title centered */}
+         <div className="hidden md:block w-[42px]" />
 
          {/* Mobile: empty spacer to balance the back button */}
          <div className="w-[42px] md:hidden" />
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-8 overflow-hidden relative shadow-glass z-10">
-         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none rounded-[inherit]" />
+      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-8 overflow-hidden relative z-10">
          
-         {/* Mobile: Points top-left, Timer top-right */}
-         <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-               <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
-               <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+         {/* Points and Timer - Now visible on all sizes in the corners of the game rectangle */}
+         <div className="flex items-center justify-between mb-2 md:mb-4 relative z-20">
+            <div className="flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+               <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+               <span className="font-display font-black text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
             </div>
-            <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-               <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
-               <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+            <div className={`flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
+               <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
             </div>
          </div>
 
@@ -261,10 +245,10 @@ export default function CapitalQuiz() {
               const isCorrect = option.capital === currentQuestion.country.capital;
               const isWrong = isSelected && !isCorrect;
               
-              let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50 shadow-glass-bubble";
+              let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50";
               if (selectedAnswer) {
-                if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white shadow-glow-accent";
-                else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white shadow-glow-warning";
+                if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white";
+                else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white";
                 else if (option.capital === currentQuestion.country.capital) stateStyles = "bg-accent/40 border-accent/80 text-white";
                 else stateStyles = "bg-white/5 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
               }
@@ -277,7 +261,6 @@ export default function CapitalQuiz() {
                   className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none rounded-[inherit]" />
                   <span className="px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.capital}</span>
                 </button>
               );
@@ -298,10 +281,8 @@ export default function CapitalQuiz() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none rounded-[inherit]" />
-              <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-8 text-warning shadow-[0_0_20px_rgba(255,149,0,0.5)] border border-white/40 relative overflow-hidden transition-transform duration-700">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-50 rounded-[inherit]" />
+            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
+              <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/40 relative overflow-hidden transition-transform duration-700">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
               <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>

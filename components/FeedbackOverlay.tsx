@@ -84,8 +84,8 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                 }}
                 className="relative flex flex-col items-center"
               >
-                <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-[0_0_30px_rgba(52,199,89,0.6)] sm:shadow-[0_0_50px_rgba(52,199,89,0.6)]">
-                  <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+                <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-xl">
+                  <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
                 
                 <motion.div
@@ -112,8 +112,8 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                 transition={{ duration: 0.4 }}
                 className="relative flex flex-col items-center w-full"
               >
-                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-[0_0_30px_rgba(239,68,68,0.6)] sm:shadow-[0_0_50px_rgba(239,68,68,0.6)]">
-                  <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-xl">
+                  <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 
                 <motion.div

@@ -169,11 +169,12 @@
         -moz-text-size-adjust: 100%;
         text-size-adjust: 100%;
         background-color: #0F172A;
-        height: 100%;
+        height: -webkit-fill-available;
         margin: 0;
         padding: 0;
         font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-        overflow-x: hidden;
+        /* Remove overflow-x: hidden from html for better Safari compatibility */
+        overflow-x: clip; 
         max-width: 100vw;
         width: 100%;
       }
@@ -181,6 +182,7 @@
       /* Consistent box-sizing */
       *, *::before, *::after {
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
       
       /* Font smoothing for all browsers */
@@ -192,11 +194,15 @@
         overflow-x: hidden;
         font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
         background-color: #0F172A;
-        min-height: 100%;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
         margin: 0;
         padding: 0;
         max-width: 100vw;
         width: 100%;
+        position: relative;
+        /* Safe area support for notched iPhones */
+        padding-bottom: env(safe-area-inset-bottom);
       }
       
       /* Root container overflow fix */
@@ -282,33 +288,50 @@
         scrollbar-width: none;
       }
       
+      /* Ensure scroll containers still work with touch */
+      [class*="overflow-"] {
+        -webkit-overflow-scrolling: touch;
+      }
+      
       /* Custom Selection */
       ::selection {
         background-color: #00C2FF;
         color: white;
       }
       
+      /* Scrollbar styles */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+      ::-webkit-scrollbar-thumb { 
+        background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 100%);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover { background: #007AFF; background-clip: content-box; }
       
-      /* ===== BACKDROP FILTER CROSS-BROWSER ===== */
-      .backdrop-blur-md {
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-      }
-      .backdrop-blur-sm {
-        -webkit-backdrop-filter: blur(4px);
-        backdrop-filter: blur(4px);
-      }
-      .backdrop-blur-lg {
-        -webkit-backdrop-filter: blur(16px);
-        backdrop-filter: blur(16px);
-      }
-      .backdrop-blur-xl {
-        -webkit-backdrop-filter: blur(24px);
-        backdrop-filter: blur(24px);
-      }
-      .backdrop-blur {
-        -webkit-backdrop-filter: blur(8px);
+      /* ===== BACKDROP FILTER CROSS-BROWSER & PERFORMANCE ===== */
+      .backdrop-blur-md, .backdrop-blur-sm, .backdrop-blur-lg, .backdrop-blur-xl, .backdrop-blur-2xl, .backdrop-blur-3xl {
+        -webkit-backdrop-filter: blur(8px); /* Cap blur on Safari for performance */
         backdrop-filter: blur(8px);
+        /* GPU acceleration for blurred elements */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+      
+      .backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+      .backdrop-blur-md { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+      .backdrop-blur-lg { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+      .backdrop-blur-xl { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+      .backdrop-blur-2xl { -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+      .backdrop-blur-3xl { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+      
+      /* Disable heavy blurs on low-power/mobile devices if they struggle */
+      @media screen and (max-width: 768px) {
+        .backdrop-blur-2xl, .backdrop-blur-3xl {
+          -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+        }
       }
       
       /* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */
@@ -363,51 +386,62 @@
       /* Note: Removed global .overflow-hidden mask as it interferes with touch events on mobile */
       /* Apply this fix only to specific elements that need it, not globally */
       
-      /* ===== TOUCH DEVICE FIXES ===== */
-      /* 
-       * CRITICAL: Use 'auto' as default to allow native scrolling, 
-       * and only restrict touch-action where explicitly needed.
-       * 'manipulation' disables double-tap-to-zoom which is fine for buttons.
-       */
-      html {
-        /* Allow all default touch behaviors on the document */
-        touch-action: auto;
-        -webkit-touch-callout: default;
+      /* ===== TOUCH DEVICE & SAFARI FIXES ===== */
+      /* Use -webkit-fill-available for proper height on iOS */
+      .min-h-screen {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
       }
       
-      body {
-        /* Prevent overscroll bounce on iOS that can feel buggy */
-        overscroll-behavior-y: contain;
-        touch-action: auto;
+      /* Fix for Safari hover states sticking on touch devices */
+      @media (hover: none) {
+        .hover\:brightness-110:hover, 
+        .hover\:bg-white\/20:hover,
+        .hover\:shadow-premium-hover:hover {
+          filter: none !important;
+          background-color: inherit !important;
+          box-shadow: inherit !important;
+        }
+      }
+
+      /* Ensure interactive elements are recognized by Safari */
+      button, a, [role="button"], input, select, textarea {
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-appearance: none;
+      }
+
+      /* Fix touch response and scrolling */
+      html, body {
+        /* Remove restrictive touch-action from root to allow native gestures */
+        touch-action: auto; 
+        -webkit-overflow-scrolling: touch;
       }
       
       #root {
-        touch-action: auto;
+        touch-action: pan-y pinch-zoom;
+        position: relative;
+        overflow-x: hidden;
+        width: 100%;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
       }
-      
-      /* Scrollable containers - ensure smooth momentum scrolling on iOS */
+
+      /* Allow vertical scrolling on scrollable containers */
       .overflow-y-auto, .overflow-y-scroll, .overflow-auto, .overflow-scroll {
+        touch-action: pan-y pinch-zoom;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
       }
       
-      /* Horizontal scroll containers */
+      /* Allow horizontal scrolling where needed */
       .overflow-x-auto, .overflow-x-scroll {
+        touch-action: pan-x pinch-zoom;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
       }
       
-      /* Interactive elements: use manipulation to remove 300ms tap delay */
-      button, a, [role="button"], input[type="button"], input[type="submit"], .cursor-pointer {
+      /* Ensure buttons and interactive elements respond to touch immediately */
+      button, a, [role="button"], input, select, textarea, .cursor-pointer {
         touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      /* Text inputs should allow normal touch behavior for selection */
-      input:not([type="button"]):not([type="submit"]), select, textarea {
-        touch-action: auto;
-        -webkit-user-select: text;
-        user-select: text;
       }
       
       /* Updated Marker Styles for Performance */
@@ -507,21 +541,17 @@
         touch-action: none;
       }
       
-      /* Fix touch delay on iOS for interactive elements - remove 300ms delay */
-      a, button, [role="button"], [tabindex]:not([tabindex="-1"]) {
+      /* Fix touch delay on iOS for interactive elements */
+      a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]) {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
         touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      /* Allow text selection in inputs and textareas */
-      input, select, textarea {
-        -webkit-user-select: auto;
-        user-select: auto;
       }
       
       /* Prevent pull-to-refresh on iOS when not wanted */
       body.no-pull-refresh {
         overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: auto;
       }
       
       /* Fix Windows high contrast mode */
@@ -551,55 +581,10 @@
       .leading-normal { line-height: 1.5; }
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
-      
-      /* ===== ENHANCED MOBILE TOUCH FIXES ===== */
-      
-      /* Prevent iOS rubber band effect on fixed containers */
-      .fixed {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-      }
-      
-      /* Ensure clickable cards and game elements respond properly on touch */
-      .group, [class*="hover:"], [class*="active:"] {
-        cursor: pointer;
-      }
-      
-      /* Fix for iOS where backdrop-filter can cause touch issues */
-      @supports (-webkit-backdrop-filter: blur(1px)) {
-        .backdrop-blur, .backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl, .backdrop-blur-2xl, .backdrop-blur-3xl {
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-        }
-      }
-      
-      /* Ensure modals and overlays don't block underlying content touch events */
-      [class*="pointer-events-none"] {
-        pointer-events: none !important;
-      }
-      [class*="pointer-events-none"] [class*="pointer-events-auto"] {
-        pointer-events: auto !important;
-      }
-      
-      /* Better active states for touch feedback on mobile */
-      @media (hover: none) and (pointer: coarse) {
-        button:active, a:active, [role="button"]:active {
-          opacity: 0.8;
-          transform: scale(0.98);
-        }
-      }
-      
-      /* Prevent text selection on game elements during rapid tapping */
-      .select-none, button, [role="button"] {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
     </style>
 </head>
-  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full"></div>
+  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full [touch-action:pan-y_pinch-zoom]"></div>
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

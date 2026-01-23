@@ -765,10 +765,9 @@ const MapPage: React.FC = () => {
       <div className={`fixed bottom-10 left-6 z-[2000] pointer-events-auto hidden md:block transition-all duration-700 ease-out ${showUI ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'}`}>
         <button 
           onClick={() => setShowUI(true)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden group"
+          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
           title="Show UI"
         >
-          <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
           <Eye size={20} className="relative z-10 drop-shadow-sm" />
         </button>
       </div>
@@ -776,10 +775,9 @@ const MapPage: React.FC = () => {
       <div className={`fixed z-[2000] pointer-events-auto md:hidden transition-all duration-700 ease-out ${showUI ? 'opacity-0 pointer-events-none' : 'bottom-10 left-6 opacity-100'}`}>
         <button 
           onClick={() => setShowUI(!showUI)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden group"
+          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
           title="Show UI"
         >
-          <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
           <Eye size={20} className="relative z-10 drop-shadow-sm" />
         </button>
       </div>
@@ -789,8 +787,7 @@ const MapPage: React.FC = () => {
       <div className={`hidden md:flex absolute top-24 left-6 w-60 flex-col gap-3 z-[1000] pointer-events-none transition-all duration-700 ease-out transform ${showUI ? 'translate-x-0 opacity-100' : '-translate-x-full -translate-y-10 opacity-0'}`}>
           {/* Search Bar */}
           <div className="pointer-events-auto relative z-50">
-              <div className="bg-white/40 backdrop-blur-2xl rounded-xl shadow-glass border border-black/20 flex items-center px-3.5 py-2.5 focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-black/30 group relative overflow-hidden">
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+              <div className="bg-white/40 backdrop-blur-2xl rounded-xl  border border-black/20 flex items-center px-3.5 py-2.5 focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-black/30 group relative overflow-hidden">
                   <button 
                     onClick={() => filteredSearchResults.length > 0 && handleResultClick(filteredSearchResults[0])} 
                     className="mr-3 text-black/40 hover:text-primary transition-all focus:outline-none relative z-10"
@@ -815,7 +812,7 @@ const MapPage: React.FC = () => {
               {searchQuery && (
                   <div 
                     ref={desktopResultsRef}
-                    className="absolute left-0 w-full bg-surface-dark/95 backdrop-blur-3xl rounded-xl shadow-glass border border-white/40 overflow-y-auto custom-scrollbar animate-in fade-in z-[60] overflow-hidden max-h-[50vh] top-full mt-2 slide-in-from-top-2"
+                    className="absolute left-0 w-full bg-surface-dark/95 backdrop-blur-3xl rounded-xl  border border-white/40 overflow-y-auto custom-scrollbar animate-in fade-in z-[60] overflow-hidden max-h-[50vh] top-full mt-2 slide-in-from-top-2"
                   >
                       <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />
                       {filteredSearchResults.length > 0 ? (
@@ -828,11 +825,11 @@ const MapPage: React.FC = () => {
                                   let glowClass = 'drop-shadow-md';
                                   if (isTerritory) {
                                     nameClass = 'text-accent';
-                                    glowClass = 'drop-shadow-glow';
+                                    glowClass = '';
                                   }
                                   if (isDeFacto) {
                                     nameClass = 'text-warning';
-                                    glowClass = 'drop-shadow-glow';
+                                    glowClass = '';
                                   }
 
                                   return (
@@ -864,8 +861,7 @@ const MapPage: React.FC = () => {
           </div>
 
           {/* Region Card */}
-          <div className="bg-white/40 backdrop-blur-3xl p-4 rounded-3xl shadow-glass border border-black/20 pointer-events-auto relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+          <div className="bg-white/40 backdrop-blur-3xl p-4 rounded-3xl  border border-black/20 pointer-events-auto relative overflow-hidden">
             <div className="flex items-center gap-2.5 mb-5 relative z-10">
               <div className="p-2 bg-primary/10 rounded-xl text-primary border border-primary/20">
                 <MapIcon size={18} />
@@ -887,9 +883,9 @@ const MapPage: React.FC = () => {
                     <button
                       key={region}
                       onClick={() => handleRegionSelect(region)}
-                      className={`px-3 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg transition-all duration-500 shadow-glass border-2 whitespace-nowrap ${
-                        selectedRegion === region 
-                          ? 'bg-primary text-white border-white/60 shadow-glow-primary' 
+                      className={`px-3 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg transition-all duration-500  border-2 whitespace-nowrap ${
+                        selectedRegion === region
+                          ? 'bg-primary text-white border-white/60' 
                           : 'bg-black/5 text-black/40 border-black/30 hover:bg-black/10 hover:text-black'
                       }`}
                     >
@@ -927,8 +923,7 @@ const MapPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white/40 backdrop-blur-3xl p-3.5 rounded-2xl shadow-glass border border-black/20 pointer-events-auto relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+          <div className="bg-white/40 backdrop-blur-3xl p-3.5 rounded-2xl  border border-black/20 pointer-events-auto relative overflow-hidden">
             <div className="flex flex-col gap-2 text-[8px] font-black uppercase tracking-[0.3em] text-black/40 relative z-10">
               <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary border border-black/10"></div>
@@ -951,10 +946,9 @@ const MapPage: React.FC = () => {
         {/* Hide UI Button */}
         <button 
           onClick={() => setShowUI(false)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden group"
+          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
           title="Hide UI"
         >
-          <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
           <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
         </button>
 
@@ -962,9 +956,8 @@ const MapPage: React.FC = () => {
         <button 
           onClick={flyToRandom}
           disabled={isLoadingRandom}
-          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl shadow-glass border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60"
+          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl  border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60"
         >
-          <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
           <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
             <Compass size={24} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
             <span className="tracking-tighter">{!mapReady ? 'Initializing...' : isLoadingRandom ? 'Scanning...' : 'Random Search'}</span>
@@ -973,11 +966,11 @@ const MapPage: React.FC = () => {
 
         {/* Zoom Controls */}
         <div className="hidden lg:flex items-center gap-2">
-          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass group relative overflow-hidden">
+          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
             <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
             <Minus size={22} className="relative z-10 drop-shadow-sm" />
           </button>
-          <button onClick={handleZoomIn} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass group relative overflow-hidden">
+          <button onClick={handleZoomIn} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
             <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
             <Plus size={22} className="relative z-10 drop-shadow-sm" />
           </button>
@@ -990,9 +983,8 @@ const MapPage: React.FC = () => {
           <div className="w-full px-4 pb-4 flex items-end justify-between pointer-events-none">
             <button 
                 onClick={() => setShowUI(false)}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden flex-shrink-0 group"
+                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden flex-shrink-0 group"
             >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
                 <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
             </button>
 
@@ -1001,9 +993,8 @@ const MapPage: React.FC = () => {
               <button 
                   onClick={flyToRandom}
                   disabled={isLoadingRandom || !mapReady}
-                  className="pointer-events-auto shadow-glass bg-white/40 backdrop-blur-3xl text-[#1A1C1E] border border-black/20 px-8 py-3.5 rounded-full flex items-center gap-3 transition-all group relative overflow-hidden disabled:opacity-40 disabled:saturate-50 hover:bg-white/60"
+                  className="pointer-events-auto  bg-white/40 backdrop-blur-3xl text-[#1A1C1E] border border-black/20 px-8 py-3.5 rounded-full flex items-center gap-3 transition-all group relative overflow-hidden disabled:opacity-40 disabled:saturate-50 hover:bg-white/60"
               >
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-30 pointer-events-none" />
                   <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
                     <Compass size={20} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
                     <span className="font-display font-black text-xs uppercase tracking-[0.1em] whitespace-nowrap">{!mapReady ? 'INITIALIZING...' : isLoadingRandom ? 'SEARCHING...' : 'Random Search'}</span>
@@ -1015,14 +1006,14 @@ const MapPage: React.FC = () => {
             <div className="flex flex-col gap-2 flex-shrink-0">
               <button 
                 onClick={handleZoomIn}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
                 <Plus size={20} className="relative z-10 drop-shadow-sm" />
               </button>
               <button 
                 onClick={handleZoomOut}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all shadow-glass relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
                 <Minus size={20} className="relative z-10 drop-shadow-sm" />
@@ -1034,7 +1025,6 @@ const MapPage: React.FC = () => {
           {/* Combined Bottom Panel */}
           <div className="w-full pointer-events-auto bg-white/40 backdrop-blur-3xl border-t border-x border-black/20 shadow-xl rounded-t-3xl p-4 pb-4 flex flex-col gap-3 relative overflow-hidden">
 
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               
               {/* Search Section */}
               <div className="relative z-20">
@@ -1066,7 +1056,6 @@ const MapPage: React.FC = () => {
                         ref={mobileResultsRef}
                         className="absolute bottom-full left-0 w-full mb-4 bg-white/95 backdrop-blur-3xl rounded-2xl shadow-2xl border border-black/20 overflow-hidden max-h-[45vh] overflow-y-auto custom-scrollbar animate-in slide-in-from-bottom-4 fade-in"
                       >
-                          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                           {filteredSearchResults.length > 0 ? (
                               <ul className="py-2 relative z-10">
                                   {filteredSearchResults.map((country) => {
@@ -1147,7 +1136,7 @@ const MapPage: React.FC = () => {
                       className={`
                         whitespace-nowrap flex-shrink-0 px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-500 border-2 select-none shadow-sm
                         ${selectedRegion === region 
-                          ? 'bg-primary text-white border-white/60 shadow-glow-primary' 
+                          ? 'bg-primary text-white border-white/60' 
                           : 'bg-black/5 text-black/40 border-black/30 active:bg-black/10'
                         }
                       `}

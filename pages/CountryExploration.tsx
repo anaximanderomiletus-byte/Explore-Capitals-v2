@@ -44,7 +44,7 @@ const PhotoPrint: React.FC<{
   return (
     <div className={`relative group rounded-3xl max-w-full overflow-hidden ${className}`}>
       {/* Liquid Glass Container - TV Style */}
-      <div className={`p-1.5 sm:p-2 bg-black/80 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 shadow-glass-bubble transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
+      <div className={`p-1.5 sm:p-2 bg-black/80 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
         {/* Bezel Gloss */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
@@ -498,18 +498,30 @@ const CountryExploration: React.FC = () => {
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (!carouselRef.current) return;
     const container = carouselRef.current;
-    // Scroll by card width + gap (approx 152px on md, 124px on mobile)
-    const cardWidth = window.innerWidth >= 768 ? 152 : 124;
-    const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    // Card width + gap (w-28 = 112px or w-36 = 144px, plus gap-3 = 12px)
+    const cardWidth = window.innerWidth >= 768 ? 156 : 124;
+    
+    // Calculate current card index based on scroll position
+    const currentScroll = container.scrollLeft;
+    const currentIndex = Math.round(currentScroll / cardWidth);
+    const targetIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
+    
+    // Scroll to the exact card position
+    container.scrollTo({ left: targetIndex * cardWidth, behavior: 'smooth' });
   };
 
-  // Carousel 3D Effect Logic
+  // Carousel 3D Effect Logic with Infinite Loop
   useEffect(() => {
-    if (view !== 'summary' || !carouselRef.current) return;
+    if (view !== 'summary' || !carouselRef.current || !tourData) return;
 
     const container = carouselRef.current;
     let rafId: number;
+    const numCards = tourData.stops.length;
+    const cardWidth = window.innerWidth >= 768 ? 156 : 124; // card width + gap
+    const singleSetWidth = numCards * cardWidth;
+    
+    // Set initial scroll to the middle set of cards
+    container.scrollLeft = singleSetWidth;
     
     const updateCardStyles = () => {
       const cards = container.querySelectorAll('.carousel-card');
@@ -536,6 +548,17 @@ const CountryExploration: React.FC = () => {
     };
 
     const handleScroll = () => {
+      // Infinite loop logic: jump to equivalent position when reaching edges
+      const scrollLeft = container.scrollLeft;
+      
+      if (scrollLeft < singleSetWidth * 0.5) {
+        // Scrolled too far left, jump to middle set
+        container.scrollLeft = scrollLeft + singleSetWidth;
+      } else if (scrollLeft > singleSetWidth * 1.5) {
+        // Scrolled too far right, jump to middle set
+        container.scrollLeft = scrollLeft - singleSetWidth;
+      }
+      
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(updateCardStyles);
     };
@@ -589,7 +612,7 @@ const CountryExploration: React.FC = () => {
               
               <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
                 {/* Main Loading Console */}
-                <div className="w-full bg-black/40 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_0_100px_rgba(0,194,255,0.15)] p-8 md:p-12 text-center border border-white/10 relative overflow-hidden">
+                <div className="w-full bg-black/40 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 text-center border border-white/10 relative overflow-hidden">
                   {/* Internal Glass Sheen */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
                   <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />
@@ -622,15 +645,15 @@ const CountryExploration: React.FC = () => {
 
                   <div className="space-y-4 mb-10">
                     <div className="inline-flex items-center gap-3 px-5 py-2 bg-sky/10 rounded-full border border-white/10 mb-2 shadow-inner group">
-                       <div className="w-2 h-2 rounded-full bg-sky animate-ping shadow-glow-sky" />
-                       <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.5em] drop-shadow-glow-sky">
+                       <div className="w-2 h-2 rounded-full bg-sky animate-ping" />
+                       <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.5em]">
                          {loadingProgress < 100 ? 'Establishing Link' : 'Connection Secured'}
                        </span>
                     </div>
                     
                     <div className="flex flex-col items-center">
                       <span className="text-[10px] text-white/40 tracking-[0.4em] uppercase mb-1 font-black">Destination</span>
-                      <h1 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase leading-tight drop-shadow-[0_0_20px_rgba(0,194,255,0.3)]">
+                      <h1 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase leading-tight">
                         {country.name}
                       </h1>
                     </div>
@@ -655,7 +678,7 @@ const CountryExploration: React.FC = () => {
                     {/* Loading Bar Container */}
                     <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden border border-white/10 shadow-inner p-0.5 relative group">
                       <div 
-                        className="h-full bg-gradient-to-r from-sky via-sky-light to-sky transition-all duration-300 ease-out rounded-full relative shadow-[0_0_20px_rgba(0,194,255,0.6)]" 
+                        className="h-full bg-gradient-to-r from-sky via-sky-light to-sky transition-all duration-300 ease-out rounded-full relative" 
                         style={{ width: `${loadingProgress}%` }}
                       >
                         {/* Animated Shimmer Overlap */}
@@ -673,7 +696,7 @@ const CountryExploration: React.FC = () => {
                             key={i} 
                             className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
                               loadingProgress > (i * 12.5) 
-                                ? 'bg-sky shadow-glow-sky' 
+                                ? 'bg-sky' 
                                 : 'bg-white/5 border border-white/5'
                             }`} 
                          />
@@ -685,7 +708,7 @@ const CountryExploration: React.FC = () => {
                   <div className="flex flex-col items-center justify-center h-8 relative">
                     <div className="flex items-center gap-4 text-white/40">
                       <div className="w-8 h-[1px] bg-gradient-to-r from-transparent to-sky/40" />
-                      <p key={loadingStep} className="text-[10px] font-black uppercase tracking-[0.4em] animate-in slide-in-from-bottom-2 fade-in duration-500 text-sky-light/80 drop-shadow-glow-sky">
+                      <p key={loadingStep} className="text-[10px] font-black uppercase tracking-[0.4em] animate-in slide-in-from-bottom-2 fade-in duration-500 text-sky-light/80">
                         {loadingMessages[loadingStep]}
                       </p>
                       <div className="w-8 h-[1px] bg-gradient-to-l from-transparent to-sky/40" />
@@ -718,7 +741,7 @@ const CountryExploration: React.FC = () => {
       return (
         <Container className="flex items-center justify-center pt-24 pb-12 px-4 md:px-6 bg-surface-dark">
           <div className="flex-1 flex flex-col items-center justify-center text-center max-w-sm">
-            <div className="w-20 h-20 bg-red-500/20 rounded-[2rem] flex items-center justify-center mb-8 text-red-500 border border-red-500/30 shadow-glow-warning">
+            <div className="w-20 h-20 bg-red-500/20 rounded-[2rem] flex items-center justify-center mb-8 text-red-500 border border-red-500/30">
                 <AlertCircle size={40} />
             </div>
             <h2 className="text-2xl font-display font-black mb-4 text-white uppercase tracking-tighter">Connection Issue</h2>
@@ -749,9 +772,9 @@ const CountryExploration: React.FC = () => {
             <div className="p-2 sm:p-4 md:p-6 text-center relative w-full overflow-hidden">
               
               <div className="space-y-1 mb-2 text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-0.5 bg-sky/30 rounded-full border border-white/40 text-[7px] font-black tracking-[0.4em] text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] relative overflow-hidden mx-auto">
+                <div className="inline-flex items-center gap-2 px-3 py-0.5 bg-sky/30 rounded-full border border-white/40 text-[7px] font-black tracking-[0.4em] text-white relative overflow-hidden mx-auto">
                   <Compass size={10} className="text-sky-light" /> 
-                  <span className="relative z-10 uppercase drop-shadow-glow-sky">Virtual Tour</span>
+                  <span className="relative z-10 uppercase">Virtual Tour</span>
                 </div>
                 <h1 className="text-xl md:text-2xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
                   {tourData.tourTitle}
@@ -885,8 +908,8 @@ const CountryExploration: React.FC = () => {
            {/* Navigation Controls */}
            <div className="sticky top-20 z-50 w-full px-4 sm:px-6 flex justify-center items-center pointer-events-none">
               {/* Progress Header */}
-              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 shadow-[0_8px_16px_rgba(0,0,0,0.4)] flex items-center gap-2 sm:gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto max-w-full overflow-hidden">
-                 <div className="w-2 h-2 rounded-full bg-sky animate-pulse shadow-[0_0_8px_rgba(0,194,255,0.5)] shrink-0" />
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 flex items-center gap-2 sm:gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto max-w-full overflow-hidden">
+                 <div className="w-2 h-2 rounded-full bg-sky animate-pulse shrink-0" />
                  <span className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] shrink-0">
                    STOP {stepIndex + 1} OF {tourData.stops.length}
                  </span>
@@ -958,7 +981,7 @@ const CountryExploration: React.FC = () => {
                         caption={`${currentStop.stopName}, ${country.name}`}
                         region="Active Stop"
                         rotation="rotate-0"
-                        className="w-full shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
+                        className="w-full"
                     />
                   </div>
                 </section>
@@ -990,13 +1013,13 @@ const CountryExploration: React.FC = () => {
            >
               {/* Progress Header */}
               <div className="text-center mb-6 md:mb-8 shrink-0 animate-in fade-in slide-in-from-top-4 duration-1000">
-                 <div className="inline-flex items-center gap-3 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-3 shadow-glass-bubble">
-                    <div className="w-1.5 h-1.5 rounded-full bg-sky shadow-glow-sky animate-pulse" />
-                    <h2 className="text-[9px] font-black text-white uppercase tracking-[0.5em] drop-shadow-glow-sky">Knowledge Check</h2>
+                 <div className="inline-flex items-center gap-3 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-sky animate-pulse" />
+                    <h2 className="text-[9px] font-black text-white uppercase tracking-[0.5em]">Knowledge Check</h2>
                  </div>
                  <div className="w-48 md:w-64 h-1.5 bg-white/10 mx-auto relative rounded-full overflow-hidden shadow-inner border border-white/10">
                     <div 
-                      className="absolute h-full bg-gradient-to-r from-sky to-sky-light transition-all duration-1000 ease-out shadow-glow-sky"
+                      className="absolute h-full bg-gradient-to-r from-sky to-sky-light transition-all duration-1000 ease-out"
                       style={{ 
                         width: `${((stepIndex + 1) / tourData.stops.length) * 100}%`, 
                       }}
@@ -1020,7 +1043,7 @@ const CountryExploration: React.FC = () => {
 
                  {/* Right: Glassy Quiz Panel */}
                  <div className="lg:col-span-7 flex flex-col animate-in fade-in slide-in-from-right-8 duration-1000 h-full justify-center overflow-hidden">
-                    <div className="bg-white/10 backdrop-blur-3xl p-4 sm:p-5 md:p-8 rounded-2xl sm:rounded-3xl border border-white/40 shadow-glass-bubble flex flex-col relative overflow-hidden group">
+                    <div className="bg-white/10 backdrop-blur-3xl p-4 sm:p-5 md:p-8 rounded-2xl sm:rounded-3xl border border-white/40 flex flex-col relative overflow-hidden group">
                        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
                        <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                        
@@ -1037,12 +1060,12 @@ const CountryExploration: React.FC = () => {
 
                               if (isSelected) {
                                  if (isCorrect) {
-                                   stateStyles = "bg-accent/70 border-accent text-white shadow-glow-accent ring-2 ring-accent/50";
+                                   stateStyles = "bg-accent/70 border-accent text-white";
                                  } else {
-                                   stateStyles = "bg-red-500/60 border-red-500 text-white shadow-glow-warning ring-2 ring-red-500/40";
+                                   stateStyles = "bg-red-500/60 border-red-500 text-white";
                                  }
                               } else if (selectedOption && option === currentQuestion.answer) {
-                                 stateStyles = "bg-accent/40 border-accent/80 text-white shadow-glow-accent/30"; 
+                                 stateStyles = "bg-accent/40 border-accent/80 text-white"; 
                               } else if (selectedOption) {
                                  stateStyles = "opacity-20 grayscale border-white/5 bg-transparent scale-95 blur-[1px]";
                               }
@@ -1052,7 +1075,7 @@ const CountryExploration: React.FC = () => {
                                   key={idx}
                                   onClick={() => handleQuizAnswer(option)}
                                   disabled={!!selectedOption}
-                                  className={`w-full text-left px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-[11px] sm:text-xs md:text-sm flex justify-between items-center shadow-glass-bubble relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
+                                  className={`w-full text-left px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-[11px] sm:text-xs md:text-sm flex justify-between items-center relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
                                   style={{ WebkitTapHighlightColor: 'transparent' }}
                                 >
                                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 group/opt:opacity-20 pointer-events-none rounded-[inherit]" />
@@ -1074,7 +1097,7 @@ const CountryExploration: React.FC = () => {
 
            {/* Feedback Bottom Panel - Static Mission Report (Non-scrollable overlay) */}
            <div 
-             className={`fixed bottom-0 left-0 right-0 z-[100] bg-surface-dark flex flex-col justify-center transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) shadow-[0_-40px_150px_rgba(0,0,0,1)] select-none pointer-events-auto touch-none overflow-hidden ${selectedOption ? 'translate-y-0' : 'translate-y-full'}`}
+             className={`fixed bottom-0 left-0 right-0 z-[100] bg-surface-dark flex flex-col justify-center transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) select-none pointer-events-auto touch-none overflow-hidden ${selectedOption ? 'translate-y-0' : 'translate-y-full'}`}
              style={{ height: 'max-content', minHeight: '32vh' }}
            >
               {/* Internal Aero Gloss - Edge to Edge */}
@@ -1086,7 +1109,7 @@ const CountryExploration: React.FC = () => {
                       {selectedOption && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
                           <div className="flex items-center justify-center md:justify-start gap-6">
-                              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 border-white/40 shadow-glass-bubble relative overflow-hidden ${isCorrect ? 'bg-accent/60 text-white shadow-glow-accent' : 'bg-red-500/60 text-white shadow-glow-warning'}`}>
+                              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 border-white/40 relative overflow-hidden ${isCorrect ? 'bg-accent/60 text-white' : 'bg-red-500/60 text-white'}`}>
                                    <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
                                    {isCorrect ? <Trophy size={32} className="relative z-10" /> : <ImageOff size={32} className="relative z-10" />}
                                   </div>
@@ -1106,7 +1129,7 @@ const CountryExploration: React.FC = () => {
                   <div className="w-full md:w-auto shrink-0 animate-in fade-in zoom-in duration-700 delay-200">
                        <Button 
                          onClick={nextQuestion} 
-                         className="w-full md:min-w-[300px] h-20 rounded-full flex items-center justify-center gap-4 text-2xl uppercase tracking-widest shadow-glow-sky border-2 border-white/40 group/next"
+                         className="w-full md:min-w-[300px] h-20 rounded-full flex items-center justify-center gap-4 text-2xl uppercase tracking-widest border-2 border-white/40 group/next"
                          variant="primary"
                          size="lg"
                          disabled={!selectedOption}
@@ -1133,16 +1156,16 @@ const CountryExploration: React.FC = () => {
           </div>
 
           <div className={`flex items-center justify-center relative z-10 w-full max-w-3xl transition-all duration-700 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
-            <div className="bg-black/40 backdrop-blur-3xl rounded-2xl shadow-glass-bubble p-4 md:p-6 w-full text-center border border-white/10 relative overflow-hidden">
+            <div className="bg-black/40 backdrop-blur-3xl rounded-2xl p-4 md:p-6 w-full text-center border border-white/10 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
               <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />
               
               <div className="relative z-10">
                 {/* Header Area: Ultra-Compact & Elegant */}
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4 pb-4 border-b border-white/5">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-white/20 shadow-glass-bubble relative shrink-0 group ${isPerfect ? 'bg-accent/30 shadow-glow-accent' : 'bg-sky/30 shadow-glow-sky'}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-white/20 relative shrink-0 group ${isPerfect ? 'bg-accent/30' : 'bg-sky/30'}`}>
                      <div className="absolute inset-0 bg-glossy-gradient opacity-40 group-hover:opacity-60 transition-opacity rounded-[inherit]" />
-                    <Trophy className="w-6 h-6 text-white drop-shadow-glow-sky" />
+                    <Trophy className="w-6 h-6 text-white" />
                   </div>
                 
                   <div className="text-center md:text-left">
@@ -1151,14 +1174,14 @@ const CountryExploration: React.FC = () => {
                         <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.4em]">Knowledge Check</span>
                         <div className="h-px w-6 bg-white/10" />
                         <p className="text-white font-black uppercase tracking-widest text-xs tabular-nums">
-                          <strong className="text-sky drop-shadow-glow-sky">{score}</strong> <span className="text-white/20 mx-0.5">/</span> {tourData.stops.length}
+                          <strong className="text-sky">{score}</strong> <span className="text-white/20 mx-0.5">/</span> {tourData.stops.length}
                         </p>
                      </div>
                   </div>
                 </div>
 
                 {/* Enhanced Carousel Section */}
-                <div className="mb-4 w-full relative bg-white/5 rounded-2xl p-2 border border-white/5 shadow-inner group/log overflow-hidden">
+                <div className="mb-4 w-full relative bg-white/5 rounded-2xl p-2 border border-white/5 group/log overflow-hidden">
                    <div className="flex items-center justify-between mb-2 px-4 pt-2">
                       <div className="flex flex-col items-start">
                         <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.5em] mb-1">Visual Log Archive</span>
@@ -1170,21 +1193,23 @@ const CountryExploration: React.FC = () => {
                       {/* Left Navigation Button */}
                       <button 
                         onClick={() => scrollCarousel('left')} 
-                        className="absolute left-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all shadow-lg group/btn"
+                        className="absolute left-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all group/btn"
                         aria-label="Scroll Left"
                       >
                          <ChevronLeft size={20} className="text-white/40 group-hover/btn:text-white transition-colors" />
                       </button>
 
-                      {/* 3D Scroller - Draggable */}
+                      {/* 3D Scroller - Infinite Loop */}
                       <div 
                         ref={carouselRef}
-                        className="flex gap-3 overflow-x-auto py-4 no-scrollbar w-full cursor-grab active:cursor-grabbing select-none"
+                        className="flex gap-3 overflow-x-auto py-4 no-scrollbar cursor-grab active:cursor-grabbing select-none mx-auto px-4"
                         style={{ 
                           perspective: '1200px', 
                           transformStyle: 'preserve-3d',
                           scrollbarWidth: 'none',
-                          msOverflowStyle: 'none'
+                          msOverflowStyle: 'none',
+                          scrollSnapType: 'x mandatory',
+                          maxWidth: '520px'
                         }}
                         onMouseDown={(e) => {
                           const el = carouselRef.current;
@@ -1194,6 +1219,8 @@ const CountryExploration: React.FC = () => {
                           el.dataset.scrollLeft = String(el.scrollLeft);
                           el.dataset.lastX = String(e.clientX);
                           el.dataset.velocity = '0';
+                          // Disable snap during drag for smooth dragging
+                          el.style.scrollSnapType = 'none';
                         }}
                         onMouseMove={(e) => {
                           const el = carouselRef.current;
@@ -1210,20 +1237,21 @@ const CountryExploration: React.FC = () => {
                           const el = carouselRef.current;
                           if (!el) return;
                           el.dataset.isDragging = 'false';
-                          // Apply momentum
-                          const velocity = Number(el.dataset.velocity || 0);
-                          if (Math.abs(velocity) > 2) {
-                            el.scrollBy({ left: -velocity * 8, behavior: 'smooth' });
-                          }
+                          // Re-enable snap and snap to nearest card
+                          el.style.scrollSnapType = 'x mandatory';
+                          const cardWidth = window.innerWidth >= 768 ? 156 : 124;
+                          const nearestCard = Math.round(el.scrollLeft / cardWidth);
+                          el.scrollTo({ left: nearestCard * cardWidth, behavior: 'smooth' });
                         }}
                         onMouseLeave={() => {
                           const el = carouselRef.current;
                           if (!el) return;
                           if (el.dataset.isDragging === 'true') {
-                            const velocity = Number(el.dataset.velocity || 0);
-                            if (Math.abs(velocity) > 2) {
-                              el.scrollBy({ left: -velocity * 8, behavior: 'smooth' });
-                            }
+                            // Re-enable snap and snap to nearest card
+                            el.style.scrollSnapType = 'x mandatory';
+                            const cardWidth = window.innerWidth >= 768 ? 156 : 124;
+                            const nearestCard = Math.round(el.scrollLeft / cardWidth);
+                            el.scrollTo({ left: nearestCard * cardWidth, behavior: 'smooth' });
                           }
                           el.dataset.isDragging = 'false';
                         }}
@@ -1235,6 +1263,8 @@ const CountryExploration: React.FC = () => {
                           el.dataset.scrollLeft = String(el.scrollLeft);
                           el.dataset.lastX = String(e.touches[0].clientX);
                           el.dataset.velocity = '0';
+                          // Disable snap during drag for smooth dragging
+                          el.style.scrollSnapType = 'none';
                         }}
                         onTouchMove={(e) => {
                           const el = carouselRef.current;
@@ -1250,26 +1280,26 @@ const CountryExploration: React.FC = () => {
                           const el = carouselRef.current;
                           if (!el) return;
                           el.dataset.isDragging = 'false';
-                          const velocity = Number(el.dataset.velocity || 0);
-                          if (Math.abs(velocity) > 2) {
-                            el.scrollBy({ left: -velocity * 8, behavior: 'smooth' });
-                          }
+                          // Re-enable snap and snap to nearest card
+                          el.style.scrollSnapType = 'x mandatory';
+                          const cardWidth = window.innerWidth >= 768 ? 156 : 124;
+                          const nearestCard = Math.round(el.scrollLeft / cardWidth);
+                          el.scrollTo({ left: nearestCard * cardWidth, behavior: 'smooth' });
                         }}
                       >
-                          {/* Left spacer for centering first card */}
-                          <div className="flex-shrink-0 w-[calc(50%-70px)] md:w-[calc(50%-80px)]" />
-                          
-                          {tourData.stops.map((stop, index) => {
-                            const isCorrectResult = quizResults[index];
-                            const image = stopImages[index];
+                          {/* Create infinite loop by tripling the cards */}
+                          {[...tourData.stops, ...tourData.stops, ...tourData.stops].map((stop, index) => {
+                            const realIndex = index % tourData.stops.length;
+                            const isCorrectResult = quizResults[realIndex];
+                            const image = stopImages[realIndex];
                             
                             return (
                               <div 
                                 key={index} 
                                 className="carousel-card flex-shrink-0 w-28 h-44 md:w-36 md:h-52 relative transition-all duration-300 ease-out"
-                                style={{ transformStyle: 'preserve-3d' }}
+                                style={{ transformStyle: 'preserve-3d', scrollSnapAlign: 'center' }}
                               >
-                                <div className={`h-full bg-white/5 backdrop-blur-2xl rounded-lg border transition-all duration-300 relative overflow-hidden flex flex-col p-1 shadow-glass-bubble group/card 
+                                <div className={`h-full bg-white/5 backdrop-blur-2xl rounded-lg border transition-all duration-300 relative overflow-hidden flex flex-col p-1 group/card 
                                   ${isCorrectResult ? 'border-accent/30' : 'border-red-500/30'}
                                 `}>
                                     <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
@@ -1311,15 +1341,12 @@ const CountryExploration: React.FC = () => {
                               </div>
                             );
                           })}
-                          
-                          {/* Right spacer for centering last card */}
-                          <div className="flex-shrink-0 w-[calc(50%-70px)] md:w-[calc(50%-80px)]" />
                       </div>
 
                       {/* Right Navigation Button */}
                       <button 
                         onClick={() => scrollCarousel('right')} 
-                        className="absolute right-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all shadow-lg group/btn"
+                        className="absolute right-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all group/btn"
                         aria-label="Scroll Right"
                       >
                          <ChevronRight size={20} className="text-white/40 group-hover/btn:text-white transition-colors" />
@@ -1332,19 +1359,29 @@ const CountryExploration: React.FC = () => {
                 </div>
 
                 {/* Action Controls: Compact */}
-                <div className="flex flex-col gap-2 max-w-xs mx-auto relative z-10 border-t border-white/5 pt-4">
-                  <Button 
+                <div className="flex flex-col items-center gap-3 relative z-10 border-t border-white/5 pt-4">
+                  <button 
                     onClick={restartTour} 
-                    variant="primary" 
-                    size="md" 
-                    className="w-full h-10 text-xs uppercase tracking-widest shadow-glow-sky border border-white/20 flex items-center justify-center gap-2 group/restart rounded-full"
+                    className="group relative w-full max-w-[280px] h-12 rounded-2xl overflow-hidden transition-all duration-500"
                   >
-                    <RotateCcw size={14} className="group-hover/restart:rotate-[-180deg] transition-transform duration-700" /> RESTART TOUR
-                  </Button>
+                    {/* Gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
+                    
+                    {/* Inner border */}
+                    <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 flex items-center justify-center gap-3 h-full">
+                      <RotateCcw size={14} className="text-white/80 group-hover:rotate-[-180deg] transition-transform duration-700" />
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-white/90">
+                        Restart Tour
+                      </span>
+                    </div>
+                  </button>
                   
                   <button 
                     onClick={() => navigate(`/country/${country.id}`)}
-                    className="w-full py-1.5 text-[9px] font-black text-white/30 hover:text-white uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group/back"
+                    className="py-1.5 text-[9px] font-black text-white/30 hover:text-white uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group/back"
                   >
                     RETURN TO PROFILE
                   </button>
@@ -1375,7 +1412,7 @@ const CountryExploration: React.FC = () => {
       {isTransitioning && createPortal(
         <div className={`fixed inset-0 z-[5000] flex items-center justify-center pointer-events-none [transform:translateZ(0)] [-webkit-transform:translateZ(0)] [backface-visibility:hidden] [-webkit-backface-visibility:hidden] ${transitionDirection === 'forward' ? 'animate-aero-wipe-full-forward' : 'animate-aero-wipe-full-backward'}`} aria-hidden="true">
           {/* Luminous Background Layer */}
-          <div className="absolute inset-0 bg-surface-dark shadow-[0_0_100px_rgba(0,0,0,0.5)]">
+          <div className="absolute inset-0 bg-surface-dark">
              {/* Immersive Aurora Blobs */}
              <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky/15 rounded-full blur-[120px] animate-pulse-slow" />
@@ -1394,7 +1431,7 @@ const CountryExploration: React.FC = () => {
               <div className="absolute inset-0 bg-sky/30 rounded-full blur-3xl animate-pulse" />
               
               {/* Compass outer ring */}
-              <div className="w-44 h-44 rounded-full bg-white/10 backdrop-blur-3xl border-2 border-white/30 flex items-center justify-center shadow-glass-bubble overflow-hidden relative">
+              <div className="w-44 h-44 rounded-full bg-white/10 backdrop-blur-3xl border-2 border-white/30 flex items-center justify-center overflow-hidden relative">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
                 
                 {/* Rotating compass ring with cardinal directions */}
@@ -1409,12 +1446,12 @@ const CountryExploration: React.FC = () => {
                 <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-sky/20 to-accent/20 border border-white/20 flex items-center justify-center">
                   {/* Orbiting plane */}
                   <div className="absolute inset-0 animate-[spin_3s_linear_infinite]">
-                    <Plane className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 text-sky drop-shadow-[0_0_12px_rgba(0,194,255,0.8)] rotate-90" />
+                    <Plane className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 text-sky rotate-90" />
                   </div>
                   
                   {/* Center destination marker */}
                   <div className="relative">
-                    <MapPin className="w-10 h-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-bounce" style={{ animationDuration: '2s' }} />
+                    <MapPin className="w-10 h-10 text-white animate-bounce" style={{ animationDuration: '2s' }} />
                     <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-1 bg-white/30 rounded-full blur-sm" />
                   </div>
                 </div>

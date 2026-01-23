@@ -73,15 +73,14 @@ interface MobileCountryCardProps {
 
 const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick, isTerritory, isDeFacto, sovereignty }) => {
   let titleColor = 'text-white';
-  if (isTerritory) titleColor = 'text-accent drop-shadow-glow';
-  if (isDeFacto) titleColor = 'text-warning drop-shadow-glow';
+  if (isTerritory) titleColor = 'text-accent';
+  if (isDeFacto) titleColor = 'text-warning';
 
   return (
     <div 
       onClick={onClick}
-      className="bg-white/10 backdrop-blur-3xl p-6 rounded-2xl shadow-glass border border-white/40 transition-all hover:bg-white/15 cursor-pointer flex flex-col transform-gpu overflow-hidden relative group"
+      className="bg-white/10 backdrop-blur-3xl p-6 rounded-2xl border border-white/40 transition-all hover:bg-white/15 cursor-pointer flex flex-col transform-gpu overflow-hidden relative group"
     >
-      <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       <div className="flex items-start justify-between mb-6 relative z-10">
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
@@ -204,7 +203,6 @@ const DatabasePage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
                <Globe size={12} className="animate-spin-slow relative z-10 text-sky-light" />
                <span className="relative z-10 drop-shadow-md">GLOBAL DATABASE</span>
             </div>
@@ -229,7 +227,6 @@ const DatabasePage: React.FC = () => {
 
         {/* Sovereign Countries Section */}
         <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 mb-16 relative group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
           <div className="overflow-x-auto relative z-10">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -280,8 +277,7 @@ const DatabasePage: React.FC = () => {
         {/* --- Officially Recognized Territories Section --- */}
         <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-accent/30 rounded-xl text-white shadow-glow-accent/30 border border-white/40 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
+                <div className="w-12 h-12 bg-accent/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
                     <Globe size={24} className="relative z-10 drop-shadow-md" />
                 </div>
                 <div>
@@ -291,7 +287,6 @@ const DatabasePage: React.FC = () => {
             </div>
             
             <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -345,8 +340,7 @@ const DatabasePage: React.FC = () => {
         {/* --- De Facto States Section --- */}
         <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-warning/30 rounded-xl text-white shadow-glow-warning/30 border border-white/40 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
+                <div className="w-12 h-12 bg-warning/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
                     <AlertTriangle size={24} className="relative z-10 drop-shadow-md" />
                 </div>
                 <div>
@@ -356,7 +350,6 @@ const DatabasePage: React.FC = () => {
             </div>
             
             <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -408,7 +401,7 @@ const DatabasePage: React.FC = () => {
         </div>
 
         {processedCountries.length === 0 && processedTerritories.length === 0 && processedDeFacto.length === 0 && (
-          <div className="bg-white/5 backdrop-blur-3xl rounded-2xl p-16 text-center border border-white/10 shadow-glass animate-in zoom-in-95">
+          <div className="bg-white/5 backdrop-blur-3xl rounded-2xl p-16 text-center border border-white/10  animate-in zoom-in-95">
             <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
                <Search className="w-8 h-8 text-white/10" />
             </div>
@@ -424,9 +417,9 @@ const DatabasePage: React.FC = () => {
               variant="secondary" 
               size="md" 
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="group h-14 px-10 border border-white/20 hover:border-white/40 shadow-glass-bubble text-[10px] uppercase tracking-[0.3em]"
+              className="group h-14 px-10 border border-white/20 hover:border-white/40 text-[10px] uppercase tracking-[0.3em]"
             >
-              <ArrowUp size={16} className="mr-2 transition-transform text-sky-light drop-shadow-glow-sky" />
+              <ArrowUp size={16} className="mr-2 transition-transform text-sky-light" />
               <span className="relative z-10">Back to Top</span>
             </Button>
           </div>

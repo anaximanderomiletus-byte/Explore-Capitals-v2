@@ -24,7 +24,8 @@ import {
   MultiFactorResolver,
   MultiFactorAssertion,
   ConfirmationResult,
-  applyActionCode
+  applyActionCode,
+  verifyBeforeUpdateEmail
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
@@ -57,6 +58,7 @@ type AuthContextType = {
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   disableMfaFactor: (uid: string) => Promise<void>;
   reloadUser: () => Promise<void>;
+  updateEmail: (newEmail: string) => Promise<void>;
   enrolledFactors: { uid: string; displayName?: string; factorId: string; phone?: string }[];
 };
 
@@ -88,6 +90,7 @@ const AuthContext = createContext<AuthContextType>({
   changePassword: async () => {},
   disableMfaFactor: async () => {},
   reloadUser: async () => {},
+  updateEmail: async () => {},
   enrolledFactors: [],
 });
 
@@ -349,6 +352,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser({ ...auth.currentUser });
   }, []);
 
+  const updateEmail = useCallback(async (newEmail: string) => {
+    if (!auth || !auth.currentUser) throw new Error('No user signed in');
+    // verifyBeforeUpdateEmail sends a verification link to the new email
+    // The email won't change until the user clicks the verification link
+    await verifyBeforeUpdateEmail(auth.currentUser, newEmail);
+  }, []);
+
   const enrolledFactors = useMemo(() => {
     if (!user) return [];
     try {
@@ -391,6 +401,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     changePassword,
     disableMfaFactor,
     reloadUser,
+    updateEmail,
     enrolledFactors,
   };
 

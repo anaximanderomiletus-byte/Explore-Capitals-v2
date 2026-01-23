@@ -213,16 +213,14 @@ export default function CapitalConnection() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
         </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky shadow-glow-sky border border-white/30 relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
             <Network size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Connection</h1>
           <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
             <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
               Back to Games
@@ -248,8 +246,7 @@ export default function CapitalConnection() {
       </div>
 
       {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-      <div className="max-w-4xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
-         <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
+      <div className="max-w-3xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 relative overflow-hidden z-10">
          <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
@@ -260,33 +257,23 @@ export default function CapitalConnection() {
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
-         {/* Desktop only: points and timer in top bar */}
-         <div className="hidden md:flex items-center gap-6 relative z-10">
-           <div className="flex items-center gap-2">
-              <Trophy size={18} className="text-warning drop-shadow-md" />
-              <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
-           </div>
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-             <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-             <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-          </div>
-         </div>
+         {/* Desktop only: spacer to keep title centered */}
+         <div className="hidden md:block w-[42px]" />
 
          {/* Mobile: empty spacer to balance the back button */}
          <div className="w-[42px] md:hidden" />
       </div>
 
       <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-6">
-          {/* Mobile: Points top-left, Timer top-right */}
-          <div className="flex md:hidden items-center justify-between mb-4 relative z-10">
+          {/* Points and Timer - Now visible on all sizes in the corners of the game rectangle */}
+          <div className="flex items-center justify-between mb-4 relative z-20">
              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-warning/15 border border-warning/30">
-                <Trophy size={16} className="text-warning" />
-                <span className="font-display font-black text-lg text-white tabular-nums">{score}</span>
+                <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning" />
+                <span className="font-display font-black text-lg md:text-xl text-white tabular-nums">{score}</span>
              </div>
              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-300 ${timeLeft < 10 ? 'bg-red-500/15 border border-error' : 'bg-sky/20 border border-white/20'}`}>
-                <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={16} /></div>
-                <span className={`font-display font-black text-lg tabular-nums min-w-[32px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+                <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
+                <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
              </div>
           </div>
 
@@ -312,17 +299,15 @@ export default function CapitalConnection() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning shadow-glow-warning border border-white/30 relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10" />
               </div>
               <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 drop-shadow-glow-sky tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
                   <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
                   Back to Games

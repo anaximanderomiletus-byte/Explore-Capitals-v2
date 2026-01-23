@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { 
-  CheckCircle2, Mail, ShieldCheck, User, 
-  AlertCircle, ShieldAlert, History,
+  CheckCircle2, Mail, ShieldCheck,
+  AlertCircle, ShieldAlert,
   Eye, EyeOff, LogOut, ArrowLeft,
-  Smartphone, Monitor, Camera,
-  Lock, Key
+  Smartphone, Monitor, Lock, Camera, Upload, X, Pencil
 } from 'lucide-react';
 import Button from '../components/Button';
 import PhoneInput from '../components/PhoneInput';
@@ -18,53 +17,29 @@ import { useNavigate } from 'react-router-dom';
 import { AVATAR_PRESETS, getAvatarById } from '../constants/avatars';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label }) => (
-  <div className={`flex items-center gap-1.5 transition-colors duration-300 ${met ? 'text-accent' : 'text-white/10'}`}>
-    <div className={`w-1 h-1 rounded-full ${met ? 'bg-accent shadow-[0_0_5px_rgba(52,199,89,0.5)]' : 'bg-white/10'}`} />
-    <span className="text-[8px] font-bold uppercase tracking-widest leading-none">{label}</span>
-  </div>
+// Section component for consistent styling
+const SettingsSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <section className="mb-8">
+    <h2 className="text-[11px] font-black text-white/40 uppercase tracking-[0.2em] mb-4 px-1">{title}</h2>
+    <div className="bg-white/[0.02] backdrop-blur-xl border border-white/[0.06] rounded-2xl overflow-hidden divide-y divide-white/[0.04]">
+      {children}
+    </div>
+  </section>
 );
 
-const LabeledInput: React.FC<{
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  type?: string;
-  placeholder?: string;
-  error?: boolean;
-}> = ({ label, value, onChange, type = 'text', placeholder, error }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const isPassword = type === 'password';
-  const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
-
-  return (
-    <div className="space-y-2.5 w-full">
-      <label className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/20 ml-1 block">{label}</label>
-      <div className="relative group">
-        <input
-          className={`w-full bg-white/[0.03] border ${error ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.15)]' : 'border-white/10'} rounded-2xl ${isPassword ? 'pl-5 pr-12' : 'px-5'} py-4 text-sm font-medium text-white placeholder:text-white/10 outline-none focus:border-primary/50 focus:bg-white/[0.05] transition-all shadow-inner group-hover:border-white/20`}
-          value={value}
-          type={inputType}
-          placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 ${error ? 'text-red-500/50 hover:text-red-500' : 'text-white/20 hover:text-white'} transition-colors`}
-            tabIndex={-1}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        )}
-        
-        {/* Visual Error Underline */}
-        <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full transition-all duration-500 ${error ? 'bg-red-500 opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-transparent opacity-0'}`} />
-      </div>
-    </div>
-  );
-};
+// Row component for consistent item styling
+const SettingsRow: React.FC<{ 
+  children: React.ReactNode; 
+  onClick?: () => void;
+  className?: string;
+}> = ({ children, onClick, className = '' }) => (
+  <div 
+    className={`p-5 ${onClick ? 'cursor-pointer hover:bg-white/[0.02] transition-colors' : ''} ${className}`}
+    onClick={onClick}
+  >
+    {children}
+  </div>
+);
 
 const Settings: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -72,7 +47,7 @@ const Settings: React.FC = () => {
   const { 
     user, updateProfileInfo, changePassword, sendVerifyEmail, 
     enrollPhoneMfa, confirmPhoneMfa, enrolledFactors, disableMfaFactor,
-    reloadUser,
+    reloadUser, updateEmail: updateUserEmail,
     reauthenticate, deleteAccount, signOut, loading: authLoading,
     mfaResolver, solveMfaPhone, sendMfaSms, setMfaResolver
   } = useAuth();
@@ -83,10 +58,10 @@ const Settings: React.FC = () => {
     let browser = "Unknown Browser";
     let os = "Unknown OS";
 
-    if (ua.includes("Chrome")) browser = "Google Chrome";
+    if (ua.includes("Chrome")) browser = "Chrome";
     else if (ua.includes("Safari")) browser = "Safari";
     else if (ua.includes("Firefox")) browser = "Firefox";
-    else if (ua.includes("Edge")) browser = "Microsoft Edge";
+    else if (ua.includes("Edge")) browser = "Edge";
 
     if (ua.includes("Mac")) os = "macOS";
     else if (ua.includes("Win")) os = "Windows";
@@ -109,6 +84,18 @@ const Settings: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [showVerifySuccess, setShowVerifySuccess] = useState(false);
+
+  // New email change state
+  const [newEmail, setNewEmail] = useState('');
+  const [emailPassword, setEmailPassword] = useState('');
+  const [showEmailModal, setShowEmailModal] = useState(false);
+
+  // Profile photo state
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Password section state
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
 
   // Sync display fields when user data arrives
   useEffect(() => {
@@ -181,7 +168,7 @@ const Settings: React.FC = () => {
   const [phoneModalStep, setPhoneModalStep] = useState<1 | 2>(1);
   const [mfaPassword, setMfaPassword] = useState('');
   const [showMfaPassword, setShowMfaPassword] = useState(false);
-  const [mfaChallengeStep, setMfaChallengeStep] = useState<1 | 2>(1); // 1: password, 2: mfa code
+  const [mfaChallengeStep, setMfaChallengeStep] = useState<1 | 2>(1);
   const [reauthVerificationId, setReauthVerificationId] = useState<string | null>(null);
 
   // Auto-clear error when user starts typing or changes state
@@ -191,6 +178,14 @@ const Settings: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  // Auto-clear status
+  useEffect(() => {
+    if (status) {
+      const timer = setTimeout(() => setStatus(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const handleVerifyReauthMfa = async (code: string) => {
     setBusy(true);
@@ -202,8 +197,6 @@ const Settings: React.FC = () => {
         await solveMfaPhone(reauthVerificationId, code);
       }
       
-      // Successfully re-authenticated with MFA!
-      // Now retry the original operation based on which modal is open
       if (showPhoneModal) {
         handleStartPhone();
       } else if (showDeleteModal) {
@@ -252,7 +245,7 @@ const Settings: React.FC = () => {
     clearMessages();
     try {
       await updateProfileInfo({ displayName });
-      setStatus('Profile updated.');
+      setStatus('Display name updated');
     } catch (err: any) {
       setError(err?.message ?? 'Update failed');
     } finally {
@@ -265,10 +258,51 @@ const Settings: React.FC = () => {
     clearMessages();
     try {
       await updateProfileInfo({ photoURL: avatarId }); 
-      setStatus('Avatar updated.');
+      setStatus('Profile picture updated');
+      setShowAvatarPicker(false);
     } catch (err: any) {
-      setError('Failed to update avatar.');
+      setError('Failed to update profile picture');
     } finally {
+      setBusy(false);
+    }
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image must be less than 5MB');
+      return;
+    }
+    
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file');
+      return;
+    }
+    
+    setBusy(true);
+    clearMessages();
+    try {
+      // Convert to base64 for now (in production, upload to storage)
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const base64 = event.target?.result as string;
+        // Store custom photo URL
+        await updateProfileInfo({ photoURL: base64 });
+        setStatus('Profile photo uploaded');
+        setShowAvatarPicker(false);
+        setBusy(false);
+      };
+      reader.onerror = () => {
+        setError('Failed to read image');
+        setBusy(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setError('Failed to upload photo');
       setBusy(false);
     }
   };
@@ -283,19 +317,55 @@ const Settings: React.FC = () => {
       return;
     }
     if (!isPasswordValid) {
-      setError('Password does not meet security requirements.');
+      setError('Password does not meet requirements');
       return;
     }
     setBusy(true);
     clearMessages();
     try {
       await changePassword(oldPassword, password);
-      setStatus('Password updated.');
+      setStatus('Password updated successfully');
       setPassword('');
       setOldPassword('');
       setConfirmPassword('');
+      setShowPasswordSection(false);
     } catch (err: any) {
-      setError(err?.message ?? 'Failed to change password.');
+      setError(err?.message ?? 'Failed to change password');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleEmailChange = async () => {
+    if (!newEmail || !emailPassword) {
+      setFieldErrors({ newEmail: !newEmail, emailPassword: !emailPassword });
+      return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    
+    setBusy(true);
+    clearMessages();
+    try {
+      await reauthenticate(emailPassword);
+      await updateUserEmail(newEmail);
+      setStatus('Verification email sent to new address');
+      setShowEmailModal(false);
+      setNewEmail('');
+      setEmailPassword('');
+    } catch (err: any) {
+      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Incorrect password');
+      } else if (err.code === 'auth/email-already-in-use') {
+        setError('Email already in use by another account');
+      } else {
+        setError(err?.message ?? 'Failed to update email');
+      }
     } finally {
       setBusy(false);
     }
@@ -306,8 +376,7 @@ const Settings: React.FC = () => {
     clearMessages();
     try {
       await sendVerifyEmail();
-      setStatus('Verification email sent.');
-      // Using status indicator instead of window.alert
+      setStatus('Verification email sent');
     } catch (err: any) {
       setError(err?.message ?? 'Failed to send email');
     } finally {
@@ -323,10 +392,9 @@ const Settings: React.FC = () => {
     setBusy(true);
     clearMessages();
     try {
-      // Re-authenticate first for sensitive MFA operation
       try {
         if (!mfaPassword) {
-          setError('Please enter your password to confirm identity.');
+          setError('Please enter your password');
           setFieldErrors({ mfaPassword: true });
           setBusy(false);
           return;
@@ -334,39 +402,38 @@ const Settings: React.FC = () => {
         await reauthenticate(mfaPassword);
       } catch (authErr: any) {
         if (authErr.code === 'auth/multi-factor-auth-required') {
-          // Keep modal open, but show MFA challenge UI
-            setMfaChallengeStep(1); // Password confirmed, now start SMS
+          setMfaChallengeStep(1);
           setBusy(false);
           return;
         }
         if (authErr.code === 'auth/wrong-password' || authErr.code === 'auth/invalid-credential') {
-          setError('Incorrect password. Please try again.');
+          setError('Incorrect password');
           setFieldErrors({ mfaPassword: true });
         } else if (authErr.code === 'auth/too-many-requests') {
-          setError('Too many failed attempts. Please try again later.');
+          setError('Too many attempts. Please try again later.');
         } else {
-          setError(`Security verification failed: ${authErr.message}`);
+          setError(`Verification failed: ${authErr.message}`);
         }
         setBusy(false);
         return;
       }
 
       const verifier = ensureRecaptcha();
-      if (!verifier) throw new Error('Security check initialization failed. Please refresh.');
+      if (!verifier) throw new Error('Security check failed. Please refresh.');
       
       const vId = await enrollPhoneMfa(phone, verifier);
       setSmsVerificationId(vId);
       setPhoneModalStep(2);
-      setStatus('Code sent.');
-      setMfaPassword(''); // Clear password after success
+      setStatus('Code sent');
+      setMfaPassword('');
     } catch (err: any) {
       console.error('Phone start error:', err.code, err);
       if (err.code === 'auth/invalid-phone-number') {
-        setError('Invalid phone number. Include country code (e.g. +1).');
+        setError('Invalid phone number format');
       } else if (err.code === 'auth/quota-exceeded') {
-        setError('SMS quota exceeded. Please try again later or use a test number.');
+        setError('SMS limit reached. Try again later.');
       } else {
-        setError(err?.message ?? 'Failed to send code. Please try again.');
+        setError(err?.message ?? 'Failed to send code');
       }
       
       if (verifierRef.current) {
@@ -390,12 +457,11 @@ const Settings: React.FC = () => {
     clearMessages();
     try {
       await confirmPhoneMfa(smsVerificationId, smsCode);
-      setStatus('2FA enabled.');
+      setStatus('Two-factor authentication enabled');
       setSmsVerificationId(null);
       setSmsCode('');
       
-      // Briefly show success state in modal before closing
-      setPhoneModalStep(2); // Ensure we are on verification step
+      setPhoneModalStep(2);
       setShowVerifySuccess(true);
       
       setTimeout(() => {
@@ -405,11 +471,11 @@ const Settings: React.FC = () => {
     } catch (err: any) {
       console.error('Phone confirmation error:', err.code, err);
       if (err?.code === 'auth/invalid-verification-code') {
-        setError('Incorrect code. Please try again.');
+        setError('Incorrect code');
       } else if (err?.code === 'auth/code-expired') {
-        setError('Code expired. Please request a new one.');
+        setError('Code expired. Request a new one.');
       } else {
-      setError(err?.message ?? 'Invalid code');
+        setError(err?.message ?? 'Invalid code');
       }
     } finally {
       setBusy(false);
@@ -420,9 +486,9 @@ const Settings: React.FC = () => {
     setBusy(true);
     try {
       await reloadUser();
-      setStatus('Status refreshed.');
+      setStatus('Status refreshed');
     } catch (err: any) {
-      setError('Failed to refresh status.');
+      setError('Failed to refresh');
     } finally {
       setBusy(false);
     }
@@ -432,10 +498,9 @@ const Settings: React.FC = () => {
     setBusy(true);
     clearMessages();
     try {
-      // Re-authenticate first
       try {
         if (!mfaPassword) {
-          setError('Please enter your password to confirm identity.');
+          setError('Please enter your password');
           setFieldErrors({ mfaPassword: true });
           setBusy(false);
           return;
@@ -443,7 +508,7 @@ const Settings: React.FC = () => {
         await reauthenticate(mfaPassword);
       } catch (authErr: any) {
         if (authErr.code === 'auth/multi-factor-auth-required') {
-            setMfaChallengeStep(1);
+          setMfaChallengeStep(1);
           setBusy(false);
           return;
         }
@@ -451,16 +516,16 @@ const Settings: React.FC = () => {
       }
 
       await disableMfaFactor(uid);
-      setStatus('2FA disabled.');
+      setStatus('Two-factor authentication disabled');
       setShowDisableMfaModal(null);
       setMfaPassword('');
     } catch (err: any) {
       console.error('MFA disable error:', err);
       if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError('Incorrect password. Please try again.');
+        setError('Incorrect password');
         setFieldErrors({ mfaPassword: true });
       } else {
-      setError(err?.message ?? 'Failed to disable');
+        setError(err?.message ?? 'Failed to disable');
       }
     } finally {
       setBusy(false);
@@ -469,11 +534,11 @@ const Settings: React.FC = () => {
 
   const handleSignOut = async () => {
     setBusy(true);
-      try {
-        await signOut();
-        navigate('/auth');
-      } catch (err) {
-        console.error('Logout failed', err);
+    try {
+      await signOut();
+      navigate('/auth');
+    } catch (err) {
+      console.error('Logout failed', err);
     } finally {
       setBusy(false);
     }
@@ -486,13 +551,12 @@ const Settings: React.FC = () => {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleDeleteAccount = async () => {
-      setBusy(true);
+    setBusy(true);
     setDeleteError(null);
     try {
-      // Step 1: Re-authenticate
       try {
         if (!deletePassword) {
-          setDeleteError('Please enter your password to confirm.');
+          setDeleteError('Please enter your password');
           setFieldErrors({ deletePassword: true });
           setBusy(false);
           return;
@@ -500,338 +564,569 @@ const Settings: React.FC = () => {
         await reauthenticate(deletePassword);
       } catch (authErr: any) {
         if (authErr.code === 'auth/multi-factor-auth-required') {
-            setMfaChallengeStep(1);
+          setMfaChallengeStep(1);
           setBusy(false);
           return;
         }
         throw authErr;
       }
 
-      // Step 2: Delete
-        await deleteAccount();
-        navigate('/auth');
-      } catch (err: any) {
+      await deleteAccount();
+      navigate('/auth');
+    } catch (err: any) {
       console.error('Deletion failed:', err);
       if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setDeleteError('Incorrect password. Please try again.');
+        setDeleteError('Incorrect password');
         setFieldErrors({ deletePassword: true });
       } else {
-        setDeleteError(err?.message ?? 'Deletion failed. Please try again later.');
+        setDeleteError(err?.message ?? 'Deletion failed');
       }
-      } finally {
-        setBusy(false);
+    } finally {
+      setBusy(false);
     }
   };
 
-  const renderAvatarContent = (photoURL: string | null, initials: string) => {
+  // Format phone number for display
+  const formatPhoneDisplay = (phoneNumber: string | null) => {
+    if (!phoneNumber) return null;
+    // Format: +1 (860) 324-2349
+    const cleaned = phoneNumber.replace(/\D/g, '');
+    if (cleaned.length === 11 && cleaned.startsWith('1')) {
+      return `+1 (${cleaned.slice(1, 4)}) ${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
+    }
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+    }
+    return phoneNumber;
+  };
+
+  const renderAvatarContent = (photoURL: string | null, initials: string, size: 'sm' | 'lg' | 'xl' = 'lg') => {
     const avatar = getAvatarById(photoURL);
+    const sizeClasses = size === 'xl' ? 'w-28 h-28' : size === 'lg' ? 'w-20 h-20' : 'w-12 h-12';
+    const iconSize = size === 'xl' ? 56 : size === 'lg' ? 40 : 24;
+    const textSize = size === 'xl' ? 'text-4xl' : size === 'lg' ? 'text-3xl' : 'text-xl';
+    
+    // Check if it's a custom uploaded photo (base64 or URL)
+    if (photoURL && (photoURL.startsWith('data:') || photoURL.startsWith('http'))) {
+      return (
+        <div className={`${sizeClasses} rounded-full overflow-hidden ring-4 ring-white/10`}>
+          <img src={photoURL} alt="Profile" className="w-full h-full object-cover" />
+        </div>
+      );
+    }
+    
     if (avatar) {
       return (
-        <div className={`w-20 h-20 rounded-full ${avatar.color} text-white flex items-center justify-center shadow-md ring-2 ring-white/10`}>
-          {React.cloneElement(avatar.icon as React.ReactElement, { size: 40 })}
+        <div className={`${sizeClasses} rounded-full ${avatar.color} text-white flex items-center justify-center ring-4 ring-white/10`}>
+          {React.cloneElement(avatar.icon as React.ReactElement, { size: iconSize })}
         </div>
       );
     }
     return (
-      <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center font-display font-bold text-3xl shadow-md ring-2 ring-white/10">
+      <div className={`${sizeClasses} rounded-full bg-gradient-to-br from-sky to-primary text-white flex items-center justify-center font-display font-bold ${textSize} ring-4 ring-white/10`}>
         {initials}
       </div>
     );
   };
 
-  // Show spinner only if we don't have any auth data yet or if an operation is in progress without a user
+  // Show spinner only if we don't have any auth data yet
   if ((authLoading || userLoading) && !user) {
     return (
       <div className="pt-32 pb-16 px-6 bg-surface-dark min-h-screen flex flex-col items-center justify-center text-center">
-        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-lg shadow-primary/10" />
+        <div className="w-12 h-12 border-4 border-sky border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
-
-  // If busy and we HAVE a user, the page content will show the busy state via buttons/inputs
-  // No need to block the whole page with a spinner once the user object is present.
 
   if (!user) {
     return (
-      <div className="pt-32 pb-16 px-6 bg-surface-dark min-h-screen flex items-center justify-center">
-        <div className="bg-white/5 backdrop-blur-3xl p-12 rounded-3xl shadow-glass border border-white/10 max-w-md text-center">
-          <ShieldAlert size={48} className="mx-auto text-primary mb-6" />
+      <div className="pt-32 pb-16 px-6 bg-surface-dark min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/10 rounded-full blur-[180px] opacity-60" />
+        </div>
+        
+        <div className="bg-white/[0.03] backdrop-blur-3xl p-12 rounded-3xl border border-white/10 max-w-md text-center relative z-10">
+          <div className="w-20 h-20 rounded-2xl bg-sky/10 border border-sky/20 flex items-center justify-center mx-auto mb-6">
+            <ShieldAlert size={40} className="text-sky" />
+          </div>
           <h2 className="text-2xl font-display font-bold text-white uppercase tracking-tight">SIGN IN REQUIRED</h2>
-          <p className="text-white/40 mt-3 mb-8 text-sm">You must be logged in to view your settings.</p>
-          <button onClick={() => navigate('/auth')} className="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase tracking-widest hover:bg-primary-light transition-all">
+          <p className="text-white/40 mt-3 mb-8 text-sm">You must be logged in to view settings.</p>
+          <Button onClick={() => navigate('/auth')} className="w-full h-14 text-[11px] font-black uppercase tracking-widest">
             GO TO SIGN IN
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
-  const initials = user.displayName?.[0] || 'E';
+  const initials = user.displayName?.[0]?.toUpperCase() || 'E';
+  const phoneFactorInfo = enrolledFactors.find(f => f.factorId === 'phone');
 
   return (
-    <div className="pt-24 pb-20 px-4 bg-surface-dark min-h-screen font-sans">
-      <div className="max-w-2xl mx-auto space-y-8">
-        
-        {/* Simple Sticky Header */}
-        <div className="flex items-center justify-between sticky top-0 z-20 bg-surface-dark/90 backdrop-blur-md py-6 -mx-4 px-4">
-          <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-surface-dark font-sans relative">
+      {/* Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-sky/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]" />
+      </div>
+          
+      {/* Status Toast */}
+      <AnimatePresence>
+        {(status || error) && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-50"
+          >
+            <div className={`px-5 py-3 rounded-full text-sm font-bold backdrop-blur-xl border ${error ? 'bg-red-500/20 border-red-500/30 text-red-400' : 'bg-accent/20 border-accent/30 text-accent'}`}>
+              {error ?? status}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <div className="relative z-10 pt-24 pb-16 px-4">
+        <div className="max-w-xl mx-auto">
+          
+          {/* Header */}
+          <div className="mb-10">
             <button 
               onClick={() => navigate('/profile')} 
-              className="p-1 -ml-1 text-white/40 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-6 group"
             >
-              <ArrowLeft size={24} />
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              <span className="text-[11px] font-black uppercase tracking-[0.15em]">BACK TO PROFILE</span>
             </button>
-            <h1 className="text-xl font-bold text-white">Settings</h1>
+            <h1 className="text-3xl md:text-4xl font-display font-black text-white uppercase tracking-tight">SETTINGS</h1>
           </div>
-          
-          <AnimatePresence>
-            {(status || error) && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm ${error ? 'bg-red-500 text-white' : 'bg-accent text-white'}`}
-              >
-                {error ?? status}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
 
-        {/* 1. Account Section */}
-        <div className="space-y-3">
-          <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/20 ml-1">Account Profile</label>
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden shadow-sm">
-            {/* Avatar picker nested inside account section for simplicity */}
-            <div className="p-6 border-b border-white/5 flex items-center gap-6">
-              <div className="relative shrink-0">
-                {renderAvatarContent(user.photoURL, initials)}
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-surface-dark border border-white/10 rounded-full flex items-center justify-center text-white/40 shadow-md">
-                  <Camera size={14} />
+          {/* Profile Section */}
+          <SettingsSection title="PROFILE">
+            {/* Profile Photo */}
+            <SettingsRow>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="relative group">
+                    {renderAvatarContent(user.photoURL, initials, 'lg')}
+                    <button 
+                      onClick={() => setShowAvatarPicker(true)}
+                      className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                    >
+                      <Camera size={24} className="text-white" />
+                    </button>
+                  </div>
+                  <div>
+                    <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-1">PROFILE PHOTO</h3>
+                    <p className="text-sm text-white/60">Choose an avatar or upload a photo</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowAvatarPicker(true)}
+                  className="text-[11px] font-black text-sky uppercase tracking-[0.1em] hover:text-sky-light transition-colors"
+                >
+                  EDIT
+                </button>
+              </div>
+            </SettingsRow>
+
+            {/* Display Name */}
+            <SettingsRow>
+              <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-3">DISPLAY NAME</h3>
+              <div className="flex gap-3">
+                <input
+                  className={`flex-1 bg-white/5 border ${fieldErrors.displayName ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-sky/50 focus:bg-white/[0.08] transition-all`}
+                  value={displayName} 
+                  onChange={(e) => { setDisplayName(e.target.value); setFieldErrors({ ...fieldErrors, displayName: false }); }}
+                  placeholder="Enter display name"
+                />
+                <button 
+                  onClick={handleProfileSave} 
+                  disabled={busy || displayName === user?.displayName || !displayName} 
+                  className="px-5 py-3 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                >
+                  SAVE
+                </button>
+              </div>
+            </SettingsRow>
+
+            {/* Email */}
+            <SettingsRow>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-1">EMAIL ADDRESS</h3>
+                  <p className="text-sm text-white">{user.email}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  {user.emailVerified ? (
+                    <span className="flex items-center gap-1.5 text-[10px] font-black text-accent uppercase tracking-[0.1em]">
+                      <CheckCircle2 size={14} />
+                      VERIFIED
+                    </span>
+                  ) : (
+                    <button 
+                      onClick={handleSendVerifyEmail}
+                      disabled={busy}
+                      className="text-[11px] font-black text-amber-400 uppercase tracking-[0.1em] hover:text-amber-300 transition-colors"
+                    >
+                      VERIFY
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => setShowEmailModal(true)}
+                    className="text-[11px] font-black text-sky uppercase tracking-[0.1em] hover:text-sky-light transition-colors"
+                  >
+                    CHANGE
+                  </button>
                 </div>
               </div>
-              <div className="flex-1">
-                <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest block mb-2">Change Avatar</span>
-                <div className="flex flex-wrap gap-2">
-                  {AVATAR_PRESETS.slice(0, 8).map((p) => (
+            </SettingsRow>
+          </SettingsSection>
+
+          {/* Security Section */}
+          <SettingsSection title="SECURITY">
+            {/* Two-Factor */}
+            <SettingsRow>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-1">TWO-FACTOR AUTHENTICATION</h3>
+                  <p className="text-sm text-white/60">
+                    {phoneFactorInfo 
+                      ? `Enabled · ${formatPhoneDisplay(phoneFactorInfo.phone)}`
+                      : 'Protect your account with SMS verification'
+                    }
+                  </p>
+                </div>
+                {!user.emailVerified ? (
+                  <span className="text-[10px] font-bold text-white/30 uppercase">Verify email first</span>
+                ) : phoneFactorInfo ? (
+                  <button 
+                    onClick={() => setShowDisableMfaModal(phoneFactorInfo.uid)} 
+                    className="text-[11px] font-black text-red-400 uppercase tracking-[0.1em] hover:text-red-300 transition-colors"
+                  >
+                    DISABLE
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => { setShowPhoneModal(true); setPhoneModalStep(1); }}
+                    disabled={busy}
+                    className="text-[11px] font-black text-sky uppercase tracking-[0.1em] hover:text-sky-light transition-colors"
+                  >
+                    ENABLE
+                  </button>
+                )}
+              </div>
+            </SettingsRow>
+
+            {/* Password */}
+            <SettingsRow onClick={() => setShowPasswordSection(!showPasswordSection)} className="cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-1">PASSWORD</h3>
+                  <p className="text-sm text-white/60">Change your account password</p>
+                </div>
+                <span className="text-[11px] font-black text-sky uppercase tracking-[0.1em]">
+                  {showPasswordSection ? 'CLOSE' : 'CHANGE'}
+                </span>
+              </div>
+            </SettingsRow>
+
+            {/* Password Form (Expandable) */}
+            <AnimatePresence>
+              {showPasswordSection && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden border-t border-white/[0.04]"
+                >
+                  <div className="p-5 space-y-4">
+                    <div>
+                      <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">CURRENT PASSWORD</label>
+                      <input
+                        type="password"
+                        className={`w-full bg-white/5 border ${fieldErrors.oldPassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all`}
+                        value={oldPassword}
+                        onChange={(e) => { setOldPassword(e.target.value); setFieldErrors({ ...fieldErrors, oldPassword: false }); }}
+                        placeholder="Enter current password"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">NEW PASSWORD</label>
+                        <input
+                          type="password"
+                          className={`w-full bg-white/5 border ${fieldErrors.password ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all`}
+                          value={password}
+                          onChange={(e) => { setPassword(e.target.value); setFieldErrors({ ...fieldErrors, password: false }); }}
+                          placeholder="New password"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">CONFIRM PASSWORD</label>
+                        <input
+                          type="password"
+                          className={`w-full bg-white/5 border ${fieldErrors.confirmPassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all`}
+                          value={confirmPassword}
+                          onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors({ ...fieldErrors, confirmPassword: false }); }}
+                          placeholder="Confirm password"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Password Requirements */}
+                    <div className="p-4 bg-white/[0.02] rounded-xl border border-white/5">
+                      <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] mb-3">REQUIREMENTS</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { key: 'length', label: '8+ characters' },
+                          { key: 'uppercase', label: 'Uppercase' },
+                          { key: 'lowercase', label: 'Lowercase' },
+                          { key: 'number', label: 'Number' },
+                          { key: 'special', label: 'Special char' },
+                        ].map(({ key, label }) => (
+                          <p key={key} className={`flex items-center gap-2 text-xs ${passwordCriteria[key as keyof typeof passwordCriteria] ? 'text-accent' : 'text-white/30'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${passwordCriteria[key as keyof typeof passwordCriteria] ? 'bg-accent' : 'bg-white/20'}`} />
+                            {label}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={handlePasswordChange} 
+                      disabled={busy || !password || !oldPassword || !isPasswordValid}
+                      className="w-full py-3 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.15em] transition-all"
+                    >
+                      UPDATE PASSWORD
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </SettingsSection>
+
+          {/* Session Section */}
+          <SettingsSection title="SESSION">
+            <SettingsRow>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-sky/10 flex items-center justify-center text-sky">
+                  {currentDeviceInfo.isMobile ? <Smartphone size={22} /> : <Monitor size={22} />}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold text-white">{currentDeviceInfo.browser} on {currentDeviceInfo.os}</h3>
+                  <p className="text-xs text-white/40">Current session</p>
+                </div>
+                <span className="flex items-center gap-1.5 text-[10px] font-black text-accent uppercase tracking-[0.1em]">
+                  <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                  ACTIVE
+                </span>
+              </div>
+            </SettingsRow>
+            <SettingsRow>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] mb-1">ACCOUNT CREATED</p>
+                  <p className="text-sm text-white">{user?.metadata.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] mb-1">LAST SIGN IN</p>
+                  <p className="text-sm text-white">{user?.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}</p>
+                </div>
+              </div>
+            </SettingsRow>
+          </SettingsSection>
+
+          {/* Account Actions */}
+          <SettingsSection title="ACCOUNT">
+            <SettingsRow>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[11px] font-black text-white/40 uppercase tracking-[0.15em] mb-1">SIGN OUT</h3>
+                  <p className="text-sm text-white/60">End your current session</p>
+                </div>
+                <button 
+                  onClick={() => setShowSignOutModal(true)}
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                >
+                  SIGN OUT
+                </button>
+              </div>
+            </SettingsRow>
+            <SettingsRow>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[11px] font-black text-red-400/60 uppercase tracking-[0.15em] mb-1">DELETE ACCOUNT</h3>
+                  <p className="text-sm text-white/60">Permanently remove all your data</p>
+                </div>
+                <button 
+                  onClick={() => setShowDeleteModal(true)}
+                  className="px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl text-[11px] font-black text-red-400 uppercase tracking-[0.1em] transition-all"
+                >
+                  DELETE
+                </button>
+              </div>
+            </SettingsRow>
+          </SettingsSection>
+
+        </div>
+      </div>
+
+      {/* Avatar Picker Modal */}
+      <AnimatePresence>
+        {showAvatarPicker && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !busy && setShowAvatarPicker(false)}
+              className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-sky/5 to-transparent pointer-events-none" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-black text-white uppercase tracking-tight">CHOOSE PHOTO</h2>
+                  <button 
+                    onClick={() => setShowAvatarPicker(false)}
+                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                  >
+                    <X size={16} className="text-white/60" />
+                  </button>
+                </div>
+
+                {/* Current Avatar Preview */}
+                <div className="flex justify-center mb-6">
+                  {renderAvatarContent(user.photoURL, initials, 'xl')}
+                </div>
+
+                {/* Upload Button */}
+                <input 
+                  ref={fileInputRef}
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={busy}
+                  className="w-full py-3 mb-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2"
+                >
+                  <Upload size={16} />
+                  UPLOAD PHOTO
+                </button>
+
+                {/* Preset Avatars */}
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] mb-3">OR CHOOSE AN AVATAR</p>
+                <div className="grid grid-cols-5 gap-3">
+                  {AVATAR_PRESETS.map((p) => (
                     <button
                       key={p.id}
                       onClick={() => handleAvatarSelect(p.id)}
-                      className={`w-8 h-8 rounded-lg ${p.color} flex items-center justify-center transition-all border ${user.photoURL === p.id ? 'border-primary ring-2 ring-primary/20 scale-105' : 'border-transparent opacity-30 hover:opacity-100'}`}
+                      disabled={busy}
+                      className={`aspect-square rounded-xl ${p.color} flex items-center justify-center transition-all ${user.photoURL === p.id ? 'ring-2 ring-white ring-offset-2 ring-offset-surface-dark scale-105' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
                     >
-                      {React.cloneElement(p.icon as React.ReactElement, { size: 12 })}
+                      {React.cloneElement(p.icon as React.ReactElement, { size: 20 })}
                     </button>
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
-            <div className="p-6 space-y-6">
-              <LabeledInput 
-                label="Display Name" 
-                value={displayName} 
-                onChange={(v) => { setDisplayName(v); setFieldErrors({ ...fieldErrors, displayName: false }); }} 
-                placeholder="Enter display name" 
-                error={fieldErrors.displayName}
-              />
+      {/* Change Email Modal */}
+      <AnimatePresence>
+        {showEmailModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !busy && setShowEmailModal(false)}
+              className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-sky/5 to-transparent pointer-events-none" />
               
-              <div className="flex items-center justify-between py-2 border-t border-white/5">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Email Address</span>
-                  <span className="text-sm text-white/60">{user.email}</span>
-                </div>
-              </div>
-
-              <Button 
-                onClick={handleProfileSave} 
-                disabled={busy || displayName === user?.displayName} 
-                variant="primary" 
-                className="w-full h-12 text-[11px] font-bold uppercase tracking-widest"
-              >
-                SAVE CHANGES
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. Security Section */}
-        <div className="space-y-3">
-          <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/20 ml-1">Login & Security</label>
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden shadow-sm divide-y divide-white/5">
-            {/* Email Verification */}
-            <div className="p-6 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/30">
-                  <Mail size={20} />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-white">Email Verification</div>
-                  <div className={`text-[10px] font-bold uppercase tracking-widest ${user.emailVerified ? 'text-accent' : 'text-red-400'}`}>
-                    {user.emailVerified ? 'Verified' : 'Action Required'}
-                  </div>
-                </div>
-              </div>
-              {!user.emailVerified ? (
-                <div className="flex items-center gap-2">
-                  <button onClick={handleReloadUser} className="p-2 text-white/20 hover:text-white transition-colors" title="Refresh status">
-                    <History size={16} />
-                  </button>
-                <button onClick={handleSendVerifyEmail} className="px-4 py-2 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-lg border border-primary/20 hover:bg-primary/20 transition-all">Verify Now</button>
-                </div>
-              ) : null}
-            </div>
-
-            {/* 2FA Section */}
-              <div className="p-6 space-y-6">
+              <div className="relative z-10 space-y-5">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/30">
-                    <ShieldCheck size={20} />
-                    </div>
-                    <div className="text-sm font-bold text-white">Two-Factor Authentication</div>
+                  <div>
+                    <h2 className="text-lg font-black text-white uppercase tracking-tight">CHANGE EMAIL</h2>
+                    <p className="text-xs text-white/40 mt-1">Current: {user.email}</p>
                   </div>
-                {!user.emailVerified && (
-                  <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-lg text-[9px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-2">
-                    <AlertCircle size={12} />
-                    Verify Email to Enable
-                    </div>
-                  )}
+                  <button 
+                    onClick={() => setShowEmailModal(false)}
+                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                  >
+                    <X size={16} className="text-white/60" />
+                  </button>
                 </div>
 
-              {user.emailVerified ? (
-                <div className="space-y-8">
-                  {/* Phone MFA */}
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Smartphone size={18} className="text-white/30" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Phone SMS</span>
-                      </div>
-                      {enrolledFactors.some(f => f.factorId === 'phone') && (
-                        <div className="px-2 py-0.5 bg-accent/10 border border-accent/20 rounded-md text-[8px] font-black text-accent uppercase tracking-widest">
-                          Enabled
-                    </div>
-                      )}
+                  <div>
+                    <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">NEW EMAIL ADDRESS</label>
+                    <input
+                      type="email"
+                      className={`w-full bg-white/5 border ${fieldErrors.newEmail ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all`}
+                      value={newEmail}
+                      onChange={(e) => { setNewEmail(e.target.value); setFieldErrors({ ...fieldErrors, newEmail: false }); }}
+                      placeholder="Enter new email address"
+                    />
                   </div>
-
-                    {!enrolledFactors.some(f => f.factorId === 'phone') ? (
-                            <Button 
-                        variant="secondary" 
-                        onClick={() => { setShowPhoneModal(true); setPhoneModalStep(1); }}
-                        disabled={busy}
-                        className="w-full h-12 text-[10px] font-black uppercase tracking-widest"
-                      >
-                        SETUP PHONE SMS
-                            </Button>
-                    ) : (
-                      <div className="flex items-center justify-between p-4 bg-white/[0.02] rounded-2xl border border-white/5 group">
-                        <div className="flex flex-col gap-0.5">
-                          <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Linked Device</span>
-                          <span className="text-xs font-medium text-white/80">{enrolledFactors.find(f => f.factorId === 'phone')?.phone}</span>
-                          </div>
-                        <button 
-                          onClick={() => setShowDisableMfaModal(enrolledFactors.find(f => f.factorId === 'phone')!.uid)} 
-                          className="text-[10px] font-bold text-red-500/40 hover:text-red-500 uppercase tracking-widest transition-all hover:bg-red-500/10 px-3 py-1.5 rounded-lg border border-transparent hover:border-red-500/20"
-                        >
-                          DISABLE
-                        </button>
-                        </div>
-                    )}
-                  </div>
-              </div>
-              ) : (
-                <div className="p-8 bg-white/[0.02] border border-dashed border-white/10 rounded-2xl text-center space-y-4">
-                  <Mail size={32} className="mx-auto text-white/10" />
-                  <p className="text-[10px] text-white/30 font-medium leading-relaxed max-w-[200px] mx-auto uppercase tracking-widest">
-                    Your email address must be verified before you can enable two-factor authentication.
-                  </p>
-              </div>
-            )}
-            </div>
-
-            {/* Password Management */}
-              <div className="p-6 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/30">
-                    <Key size={20} />
-                  </div>
-                  <div className="text-sm font-bold text-white">Update Password</div>
-                </div>
-                <div className="space-y-4">
-                <LabeledInput label="Current Password" type="password" value={oldPassword} onChange={(v) => { setOldPassword(v); setFieldErrors({ ...fieldErrors, oldPassword: false }); }} error={fieldErrors.oldPassword} />
-                  <div className="grid grid-cols-2 gap-4">
-                  <LabeledInput label="New Password" type="password" value={password} onChange={(v) => { setPassword(v); setFieldErrors({ ...fieldErrors, password: false }); }} error={fieldErrors.password} />
-                  <LabeledInput label="Confirm New" type="password" value={confirmPassword} onChange={(v) => { setConfirmPassword(v); setFieldErrors({ ...fieldErrors, confirmPassword: false }); }} error={fieldErrors.confirmPassword} />
-                  </div>
-                
-                {/* Password Requirements Indicator */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1 px-1">
-                  <RequirementItem met={passwordCriteria.length} label="8-4096 chars" />
-                  <RequirementItem met={passwordCriteria.uppercase} label="Uppercase" />
-                  <RequirementItem met={passwordCriteria.lowercase} label="Lowercase" />
-                  <RequirementItem met={passwordCriteria.number} label="Numeric" />
-                  <RequirementItem met={passwordCriteria.special} label="Special char" />
-                </div>
-
-                  <div className="flex justify-end">
-                  <Button onClick={handlePasswordChange} disabled={busy || !password || !oldPassword || !isPasswordValid} variant="secondary" className="w-full sm:w-auto px-12 h-12 text-[11px] font-black uppercase tracking-widest shadow-sm">
-                    UPDATE PASSWORD
-                    </Button>
+                  <div>
+                    <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">CURRENT PASSWORD</label>
+                    <input
+                      type="password"
+                      className={`w-full bg-white/5 border ${fieldErrors.emailPassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all`}
+                      value={emailPassword}
+                      onChange={(e) => { setEmailPassword(e.target.value); setFieldErrors({ ...fieldErrors, emailPassword: false }); }}
+                      placeholder="Confirm with your password"
+                    />
                   </div>
                 </div>
+
+                <div className="p-4 bg-sky/5 border border-sky/10 rounded-xl text-xs text-white/60">
+                  A verification link will be sent to your new email address. Your email won't change until you verify it.
+                </div>
+
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setShowEmailModal(false)}
+                    disabled={busy}
+                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                  >
+                    CANCEL
+                  </button>
+                  <button 
+                    onClick={handleEmailChange}
+                    disabled={busy || !newEmail || !emailPassword}
+                    className="flex-1 py-3 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                  >
+                    {busy ? 'UPDATING...' : 'UPDATE EMAIL'}
+                  </button>
+                </div>
               </div>
+            </motion.div>
           </div>
-        </div>
-
-        {/* 3. Session Section */}
-        <div className="space-y-3">
-          <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/20 ml-1">Session & History</label>
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden shadow-sm divide-y divide-white/5">
-            <div className="p-6 flex items-center gap-5">
-              <div className="w-12 h-12 rounded-xl bg-surface-dark flex items-center justify-center text-primary border border-white/10">
-                {currentDeviceInfo.isMobile ? <Smartphone size={24} /> : <Monitor size={24} />}
-              </div>
-              <div>
-                <div className="text-sm font-bold text-white">{currentDeviceInfo.os} • {currentDeviceInfo.browser}</div>
-                <div className="text-[10px] text-accent font-bold uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
-                  <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-                  Active Session
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-6 grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1">Joined Date</div>
-                <div className="text-sm font-medium text-white/60">{user?.metadata.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : '—'}</div>
-              </div>
-              <div>
-                <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-1">Last Logged In</div>
-                <div className="text-sm font-medium text-white/60">{user?.metadata.lastSignInTime ? new Date(user.metadata.lastSignInTime).toLocaleDateString() : '—'}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 4. Action Section */}
-        <div className="pt-6 space-y-4">
-          <button 
-            onClick={() => setShowSignOutModal(true)}
-            className="w-full py-4 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] text-red-500/80 transition-all flex items-center justify-center gap-3 group shadow-sm shadow-red-500/5"
-          >
-            <LogOut size={16} className="text-red-500/40 group-hover:text-red-500 transition-colors" />
-            SIGN OUT
-          </button>
-          
-          <button 
-            onClick={() => setShowDeleteModal(true)}
-            className="w-full py-4 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] text-red-500/80 transition-all flex items-center justify-center gap-3 group shadow-sm shadow-red-500/5"
-          >
-            <ShieldAlert size={16} className="text-red-500/40 group-hover:text-red-500 transition-colors" />
-            DELETE ACCOUNT
-          </button>
-        </div>
-        </div>
+        )}
+      </AnimatePresence>
         
       {/* Delete Account Modal */}
       <AnimatePresence>
@@ -848,111 +1143,58 @@ const Settings: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none" />
               
-              <div className="relative z-10 space-y-6">
+              <div className="relative z-10 space-y-5">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500">
-                    <ShieldAlert size={24} />
+                  <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/20">
+                    <AlertCircle size={28} />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-white">Delete Account?</h2>
-                    <p className="text-xs text-white/40 uppercase tracking-widest font-bold">This action is permanent</p>
+                    <h2 className="text-lg font-black text-white uppercase tracking-tight">DELETE ACCOUNT</h2>
+                    <p className="text-xs text-white/40 mt-0.5">This action cannot be undone</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl text-[11px] text-red-400/80 leading-relaxed font-medium">
-                  All your progress, achievements, loyalty points, and personal data will be permanently erased from our systems. This cannot be undone.
+                <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-xl text-xs text-red-400/80 leading-relaxed">
+                  All your progress, achievements, loyalty points, and personal data will be permanently deleted.
                 </div>
 
-                <div className="space-y-3">
-                  <LabeledInput 
-                    label="Confirm Password" 
-                    type="password" 
-                    value={deletePassword} 
-                    onChange={(v) => { setDeletePassword(v); setDeleteError(null); setFieldErrors({ ...fieldErrors, deletePassword: false }); }} 
+                <div>
+                  <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">CONFIRM PASSWORD</label>
+                  <input
+                    type="password"
+                    className={`w-full bg-white/5 border ${fieldErrors.deletePassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-red-500/50 transition-all`}
+                    value={deletePassword}
+                    onChange={(e) => { setDeletePassword(e.target.value); setDeleteError(null); setFieldErrors({ ...fieldErrors, deletePassword: false }); }}
                     placeholder="Enter your password"
-                    error={fieldErrors.deletePassword}
                   />
                   {deleteError && (
-                    <div className="px-1 text-[10px] font-bold text-red-400 uppercase tracking-widest flex items-center gap-2">
+                    <p className="mt-2 text-xs text-red-400 flex items-center gap-1">
                       <AlertCircle size={12} />
                       {deleteError}
-                    </div>
+                    </p>
                   )}
                 </div>
 
-                <div className="flex flex-col gap-3 pt-2">
-                  {mfaResolver ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-sky/5 border border-sky/10 rounded-2xl text-[11px] text-sky-light/70 leading-relaxed font-medium text-center">
-                        {mfaChallengeStep === 1 
-                          ? `Security verification: verify your identity via SMS (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}) before deleting.` 
-                          : `Enter the 6-digit code sent to your phone (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}).`}
-                      </div>
-                      
-                      {mfaChallengeStep === 1 ? (
-                        <Button 
-                          variant="primary" 
-                          onClick={handleStartReauthMfa}
-                          disabled={busy}
-                          className="w-full h-14 bg-red-500 hover:bg-red-600 border-none text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/20"
-                        >
-                          {busy ? 'SENDING...' : 'SEND CODE'}
-                        </Button>
-                      ) : (
-                        <div className="space-y-4">
-                          <input 
-                            className={`w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-center text-2xl font-black tracking-[0.5em] text-white outline-none focus:border-red-500/50 transition-all shadow-inner`} 
-                            value={deletePassword} 
-                            onChange={(e) => { 
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                              setDeletePassword(val);
-                              if (val.length === 6) handleVerifyReauthMfa(val);
-                            }} 
-                            placeholder="000000" 
-                            autoFocus
-                          />
-                          <Button 
-                            variant="primary" 
-                            onClick={() => handleVerifyReauthMfa(deletePassword)}
-                            disabled={busy || deletePassword.length < 6}
-                            className="w-full h-14 bg-red-500 hover:bg-red-600 border-none text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/20"
-                          >
-                            {busy ? 'VERIFYING...' : 'VERIFY & DELETE'}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <Button 
-                        variant="primary" 
-            onClick={handleDeleteAccount}
-                        disabled={busy}
-                        className="w-full h-14 bg-red-500 hover:bg-red-600 border-none text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/20"
-                      >
-                        {busy ? 'PROCESSING...' : 'PERMANENTLY DELETE'}
-                      </Button>
-                    </>
-                  )}
+                <div className="flex gap-3">
                   <button 
-                    onClick={() => {
-                      if (!busy) {
-                        setShowDeleteModal(false);
-                        setMfaResolver(null);
-                        setMfaChallengeStep(1);
-                        setReauthVerificationId(null);
-                      }
-                    }}
+                    onClick={() => { setShowDeleteModal(false); setDeletePassword(''); setDeleteError(null); }}
                     disabled={busy}
-                    className="w-full py-4 text-[10px] font-bold text-white/20 hover:text-white uppercase tracking-widest transition-colors"
+                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
                   >
-                    Cancel
-          </button>
-        </div>
+                    CANCEL
+                  </button>
+                  <button 
+                    onClick={handleDeleteAccount}
+                    disabled={busy || !deletePassword}
+                    className="flex-1 py-3 bg-red-500 hover:bg-red-600 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                  >
+                    {busy ? 'DELETING...' : 'DELETE ACCOUNT'}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -974,191 +1216,127 @@ const Settings: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-sky/5 to-transparent pointer-events-none" />
               
-              <div className="relative z-10 space-y-6 text-center">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                    <Smartphone size={32} />
+              <div className="relative z-10 space-y-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-sky/10 flex items-center justify-center text-sky border border-sky/20">
+                      <Smartphone size={24} />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-black text-white uppercase tracking-tight">
+                        {phoneModalStep === 1 ? 'SETUP 2FA' : 'VERIFY PHONE'}
+                      </h2>
+                      <p className="text-xs text-white/40">
+                        {phoneModalStep === 1 ? 'Enter your phone number' : 'Check your messages'}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      {phoneModalStep === 1 ? 'Setup Phone SMS' : 'Verify Phone'}
-                    </h2>
-                    <p className="text-xs text-white/40 uppercase tracking-widest font-bold mt-1">
-                      {phoneModalStep === 1 ? 'Enter your mobile number' : 'Check your messages'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {showVerifySuccess ? (
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="py-8 space-y-4"
-                    >
-                      <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center text-accent mx-auto border-2 border-accent/30 shadow-glow-accent">
-                        <CheckCircle2 size={48} />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="text-xl font-black text-white uppercase tracking-tighter">Verified</h3>
-                        <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">Phone protection active</p>
-                      </div>
-                    </motion.div>
-                  ) : mfaResolver ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-sky/5 border border-sky/10 rounded-2xl text-[11px] text-sky-light/70 leading-relaxed font-medium text-center">
-                        {mfaChallengeStep === 1 
-                          ? `To proceed, verify your identity via SMS (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}).` 
-                          : `Enter the 6-digit code sent to your phone (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}).`}
-                      </div>
-                      
-                      {mfaChallengeStep === 1 ? (
-                        <Button 
-                          variant="primary" 
-                          onClick={handleStartReauthMfa}
-                          disabled={busy}
-                          className="w-full h-14 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 mt-2"
-                        >
-                          {busy ? 'SENDING...' : 'SEND CODE'}
-                        </Button>
-                      ) : (
-                        <div className="space-y-4">
-                          <input 
-                            className={`w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-center text-2xl font-black tracking-[0.5em] text-white outline-none focus:border-primary/50 transition-all shadow-inner`} 
-                            value={smsCode} 
-                            onChange={(e) => { 
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                              setSmsCode(val);
-                              if (val.length === 6) handleVerifyReauthMfa(val);
-                            }} 
-                            placeholder="000000" 
-                            autoFocus
-                          />
-                          <Button 
-                            variant="primary" 
-                            onClick={() => handleVerifyReauthMfa(smsCode)}
-                            disabled={busy || smsCode.length < 6}
-                            className="w-full h-14 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 mt-2"
-                          >
-                            {busy ? 'VERIFYING...' : 'VERIFY IDENTITY'}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ) : phoneModalStep === 1 ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-sky/5 border border-sky/10 rounded-2xl text-[11px] text-sky-light/70 leading-relaxed font-medium">
-                        Enter your mobile number to receive a verification code. This number will be used for secure logins.
-                      </div>
-                      <div className="text-left">
-                        <PhoneInput 
-                          value={phone} 
-                          onChange={setPhone} 
-                          placeholder="000-000-0000" 
-                          error={fieldErrors.phone}
-                        />
-                      </div>
-
-                      <div className="space-y-2 text-left">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/20 ml-1 block">Account Password</label>
-                        <div className="relative">
-                          <input 
-                            type={showMfaPassword ? "text" : "password"}
-                            className={`w-full bg-white/5 border ${fieldErrors.mfaPassword ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'border-white/10'} rounded-2xl px-5 py-4 text-white outline-none focus:border-primary/50 transition-all font-black text-sm pr-20`} 
-                            value={mfaPassword} 
-                            onChange={(e) => { setMfaPassword(e.target.value); setFieldErrors({ ...fieldErrors, mfaPassword: false }); }} 
-                            placeholder="••••••••" 
-                          />
-                          <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                            <button
-                              type="button"
-                              onClick={() => setShowMfaPassword(!showMfaPassword)}
-                              className="text-white/20 hover:text-white transition-colors"
-                            >
-                              {showMfaPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
-                            <Lock className="text-white/20" size={18} />
-                          </div>
-                        </div>
-                        <p className="text-[8px] text-white/30 uppercase font-black tracking-widest ml-1 italic">Required for security confirmation</p>
-                      </div>
-
-                      <div className="flex justify-center py-2">
-        <div ref={recaptchaRef} id="recaptcha-settings-container" />
-      </div>
-                      
-                      <Button 
-                        variant="primary" 
-                        onClick={handleStartPhone}
-                        disabled={busy || !phone}
-                        className="w-full h-14 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 mt-2"
-                      >
-                        {busy ? 'SENDING...' : 'CONTINUE'}
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-sky/5 border border-sky/10 rounded-2xl text-[11px] text-sky-light/70 leading-relaxed font-medium text-center">
-                        We've sent a 6-digit verification code to <span className="text-white font-bold">{phone}</span>.
-                      </div>
-                      <div className="space-y-2 text-left">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/20 ml-1 block">Verification Code</label>
-                        <input 
-                          className={`w-full bg-white/5 border ${fieldErrors.smsCode ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'border-white/10'} rounded-2xl px-5 py-4 text-center text-2xl font-black tracking-[0.5em] text-white outline-none focus:border-primary/50 transition-all shadow-inner`} 
-                          value={smsCode} 
-                          onChange={(e) => { setSmsCode(e.target.value.replace(/\D/g, '').slice(0, 6)); setFieldErrors({ ...fieldErrors, smsCode: false }); }} 
-                          placeholder="000000" 
-                          autoFocus
-                        />
-                      </div>
-                      
-                      <Button 
-                        variant="primary" 
-                        onClick={handleConfirmPhone}
-                        disabled={busy || smsCode.length < 6}
-                        className="w-full h-14 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 mt-2"
-                      >
-                        {busy ? 'VERIFYING...' : 'VERIFY & ENABLE'}
-                      </Button>
-                      
-                      <button 
-                        onClick={() => setPhoneModalStep(1)}
-                        disabled={busy}
-                        className="w-full py-2 text-[10px] font-bold text-white/40 hover:text-white uppercase tracking-widest transition-colors"
-                      >
-                        Change Number
-                      </button>
-                    </div>
-                  )}
-
-                  {error && (
-                    <div className="px-1 text-[10px] font-bold text-red-400 uppercase tracking-widest flex items-center justify-center gap-2">
-                      <AlertCircle size={12} />
-                      {error}
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-2">
                   <button 
-                    onClick={() => {
-                      if (!busy) {
-                        setShowPhoneModal(false);
-                        setMfaResolver(null);
-                        setMfaChallengeStep(1);
-                        setReauthVerificationId(null);
-                      }
-                    }}
-                    disabled={busy}
-                    className="w-full py-4 text-[10px] font-bold text-white/20 hover:text-white uppercase tracking-widest transition-colors"
+                    onClick={() => { if (!busy) { setShowPhoneModal(false); setMfaPassword(''); setSmsCode(''); } }}
+                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
                   >
-                    Cancel
+                    <X size={16} className="text-white/60" />
                   </button>
                 </div>
+
+                {showVerifySuccess ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="py-8 text-center"
+                  >
+                    <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center text-accent mx-auto mb-4 border-2 border-accent/30">
+                      <CheckCircle2 size={48} />
+                    </div>
+                    <h3 className="text-xl font-black text-white uppercase tracking-tight">VERIFIED</h3>
+                    <p className="text-xs text-white/40 uppercase tracking-widest mt-1">Two-factor authentication enabled</p>
+                  </motion.div>
+                ) : phoneModalStep === 1 ? (
+                  <div className="space-y-4">
+                    <PhoneInput 
+                      value={phone} 
+                      onChange={setPhone} 
+                      placeholder="(555) 123-4567" 
+                      error={fieldErrors.phone}
+                    />
+
+                    <div>
+                      <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">ACCOUNT PASSWORD</label>
+                      <div className="relative">
+                        <input 
+                          type={showMfaPassword ? "text" : "password"}
+                          className={`w-full bg-white/5 border ${fieldErrors.mfaPassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-sky/50 transition-all pr-12`} 
+                          value={mfaPassword} 
+                          onChange={(e) => { setMfaPassword(e.target.value); setFieldErrors({ ...fieldErrors, mfaPassword: false }); }} 
+                          placeholder="Enter password to confirm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowMfaPassword(!showMfaPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                        >
+                          {showMfaPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center py-2">
+                      <div ref={recaptchaRef} id="recaptcha-settings-container" />
+                    </div>
+                    
+                    <button 
+                      onClick={handleStartPhone}
+                      disabled={busy || !phone || !mfaPassword}
+                      className="w-full py-3 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.15em] transition-all"
+                    >
+                      {busy ? 'SENDING...' : 'SEND VERIFICATION CODE'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-sky/5 border border-sky/10 rounded-xl text-xs text-white/60 text-center">
+                      We sent a 6-digit code to <span className="text-white font-bold">{formatPhoneDisplay(phone)}</span>
+                    </div>
+                    
+                    <div>
+                      <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">VERIFICATION CODE</label>
+                      <input 
+                        className={`w-full bg-white/5 border ${fieldErrors.smsCode ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-4 text-center text-2xl font-black tracking-[0.3em] text-white outline-none focus:border-sky/50 transition-all`} 
+                        value={smsCode} 
+                        onChange={(e) => { setSmsCode(e.target.value.replace(/\D/g, '').slice(0, 6)); setFieldErrors({ ...fieldErrors, smsCode: false }); }} 
+                        placeholder="000000" 
+                        autoFocus
+                      />
+                    </div>
+                    
+                    <button 
+                      onClick={handleConfirmPhone}
+                      disabled={busy || smsCode.length < 6}
+                      className="w-full py-3 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.15em] transition-all"
+                    >
+                      {busy ? 'VERIFYING...' : 'VERIFY & ENABLE'}
+                    </button>
+                    
+                    <button 
+                      onClick={() => setPhoneModalStep(1)}
+                      disabled={busy}
+                      className="w-full py-2 text-xs text-white/40 hover:text-white uppercase tracking-widest transition-colors"
+                    >
+                      CHANGE NUMBER
+                    </button>
+                  </div>
+                )}
+
+                {error && (
+                  <p className="text-xs text-red-400 flex items-center justify-center gap-1">
+                    <AlertCircle size={12} />
+                    {error}
+                  </p>
+                )}
               </div>
             </motion.div>
           </div>
@@ -1169,9 +1347,9 @@ const Settings: React.FC = () => {
         isOpen={showSignOutModal}
         onClose={() => setShowSignOutModal(false)}
         onConfirm={handleSignOut}
-        title="SIGN OUT?"
-        message="Are you sure you want to end your session? You can sign back in at any time to access your stats."
-        confirmText="SIGN OUT"
+        title="Sign Out?"
+        message="Are you sure you want to end your session? You can sign back in at any time."
+        confirmText="Sign Out"
         variant="danger"
       />
 
@@ -1190,145 +1368,68 @@ const Settings: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none" />
               
-              <div className="relative z-10 space-y-6 text-center">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 shadow-lg shadow-amber-500/10">
-                    <ShieldAlert size={32} />
+              <div className="relative z-10 space-y-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20">
+                    <ShieldAlert size={28} />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">Disable 2FA?</h2>
-                    <p className="text-xs text-amber-500/60 uppercase tracking-widest font-black mt-1">Identity Verification Required</p>
+                    <h2 className="text-lg font-black text-white uppercase tracking-tight">DISABLE 2FA</h2>
+                    <p className="text-xs text-white/40 mt-0.5">Your account will be less secure</p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-2xl text-[11px] text-amber-500/80 leading-relaxed font-medium text-center">
-                  Are you sure you want to remove this security layer? To proceed, please confirm your identity.
+                <div className="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl text-xs text-amber-500/80 leading-relaxed">
+                  Removing two-factor authentication will make your account more vulnerable to unauthorized access.
                 </div>
 
-                <div className="space-y-4">
-                  {mfaResolver ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-sky/5 border border-sky/10 rounded-2xl text-[11px] text-sky-light/70 leading-relaxed font-medium text-center">
-                        {mfaChallengeStep === 1 
-                          ? `Security verification: verify your identity via SMS (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}) before disabling.` 
-                          : `Enter the 6-digit code sent to your phone (•••• ${(mfaResolver.hints[0] as any).phoneNumber?.slice(-4) || 'XXXX'}).`}
-                      </div>
-                      
-                      {mfaChallengeStep === 1 ? (
-                        <Button 
-                          variant="primary" 
-                          onClick={handleStartReauthMfa}
-                          disabled={busy}
-                          className="w-full h-14 bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-500/20 mt-2"
-                        >
-                          {busy ? 'SENDING...' : 'SEND CODE'}
-                        </Button>
-                      ) : (
-                        <div className="space-y-4">
-                          <input 
-                            className={`w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-center text-2xl font-black tracking-[0.5em] text-white outline-none focus:border-amber-500/50 transition-all shadow-inner`} 
-                            value={mfaPassword} 
-                            onChange={(e) => { 
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                              setMfaPassword(val);
-                              if (val.length === 6) handleVerifyReauthMfa(val);
-                            }} 
-                            placeholder="000000" 
-                            autoFocus
-                          />
-                          <Button 
-                            variant="primary" 
-                            onClick={() => handleVerifyReauthMfa(mfaPassword)}
-                            disabled={busy || mfaPassword.length < 6}
-                            className="w-full h-14 bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-500/20 mt-2"
-                          >
-                            {busy ? 'VERIFYING...' : 'VERIFY & DISABLE'}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="space-y-2 text-left">
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/20 ml-1 block">Account Password</label>
-                      <div className="relative">
-                        <input 
-                          type={showMfaPassword ? "text" : "password"}
-                          className={`w-full bg-white/5 border ${fieldErrors.mfaPassword ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'border-white/10'} rounded-2xl px-5 py-4 text-white outline-none focus:border-amber-500/50 transition-all font-black text-sm pr-20`} 
-                          value={mfaPassword} 
-                          onChange={(e) => { setMfaPassword(e.target.value); setFieldErrors({ ...fieldErrors, mfaPassword: false }); }} 
-                          placeholder="••••••••" 
-                        />
-                        <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => setShowMfaPassword(!showMfaPassword)}
-                            className="text-white/20 hover:text-white transition-colors"
-                          >
-                            {showMfaPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                          <Lock className="text-white/20" size={18} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {error && (
-                    <div className="px-1 text-[10px] font-bold text-red-400 uppercase tracking-widest flex items-center justify-center gap-2">
-                      <AlertCircle size={12} />
-                      {error}
-                    </div>
-                  )}
-                </div>
-
-                {!mfaResolver && (
-                  <div className="flex flex-col gap-3 pt-2">
-                    <Button 
-                      variant="primary" 
-                      onClick={() => handleDisableFactor(showDisableMfaModal)}
-                      disabled={busy}
-                      className="w-full h-14 bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-500/20"
+                <div>
+                  <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] block mb-2">ACCOUNT PASSWORD</label>
+                  <div className="relative">
+                    <input 
+                      type={showMfaPassword ? "text" : "password"}
+                      className={`w-full bg-white/5 border ${fieldErrors.mfaPassword ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-amber-500/50 transition-all pr-12`} 
+                      value={mfaPassword} 
+                      onChange={(e) => { setMfaPassword(e.target.value); setFieldErrors({ ...fieldErrors, mfaPassword: false }); }} 
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowMfaPassword(!showMfaPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
                     >
-                      {busy ? 'CONFIRMING...' : 'DISABLE PROTECTION'}
-                    </Button>
-                  <button 
-                    onClick={() => {
-                      if (!busy) {
-                        setShowDisableMfaModal(null);
-                        setMfaResolver(null);
-                        setMfaChallengeStep(1);
-                        setReauthVerificationId(null);
-                      }
-                    }}
-                    disabled={busy}
-                    className="w-full py-4 text-[10px] font-bold text-white/20 hover:text-white uppercase tracking-widest transition-colors"
-                  >
-                    Cancel
-                  </button>
+                      {showMfaPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
                   </div>
+                </div>
+
+                {error && (
+                  <p className="text-xs text-red-400 flex items-center gap-1">
+                    <AlertCircle size={12} />
+                    {error}
+                  </p>
                 )}
-                
-                {mfaResolver && (
-                  <div className="pt-2">
+
+                <div className="flex gap-3">
                   <button 
-                    onClick={() => {
-                      if (!busy) {
-                        setShowDisableMfaModal(null);
-                        setMfaResolver(null);
-                        setMfaChallengeStep(1);
-                        setReauthVerificationId(null);
-                      }
-                    }}
+                    onClick={() => { setShowDisableMfaModal(null); setMfaPassword(''); }}
                     disabled={busy}
-                    className="w-full py-4 text-[10px] font-bold text-white/20 hover:text-white uppercase tracking-widest transition-colors"
+                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
                   >
-                    Cancel
+                    CANCEL
                   </button>
-                  </div>
-                )}
+                  <button 
+                    onClick={() => handleDisableFactor(showDisableMfaModal)}
+                    disabled={busy || !mfaPassword}
+                    className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.1em] transition-all"
+                  >
+                    {busy ? 'DISABLING...' : 'DISABLE 2FA'}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>

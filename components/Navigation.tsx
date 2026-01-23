@@ -160,11 +160,27 @@ const Navigation: React.FC = () => {
   // Lock body scroll when mobile menu is open to prevent background scrolling
   useEffect(() => {
     if (isMobileMenuOpen) {
+      // Improved iOS scroll lock
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
     } else {
+      // Improved iOS scroll unlock
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
       document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
     return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
       document.body.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
@@ -328,7 +344,8 @@ const Navigation: React.FC = () => {
             : 'translate-x-full pointer-events-none'
         }`}
         style={{ 
-          WebkitOverflowScrolling: 'touch'
+          WebkitOverflowScrolling: 'touch',
+          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
         }}
       >
         {/* Background blobs for mobile menu */}

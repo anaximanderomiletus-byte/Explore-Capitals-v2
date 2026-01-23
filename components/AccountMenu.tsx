@@ -75,7 +75,7 @@ const AccountMenu: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`shing-btn relative flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all overflow-hidden ${
-          isOpen ? 'border-sky-light shadow-[0_0_8px_rgba(119,182,234,0.15)]' : 'border-white/60 hover:border-sky/40'
+          isOpen ? 'border-sky-light' : 'border-white/60 hover:border-sky/40'
         } ${avatar ? avatar.color : 'bg-gel-blue'} text-white font-display font-bold`}
       >
         {avatar ? (

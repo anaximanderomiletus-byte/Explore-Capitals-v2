@@ -153,16 +153,14 @@ export default function GlobalDetective() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass p-8 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none rounded-[inherit]" />
-          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky shadow-glow-sky border border-white/30 relative overflow-hidden transition-transform duration-700">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
+          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden transition-transform duration-700">
             <Search size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Global Detective</h1>
           <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>
           <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
             <button 
               onClick={() => navigate('/games')}
               className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -184,17 +182,15 @@ export default function GlobalDetective() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none rounded-[inherit]" />
-          <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning shadow-glow-warning border border-white/30 relative overflow-hidden transition-transform duration-700">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
+          <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden transition-transform duration-700">
             <Trophy size={36} className="relative z-10" />
           </div>
           <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
           <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-          <div className="text-7xl font-display font-black text-white mb-10 drop-shadow-glow-sky tabular-nums">{score}</div>
+          <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
           <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play Again</Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
             <button 
               onClick={() => navigate('/games')}
               className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -217,8 +213,7 @@ export default function GlobalDetective() {
           >
             <div className="w-full max-w-2xl flex flex-col flex-1 min-h-0 relative z-10">
           {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-          <div className="w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden">
-             <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
+          <div className="w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 relative overflow-hidden">
              <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
                <ArrowLeft size={18} className="transition-transform" />
              </Link>
@@ -229,37 +224,24 @@ export default function GlobalDetective() {
                 <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
              </div>
 
-             {/* Desktop only: points and timer in top bar */}
-             <div className="hidden md:flex items-center gap-6 relative z-10">
-               <div className="flex items-center gap-2">
-                  <Trophy size={18} className="text-warning drop-shadow-md" />
-                  <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
-               </div>
-              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-                 <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                       <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-                 <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-              </div>
-             </div>
+             {/* Desktop only: spacer to keep title centered */}
+             <div className="hidden md:block w-[42px]" />
 
              {/* Mobile: empty spacer to balance the back button */}
              <div className="w-[42px] md:hidden" />
           </div>
 
-          <div className="flex-1 flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-8 overflow-hidden relative shadow-glass z-10">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+          <div className="flex-1 flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-8 overflow-hidden relative z-10">
                 
-                {/* Mobile: Points top-left, Timer top-right */}
-                <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
-                   <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                      <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
-                      <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+                {/* Points and Timer - Now visible on all sizes in the corners of the game rectangle */}
+                <div className="flex items-center justify-between mb-2 md:mb-4 relative z-20">
+                   <div className="flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+                      <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+                      <span className="font-display font-black text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
                    </div>
-                   <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                      <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
-                      <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+                   <div className={`flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                      <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
+                      <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                    </div>
                 </div>
 
@@ -273,24 +255,22 @@ export default function GlobalDetective() {
                         className="h-full flex flex-col justify-between relative z-10"
                       >
                     <div className="flex flex-col flex-1 justify-center">
-                        <h2 className="text-sky font-black uppercase tracking-[0.4em] text-[9px] mb-3 flex items-center gap-2 font-sans drop-shadow-glow-sky">
+                        <h2 className="text-sky font-black uppercase tracking-[0.4em] text-[9px] mb-3 flex items-center gap-2 font-sans">
                           <Search size={12} /> Geographic Intelligence
                         </h2>
                         
                         <div className="grid grid-cols-1 gap-2 md:gap-2.5 mb-2 md:mb-4">
                             {activeClues.map((clue, idx) => (
                               <div key={idx} className="px-4 rounded-xl border border-white/20 flex justify-between items-center h-[52px] md:h-[56px] transition-all duration-500 bg-white/5 group hover:bg-white/10 shadow-inner relative overflow-hidden">
-                                <div className="absolute inset-0 bg-glossy-gradient opacity-5 rounded-[inherit]" />
                                 <span className="text-[9px] font-black text-white/30 uppercase tracking-widest relative z-10">{clue.label}</span>
                                 <span className="font-display font-black text-white text-sm md:text-lg uppercase tracking-tight relative z-10 drop-shadow-md truncate ml-4">{clue.value}</span>
                               </div>
                             ))}
                             
                             <div 
-                              className={`px-4 rounded-xl border flex justify-between items-center h-[52px] md:h-[56px] transition-all duration-500 relative overflow-hidden shadow-inner ${isCapitalRevealed ? 'bg-warning/20 border-warning/50 shadow-glow-warning' : 'bg-surface-dark border-white/10 cursor-pointer group'}`} 
+                              className={`px-4 rounded-xl border flex justify-between items-center h-[52px] md:h-[56px] transition-all duration-500 relative overflow-hidden shadow-inner ${isCapitalRevealed ? 'bg-warning/20 border-warning/50' : 'bg-surface-dark border-white/10 cursor-pointer group'}`} 
                               onClick={revealCapital}
                             >
-                                <div className="absolute inset-0 bg-glossy-gradient opacity-10 rounded-[inherit]" />
                                 <span className={`text-[9px] font-black uppercase tracking-widest relative z-10 ${isCapitalRevealed ? 'text-white' : 'text-white/20'}`}>Capital City</span>
                                 
                                 {isCapitalRevealed ? (
@@ -317,10 +297,10 @@ export default function GlobalDetective() {
                              const isCorrect = option.name === targetCountry.name;
                              const isWrong = isSelected && !isCorrect;
                              
-                             let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50 shadow-glass-bubble";
+                             let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50";
                              if (selectedAnswer) {
-                               if (isCorrect) stateStyles = "bg-accent/70 border-accent shadow-glow-accent text-white";
-                               else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 shadow-glow-warning text-white";
+                               if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white";
+                               else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white";
                                else if (option.name === targetCountry.name) stateStyles = "bg-accent/40 border-accent/80 text-white";
                                else stateStyles = "bg-white/5 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
                              }
@@ -332,7 +312,6 @@ export default function GlobalDetective() {
                                className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
                                style={{ WebkitTapHighlightColor: 'transparent' }}
                              >
-                               <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none rounded-[inherit]" />
                                <span className="px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
                              </button>
                              );

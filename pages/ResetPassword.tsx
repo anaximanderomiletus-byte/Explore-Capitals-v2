@@ -78,14 +78,14 @@ const ResetPassword: React.FC = () => {
       </div>
 
       <div className="relative z-10 flex-grow flex items-center justify-center px-6 py-24 sm:py-32">
-        <div className="w-full max-w-[600px] bg-white/20 backdrop-blur-3xl rounded-[4rem] shadow-[0_40px_100px_rgba(0,194,255,0.3)] border-2 border-white/40 overflow-hidden relative">
+        <div className="w-full max-w-[600px] bg-white/20 backdrop-blur-3xl rounded-[4rem] border-2 border-white/40 overflow-hidden relative">
           <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
           
           <div className="p-10 sm:p-16 flex flex-col justify-center bg-white/5 relative overflow-hidden">
             <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
             <div className="max-w-md mx-auto w-full relative z-10">
               <div className="mb-14 text-center">
-                <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/30 backdrop-blur-3xl rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-white mb-10 border-2 border-white/40 shadow-glow-sky relative overflow-hidden">
+                <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/30 backdrop-blur-3xl rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-white mb-10 border-2 border-white/40 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                   <Compass size={14} className="animate-spin-slow relative z-10 text-sky-light" />
                   <span className="relative z-10 drop-shadow-md">SECURE ACCESS</span>
@@ -99,7 +99,7 @@ const ResetPassword: React.FC = () => {
               </div>
 
               {error && (
-                <div className="flex items-start gap-3 bg-red-500/20 p-6 rounded-2xl border border-red-500/30 mb-10 animate-in zoom-in-95 shadow-glass-bubble relative overflow-hidden">
+                <div className="flex items-start gap-3 bg-red-500/20 p-6 rounded-2xl border border-red-500/30 mb-10 animate-in zoom-in-95 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                   <AlertCircle className="text-red-500 shrink-0 mt-0.5 relative z-10" size={20} />
                   <p className="text-[10px] font-black text-red-500 uppercase tracking-widest leading-snug relative z-10">{error}</p>
@@ -107,7 +107,7 @@ const ResetPassword: React.FC = () => {
               )}
 
               {success && (
-                <div className="flex items-start gap-3 bg-green-500/20 p-6 rounded-2xl border border-green-500/30 mb-10 animate-in zoom-in-95 shadow-glass-bubble relative overflow-hidden">
+                <div className="flex items-start gap-3 bg-green-500/20 p-6 rounded-2xl border border-green-500/30 mb-10 animate-in zoom-in-95 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                   <CheckCircle2 className="text-green-500 shrink-0 mt-0.5 relative z-10" size={20} />
                   <p className="text-[10px] font-black text-green-500 uppercase tracking-widest leading-snug relative z-10">Password reset successfully!</p>
@@ -144,7 +144,7 @@ const ResetPassword: React.FC = () => {
                     <RequirementItem met={passwordCriteria.special} label="Special char (!@#$)" />
                   </div>
 
-                  <Button type="submit" className="w-full h-16 text-xl mt-6 shadow-glow-sky uppercase tracking-widest border border-white/20" disabled={busy || !isPasswordValid}>
+                  <Button type="submit" className="w-full h-16 text-xl mt-6 uppercase tracking-widest border border-white/20" disabled={busy || !isPasswordValid}>
                     {busy ? <span className="animate-pulse">RESETTING...</span> : 
                     <span className="flex items-center gap-3">RESET PASSWORD <ArrowRight size={24} /></span>}
                   </Button>
@@ -152,7 +152,7 @@ const ResetPassword: React.FC = () => {
               )}
 
               {!oobCode && (
-                <Button onClick={() => navigate('/auth')} className="w-full h-16 text-xl mt-6 shadow-glow-sky uppercase tracking-widest border border-white/20">
+                <Button onClick={() => navigate('/auth')} className="w-full h-16 text-xl mt-6 uppercase tracking-widest border border-white/20">
                   BACK TO SIGN IN
                 </Button>
               )}
@@ -170,7 +170,7 @@ const ResetPassword: React.FC = () => {
 
 const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label }) => (
   <div className={`flex items-center gap-1.5 transition-colors duration-300 ${met ? 'text-green-400' : 'text-white/20'}`}>
-    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400 shadow-[0_0_5px_rgba(74,222,128,0.5)]' : 'bg-white/20'}`} />
+    <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-400' : 'bg-white/20'}`} />
     <span className="text-[8px] font-black uppercase tracking-widest leading-none">{label}</span>
   </div>
 );

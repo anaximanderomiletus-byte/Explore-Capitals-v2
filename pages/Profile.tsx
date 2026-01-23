@@ -180,8 +180,8 @@ const Profile: React.FC = () => {
   if (isRedirecting || isAuthInitializing) {
     return (
       <div className="pt-32 pb-16 px-6 bg-surface-dark min-h-screen flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 border-4 border-sky border-t-transparent rounded-full animate-spin shadow-glow-sky" />
-        <p className="mt-4 text-white/40 text-[10px] font-black uppercase tracking-widest uppercase tracking-widest">
+        <div className="w-12 h-12 border-4 border-sky border-t-transparent rounded-full animate-spin" />
+        <p className="mt-4 text-white/40 text-[10px] font-black uppercase tracking-widest">
           {isRedirecting ? 'Ending Session...' : 'Identifying Explorer...'}
         </p>
       </div>
@@ -277,7 +277,7 @@ const Profile: React.FC = () => {
             }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           >
-            <div className="w-20 h-20 bg-sky/10 backdrop-blur-xl border border-sky/20 rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,194,255,0.15)]">
+            <div className="w-20 h-20 bg-sky/10 backdrop-blur-xl border border-sky/20 rounded-2xl flex items-center justify-center shadow-lg">
               <FilledTrophy />
           </div>
           </motion.div>
@@ -296,7 +296,7 @@ const Profile: React.FC = () => {
             }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           >
-            <div className="w-16 h-16 bg-accent/10 backdrop-blur-xl border border-accent/20 rounded-xl flex items-center justify-center shadow-[0_8px_32px_rgba(52,199,89,0.15)]">
+            <div className="w-16 h-16 bg-accent/10 backdrop-blur-xl border border-accent/20 rounded-xl flex items-center justify-center shadow-lg">
               <FilledGlobe />
           </div>
           </motion.div>
@@ -315,7 +315,7 @@ const Profile: React.FC = () => {
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
-            <div className="w-12 h-12 bg-purple-500/10 backdrop-blur-xl border border-purple-500/20 rounded-lg flex items-center justify-center shadow-[0_8px_32px_rgba(139,92,246,0.15)]">
+            <div className="w-12 h-12 bg-purple-500/10 backdrop-blur-xl border border-purple-500/20 rounded-lg flex items-center justify-center shadow-lg">
               <FilledMedal />
         </div>
           </motion.div>
@@ -342,7 +342,7 @@ const Profile: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.3, type: "spring", stiffness: 200 }}
               className="relative mx-auto w-fit"
             >
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky via-cyan-400 to-sky-light text-white flex items-center justify-center shadow-[0_0_40px_rgba(0,194,255,0.4)] border border-white/30 relative overflow-hidden">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky via-cyan-400 to-sky-light text-white flex items-center justify-center border border-white/30 relative overflow-hidden">
                 <Compass size={40} className="relative z-10 drop-shadow-lg" strokeWidth={2.5} />
                 <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/40 opacity-60" />
               </div>
@@ -363,7 +363,7 @@ const Profile: React.FC = () => {
                 className="text-3xl md:text-4xl font-display font-black text-white uppercase tracking-tight leading-none drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
               >
                 Join the<br />
-                <span className="bg-clip-text bg-gradient-to-r from-sky via-cyan-400 to-sky-light [-webkit-text-fill-color:transparent] drop-shadow-[0_0_30px_rgba(0,194,255,0.5)]">
+                <span className="bg-clip-text bg-gradient-to-r from-sky via-cyan-400 to-sky-light [-webkit-text-fill-color:transparent]">
                   Expedition
                 </span>
               </motion.h1>
@@ -451,7 +451,7 @@ const Profile: React.FC = () => {
                   exit={{ opacity: 0, y: -20 }}
                   className="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 bg-sky/10 border border-sky/20 rounded-full"
                 >
-                  <div className="w-2 h-2 bg-sky rounded-full animate-pulse shadow-glow-sky" />
+                  <div className="w-2 h-2 bg-sky rounded-full animate-pulse" />
                   <span className="text-[9px] font-black text-sky uppercase tracking-widest">Syncing Data...</span>
                 </motion.div>
               )}
@@ -465,7 +465,7 @@ const Profile: React.FC = () => {
                 {renderAvatar()}
                 <div className="absolute inset-0 bg-glossy-gradient opacity-60 pointer-events-none" />
               </div>
-              <Link to="/settings" className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white/40 backdrop-blur-3xl shadow-sm hover:shadow-glow-sky/20 flex items-center justify-center text-white hover:text-sky transition-all border border-white/50">
+              <Link to="/settings" className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white/40 backdrop-blur-3xl flex items-center justify-center text-white hover:text-sky transition-all border border-white/50">
                 <Settings size={14} />
               </Link>
             </div>
@@ -506,7 +506,7 @@ const Profile: React.FC = () => {
                     </span>
               </div>
               <div className="h-2 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/30 shadow-inner">
-                    <div className="h-full bg-frutiger-gradient rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(0,194,255,0.8)] relative" style={{ width: `${lp.progressToNext || 0}%` }}>
+                    <div className="h-full bg-frutiger-gradient rounded-full transition-all duration-1000 relative" style={{ width: `${lp.progressToNext || 0}%` }}>
                    <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                 </div>
               </div>
@@ -518,13 +518,13 @@ const Profile: React.FC = () => {
             {/* TABS */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex gap-8">
-                <button onClick={() => setView('overview')} className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors relative group cursor-pointer ${view === 'overview' ? 'text-sky drop-shadow-glow-sky' : 'text-white/50 hover:text-white'}`}>
+                <button onClick={() => setView('overview')} className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors relative group cursor-pointer ${view === 'overview' ? 'text-sky' : 'text-white/50 hover:text-white'}`}>
               Overview
-              <div className={`absolute -bottom-4 left-0 h-0.5 bg-sky transition-all duration-300 ${view === 'overview' ? 'w-full shadow-glow-sky' : 'w-0 group-hover:w-full opacity-50'}`} />
+              <div className={`absolute -bottom-4 left-0 h-0.5 bg-sky transition-all duration-300 ${view === 'overview' ? 'w-full' : 'w-0 group-hover:w-full opacity-50'}`} />
             </button>
-                <button onClick={() => setView('detailed')} className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors relative group cursor-pointer ${view === 'detailed' ? 'text-sky drop-shadow-glow-sky' : 'text-white/50 hover:text-white'}`}>
+                <button onClick={() => setView('detailed')} className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors relative group cursor-pointer ${view === 'detailed' ? 'text-sky' : 'text-white/50 hover:text-white'}`}>
               Detailed Analytics
-              <div className={`absolute -bottom-4 left-0 h-0.5 bg-sky transition-all duration-300 ${view === 'detailed' ? 'w-full shadow-glow-sky' : 'w-0 group-hover:w-full opacity-50'}`} />
+              <div className={`absolute -bottom-4 left-0 h-0.5 bg-sky transition-all duration-300 ${view === 'detailed' ? 'w-full' : 'w-0 group-hover:w-full opacity-50'}`} />
             </button>
           </div>
           <div className="hidden sm:flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.15em] text-white/40">
@@ -981,60 +981,9 @@ const CircularProgress: React.FC<{ value: number; size?: number; strokeWidth?: n
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (value / 100) * circumference;
-  const glowSize = size + 40; // Extra space for glow
   
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      {/* Glow layer - blurred copy of the progress arc */}
-      <svg 
-        className="absolute transform -rotate-90" 
-        width={glowSize} 
-        height={glowSize}
-        style={{ 
-          top: -20, 
-          left: -20,
-          filter: 'blur(10px)',
-          opacity: 0.6,
-        }}
-      >
-        <circle
-          stroke="rgba(0, 194, 255, 0.8)"
-          strokeWidth={strokeWidth + 4}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          fill="transparent"
-          r={radius}
-          cx={glowSize / 2}
-          cy={glowSize / 2}
-        />
-      </svg>
-      
-      {/* Second glow layer - even more diffused */}
-      <svg 
-        className="absolute transform -rotate-90" 
-        width={glowSize} 
-        height={glowSize}
-        style={{ 
-          top: -20, 
-          left: -20,
-          filter: 'blur(20px)',
-          opacity: 0.4,
-        }}
-      >
-        <circle
-          stroke="rgba(0, 194, 255, 0.6)"
-          strokeWidth={strokeWidth + 8}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          fill="transparent"
-          r={radius}
-          cx={glowSize / 2}
-          cy={glowSize / 2}
-        />
-      </svg>
-
       {/* Main SVG */}
       <svg className="transform -rotate-90 relative z-10" width={size} height={size}>
         <defs>

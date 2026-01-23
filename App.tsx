@@ -40,7 +40,14 @@ const SKIP_TRANSITION_ROUTES = ['/auth', '/profile', '/settings', '/loyalty', '/
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Immediate scroll for faster feeling on Safari
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+    
+    // Fallback for some mobile browsers
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
   return null;
 };
@@ -52,11 +59,11 @@ const ScrollToTop: React.FC = () => {
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="flex-grow flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="flex-grow flex flex-col w-full overflow-x-hidden"
     >
       {children}
     </motion.div>
@@ -70,8 +77,8 @@ const AppContent: React.FC = () => {
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
       <ScrollToTop />
       <Navigation />
-      <div className="flex-grow flex flex-col relative">
-        <AnimatePresence mode="wait" initial={false}>
+      <div className="flex-grow flex flex-col relative w-full">
+        <AnimatePresence mode="popLayout" initial={false}>
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
             <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />

@@ -299,7 +299,7 @@ export default function MapDash() {
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
               <Link to="/games">
-                <button className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white/80 hover:text-white shadow-glass transition-all border border-white/20 group active:scale-95">
+                <button className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all border border-white/20 group active:scale-95">
                   <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
                 </button>
               </Link>
@@ -307,15 +307,14 @@ export default function MapDash() {
 
             {/* Score and Timer - positioned below nav bar, matching back button height */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 right-3 sm:right-4 md:right-6 z-30 flex gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <div className="bg-surface-dark/90 backdrop-blur-xl rounded-xl shadow-glass border border-white/20 h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2">
-                <Trophy size={14} className="sm:w-4 sm:h-4 text-warning drop-shadow-glow flex-shrink-0" />
+              <div className="bg-surface-dark/90 backdrop-blur-xl rounded-xl border border-white/20 h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2">
+                <Trophy size={14} className="sm:w-4 sm:h-4 text-warning flex-shrink-0" />
                 <span className="font-display font-black text-xs sm:text-sm md:text-base text-white tabular-nums relative z-10 drop-shadow-md">{score}</span>
               </div>
               
               <div className={`rounded-xl shadow-inner h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border border-white/20'}`}>
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 rounded-[inherit]" />
                 <Timer size={14} className={`sm:w-4 sm:h-4 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-sky"}`} />
-                <span className={`font-display font-black text-xs sm:text-sm md:text-base tabular-nums min-w-[32px] sm:min-w-[36px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? 'text-error' : 'text-white'}`}>
+                <span className={`font-display font-black text-xs sm:text-sm md:text-base tabular-nums min-w-[32px] sm:min-w-[36px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? "text-error" : "text-white"}`}>
                   {formatTime(timeLeft)}
                 </span>
               </div>
@@ -325,16 +324,14 @@ export default function MapDash() {
             <div className="absolute bottom-32 sm:bottom-36 md:bottom-40 right-3 sm:right-4 md:right-6 z-30 hidden lg:flex flex-col gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-right-4 duration-500">
               <button 
                 onClick={handleZoomIn}
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white shadow-glass transition-all border border-white/20 relative overflow-hidden group active:scale-95"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95"
               >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                 <Plus size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </button>
               <button 
                 onClick={handleZoomOut}
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white shadow-glass transition-all border border-white/20 relative overflow-hidden group active:scale-95"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95"
               >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                 <Minus size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </button>
             </div>
@@ -346,17 +343,16 @@ export default function MapDash() {
                 className={`absolute bottom-4 sm:bottom-5 md:bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-[320px] sm:max-w-[360px] md:max-w-sm z-20 pointer-events-none transform transition-all duration-500 opacity-100 translate-y-0 ${lastResult === 'incorrect' ? 'card-shake' : ''}`}
               >
                 <div 
-                  className={`pointer-events-auto backdrop-blur-2xl rounded-2xl sm:rounded-[1.5rem] md:rounded-[2rem] shadow-glass py-8 px-5 sm:py-10 sm:px-6 md:py-10 md:px-6 lg:py-6 text-center relative transition-all duration-200 overflow-hidden
+                  className={`pointer-events-auto backdrop-blur-2xl rounded-2xl sm:rounded-[1.5rem] md:rounded-[2rem] py-8 px-5 sm:py-10 sm:px-6 md:py-10 md:px-6 lg:py-6 text-center relative transition-all duration-200 overflow-hidden
                     ${lastResult === 'correct' ? 'bg-accent border-2 sm:border-[3px] md:border-4 border-white' : 
                       lastResult === 'incorrect' ? 'bg-error border-2 sm:border-[3px] md:border-4 border-white' : 
                       'bg-surface-dark/95 border-2 sm:border-[3px] md:border-4 border-white/40'}`}
                 >
                   {/* Premium Glossy Overlays */}
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                   <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                   
                   <div className="flex flex-col items-center justify-center gap-2 sm:gap-2.5 md:gap-1.5 relative z-10">
-                    <p className={`text-[10px] sm:text-xs md:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] ${lastResult ? 'text-white drop-shadow-md' : 'text-sky drop-shadow-glow-sky'}`}>
+                    <p className={`text-[10px] sm:text-xs md:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] ${lastResult ? 'text-white drop-shadow-md' : 'text-sky'}`}>
                       FIND COUNTRY
                     </p>
                     
@@ -386,14 +382,14 @@ export default function MapDash() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/40 backdrop-blur-xl p-3 sm:p-4"
           >
-            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl shadow-glass p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-sky/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-sky shadow-glow-sky border border-white/30">
+            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-sky/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-sky border border-white/30">
                 <MapIcon size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
               </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-1.5 sm:mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
               <p className="text-white/60 text-[9px] sm:text-[10px] mb-6 sm:mb-8 md:mb-10 font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
               <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest shadow-glow-sky font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
+                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
@@ -407,7 +403,7 @@ export default function MapDash() {
       )}
 
 
-      {gameState === 'finished' && (
+        {gameState === 'finished' && (
           <motion.div
             key="finished"
             initial={{ opacity: 0, scale: 1.1 }}
@@ -415,15 +411,15 @@ export default function MapDash() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/60 backdrop-blur-2xl p-3 sm:p-4"
           >
-            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl shadow-glass p-5 sm:p-7 md:p-10 text-center border-2 border-white/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-warning shadow-glow-warning border border-white/30">
+            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-10 text-center border-2 border-white/20">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-warning border border-white/30">
                 <Trophy size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
               </div>
               <h1 className="text-2xl sm:text-[1.75rem] md:text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
               <p className="text-white/60 mb-4 sm:mb-5 md:mb-6 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-5xl sm:text-6xl md:text-7xl font-display font-black text-white mb-6 sm:mb-8 md:mb-10 drop-shadow-glow-sky tabular-nums">{score}</div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-display font-black text-white mb-6 sm:mb-8 md:mb-10 tabular-nums">{score}</div>
               <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest shadow-glow-sky font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">Play Again</Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"

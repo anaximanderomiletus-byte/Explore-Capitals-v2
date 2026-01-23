@@ -35,19 +35,19 @@ const Terms: React.FC = () => {
           Back
         </button>
 
-        <section className="bg-white/5 backdrop-blur-3xl rounded-[3rem] shadow-glass border border-white/20 overflow-hidden relative">
+        <section className="bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/20 overflow-hidden relative">
           <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
           
           <div className="p-8 md:p-16 relative z-10">
             <header className="mb-16">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-10 shadow-glass-bubble relative overflow-hidden">
+              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-10 relative overflow-hidden">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
                 <Scale size={12} className="text-sky-light relative z-10" /> 
                 <span className="relative z-10 drop-shadow-md">Legal Protocol</span>
               </div>
               <h1 className="text-4xl md:text-6xl font-display font-black text-white leading-tight mb-6 tracking-tighter uppercase drop-shadow-lg">
                 Terms of <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white drop-shadow-glow-sky">Service</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Service</span>
               </h1>
               <p className="text-white/40 text-xs font-black uppercase tracking-widest">Effective Date: December 28, 2025</p>
             </header>

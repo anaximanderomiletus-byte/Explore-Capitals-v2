@@ -32,7 +32,7 @@ const Loyalty: React.FC = () => {
   if (isLoading) {
     return (
       <div className="pt-28 pb-16 px-6 bg-surface-dark min-h-screen flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 border-4 border-sky border-t-transparent rounded-full animate-spin shadow-glow-sky" />
+        <div className="w-12 h-12 border-4 border-sky border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -55,14 +55,14 @@ const Loyalty: React.FC = () => {
         </button>
 
         <header className="max-w-3xl mb-10 md:mb-14">
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 shadow-glass-bubble relative overflow-hidden">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 relative overflow-hidden">
             <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
             <Sparkles size={12} className="text-sky-light relative z-10" /> 
             <span className="relative z-10 drop-shadow-md">Loyalty Path</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-display font-black mb-6 tracking-tighter leading-tight uppercase drop-shadow-lg">
             Ascend the <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white drop-shadow-glow-sky">Explorer Ranks</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Explorer Ranks</span>
           </h1>
           <p className="text-white/60 text-base md:text-lg leading-relaxed font-bold max-w-2xl uppercase tracking-wide">
             Every correct answer in the Atlas earns you experience points. Master the globe to unlock exclusive badges, themes, and legendary status.
@@ -71,9 +71,9 @@ const Loyalty: React.FC = () => {
 
         <div className="flex flex-col gap-10 md:gap-16 mb-16 md:mb-24 relative">
           {/* Vertical Connector Path - Masked by cards */}
-          <div className="absolute left-[72px] md:left-[112px] top-0 bottom-0 w-1 bg-white/10 hidden sm:block z-0">
+          <div className="absolute left-[72px] md:left-[112px] top-0 bottom-0 w-1 bg-white/10 hidden sm:block z-0 overflow-hidden rounded-full shadow-[inset_0_0_15px_rgba(255,255,255,0.5)]">
             <div 
-              className="absolute top-0 left-0 w-full bg-frutiger-gradient rounded-full transition-all duration-1000 shadow-glow-sky"
+              className="absolute top-0 left-0 w-full bg-frutiger-gradient rounded-full transition-all duration-1000"
               style={{ 
                 height: `${Math.min(100, Math.max(0, (loyaltyProgress.points / 150000) * 100))}%`,
                 opacity: loyaltyProgress.points > 0 ? 1 : 0 
@@ -91,9 +91,9 @@ const Loyalty: React.FC = () => {
                 key={t.tier} 
                 className={`group relative p-8 md:p-12 rounded-[3rem] transition-all duration-700 border-2 flex flex-col md:flex-row md:items-center gap-10 md:gap-16 overflow-hidden z-10 ${
                   isCurrent 
-                    ? 'bg-[#1E293B] border-white/40 shadow-glow-sky' 
+                    ? 'bg-[#1E293B] border-white/40' 
                     : isCompleted
-                      ? 'bg-sky/10 backdrop-blur-3xl border-sky/40 shadow-glow-sky hover:scale-[1.01]'
+                      ? 'bg-sky/10 backdrop-blur-3xl border-sky/40 hover:scale-[1.01]'
                       : 'bg-[#1E293B]/40 backdrop-blur-3xl border-white/10 hover:border-white/30 hover:bg-[#1E293B]/60'
                 }`}
               >
@@ -124,9 +124,9 @@ const Loyalty: React.FC = () => {
                 <div className="relative z-20 flex-shrink-0 flex flex-col items-center w-20 md:w-32">
                   <div className={`w-20 h-20 rounded-3xl flex items-center justify-center font-display font-black text-4xl mb-4 relative overflow-hidden border-2 z-10 ${
                     isCurrent 
-                      ? 'bg-sky text-white shadow-glow-sky border-white/40' 
+                      ? 'bg-sky text-white border-white/40' 
                       : isCompleted
-                        ? 'bg-sky text-white shadow-glow-sky border-white/30'
+                        ? 'bg-sky text-white border-white/30'
                         : 'bg-surface-dark text-white/20 group-hover:text-sky transition-all border-white/10 shadow-inner'
                   }`}>
                     {isCompleted ? (
@@ -154,7 +154,7 @@ const Loyalty: React.FC = () => {
                         isCurrent ? 'text-white' : isCompleted ? 'text-white/70' : 'text-white/40'
                       }`}>
                         <Zap size={16} className={`shrink-0 mt-0.5 ${
-                          isCurrent || isCompleted ? 'text-sky-light drop-shadow-glow-sky' : 'text-white/10'
+                          isCurrent || isCompleted ? 'text-sky-light' : 'text-white/10'
                         }`} />
                         {b}
                       </li>
@@ -165,7 +165,7 @@ const Loyalty: React.FC = () => {
                 {/* Status Indicator */}
                 <div className="relative z-10 md:w-48 flex-shrink-0">
                   {isCurrent ? (
-                    <div className="inline-block px-6 py-4 bg-sky text-white rounded-3xl text-[10px] font-black uppercase tracking-[0.4em] w-full text-center shadow-glow-sky border-2 border-white/40 relative overflow-hidden">
+                    <div className="inline-block px-6 py-4 bg-sky text-white rounded-3xl text-[10px] font-black uppercase tracking-[0.4em] w-full text-center border-2 border-white/40 relative overflow-hidden">
                       <div className="absolute inset-0 bg-glossy-gradient opacity-40 rounded-[inherit]" />
                       <span className="relative z-10 drop-shadow-md">CURRENT RANK</span>
                     </div>
@@ -185,29 +185,29 @@ const Loyalty: React.FC = () => {
           })}
         </div>
 
-        <div className="p-8 md:p-12 bg-white/10 backdrop-blur-3xl rounded-[3rem] border border-white/30 flex flex-col md:flex-row items-center justify-between gap-10 shadow-glass-bubble relative overflow-hidden group">
+        <div className="p-8 md:p-12 bg-white/10 backdrop-blur-3xl rounded-[3rem] border border-white/30 flex flex-col md:flex-row items-center justify-between gap-10 relative overflow-hidden group">
           <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
           
           <div className="flex items-center gap-8 text-center md:text-left relative z-10">
-            <div className="w-20 h-20 rounded-3xl bg-sky text-white flex items-center justify-center shadow-glow-sky border border-white/30 relative overflow-hidden shrink-0">
+            <div className="w-20 h-20 rounded-3xl bg-sky text-white flex items-center justify-center border border-white/30 relative overflow-hidden shrink-0">
               <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               <div className="absolute inset-0 bg-glossy-gradient opacity-40 rounded-[inherit]" />
             </div>
             <div>
               <h4 className="text-2xl md:text-3xl font-display font-black mb-2 tracking-tighter text-white uppercase leading-none drop-shadow-md">Current Standing</h4>
               <p className="text-white/50 text-base md:text-lg font-bold uppercase tracking-widest">
-                Progressed to <span className="text-sky-light font-black drop-shadow-glow-sky">{loyaltyProgress.points.toLocaleString()} Points</span>
+                Progressed to <span className="text-sky-light font-black">{loyaltyProgress.points.toLocaleString()} Points</span>
               </p>
             </div>
           </div>
           <div className="w-full md:w-[400px] relative z-10">
             <div className="flex justify-between items-end mb-4">
               <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/40">NEXT RANK COMPLETION</span>
-              <span className="text-2xl font-black text-sky-light drop-shadow-glow-sky tabular-nums">{loyaltyProgress.progressToNext}%</span>
+              <span className="text-2xl font-black text-sky-light tabular-nums">{loyaltyProgress.progressToNext}%</span>
             </div>
             <div className="h-4 w-full bg-black/40 rounded-full overflow-hidden p-1 border border-white/20 shadow-inner">
               <div 
-                className="h-full bg-frutiger-gradient rounded-full transition-all duration-1000 shadow-glow-sky animate-shimmer bg-[length:200%_auto] relative" 
+                className="h-full bg-frutiger-gradient rounded-full transition-all duration-1000 animate-shimmer bg-[length:200%_auto] relative" 
                 style={{ width: `${loyaltyProgress.progressToNext}%` }} 
               >
                 <div className="absolute inset-0 bg-glossy-gradient opacity-40 rounded-[inherit]" />

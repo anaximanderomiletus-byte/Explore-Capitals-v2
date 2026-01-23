@@ -30,9 +30,9 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   const isSignOut = variant === 'danger' && title.toLowerCase().includes('sign out');
 
   const iconColors = {
-    primary: 'bg-primary/20 text-primary shadow-glow-primary',
-    danger: 'bg-error/20 text-error shadow-[0_0_20px_rgba(239,68,68,0.4)]',
-    warning: 'bg-warning/20 text-warning shadow-[0_0_20px_rgba(255,149,0,0.4)]',
+    primary: 'bg-primary/20 text-primary',
+    danger: 'bg-error/20 text-error',
+    warning: 'bg-warning/20 text-warning',
   };
 
   // Clean red-themed sign-out modal
@@ -56,7 +56,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
               transition={{ duration: 0.2 }}
               className="relative w-full max-w-sm my-auto"
             >
-              <div className="relative bg-[#1E293B] border border-red-500/20 rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(239,68,68,0.15)]">
+              <div className="relative bg-[#1E293B] border border-red-500/20 rounded-3xl overflow-hidden shadow-2xl">
                 {/* Red accent glow */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
                 <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 bg-red-500/10 rounded-full blur-[60px] pointer-events-none" />
@@ -64,7 +64,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 <div className="relative p-8">
                   {/* Icon */}
                   <div className="flex justify-center mb-6">
-                    <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.2)]">
+                    <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center">
                       <LogOut size={28} className="text-red-400" />
                     </div>
                   </div>

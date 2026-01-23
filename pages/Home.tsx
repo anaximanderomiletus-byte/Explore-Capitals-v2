@@ -358,7 +358,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-8 lg:gap-10">
             <Link to="/database" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
                   <BookOpen size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
@@ -371,7 +371,7 @@ const Home: React.FC = () => {
             </Link>
 
             <Link to="/map" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
                   <Compass size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>

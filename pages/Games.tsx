@@ -105,7 +105,7 @@ const Games: React.FC = () => {
                 
                 {game.status !== 'active' && (
                   <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-                    <div className="px-6 py-3 bg-white/10 backdrop-blur-xl rounded-xl text-white font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-3 border border-white/20 shadow-glass-bubble">
+                    <div className="px-6 py-3 bg-white/10 backdrop-blur-xl rounded-xl text-white font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-3 border border-white/20">
                       <Lock size={16} className="text-white/60" /> Locked
                     </div>
                   </div>

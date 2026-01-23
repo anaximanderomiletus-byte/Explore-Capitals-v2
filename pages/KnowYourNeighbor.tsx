@@ -148,16 +148,14 @@ export default function KnowYourNeighbor() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
         </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky shadow-glow-sky border border-white/30 relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
             <Network size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
           <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
             <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
             <button 
               onClick={() => navigate('/games')}
               className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -177,7 +175,7 @@ export default function KnowYourNeighbor() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-hidden"
           >
       <SEO title="Playing Know Your Neighbor" description="Select all the bordering countries." />
       
@@ -188,8 +186,7 @@ export default function KnowYourNeighbor() {
       </div>
 
       {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
-         <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
+      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-2 md:mb-2 bg-white/10 backdrop-blur-2xl p-2 md:p-2.5 rounded-2xl border border-white/20 relative overflow-hidden z-10">
          <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
@@ -200,37 +197,24 @@ export default function KnowYourNeighbor() {
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
-         {/* Desktop only: points and timer in top bar */}
-         <div className="hidden md:flex items-center gap-6 relative z-10">
-           <div className="flex items-center gap-2">
-              <Trophy size={18} className="text-warning drop-shadow-md" />
-              <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
-           </div>
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-             <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-             <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-          </div>
-         </div>
+         {/* Desktop only: spacer to keep title centered */}
+         <div className="hidden md:block w-[42px]" />
 
          {/* Mobile: empty spacer to balance the back button */}
          <div className="w-[42px] md:hidden" />
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-3 md:p-6 overflow-hidden relative shadow-glass z-10">
-         <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-2 md:p-4 overflow-hidden relative z-10">
          
-         {/* Mobile: Points top-left, Timer top-right */}
-         <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-               <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
-               <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+         {/* Points and Timer - Now visible on all sizes in the corners of the game rectangle */}
+         <div className="flex items-center justify-between mb-1 md:mb-2 relative z-20">
+            <div className="flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+               <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+               <span className="font-display font-black text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
             </div>
-            <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-               <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
-               <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+            <div className={`flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
+               <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
             </div>
          </div>
 
@@ -243,68 +227,69 @@ export default function KnowYourNeighbor() {
                    transition={{ duration: 0.3 }}
                    className="h-full flex flex-col justify-between relative z-10"
                  >
-            <div className="flex-1 flex flex-col justify-center min-h-0">
-              <div className="text-center shrink-0 overflow-hidden py-2 md:py-3">
-                 <p className="text-sky font-black text-[9px] uppercase tracking-[0.4em] mb-2 font-sans drop-shadow-glow-sky">SELECT ALL LAND NEIGHBORS FOR</p>
+            {/* Country Prompt - Centered */}
+            <div className="flex-1 flex flex-col items-center justify-center min-h-0">
+              <div className="text-center">
+                 <p className="text-sky font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] mb-3 md:mb-4 font-sans">SELECT ALL LAND NEIGHBORS FOR</p>
                  <img 
                    src={`https://flagcdn.com/w160/${getCountryCode(targetCountry.flag)}.png`}
                    alt={`${targetCountry.name} Flag`}
-                   className="h-10 md:h-12 w-auto mx-auto mb-2 drop-shadow-lg object-contain"
+                   className="h-10 md:h-14 w-auto mx-auto mb-2 md:mb-3 drop-shadow-lg object-contain"
                  />
-                 <h3 className="text-lg md:text-2xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg">{targetCountry.name}</h3>
+                 <h3 className="text-2xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg">{targetCountry.name}</h3>
               </div>
+            </div>
               
-              <div className="overflow-y-auto no-scrollbar px-1">
-                <div className="grid grid-cols-3 gap-2 md:gap-2.5 w-full">
-                {options.map((countryName) => {
-                  const isSelected = selectedOptions.includes(countryName);
-                  const isActualNeighbor = targetCountry.borders?.includes(countryName);
-                  const isIncorrectSelection = isSelected && !isActualNeighbor;
-                  
-                  let btnStyle = "bg-white/5 border border-white/30 text-white/70 hover:bg-white/10 hover:border-sky/40 shadow-inner";
-                  
-                  if (roundResult) {
-                    if (isActualNeighbor && isSelected) {
-                      btnStyle = "bg-accent/70 border-accent shadow-glow-accent text-white";
-                    } else if (isActualNeighbor && !isSelected) {
-                      btnStyle = "bg-warning/40 border-warning shadow-glow-warning text-white";
-                    } else if (isSelected && !isActualNeighbor) {
-                      btnStyle = "bg-red-500/70 border-red-500 shadow-glow-warning text-white";
-                    } else {
-                      btnStyle = "bg-white/5 border-white/5 text-white/10 opacity-40 grayscale blur-[1px]";
-                    }
+            {/* Selections Grid - At Bottom */}
+            <div className="shrink-0 px-1 pb-2">
+              <div className="grid grid-cols-3 gap-1.5 md:gap-2 w-full">
+              {options.map((countryName) => {
+                const isSelected = selectedOptions.includes(countryName);
+                const isActualNeighbor = targetCountry.borders?.includes(countryName);
+                const isIncorrectSelection = isSelected && !isActualNeighbor;
+                
+                let btnStyle = "bg-white/5 border border-white/30 text-white/70 hover:bg-white/10 hover:border-sky/40 shadow-inner";
+                
+                if (roundResult) {
+                  if (isActualNeighbor && isSelected) {
+                    btnStyle = "bg-accent/70 border-accent text-white";
+                  } else if (isActualNeighbor && !isSelected) {
+                    btnStyle = "bg-warning/40 border-warning text-white";
+                  } else if (isSelected && !isActualNeighbor) {
+                    btnStyle = "bg-red-500/70 border-red-500 text-white";
                   } else {
-                    if (isSelected) {
-                      btnStyle = "bg-sky/60 border-sky text-white shadow-glow-sky ring-2 ring-sky/50";
-                    }
+                    btnStyle = "bg-white/5 border-white/5 text-white/10 opacity-40 grayscale blur-[1px]";
                   }
+                } else {
+                  if (isSelected) {
+                    btnStyle = "bg-sky/60 border-sky text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)]";
+                  }
+                }
 
-                  return (
-                    <button
-                      key={countryName}
-                      onClick={() => toggleOption(countryName)}
-                      disabled={!!roundResult}
-                      className={`relative p-2 md:p-3 rounded-xl font-black text-[10px] md:text-[11px] flex items-center justify-center min-h-[48px] md:min-h-[52px] text-center transition-all duration-500 uppercase tracking-tight shadow-glass-bubble overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''}`}
-                      style={{ WebkitTapHighlightColor: 'transparent' }}
-                    >
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-5 group-hover:opacity-10 pointer-events-none rounded-[inherit]" />
-                      <span className="leading-tight line-clamp-2 relative z-10 drop-shadow-md">{countryName}</span>
-                    </button>
-                  );
-                })}
-                </div>
+                return (
+                  <button
+                    key={countryName}
+                    onClick={() => toggleOption(countryName)}
+                    disabled={!!roundResult}
+                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[44px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''}`}
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                  >
+                    <span className="leading-tight line-clamp-2 relative z-10 drop-shadow-md">{countryName}</span>
+                  </button>
+                );
+              })}
               </div>
             </div>
 
-            {/* Submit Button - below selections for both mobile and desktop */}
-            <div className="shrink-0 relative z-10 pt-3">
+            {/* Submit Button - below selections */}
+            <div className="shrink-0 relative z-10 pt-2">
+              <div className="h-px w-full bg-white/10 mb-2" />
               {roundResult ? (
-                <div className={`p-3 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest shadow-glass relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white shadow-glow-accent' : 'bg-red-500/60 border-red-500 text-white shadow-glow-warning'}`}>
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                <div className={`p-3 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
                   <span className="text-sm relative z-10 drop-shadow-md">{feedback}</span>
                 </div>
               ) : (
-                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full h-12 text-sm uppercase tracking-widest shadow-glow-sky" size="lg">Submit</Button>
+                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full h-10 md:h-11 text-xs md:text-sm uppercase tracking-widest" size="lg">Submit</Button>
               )}
             </div>
                  </motion.div>
@@ -322,17 +307,15 @@ export default function KnowYourNeighbor() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning shadow-glow-warning border border-white/30 relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10" />
               </div>
               <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 drop-shadow-glow-sky tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"

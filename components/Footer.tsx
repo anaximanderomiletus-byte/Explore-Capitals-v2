@@ -25,7 +25,7 @@ const Footer: React.FC = () => (
 
         {/* Navigation Column */}
         <div>
-          <h4 className="font-black text-sky text-[10px] uppercase tracking-[0.4em] mb-8 drop-shadow-glow-sky">Navigation</h4>
+          <h4 className="font-black text-sky text-[10px] uppercase tracking-[0.4em] mb-8">Navigation</h4>
           <ul className="space-y-4">
             <li>
               <Link to="/" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Home</Link>
@@ -44,7 +44,7 @@ const Footer: React.FC = () => (
 
         {/* Project Column */}
         <div>
-          <h4 className="font-black text-sky text-[10px] uppercase tracking-[0.4em] mb-8 drop-shadow-glow-sky">About</h4>
+          <h4 className="font-black text-sky text-[10px] uppercase tracking-[0.4em] mb-8">About</h4>
           <ul className="space-y-4">
             <li>
               <Link to="/about" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">About Us</Link>

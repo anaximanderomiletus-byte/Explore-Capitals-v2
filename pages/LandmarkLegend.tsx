@@ -191,16 +191,14 @@ export default function LandmarkLegend() {
               <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
             </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-              <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky shadow-glow-sky border border-white/30 relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+              <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
                 <Camera size={36} className="relative z-10" />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Landmark Legend</h1>
               <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify nations through their landmarks.</p>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -244,8 +242,7 @@ export default function LandmarkLegend() {
             </div>
 
             {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
+            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 relative overflow-hidden z-10">
                <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
@@ -256,79 +253,77 @@ export default function LandmarkLegend() {
                   <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
                </div>
 
-               {/* Desktop only: points and timer in top bar */}
-               <div className="hidden md:flex items-center gap-6 relative z-10">
-                 <div className="flex items-center gap-2">
-                    <Trophy size={18} className="text-warning drop-shadow-md" />
-                    <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
-                 </div>
-                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-                   <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-                   <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-                </div>
-               </div>
+               {/* Desktop only: spacer to keep title centered */}
+               <div className="hidden md:block w-[42px]" />
 
                {/* Mobile: empty spacer to balance the back button */}
                <div className="w-[42px] md:hidden" />
             </div>
 
-            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col md:flex-row gap-3 md:gap-5 min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-3 md:p-6 overflow-hidden relative shadow-glass z-10">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-6 overflow-hidden relative z-10">
                
-               {/* Mobile: Points top-left, Timer top-right */}
-               <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
-                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
-                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                     <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
-                     <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+               {/* Points and Timer - visible on all sizes in the corners */}
+               <div className="flex items-center justify-between mb-2 md:mb-4 relative z-20">
+                  <div className="flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+                     <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+                     <span className="font-display font-black text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
                   </div>
-                  <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
-                     <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+                  <div className={`flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
+                     <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                   </div>
                </div>
 
                <AnimatePresence mode="wait">
                  <motion.div
                    key={questionIndex}
-                   initial={{ opacity: 0, scale: 0.98 }}
-                   animate={{ opacity: 1, scale: 1 }}
-                   exit={{ opacity: 0, scale: 1.02 }}
+                   initial={{ opacity: 0, x: 20 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   exit={{ opacity: 0, x: -20 }}
                    transition={{ duration: 0.3 }}
-                   className="flex-1 flex flex-col md:flex-row gap-2 md:gap-5 min-h-0 relative z-10"
+                   className="flex-1 flex flex-col min-h-0"
                  >
-                   <div className="flex-1 flex flex-col min-h-0 relative z-10">
-                      <p className="text-sky font-black text-[8px] md:text-[9px] uppercase tracking-[0.4em] text-center mb-2 font-sans drop-shadow-glow-sky">IDENTIFY MISSION TARGET</p>
-                      <div className="relative flex-1 rounded-xl md:rounded-2xl overflow-hidden bg-black/40 border border-white/10 shadow-inner group min-h-[160px] md:min-h-0">
+                   {/* Centered image area */}
+                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:py-4 overflow-hidden relative z-10">
+                      <p className="text-sky-light font-black text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
+                      <div 
+                       className="relative w-full max-w-sm md:max-w-md h-48 md:h-64 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 group"
+                       style={{ 
+                         boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 -20px 40px -20px rgba(56,189,248,0.15) inset',
+                         transform: 'perspective(1000px) rotateX(2deg)',
+                       }}
+                     >
+                          {/* Subtle shine overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none z-10" />
                           <img 
                               src={currentQuestion.imageUrl} 
                               alt="Landmark" 
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-                          <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 p-2 md:p-4 bg-surface-dark/80 backdrop-blur-2xl rounded-xl md:rounded-2xl border border-white/40 text-white flex items-center gap-2 md:gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden z-20">
-                             <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none rounded-[inherit]" />
-                             <div className="p-1.5 md:p-2 bg-sky/30 rounded-lg relative z-10 border border-white/20"><MapPin size={16} className="md:w-5 md:h-5 text-sky-light" /></div>
-                             <h2 className="font-display font-black text-sm md:text-xl drop-shadow-2xl relative z-10 uppercase tracking-tighter leading-tight line-clamp-2">{currentQuestion.landmarkName}</h2>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 pointer-events-none" />
+                          {/* Frame effect - top highlight */}
+                          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                          <div className="absolute bottom-2 md:bottom-3 left-2 md:left-3 right-2 md:right-3 p-2 md:p-3 bg-surface-dark/80 backdrop-blur-2xl rounded-lg md:rounded-xl border border-white/40 text-white flex items-center gap-2 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden z-20">
+                             <div className="p-1.5 bg-sky/30 rounded-lg relative z-10 border border-white/20"><MapPin size={14} className="md:w-4 md:h-4 text-sky-light" /></div>
+                             <h2 className="font-display font-black text-xs md:text-base drop-shadow-2xl relative z-10 uppercase tracking-tighter leading-tight line-clamp-1">{currentQuestion.landmarkName}</h2>
                           </div>
                       </div>
                    </div>
 
-                   <div className="w-full md:w-72 flex flex-col justify-center gap-2 md:gap-2.5 shrink-0 pb-2 relative z-10">
+                   {/* Grid of options at bottom */}
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {currentQuestion.options.map((option) => {
                         const isSelected = selectedAnswerId === option.id;
                         const isCorrect = option.id === currentQuestion.country.id;
                         const isWrong = isSelected && !isCorrect;
                         
-                        let stateStyles = "bg-white/10 border border-white/40 text-white hover:bg-white/20 hover:border-sky/50 shadow-glass-bubble relative overflow-hidden group/opt";
+                        let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50";
                         
                         if (selectedAnswerId) {
-                          if (isCorrect) stateStyles = "bg-accent/70 border-accent shadow-glow-accent text-white group/opt";
-                          else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 shadow-glow-warning text-white group/opt";
-                          else if (option.id === currentQuestion.country.id) stateStyles = "bg-accent/20 border-accent/60 text-white/90 group/opt";
-                          else stateStyles = "bg-white/5 border-white/5 text-white/20 opacity-40 grayscale blur-[1px] group/opt";
+                          if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white";
+                          else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white";
+                          else if (option.id === currentQuestion.country.id) stateStyles = "bg-accent/40 border-accent/80 text-white";
+                          else stateStyles = "bg-white/5 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
                         }
 
                         return (
@@ -336,16 +331,15 @@ export default function LandmarkLegend() {
                             key={option.id}
                             onClick={() => handleAnswer(option.id)}
                             disabled={!!selectedAnswerId}
-                            className={`relative p-2.5 md:p-3 rounded-xl md:rounded-2xl font-display font-black text-xs md:text-base flex items-center justify-between min-h-[48px] md:min-h-[60px] transition-all duration-500 uppercase tracking-tighter group ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                            className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
                             style={{ WebkitTapHighlightColor: 'transparent' }}
                           >
-                            <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover/opt:opacity-20 pointer-events-none rounded-[inherit]" />
-                            <span className="text-left leading-tight truncate pr-2 relative z-10 drop-shadow-md">{option.name}</span>
                             <img 
                               src={`https://flagcdn.com/w80/${getCountryCode(option.flag)}.png`}
                               alt={`${option.name} Flag`}
-                              className="h-5 md:h-6 w-auto relative z-10 drop-shadow-lg object-contain shrink-0"
+                              className="h-4 md:h-5 w-auto relative z-10 drop-shadow-lg object-contain shrink-0 mr-2"
                             />
+                            <span className="text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
                           </button>
                         );
                       })}
@@ -365,17 +359,15 @@ export default function LandmarkLegend() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl shadow-glass p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning shadow-glow-warning border border-white/30 relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10" />
               </div>
               <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 drop-shadow-glow-sky tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"

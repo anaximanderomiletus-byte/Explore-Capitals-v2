@@ -334,7 +334,7 @@ const CountryDetail: React.FC = () => {
                     <div className="flex flex-col gap-2">
                         {isDeFacto && (
                             <div className="text-warning font-black tracking-[0.2em] text-[8px] uppercase flex items-center gap-2.5">
-                                <AlertTriangle size={12} className="text-warning shadow-[0_0_10px_rgba(255,149,0,0.6)]" /> 
+                                <AlertTriangle size={12} className="text-warning" /> 
                                 <span className="text-white">{(country as any).sovereignty || 'LIMITED RECOGNITION'}</span>
                             </div>
                         )}
