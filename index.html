@@ -275,9 +275,17 @@
         border: none !important;
       }
       
-      /* Hide scrollbars globally */
+      /* Hide scrollbars globally while maintaining scroll functionality */
       ::-webkit-scrollbar { display: none; }
-      * { -ms-overflow-style: none; scrollbar-width: none; }
+      * { 
+        -ms-overflow-style: none; 
+        scrollbar-width: none;
+      }
+      
+      /* Ensure scroll containers still work with touch */
+      [class*="overflow-"] {
+        -webkit-overflow-scrolling: touch;
+      }
       
       /* Custom Selection */
       ::selection {
@@ -367,8 +375,31 @@
       }
       
       /* ===== FIX BORDER-RADIUS CLIPPING IN SAFARI ===== */
-      .overflow-hidden {
-        -webkit-mask-image: -webkit-radial-gradient(white, black);
+      /* Note: Removed global .overflow-hidden mask as it interferes with touch events on mobile */
+      /* Apply this fix only to specific elements that need it, not globally */
+      
+      /* ===== TOUCH DEVICE FIXES ===== */
+      /* Ensure touch scrolling works properly on all devices */
+      html, body, #root {
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+      }
+      
+      /* Allow vertical scrolling on scrollable containers */
+      .overflow-y-auto, .overflow-y-scroll, .overflow-auto, .overflow-scroll {
+        touch-action: pan-y pinch-zoom;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Allow horizontal scrolling where needed */
+      .overflow-x-auto, .overflow-x-scroll {
+        touch-action: pan-x pinch-zoom;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Ensure buttons and interactive elements respond to touch immediately */
+      button, a, [role="button"], input, select, textarea, .cursor-pointer {
+        touch-action: manipulation;
       }
       
       /* Updated Marker Styles for Performance */
@@ -463,6 +494,18 @@
         transform: translateZ(0);
       }
       
+      /* Ensure fixed/absolute positioned overlays don't block touch on elements below */
+      .pointer-events-none {
+        touch-action: none;
+      }
+      
+      /* Fix touch delay on iOS for interactive elements */
+      a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]) {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      
       /* Prevent pull-to-refresh on iOS when not wanted */
       body.no-pull-refresh {
         overscroll-behavior-y: contain;
@@ -498,8 +541,8 @@
       .leading-loose { line-height: 2; }
     </style>
 </head>
-  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full"></div>
+  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full [touch-action:pan-y_pinch-zoom]"></div>
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

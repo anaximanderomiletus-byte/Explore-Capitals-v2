@@ -322,11 +322,15 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-transform duration-500 ease-in-out flex flex-col pt-20 pb-8 px-8 overflow-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-transform duration-500 ease-in-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0' 
-            : 'translate-x-full'
+            : 'translate-x-full pointer-events-none'
         }`}
+        style={{ 
+          WebkitOverflowScrolling: 'touch',
+          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
+        }}
       >
         {/* Background blobs for mobile menu */}
         <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
