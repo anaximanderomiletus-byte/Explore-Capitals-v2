@@ -66,7 +66,8 @@ const Button: React.FC<ButtonProps> = ({
   const hasTextColor = className.includes('text-');
 
   // Cross-browser compatible base styles with smooth hover transition (300ms)
-  const baseStyles = "inline-flex items-center justify-center font-display font-bold transition-all duration-300 ease-out rounded-full outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50 disabled:cursor-not-allowed relative select-none [-webkit-appearance:none] [appearance:none] [-webkit-tap-highlight-color:transparent] overflow-hidden";
+  // Added active states for better mobile touch feedback
+  const baseStyles = "inline-flex items-center justify-center font-display font-bold transition-all duration-300 ease-out rounded-full outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50 disabled:cursor-not-allowed relative select-none [-webkit-appearance:none] [appearance:none] [-webkit-tap-highlight-color:transparent] overflow-hidden active:scale-[0.98] active:brightness-95";
   
   const variants = {
     primary: isFlat 

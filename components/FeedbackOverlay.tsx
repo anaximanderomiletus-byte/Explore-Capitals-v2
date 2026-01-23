@@ -39,7 +39,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
           className="fixed inset-0 z-[9999] flex items-center justify-center pb-[10vh] sm:pb-[15vh] pointer-events-none overflow-hidden px-4"
+          style={{ touchAction: 'none' }}
         >
           {/* Full screen background flash */}
           <motion.div

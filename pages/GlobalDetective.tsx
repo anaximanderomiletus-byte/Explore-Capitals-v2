@@ -136,7 +136,7 @@ export default function GlobalDetective() {
   const clueBarBase = "px-4 rounded-xl border-2 flex justify-between items-center h-[54px] transition-all duration-300";
 
   return (
-    <div className="h-[100dvh] min-h-screen w-full relative overflow-hidden font-sans [-webkit-overflow-scrolling:touch] bg-surface-dark">
+    <div className="h-[100dvh] min-h-screen w-full relative overflow-hidden font-sans bg-surface-dark">
       <SEO title="Global Detective" description="Deduce the mystery country from clues." />
       
       <div className="absolute inset-0 -z-10">

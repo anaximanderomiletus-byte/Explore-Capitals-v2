@@ -67,10 +67,10 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative [touch-action:pan-y_pinch-zoom]">
+    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
       <ScrollToTop />
       <Navigation />
-      <div className="flex-grow flex flex-col relative [touch-action:pan-y_pinch-zoom]">
+      <div className="flex-grow flex flex-col relative">
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />

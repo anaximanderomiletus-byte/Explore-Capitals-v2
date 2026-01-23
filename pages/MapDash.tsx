@@ -245,7 +245,7 @@ export default function MapDash() {
   }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries]);
 
   return (
-    <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans [-webkit-overflow-scrolling:touch]">
+    <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans">
       <SEO title="Map Dash" description="Locate the nation on the map." />
       
       <style>{`

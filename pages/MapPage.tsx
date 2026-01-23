@@ -742,7 +742,7 @@ const MapPage: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-40 bg-surface-dark [-webkit-overflow-scrolling:touch]">
+    <div className="fixed inset-0 z-40 bg-surface-dark">
       <SEO 
         title="Interactive World Map"
         description="Explore the world with our high-fidelity interactive map. Click on countries to discover capitals, flags, and key demographics."
@@ -751,7 +751,7 @@ const MapPage: React.FC = () => {
       <div 
         id="map" 
         ref={mapRef} 
-        className="w-full h-full outline-none focus:outline-none [touch-action:manipulation] [-webkit-tap-highlight-color:transparent] relative"
+        className="w-full h-full outline-none focus:outline-none relative"
         style={{ background: '#0F172A', height: '100dvh', width: '100%' }} 
       >
         {!mapReady && (

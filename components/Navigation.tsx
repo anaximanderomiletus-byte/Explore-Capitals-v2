@@ -328,8 +328,7 @@ const Navigation: React.FC = () => {
             : 'translate-x-full pointer-events-none'
         }`}
         style={{ 
-          WebkitOverflowScrolling: 'touch',
-          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
+          WebkitOverflowScrolling: 'touch'
         }}
       >
         {/* Background blobs for mobile menu */}
