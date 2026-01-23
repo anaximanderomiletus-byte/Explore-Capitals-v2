@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, RefreshCw, Flag } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, RefreshCw, Flag, Play } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -22,7 +22,7 @@ const getCountryCode = (emoji: string) => {
 };
 
 export default function FlagFrenzy() {
-  const [gameState, setGameState] = useState<'start' | 'loading' | 'playing' | 'finished'>('loading');
+  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [shuffledCountries, setShuffledCountries] = useState<Country[]>([]);
@@ -41,10 +41,6 @@ export default function FlagFrenzy() {
 
   useEffect(() => {
     setPageLoading(false);
-    const timer = setTimeout(() => {
-      setGameState('start');
-    }, 800);
-    return () => clearTimeout(timer);
   }, [setPageLoading]);
 
   useEffect(() => {
@@ -58,6 +54,12 @@ export default function FlagFrenzy() {
     }
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   const setupQuestion = (target: Country) => {
     const distractors: Country[] = [];
@@ -159,7 +161,7 @@ export default function FlagFrenzy() {
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Flag Frenzy</h1>
               <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Match flags to nations.</p>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -172,19 +174,6 @@ export default function FlagFrenzy() {
           </motion.div>
         )}
 
-        {gameState === 'loading' && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="h-full flex items-center justify-center"
-          >
-            <div className="text-white font-display font-black text-2xl uppercase tracking-[0.5em] animate-pulse">
-              Loading
-            </div>
-          </motion.div>
-        )}
 
         {gameState === 'playing' && currentQuestion && (
           <motion.div
@@ -192,7 +181,7 @@ export default function FlagFrenzy() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col p-4 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
             <SEO title="Playing Flag Frenzy" description="Match the flag to the correct nation." />
             
@@ -202,18 +191,21 @@ export default function FlagFrenzy() {
               <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
             </div>
 
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between mb-4 bg-white/10 backdrop-blur-2xl p-3 rounded-2xl shadow-glass border border-white/20 mt-16 md:mt-20 relative overflow-hidden z-10">
+            {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
+            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
                <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
                <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
 
-               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-                  <h1 className="text-[10px] font-black text-white uppercase tracking-[0.3em] drop-shadow-md">Flag Frenzy</h1>
+               {/* Game title - visible on all sizes, centered */}
+               <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
+                  <h1 className="text-[10px] font-black text-white uppercase tracking-[0.2em] md:tracking-[0.3em] drop-shadow-md whitespace-nowrap">Flag Frenzy</h1>
                   <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
                </div>
 
-               <div className="flex items-center gap-6 relative z-10">
+               {/* Desktop only: points and timer in top bar */}
+               <div className="hidden md:flex items-center gap-6 relative z-10">
                  <div className="flex items-center gap-2">
                     <Trophy size={18} className="text-warning drop-shadow-md" />
                     <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
@@ -221,13 +213,31 @@ export default function FlagFrenzy() {
                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-                    <span className={`font-display font-black text-xl tabular-nums min-w-[24px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{timeLeft}</span>
+                    <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                  </div>
                </div>
+
+               {/* Mobile: empty spacer to balance the back button */}
+               <div className="w-[42px] md:hidden" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-3xl border border-white/30 p-5 md:p-8 overflow-hidden relative shadow-glass z-10">
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-4 md:p-8 overflow-hidden relative shadow-glass z-10">
                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+               
+               {/* Mobile: Points top-left, Timer top-right */}
+               <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
+                  <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                     <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
+                     <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+                  </div>
+                  <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
+                     <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+                  </div>
+               </div>
+
                <AnimatePresence mode="wait">
                  <motion.div
                    key={questionIndex}
@@ -256,7 +266,7 @@ export default function FlagFrenzy() {
                         )}
                       </div>
                    </div>
-                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 shrink-0 pb-4 relative z-10">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {currentQuestion.options.map((option) => {
                         const isSelected = selectedAnswer === option.name;
                         const isCorrect = option.name === currentQuestion.country.name;
@@ -274,11 +284,11 @@ export default function FlagFrenzy() {
                             key={option.id} 
                             onClick={() => handleAnswer(option.name)} 
                             disabled={!!selectedAnswer} 
-                            className={`relative p-3 rounded-2xl font-display font-black text-base md:text-lg flex items-center justify-center min-h-[56px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
+                            className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
                             style={{ WebkitTapHighlightColor: 'transparent' }}
                           >
                             <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none rounded-[inherit]" />
-                            <span className="px-2 text-center truncate leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
+                            <span className="px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
                           </button>
                         );
                       })}

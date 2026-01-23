@@ -42,13 +42,13 @@ const PhotoPrint: React.FC<{
   };
 
   return (
-    <div className={`relative group rounded-3xl ${className}`}>
+    <div className={`relative group rounded-3xl max-w-full overflow-hidden ${className}`}>
       {/* Liquid Glass Container - TV Style */}
-      <div className={`p-2 bg-black/80 backdrop-blur-3xl rounded-3xl border-4 border-white/10 shadow-glass-bubble transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
+      <div className={`p-1.5 sm:p-2 bg-black/80 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 shadow-glass-bubble transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
         {/* Bezel Gloss */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
-        <div className="w-full aspect-video rounded-[1.8rem] overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
+        <div className="w-full aspect-video rounded-xl sm:rounded-[1.8rem] overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
           {currentSrc ? (
             <img 
               src={currentSrc} 
@@ -72,14 +72,14 @@ const PhotoPrint: React.FC<{
         
         {/* Label Overlay (Internal) */}
         {(caption || region) && (
-          <div className="mt-3 pb-2 w-full px-6 flex justify-between items-center relative z-10">
+          <div className="mt-2 sm:mt-3 pb-1 sm:pb-2 w-full px-3 sm:px-6 flex justify-between items-center relative z-10 gap-2">
             {caption && (
-              <p className="text-[10px] font-black text-white/60 tracking-widest uppercase font-display drop-shadow-md flex-1 truncate">
+              <p className="text-[8px] sm:text-[10px] font-black text-white/60 tracking-wider sm:tracking-widest uppercase font-display drop-shadow-md flex-1 truncate min-w-0">
                 {caption}
               </p>
             )}
             {region && (
-              <div className="bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md text-[6px] font-black text-white/40 uppercase tracking-[0.2em]">
+              <div className="bg-white/5 border border-white/10 px-1.5 sm:px-2.5 py-0.5 rounded-md text-[5px] sm:text-[6px] font-black text-white/40 uppercase tracking-[0.15em] sm:tracking-[0.2em] shrink-0 whitespace-nowrap">
                 {region}
               </div>
             )}
@@ -353,7 +353,7 @@ const CountryExploration: React.FC = () => {
     if (stepIndex >= tourData.stops.length - 1) {
       setForwardTransitionText('Preparing Files');
     } else {
-      setForwardTransitionText(`Traveling to ${tourData.stops[stepIndex + 1].stopName}`);
+      setForwardTransitionText(`Next Stop: ${tourData.stops[stepIndex + 1].stopName}`);
     }
     setIsTransitioning(true);
     setContentVisible(false);
@@ -731,7 +731,7 @@ const CountryExploration: React.FC = () => {
 
     if (view === 'intro') {
       return (
-        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-12 px-4 md:px-6 relative overflow-hidden" transparent>
+        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-12 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
             title={`Expedition - ${country.name}`} 
             description={`Explore ${country.name} with a virtual expedition.`}
@@ -745,8 +745,8 @@ const CountryExploration: React.FC = () => {
             <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
           </div>
           
-          <div className={`relative z-10 w-full max-w-4xl flex flex-col items-center transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
-            <div className="p-4 md:p-6 text-center relative w-full">
+          <div className={`relative z-10 w-full max-w-4xl flex flex-col items-center transition-all duration-500 px-1 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+            <div className="p-2 sm:p-4 md:p-6 text-center relative w-full overflow-hidden">
               
               <div className="space-y-1 mb-2 text-center">
                 <div className="inline-flex items-center gap-2 px-3 py-0.5 bg-sky/30 rounded-full border border-white/40 text-[7px] font-black tracking-[0.4em] text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] relative overflow-hidden mx-auto">
@@ -761,9 +761,9 @@ const CountryExploration: React.FC = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center gap-2.5 mb-1.5 w-full">
+              <div className="flex flex-col items-center gap-2.5 mb-1.5 w-full overflow-hidden">
                 {/* Main Featured Image - Centered TV */}
-                <div className="max-w-lg w-full relative group">
+                <div className="max-w-lg w-full relative group px-1">
                   <PhotoPrint 
                     src={introImage} 
                     alt={country.name} 
@@ -883,15 +883,15 @@ const CountryExploration: React.FC = () => {
                   </div>
 
            {/* Navigation Controls */}
-           <div className="sticky top-20 z-50 w-full px-6 flex justify-center items-center pointer-events-none">
+           <div className="sticky top-20 z-50 w-full px-4 sm:px-6 flex justify-center items-center pointer-events-none">
               {/* Progress Header */}
-              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-6 py-2 shadow-[0_8px_16px_rgba(0,0,0,0.4)] flex items-center gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto">
-                 <div className="w-2 h-2 rounded-full bg-sky animate-pulse shadow-[0_0_8px_rgba(0,194,255,0.5)]" />
-                 <span className="text-[10px] font-black text-white uppercase tracking-[0.4em]">
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 shadow-[0_8px_16px_rgba(0,0,0,0.4)] flex items-center gap-2 sm:gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto max-w-full overflow-hidden">
+                 <div className="w-2 h-2 rounded-full bg-sky animate-pulse shadow-[0_0_8px_rgba(0,194,255,0.5)] shrink-0" />
+                 <span className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] shrink-0">
                    STOP {stepIndex + 1} OF {tourData.stops.length}
                  </span>
-                 <div className="h-4 w-[1px] bg-white/20" />
-                 <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.2em]">
+                 <div className="h-4 w-[1px] bg-white/20 shrink-0" />
+                 <span className="text-[9px] sm:text-[10px] font-black text-sky-light uppercase tracking-[0.1em] sm:tracking-[0.2em] truncate">
                       {currentStop.stopName}
                  </span>
                 </div>
@@ -900,20 +900,20 @@ const CountryExploration: React.FC = () => {
            {/* Narrative Content Scroll */}
            <div 
              key={stepIndex}
-             className={`relative z-10 w-full max-w-6xl px-8 pt-24 pb-20 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-24 pb-20 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
            >
-              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start w-full">
+              <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-start w-full">
                 {/* Section 1: Text Content */}
-                <section className="w-full animate-in fade-in slide-in-from-left-8 duration-1000 order-2 lg:order-1 lg:pt-6">
-                   <div className="space-y-5">
+                <section className="w-full animate-in fade-in slide-in-from-left-8 duration-1000 order-2 lg:order-1 lg:pt-6 overflow-hidden">
+                   <div className="space-y-4 sm:space-y-5">
                       <div className="text-center lg:text-left">
-                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-white leading-none uppercase tracking-tighter drop-shadow-lg mb-5">
+                         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-black text-white leading-none uppercase tracking-tighter drop-shadow-lg mb-4 sm:mb-5">
                             {currentStop.stopName}
                          </h2>
                       </div>
 
-                      <div className="space-y-4 lg:text-left">
-                         <p className="text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
+                      <div className="space-y-3 sm:space-y-4 lg:text-left">
+                         <p className="text-base sm:text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
                             {currentStop.description[0]}
                          </p>
                          <div className="w-12 h-1 bg-sky/40 rounded-full hidden lg:block" />
@@ -949,8 +949,8 @@ const CountryExploration: React.FC = () => {
                 </section>
 
                 {/* Section 2: The Visual Encounter */}
-                <section className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-8 duration-1000 order-1 lg:order-2 lg:pt-14">
-                   <div className="relative group w-full">
+                <section className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-8 duration-1000 order-1 lg:order-2 lg:pt-14 overflow-hidden">
+                   <div className="relative group w-full max-w-full">
                     <PhotoPrint 
                       src={currentImage} 
                       alt={currentStop.stopName} 
@@ -974,7 +974,7 @@ const CountryExploration: React.FC = () => {
       const currentImage = stopImages[stepIndex];
 
       return (
-        <Container className={`w-full min-h-screen bg-surface-dark flex flex-col items-center pt-20 md:pt-24 px-4 md:px-6 relative overflow-x-hidden transition-all duration-700 ${selectedOption ? 'pb-[35vh] md:pb-[30vh]' : 'pb-12 md:pb-16'}`}>
+        <Container className={`w-full min-h-screen bg-surface-dark flex flex-col items-center pt-20 md:pt-24 px-3 sm:px-4 md:px-6 relative overflow-x-hidden transition-all duration-700 ${selectedOption ? 'pb-[35vh] md:pb-[30vh]' : 'pb-12 md:pb-16'}`}>
            <SEO title={`Knowledge Check - ${country.name}`} description={`Select the correct answer about ${currentQuestion.stopName}.`} />
            
            {/* Immersive Aurora Background */}
@@ -1019,13 +1019,13 @@ const CountryExploration: React.FC = () => {
                  </div>
 
                  {/* Right: Glassy Quiz Panel */}
-                 <div className="lg:col-span-7 flex flex-col animate-in fade-in slide-in-from-right-8 duration-1000 h-full justify-center">
-                    <div className="bg-white/10 backdrop-blur-3xl p-5 md:p-8 rounded-3xl border border-white/40 shadow-glass-bubble flex flex-col relative overflow-hidden group">
+                 <div className="lg:col-span-7 flex flex-col animate-in fade-in slide-in-from-right-8 duration-1000 h-full justify-center overflow-hidden">
+                    <div className="bg-white/10 backdrop-blur-3xl p-4 sm:p-5 md:p-8 rounded-2xl sm:rounded-3xl border border-white/40 shadow-glass-bubble flex flex-col relative overflow-hidden group">
                        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
                        <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
                        
-                       <div className="flex flex-col justify-center gap-5 md:gap-8 relative z-10">
-                          <h3 className="text-lg md:text-2xl font-display font-black text-white leading-tight tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] uppercase text-center border-b border-white/10 pb-5 md:pb-6">
+                       <div className="flex flex-col justify-center gap-4 sm:gap-5 md:gap-8 relative z-10">
+                          <h3 className="text-base sm:text-lg md:text-2xl font-display font-black text-white leading-tight tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] uppercase text-center border-b border-white/10 pb-4 sm:pb-5 md:pb-6">
                             {currentQuestion.question}
                           </h3>
 
@@ -1052,11 +1052,11 @@ const CountryExploration: React.FC = () => {
                                   key={idx}
                                   onClick={() => handleQuizAnswer(option)}
                                   disabled={!!selectedOption}
-                                  className={`w-full text-left px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-xs md:text-sm flex justify-between items-center shadow-glass-bubble relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
+                                  className={`w-full text-left px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-[11px] sm:text-xs md:text-sm flex justify-between items-center shadow-glass-bubble relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
                                   style={{ WebkitTapHighlightColor: 'transparent' }}
                                 >
                                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 group/opt:opacity-20 pointer-events-none rounded-[inherit]" />
-                                  <span className="leading-snug pr-4 relative z-10 drop-shadow-md uppercase tracking-tight">{option}</span>
+                                  <span className="leading-snug pr-2 sm:pr-4 relative z-10 drop-shadow-md uppercase tracking-tight">{option}</span>
                                 </button>
                               );
                              })}
@@ -1125,7 +1125,7 @@ const CountryExploration: React.FC = () => {
     if (view === 'summary') {
       const isPerfect = score === tourData.stops.length;
       return (
-        <Container className="w-full h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-6 px-4 md:px-6 relative overflow-hidden" transparent>
+        <Container className="w-full h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-6 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           {/* Immersive Aurora Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
             <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-[160px] opacity-80 animate-pulse-slow" />
@@ -1387,22 +1387,60 @@ const CountryExploration: React.FC = () => {
              <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
           </div>
 
-          {/* Icon visual */}
+          {/* Animated Travel Visual */}
           <div className="relative z-10 flex flex-col items-center gap-8">
             <div className="relative">
-                 <div className="absolute inset-0 bg-sky/20 rounded-full blur-3xl animate-pulse" />
-               <div className="w-44 h-44 rounded-full bg-white/15 backdrop-blur-3xl border-2 border-white/40 flex items-center justify-center shadow-glass-bubble overflow-hidden relative">
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
-                  <img 
-                    src={`${import.meta.env.BASE_URL}logo.png`} 
-                    alt="Loading" 
-                    className="w-44 h-44 drop-shadow-[0_0_20px_rgba(0,194,255,0.5)] relative z-10 animate-pulse-scale"
-                  />
+              {/* Outer glow */}
+              <div className="absolute inset-0 bg-sky/30 rounded-full blur-3xl animate-pulse" />
+              
+              {/* Compass outer ring */}
+              <div className="w-44 h-44 rounded-full bg-white/10 backdrop-blur-3xl border-2 border-white/30 flex items-center justify-center shadow-glass-bubble overflow-hidden relative">
+                <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
+                
+                {/* Rotating compass ring with cardinal directions */}
+                <div className="absolute inset-2 rounded-full border border-white/20 animate-[spin_12s_linear_infinite]">
+                  <span className="absolute top-1 left-1/2 -translate-x-1/2 text-[8px] font-bold text-sky/80">N</span>
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-bold text-white/40">S</span>
+                  <span className="absolute left-1 top-1/2 -translate-y-1/2 text-[8px] font-bold text-white/40">W</span>
+                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[8px] font-bold text-white/40">E</span>
                 </div>
-             </div>
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70">
-               {transitionDirection === 'forward' ? forwardTransitionText : backDestinationText}
-             </span>
+                
+                {/* Inner circle with plane */}
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-sky/20 to-accent/20 border border-white/20 flex items-center justify-center">
+                  {/* Orbiting plane */}
+                  <div className="absolute inset-0 animate-[spin_3s_linear_infinite]">
+                    <Plane className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 text-sky drop-shadow-[0_0_12px_rgba(0,194,255,0.8)] rotate-90" />
+                  </div>
+                  
+                  {/* Center destination marker */}
+                  <div className="relative">
+                    <MapPin className="w-10 h-10 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-bounce" style={{ animationDuration: '2s' }} />
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-1 bg-white/30 rounded-full blur-sm" />
+                  </div>
+                </div>
+                
+                {/* Decorative dots on compass edge */}
+                {[...Array(12)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-1.5 h-1.5 rounded-full bg-white/30"
+                    style={{
+                      top: '50%',
+                      left: '50%',
+                      transform: `rotate(${i * 30}deg) translateY(-80px) translateX(-50%)`,
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Pulsing rings */}
+              <div className="absolute inset-0 rounded-full border border-sky/30 animate-ping" style={{ animationDuration: '2s' }} />
+              <div className="absolute -inset-4 rounded-full border border-white/10 animate-ping" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
+            </div>
+            
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70">
+              {transitionDirection === 'forward' ? forwardTransitionText : backDestinationText}
+            </span>
           </div>
         </div>,
         document.body

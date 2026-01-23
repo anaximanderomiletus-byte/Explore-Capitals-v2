@@ -54,7 +54,7 @@ const Games: React.FC = () => {
   }, [setPageLoading]);
 
   return (
-    <div className="pt-32 pb-20 px-6 bg-surface-dark min-h-screen relative overflow-hidden">
+    <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] animate-pulse-slow opacity-80" />
@@ -67,14 +67,14 @@ const Games: React.FC = () => {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky/30 border border-white/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                <Play size={12} className="relative z-10 text-sky-light" fill="currentColor" />
                <span className="relative z-10 drop-shadow-md">GAMES</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">Games</h1>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-3 md:mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">Games</h1>
             <p className="text-white/70 text-lg font-bold uppercase tracking-wide drop-shadow-md">Earn points and rank up.</p>
           </div>
 
@@ -88,14 +88,14 @@ const Games: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {GAMES.map((game) => (
             <div 
               key={game.id} 
               className={`group bg-white/20 backdrop-blur-3xl rounded-3xl overflow-hidden border-2 border-white/50 shadow-[0_20px_40px_rgba(0,194,255,0.1)] transition-all duration-700 hover:bg-white/30 relative ${game.status !== 'active' ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-              <div className="relative h-48 overflow-hidden border-b border-white/20">
+              <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden border-b border-white/20">
                 <img 
                   src={game.image} 
                   alt={game.title} 
@@ -118,21 +118,21 @@ const Games: React.FC = () => {
                 )}
               </div>
               
-              <div className="p-8 flex flex-col h-[calc(100%-12rem)] relative z-10">
-                <h3 className="text-2xl font-display font-black text-white mb-2 tracking-tighter leading-none uppercase drop-shadow-md">{game.title}</h3>
-                <p className="text-white/60 mb-8 text-base leading-relaxed font-bold uppercase tracking-tight line-clamp-2 drop-shadow-sm">{game.description}</p>
+              <div className="p-5 sm:p-6 md:p-8 flex flex-col h-[calc(100%-10rem)] sm:h-[calc(100%-11rem)] md:h-[calc(100%-12rem)] relative z-10">
+                <h3 className="text-xl sm:text-2xl font-display font-black text-white mb-2 tracking-tighter leading-none uppercase drop-shadow-md">{game.title}</h3>
+                <p className="text-white/60 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base leading-relaxed font-bold uppercase tracking-tight line-clamp-2 drop-shadow-sm">{game.description}</p>
                 
                     <div className="mt-auto">
                       {game.status === 'active' ? (
                         <Link to={`/games/${getGamePath(game.id)}`}>
-                          <Button variant="primary" className="w-full h-14 text-lg border border-white/30">
-                            Play <Play size={18} fill="currentColor" />
+                          <Button variant="primary" className="w-full h-12 sm:h-14 text-base sm:text-lg border border-white/30">
+                            PLAY <Play size={18} fill="currentColor" />
                           </Button>
                         </Link>
                       ) : (
                         <Button 
                           variant="secondary" 
-                          className="w-full h-14 opacity-50 text-lg font-black uppercase tracking-[0.1em]"
+                          className="w-full h-12 sm:h-14 opacity-50 text-base sm:text-lg font-black uppercase tracking-[0.1em]"
                           disabled={true}
                         >
                           Locked

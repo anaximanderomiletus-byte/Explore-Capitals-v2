@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Users, Check, X, TrendingUp, TrendingDown } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, Users, Check, X, TrendingUp, TrendingDown, Play } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -28,7 +28,7 @@ const getCountryCode = (emoji: string) => {
 };
 
 export default function PopulationPursuit() {
-  const [gameState, setGameState] = useState<'start' | 'loading' | 'playing' | 'finished'>('loading');
+  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [countryA, setCountryA] = useState<Country | null>(null);
@@ -54,10 +54,6 @@ export default function PopulationPursuit() {
 
   useEffect(() => {
     setPageLoading(false);
-    const timer = setTimeout(() => {
-      setGameState('start');
-    }, 800);
-    return () => clearTimeout(timer);
   }, [setPageLoading]);
 
   useEffect(() => {
@@ -71,6 +67,12 @@ export default function PopulationPursuit() {
     }
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     if (gameState === 'finished' && !hasReported) {
@@ -167,7 +169,7 @@ export default function PopulationPursuit() {
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Population Pursuit</h1>
           <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Choose the larger population.</p>
             <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play</Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
             <button 
               onClick={() => navigate('/games')}
               className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -180,19 +182,6 @@ export default function PopulationPursuit() {
           </motion.div>
         )}
 
-        {gameState === 'loading' && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="h-full flex items-center justify-center"
-          >
-            <div className="text-white font-display font-black text-2xl uppercase tracking-[0.5em] animate-pulse">
-              Loading
-            </div>
-          </motion.div>
-        )}
 
         {gameState === 'playing' && countryA && countryB && (
           <motion.div
@@ -200,7 +189,7 @@ export default function PopulationPursuit() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col p-4 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
       <SEO title="Playing Population Pursuit" description="Choose the larger population." />
       
@@ -210,48 +199,68 @@ export default function PopulationPursuit() {
         <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
       </div>
 
-      <div className="max-w-4xl mx-auto w-full flex shrink-0 items-center justify-between mb-4 bg-white/10 backdrop-blur-2xl p-3 rounded-2xl shadow-glass border border-white/20 mt-16 md:mt-20 relative overflow-hidden z-10">
+      {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
+      <div className="max-w-4xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
          <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
          <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
 
+         {/* Game title - visible on all sizes, centered */}
          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <h1 className="text-[10px] md:text-xs font-black text-white uppercase tracking-[0.3em] drop-shadow-md">Population Pursuit</h1>
-            <div className="h-0.5 w-8 bg-sky/40 rounded-full mt-1" />
+            <h1 className="text-[10px] font-black text-white uppercase tracking-[0.3em] drop-shadow-md">Population Pursuit</h1>
+            <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
-         <div className="flex items-center gap-6 relative z-10">
+         {/* Desktop only: points and timer in top bar */}
+         <div className="hidden md:flex items-center gap-6 relative z-10">
            <div className="flex items-center gap-2">
               <Trophy size={18} className="text-warning drop-shadow-md" />
               <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
            </div>
-           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-              <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
-                    <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
-              <span className={`font-display font-black text-xl tabular-nums min-w-[24px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{timeLeft}</span>
-           </div>
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+             <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
+             <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+          </div>
          </div>
+
+         {/* Mobile: empty spacer to balance the back button */}
+         <div className="w-[42px] md:hidden" />
       </div>
 
-      <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 pb-6 overflow-hidden relative z-10 max-h-[85dvh] md:max-h-none">
-         <div className="text-center mb-6 shrink-0 relative">
-           <h2 className="text-xl md:text-4xl font-display font-black text-white tracking-tighter uppercase drop-shadow-md flex items-center justify-center gap-4">
-             <TrendingUp size={32} className="text-sky-light hidden md:block" />
-             Who has a larger population?
-             <TrendingDown size={32} className="text-red-400 hidden md:block" />
-           </h2>
-         </div>
+       <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 overflow-hidden relative z-10 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-3 md:p-6 shadow-glass">
+          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+          
+          {/* Mobile: Points top-left, Timer top-right */}
+          <div className="flex md:hidden items-center justify-between mb-2 relative z-10">
+             <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
+                <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                <Trophy size={16} className="text-warning drop-shadow-md relative z-10" />
+                <span className="font-display font-black text-lg text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+             </div>
+             <div className={`flex items-center gap-2 px-2.5 py-1 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} /></div>
+                <span className={`font-display font-black text-lg tabular-nums min-w-[32px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+             </div>
+          </div>
 
-         <div className="flex-1 flex flex-col md:flex-row gap-4 md:gap-6 min-h-0 overflow-hidden px-4 items-stretch relative">
-                  <AnimatePresence mode="wait">
+          <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
+                   {/* Question Text */}
+                   <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.3em] drop-shadow-glow-sky">Which country has the</p>
+                      <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">Larger Population?</h2>
+                   </div>
+
+                   <AnimatePresence mode="wait">
                      <motion.div
                        key={countryA?.id + (countryB?.id || '')}
                        initial={{ opacity: 0, scale: 0.98 }}
                        animate={{ opacity: 1, scale: 1 }}
                        exit={{ opacity: 0, scale: 1.02 }}
                        transition={{ duration: 0.3 }}
-                       className="flex-1 flex flex-col md:flex-row gap-4 md:gap-6 h-full w-full"
+                       className="w-full h-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-4xl mx-auto"
                      >
               {[countryA, countryB].map((country, idx) => {
                          if (!country) return null;
@@ -271,10 +280,10 @@ export default function PopulationPursuit() {
                   
                 if (result) {
                     if (isWinner) {
-                        cardStyle = "bg-accent/60 border-accent shadow-glow-accent z-20 border-2";
+                        cardStyle = "bg-accent/60 border-2 border-accent shadow-glow-accent z-20";
                         titleStyle = "text-white";
                     } else if (isSelected) {
-                        cardStyle = "bg-red-500/60 border-red-500 shadow-glow-warning z-10 border-2";
+                        cardStyle = "bg-red-500/60 border-2 border-red-500 shadow-glow-warning z-10";
                         titleStyle = "text-white";
                     } else {
                         cardStyle = "bg-black/20 border-white/5 opacity-30 z-0";
@@ -286,46 +295,46 @@ export default function PopulationPursuit() {
                     <div 
                       key={country.id} 
                       onClick={() => handleChoice(country)} 
-                      className={`flex-1 relative rounded-3xl p-4 md:p-6 flex flex-col items-center justify-center transition-[background-color,border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`} 
+                      className={`min-h-0 md:min-h-[320px] relative rounded-2xl md:rounded-3xl p-3 md:p-6 flex flex-col items-center justify-center transition-[background-color,border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`} 
                       style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
                       <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none rounded-[inherit]" />
                       
-                      <div className="mb-2 md:mb-4 flex items-center justify-center min-h-[100px] md:min-h-[160px] relative z-10 w-full">
+                      <div className="mb-1 md:mb-2 flex items-center justify-center relative z-10 w-full min-h-[60px] md:min-h-[140px]">
                         {!hasError ? (
-                          <div className={`w-28 h-20 md:w-48 md:h-32 lg:w-64 lg:h-44 flex items-center justify-center transition-all duration-500 ${result ? 'scale-[0.65] -translate-y-4 md:-translate-y-6' : 'scale-100 translate-y-4 md:translate-y-6'}`}>
+                          <div className={`w-full max-w-[100px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
                             <img 
                               src={`https://flagcdn.com/w320/${code}.png`}
                               alt={`${country.name} flag`}
-                              className={`w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
+                              className={`w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
                               onError={() => setHasError(true)}
                             />
                           </div>
                         ) : (
-                          <div className={`w-28 h-20 md:w-44 md:h-28 transition-all duration-500 ${result ? 'scale-[0.65] -translate-y-4 md:-translate-y-6' : 'scale-100 translate-y-4 md:translate-y-6'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
+                          <div className={`w-full max-w-[100px] md:max-w-[160px] aspect-[3/2] transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
                             <img 
                               src={`https://flagcdn.com/w160/${getCountryCode(country.flag)}.png`}
                               alt={`${country.name} flag fallback`}
-                              className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)]"
+                              className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
                             />
                           </div>
                         )}
                       </div>
                       
-                      <div className="text-center relative z-10 w-full px-4">
-                        <h3 className={`text-lg md:text-2xl font-display font-black mb-3 leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-lg ${titleStyle} ${result ? '-translate-y-4 md:-translate-y-6' : 'translate-y-4 md:translate-y-6'}`}>
-                          {country.name}
-                        </h3>
+                      {/* Country name - directly under flag on mobile */}
+                      <h3 className={`text-xs md:text-xl font-display font-black mb-0 md:mb-2 leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-lg line-clamp-2 text-center relative z-10 px-1 md:px-4 ${titleStyle}`}>
+                        {country.name}
+                      </h3>
 
-                        <div className={`transition-[opacity,transform] relative ${result ? 'duration-500 opacity-100 scale-100 -translate-y-4 md:-translate-y-6' : 'duration-0 opacity-0 scale-90 pointer-events-none'}`}>
-                            <div className="h-px w-12 bg-white/20 mx-auto mb-4" />
-                            <div className="flex flex-col items-center gap-1">
-                              <span className="text-sky-light uppercase font-black text-[10px] tracking-[0.4em] mb-1 font-sans drop-shadow-glow-sky">POPULATION</span>
-                              <div className={`text-2xl md:text-5xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] ${isWinner ? 'text-white' : 'text-white/60'}`}>
-                                {country.population}
-                              </div>
+                      {/* Population info - shows after selection */}
+                      <div className={`text-center relative z-10 w-full px-2 md:px-4 shrink-0 transition-[opacity,transform] ${result ? 'duration-500 opacity-100 scale-100 mt-2 md:mt-3' : 'duration-0 opacity-0 scale-90 h-0 overflow-hidden pointer-events-none'}`}>
+                          <div className="h-px w-6 md:w-12 bg-white/20 mx-auto mb-1.5 md:mb-3" />
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span className="text-sky-light uppercase font-black text-[6px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans drop-shadow-glow-sky">POPULATION</span>
+                            <div className={`text-[11px] md:text-3xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_3px_10px_rgba(0,0,0,0.5)] ${isWinner ? 'text-white' : 'text-white/60'}`}>
+                              {country.population}
                             </div>
-                        </div>
+                          </div>
                       </div>
 
                     </div>

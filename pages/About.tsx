@@ -58,23 +58,23 @@ const About: React.FC = () => {
                 <Compass size={12} className="text-sky-light relative z-10" /> 
                 <span className="relative z-10 drop-shadow-md">Our Mission</span>
               </div>
-              <h1 className="text-5xl md:text-7xl font-display font-black text-white leading-tight mb-5 tracking-tighter uppercase drop-shadow-lg">
+              <h1 className="text-4xl md:text-7xl font-display font-black text-white leading-tight mb-5 tracking-tighter uppercase drop-shadow-lg">
                 Redefining the <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white drop-shadow-glow-sky">Digital Atlas</span>
               </h1>
-              <p className="text-white/60 text-lg md:text-xl leading-relaxed font-bold max-w-2xl">
+              <p className="text-white/60 text-base md:text-xl leading-relaxed font-bold max-w-2xl">
                 ExploreCapitals is a premier digital gateway designed to bridge the gap between complex global data and high-fidelity interactive education.
               </p>
             </header>
 
             <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch mb-10 md:mb-14">
               <div className="space-y-6 text-white/50 leading-relaxed text-base font-bold flex flex-col justify-center">
-                <h2 className="text-4xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-md">Our Story</h2>
+                <h2 className="text-3xl md:text-4xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-md">Our Story</h2>
                 <div className="space-y-6">
-                  <p className="text-xl md:text-2xl border-l-4 border-sky/30 pl-8 italic leading-relaxed">
+                  <p className="text-lg md:text-2xl border-l-4 border-sky/30 pl-8 italic leading-relaxed">
                     We architected ExploreCapitals from a singular vision: geography should be as beautiful as it is informative. Most educational tools prioritize function over form; we choose both.
                   </p>
-                  <p className="text-xl md:text-2xl border-l-4 border-white/10 pl-8 leading-relaxed">
+                  <p className="text-lg md:text-2xl border-l-4 border-white/10 pl-8 leading-relaxed">
                     By leveraging <strong className="text-sky-light font-black drop-shadow-glow-sky">high-fidelity interfaces</strong> and <strong className="text-white font-black drop-shadow-sm">gamified logic</strong>, we've created a premium environment for mastering the global landscape.
                   </p>
                 </div>
@@ -102,8 +102,8 @@ const About: React.FC = () => {
 
             {/* Contact Section */}
             <div id="contact" className="scroll-mt-32 relative z-10">
-              <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact</h2>
-              <p className="text-white/50 text-base md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
+              <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact</h2>
+              <p className="text-white/50 text-sm md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
                 Direct all inquiries, technical feedback, or partnership requests to <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-white transition-all underline underline-offset-8 decoration-sky/30 hover:decoration-white/50 drop-shadow-glow-sky">anaximanderomiletus@gmail.com</a>.
               </p>
 
@@ -144,7 +144,7 @@ const About: React.FC = () => {
              <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
              
              <div className="relative z-10 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-6xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">Start Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-light via-white to-sky-light drop-shadow-glow-sky">Expedition</span></h2>
+                <h2 className="text-3xl md:text-6xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">Start Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-light via-white to-sky-light drop-shadow-glow-sky">Expedition</span></h2>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                     <Link to="/map" className="w-full sm:w-auto">
                       <Button variant="secondary" size="lg" className="h-16 px-14 text-lg w-full uppercase tracking-[0.2em] font-black border-white/40">

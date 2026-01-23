@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Building2, Network } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, Building2, Network, Play } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
@@ -37,7 +37,7 @@ interface GameCard {
 }
 
 export default function CapitalConnection() {
-  const [gameState, setGameState] = useState<'start' | 'loading' | 'playing' | 'finished'>('loading');
+  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   
@@ -53,10 +53,6 @@ export default function CapitalConnection() {
 
   useEffect(() => {
     setPageLoading(false);
-    const timer = setTimeout(() => {
-      setGameState('start');
-    }, 800);
-    return () => clearTimeout(timer);
   }, [setPageLoading]);
 
   // Timer logic
@@ -71,6 +67,12 @@ export default function CapitalConnection() {
     }
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   // Reporting results
   useEffect(() => {
@@ -220,7 +222,7 @@ export default function CapitalConnection() {
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Connection</h1>
           <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
             <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">Play</Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest shadow-glow-sky font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
               Back to Games
@@ -230,19 +232,6 @@ export default function CapitalConnection() {
           </motion.div>
         )}
 
-        {gameState === 'loading' && (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="h-full flex items-center justify-center"
-          >
-            <div className="text-white font-display font-black text-2xl uppercase tracking-[0.5em] animate-pulse">
-              Loading
-            </div>
-          </motion.div>
-        )}
 
         {gameState === 'playing' && (
           <motion.div
@@ -250,7 +239,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col p-4 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
       <SEO title="Playing Capital Connection" description="Match the country to its capital." />
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -258,39 +247,59 @@ export default function CapitalConnection() {
         <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
       </div>
 
-      <div className="max-w-4xl mx-auto w-full flex shrink-0 items-center justify-between mb-4 bg-white/10 backdrop-blur-2xl p-4 rounded-3xl shadow-glass border-2 border-white/20 mt-16 md:mt-20 relative overflow-hidden z-10">
+      {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
+      <div className="max-w-4xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl shadow-glass border border-white/20 relative overflow-hidden z-10">
          <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-         <Link to="/games" className="p-3 bg-white/10 hover:bg-white/20 rounded-2xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group">
-           <ArrowLeft size={20} className="transition-transform" />
+         <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
+           <ArrowLeft size={18} className="transition-transform" />
          </Link>
+
+         {/* Game title - visible on all sizes, centered */}
          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <h1 className="text-[10px] md:text-xs font-black text-white uppercase tracking-[0.3em] drop-shadow-md">Capital Connection</h1>
-            <div className="h-0.5 w-8 bg-sky/40 rounded-full mt-1" />
+            <h1 className="text-[10px] font-black text-white uppercase tracking-[0.3em] drop-shadow-md">Capital Connection</h1>
+            <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
-         <div className="flex items-center gap-8 relative z-10">
-           <div className="flex items-center gap-3">
-              <Trophy size={20} className="text-warning drop-shadow-glow" />
-              <span className="font-display font-black text-2xl text-white tabular-nums drop-shadow-md">{score}</span>
+
+         {/* Desktop only: points and timer in top bar */}
+         <div className="hidden md:flex items-center gap-6 relative z-10">
+           <div className="flex items-center gap-2">
+              <Trophy size={18} className="text-warning drop-shadow-md" />
+              <span className="font-display font-black text-xl text-white tabular-nums drop-shadow-sm">{score}</span>
            </div>
-           <div className={`flex items-center gap-3 px-4 py-2 rounded-2xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/20 text-white border-2 border-white/20'}`}>
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10 rounded-[inherit]" />
-                    <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky'}`}><Timer size={20} /></div>
-              <span className={`font-display font-black text-2xl tabular-nums min-w-[30px] relative z-10 drop-shadow-md ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{timeLeft}</span>
-           </div>
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+             <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-[inherit]" />
+                   <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} /></div>
+             <span className={`font-display font-black text-xl tabular-nums min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+          </div>
          </div>
+
+         {/* Mobile: empty spacer to balance the back button */}
+         <div className="w-[42px] md:hidden" />
       </div>
 
-      <div className="flex-1 max-w-4xl mx-auto w-full overflow-y-auto no-scrollbar px-4 pb-10 relative z-10">
-          <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 content-start py-2">
-                    {cards.map(card => (
-                        <Card 
-                          key={card.id} 
-                          card={card} 
-                          onClick={() => handleCardClick(card.id)} 
-                        />
-                    ))}
-                </div>
-            </div>
+      <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-4 md:p-6">
+          {/* Mobile: Points top-left, Timer top-right */}
+          <div className="flex md:hidden items-center justify-between mb-4 relative z-10">
+             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-warning/15 border border-warning/30">
+                <Trophy size={16} className="text-warning" />
+                <span className="font-display font-black text-lg text-white tabular-nums">{score}</span>
+             </div>
+             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-300 ${timeLeft < 10 ? 'bg-red-500/15 border border-error' : 'bg-sky/20 border border-white/20'}`}>
+                <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={16} /></div>
+                <span className={`font-display font-black text-lg tabular-nums min-w-[32px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+             </div>
+          </div>
+
+          <div className="flex-1 grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 auto-rows-fr content-center relative z-10">
+            {cards.map(card => (
+              <Card 
+                key={card.id} 
+                card={card} 
+                onClick={() => handleCardClick(card.id)} 
+              />
+            ))}
+          </div>
+      </div>
             <FeedbackOverlay type={feedback} triggerKey={feedbackKey} />
           </motion.div>
         )}
@@ -329,46 +338,39 @@ export default function CapitalConnection() {
 
 // Memoized Card component to prevent unnecessary re-renders
 const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => void }) => {
-              let stateStyle = "bg-white/10 border-white/40 text-white hover:bg-white/15 hover:border-sky/50 shadow-glass-bubble";
-              
-              if (card.isMatched) {
-    stateStyle = "bg-accent/40 border-accent text-white cursor-default shadow-glow-accent z-0 opacity-40 grayscale-[0.5]";
-              } else if (card.isWrong) {
-                  stateStyle = "bg-red-500/40 border-red-500 text-white shadow-glow-warning z-50";
-              } else if (card.isSelected) {
-                  stateStyle = "bg-sky/20 border-sky text-white shadow-none z-20";
-              }
+  let stateStyle = "bg-white/10 border-white/20 text-white hover:bg-white/15 hover:border-sky/40";
+  
+  if (card.isMatched) {
+    stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50";
+  } else if (card.isWrong) {
+    stateStyle = "bg-red-500/30 border-red-400 text-white";
+  } else if (card.isSelected) {
+    stateStyle = "bg-sky/25 border-sky text-white";
+  }
 
-              return (
-                  <button
+  return (
+    <button
       onClick={onClick}
-                      disabled={card.isMatched}
-      className={`h-24 md:h-36 rounded-[1.5rem] p-3 flex flex-col items-center justify-center text-center transition-all duration-300 border-2 relative group ${stateStyle} ${card.isWrong ? 'animate-shake overflow-visible' : 'overflow-hidden'}`}
-      style={{ 
-        WebkitTapHighlightColor: 'transparent', 
-        isolation: 'isolate',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden'
-      }}
-                  >
-      <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none rounded-[1.4rem]" />
-      
-      <div className={`mb-1 md:mb-2 transform transition-all duration-300 relative z-10 ${card.type === 'country' ? 'drop-shadow-2xl' : (card.isMatched ? 'opacity-100 text-white' : 'opacity-40 text-sky')}`}>
+      disabled={card.isMatched}
+      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${card.isWrong ? 'animate-shake' : ''}`}
+      style={{ WebkitTapHighlightColor: 'transparent' }}
+    >
+      <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>
         {card.type === 'country' ? (
           <img 
             src={`https://flagcdn.com/w80/${card.flagCode}.png`}
             alt="Flag"
-            className="w-10 h-auto md:w-14 drop-shadow-md select-none object-contain"
+            className="w-10 h-auto md:w-12 select-none object-contain"
             loading="lazy"
           />
         ) : (
-          <Building2 size={24} className={card.isMatched ? 'text-white' : 'text-sky-light'} />
+          <Building2 size={20} className={`md:w-6 md:h-6 ${card.isMatched ? 'text-white/60' : 'text-sky-light'}`} />
         )}
-                      </div>
+      </div>
 
-                      <span className="font-black leading-tight text-[9px] md:text-xs uppercase tracking-tighter line-clamp-3 font-sans relative z-10 drop-shadow-md">
-                          {card.label}
-                      </span>
-                  </button>
+      <span className="font-bold leading-tight text-[10px] md:text-xs uppercase tracking-tight line-clamp-2">
+        {card.label}
+      </span>
+    </button>
   );
 });
