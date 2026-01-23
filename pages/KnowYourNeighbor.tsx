@@ -185,36 +185,33 @@ export default function KnowYourNeighbor() {
         <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
       </div>
 
-      {/* Top Bar - Back arrow + Title on mobile, full bar on desktop */}
-      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center justify-between md:justify-between mb-2 md:mb-2 bg-white/10 backdrop-blur-2xl p-2 md:p-2.5 rounded-2xl border border-white/20 relative overflow-hidden z-10">
-         <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 relative z-10 group shadow-inner">
+      {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
+      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-2 bg-white/10 backdrop-blur-2xl p-2 md:p-2.5 rounded-2xl border border-white/20 z-10">
+         <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
 
-         {/* Game title - visible on all sizes, centered */}
-         <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-            <h1 className="text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.15em] md:tracking-[0.3em] drop-shadow-md whitespace-nowrap">Know Your Neighbor</h1>
+         {/* Game title - flexbox centered, will shrink if needed */}
+         <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+            <h1 className="text-[8px] sm:text-[9px] md:text-[10px] font-black text-white uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Know Your Neighbor</h1>
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
-         {/* Desktop only: spacer to keep title centered */}
-         <div className="hidden md:block w-[42px]" />
-
-         {/* Mobile: empty spacer to balance the back button */}
-         <div className="w-[42px] md:hidden" />
+         {/* Spacer to balance the back button */}
+         <div className="w-[42px] shrink-0" />
       </div>
 
       <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-2 md:p-4 overflow-hidden relative z-10">
          
-         {/* Points and Timer - Now visible on all sizes in the corners of the game rectangle */}
-         <div className="flex items-center justify-between mb-1 md:mb-2 relative z-20">
-            <div className="flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative">
-               <Trophy size={16} className="md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
-               <span className="font-display font-black text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+         {/* Points and Timer - Responsive layout for all screen sizes */}
+         <div className="flex items-center justify-between gap-2 mb-1 sm:mb-2 md:mb-2 relative z-20 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
+               <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+               <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
             </div>
-            <div className={`flex items-center gap-2 px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
-               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={16} className="md:w-[18px] md:h-[18px]" /></div>
-               <span className={`font-display font-black text-lg md:text-xl tabular-nums min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+            <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+               <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" /></div>
+               <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums min-w-[28px] sm:min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
             </div>
          </div>
 
