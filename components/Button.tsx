@@ -70,18 +70,18 @@ const Button: React.FC<ButtonProps> = ({
   
   const variants = {
     primary: isFlat 
-      ? `bg-sky hover:brightness-110 active:brightness-95 shadow-glow-sky text-white` 
-      : `bg-gel-blue backdrop-blur-2xl shadow-glass-bubble hover:brightness-110 hover:shadow-[0_18px_40px_rgba(0,0,0,0.25)] before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
+      ? `bg-sky hover:brightness-110 active:brightness-95 text-white` 
+      : `bg-gel-blue backdrop-blur-2xl hover:brightness-110 hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)] before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
     accent: isFlat
-      ? `bg-[#22c55e] hover:brightness-110 active:brightness-95 shadow-[0_0_20px_rgba(34,197,94,0.5)] text-white`
-      : `bg-[#22c55e]/60 backdrop-blur-2xl shadow-glass-bubble hover:bg-[#22c55e]/80 hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/70`,
+      ? `bg-[#22c55e] hover:brightness-110 active:brightness-95 text-white`
+      : `bg-[#22c55e]/60 backdrop-blur-2xl hover:bg-[#22c55e]/80 hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/70`,
     danger: isFlat
-      ? `bg-error hover:brightness-110 active:brightness-95 shadow-[0_0_20px_rgba(239,68,68,0.5)] text-white`
-      : `bg-error/80 backdrop-blur-2xl shadow-glass-bubble hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
+      ? `bg-error hover:brightness-110 active:brightness-95 text-white`
+      : `bg-error/80 backdrop-blur-2xl hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
     secondary: isFlat
-      ? `bg-white/10 backdrop-blur-xl border-2 border-white/20 hover:bg-white/20 hover:brightness-110 shadow-glass ${hasTextColor ? '' : 'text-white'}`
-      : `bg-white/20 backdrop-blur-2xl border-2 border-white/80 shadow-glass-bubble hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
-    outline: `bg-white/20 backdrop-blur-3xl border-4 border-white shadow-glass-bubble hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-glossy-gradient before:opacity-40 before:z-0 ${hasTextColor ? '' : 'text-white'} after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
+      ? `bg-white/10 backdrop-blur-xl border-2 border-white/20 hover:bg-white/20 hover:brightness-110 ${hasTextColor ? '' : 'text-white'}`
+      : `bg-white/20 backdrop-blur-2xl border-2 border-white/80 hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
+    outline: `bg-white/20 backdrop-blur-3xl border-4 border-white hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-glossy-gradient before:opacity-40 before:z-0 ${hasTextColor ? '' : 'text-white'} after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
   };
 
   const sizes = {

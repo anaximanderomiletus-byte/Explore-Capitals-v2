@@ -70,8 +70,8 @@ const CountryDetail: React.FC = () => {
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
         </div>
 
-        <div className="bg-white/5 backdrop-blur-3xl p-12 rounded-[3rem] border border-white/10 shadow-glass relative z-10 max-w-md">
-          <AlertTriangle size={64} className="mx-auto text-warning mb-8 drop-shadow-glow" />
+        <div className="bg-white/5 backdrop-blur-3xl p-12 rounded-[3rem] border border-white/10 relative z-10 max-w-md">
+          <AlertTriangle size={64} className="mx-auto text-warning mb-8" />
           <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter drop-shadow-lg">Location Unknown</h2>
           <p className="text-white/40 mt-4 mb-10 text-sm font-medium uppercase tracking-[0.2em] leading-relaxed">The coordinates for this territory are not present in our global database.</p>
           
@@ -257,8 +257,8 @@ const CountryDetail: React.FC = () => {
 
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.06)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.03)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
+        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.02)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.01)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -335,7 +335,7 @@ const CountryDetail: React.FC = () => {
                         {isDeFacto && (
                             <div className="text-warning font-black tracking-[0.2em] text-[8px] uppercase flex items-center gap-2.5">
                                 <AlertTriangle size={12} className="text-warning shadow-[0_0_10px_rgba(255,149,0,0.6)]" /> 
-                                <span className="text-white drop-shadow-glow">{(country as any).sovereignty || 'LIMITED RECOGNITION'}</span>
+                                <span className="text-white">{(country as any).sovereignty || 'LIMITED RECOGNITION'}</span>
                             </div>
                         )}
                     </div>
@@ -362,7 +362,7 @@ const CountryDetail: React.FC = () => {
                     BACK TO DIRECTORY
                 </button>
                 
-                <div className="bg-white/20 backdrop-blur-3xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-glass rounded-3xl border border-white/50 relative h-full flex flex-col overflow-hidden group">
+                <div className="bg-white/20 backdrop-blur-3xl p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl border border-white/50 relative h-full flex flex-col overflow-hidden group">
                      <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
                      <div className="absolute top-12 right-12 transition-transform duration-1000 hidden sm:block">
                         <Scroll className="text-sky-light opacity-[0.1] w-24 h-24" />
@@ -370,7 +370,7 @@ const CountryDetail: React.FC = () => {
                      
                      <header className="mb-8 lg:mb-10 pb-6 lg:pb-8 border-b border-white/20 shrink-0 relative z-10">
                         <div className="flex items-center gap-4 mb-6 lg:mb-8">
-                            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-sky/30 flex items-center justify-center border border-white/40 shadow-glow-sky relative overflow-hidden shrink-0">
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-sky/30 flex items-center justify-center border border-white/40 relative overflow-hidden shrink-0">
                                 <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                                 <Compass className="text-sky-light relative z-10" size={20} />
                             </div>
@@ -453,7 +453,7 @@ const CountryDetail: React.FC = () => {
                         </p>
                         <div className="flex flex-wrap gap-2 lg:gap-2.5 relative z-10">
                             {country.languages.map(lang => (
-                                <span key={lang} className="px-3 lg:px-5 py-1.5 lg:py-2 bg-white/15 border-2 border-white/40 rounded-xl text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 shadow-glass hover:bg-white/25 hover:text-white hover:border-white/50 transition-all cursor-default relative overflow-hidden">
+                                <span key={lang} className="px-3 lg:px-5 py-1.5 lg:py-2 bg-white/15 border-2 border-white/40 rounded-xl text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 hover:bg-white/25 hover:text-white hover:border-white/50 transition-all cursor-default relative overflow-hidden">
                                     <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
                                     <span className="relative z-10">{lang}</span>
                                 </span>
@@ -515,7 +515,7 @@ const CountryDetail: React.FC = () => {
                                 </p>
                                 <div className="flex flex-col items-center gap-6 w-full">
                                 <Link to={`/expedition/${country.id}`} className="inline-block w-full sm:w-auto group/exp">
-                                    <Button variant="primary" size="md" className="w-full sm:w-auto h-14 lg:h-16 px-10 lg:px-16 text-base lg:text-lg text-white shadow-glow-sky border border-white/20 rounded-full">
+                                    <Button variant="primary" size="md" className="w-full sm:w-auto h-14 lg:h-16 px-10 lg:px-16 text-base lg:text-lg text-white border border-white/20 rounded-full">
                                         <span className="flex items-center gap-3">
                                             START EXPEDITION <Compass size={20} className="transition-transform duration-1000" />
                                         </span>
@@ -530,12 +530,12 @@ const CountryDetail: React.FC = () => {
                      <div className="mt-8 lg:mt-12 flex flex-col items-center gap-6 lg:gap-8 relative z-10">
                         <div className="inline-flex flex-col items-center gap-3 lg:gap-4">
                              <div className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em] drop-shadow-sm">Global Coordinates</div>
-                             <div className="inline-flex items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 lg:py-4 bg-white/20 backdrop-blur-3xl text-white rounded-2xl shadow-glass border-2 border-white/60 group transition-all duration-700 relative overflow-hidden whitespace-nowrap">
+                             <div className="inline-flex items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 lg:py-4 bg-white/20 backdrop-blur-3xl text-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.12)] border-2 border-white/60 group transition-all duration-700 relative overflow-hidden whitespace-nowrap">
                                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
                                   <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
                                      {Math.abs(country.lat).toFixed(4)}° {country.lat >= 0 ? 'N' : 'S'}
                                   </span>
-                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-light shadow-glow-sky animate-pulse relative z-10"></div>
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-light animate-pulse relative z-10"></div>
                                   <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
                                      {Math.abs(country.lng).toFixed(4)}° {country.lng >= 0 ? 'E' : 'W'}
                                   </span>

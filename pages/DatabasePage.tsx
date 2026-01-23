@@ -203,8 +203,8 @@ const DatabasePage: React.FC = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/30 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 shadow-glow-sky relative overflow-hidden group">
-               <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
+               <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
                <Globe size={12} className="animate-spin-slow relative z-10 text-sky-light" />
                <span className="relative z-10 drop-shadow-md">GLOBAL DATABASE</span>
             </div>
@@ -228,12 +228,12 @@ const DatabasePage: React.FC = () => {
         </div>
 
         {/* Sovereign Countries Section */}
-        <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border border-white/50 mb-16 relative group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+        <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 mb-16 relative group">
+          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
           <div className="overflow-x-auto relative z-10">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-white/10 border-b border-white/30">
+                <tr className="bg-white/5 border-b border-white/15">
                   <SortHeader label="Country" field="name" sortConfig={sortConfig} onSort={handleSort} />
                   <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
                   <SortHeader label="Region" field="region" sortConfig={sortConfig} onSort={handleSort} />
@@ -258,7 +258,7 @@ const DatabasePage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{country.capital}</td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 shadow-glow-sky/30 group-hover/row:shadow-glow-sky group-hover/row:bg-sky/50 transition-all whitespace-nowrap">
+                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 group-hover/row:bg-sky/50 transition-all whitespace-nowrap">
                         {country.region}
                       </span>
                     </td>
@@ -290,12 +290,12 @@ const DatabasePage: React.FC = () => {
                 </div>
             </div>
             
-            <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border border-white/50 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-accent/20 border-b border-white/30">
+                    <tr className="bg-accent/10 border-b border-white/20">
                       <SortHeader label="Territory" field="name" sortConfig={sortConfig} onSort={handleSort} />
                       <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Sovereignty</th>
                       <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
@@ -318,7 +318,7 @@ const DatabasePage: React.FC = () => {
                             <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-accent transition-colors drop-shadow-sm">{territory.name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em] drop-shadow-glow">
+                        <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
                             {territory.sovereignty}
                         </td>
                         <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{territory.capital}</td>
@@ -355,12 +355,12 @@ const DatabasePage: React.FC = () => {
                 </div>
             </div>
             
-            <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border border-white/50 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-warning/20 border-b border-white/30">
+                    <tr className="bg-warning/10 border-b border-white/20">
                       <SortHeader label="Entity" field="name" sortConfig={sortConfig} onSort={handleSort} />
                       <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Status</th>
                       <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
@@ -383,7 +383,7 @@ const DatabasePage: React.FC = () => {
                             <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-warning transition-colors drop-shadow-sm">{state.name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-warning uppercase tracking-[0.2em] drop-shadow-glow">
+                        <td className="px-6 py-4 text-[9px] font-bold text-warning uppercase tracking-[0.2em]">
                             {state.sovereignty}
                         </td>
                         <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{state.capital}</td>

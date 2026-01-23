@@ -42,25 +42,25 @@ const About: React.FC = () => {
 
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
+        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.04)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
       </div>
 
       <div className="max-w-5xl mx-auto space-y-12 relative z-10">
         {/* Mission & Hero Section */}
-        <section className="bg-white/5 backdrop-blur-3xl rounded-[3rem] shadow-glass border border-white/20 overflow-hidden relative group">
+        <section className="bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/20 overflow-hidden relative group">
           <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
           
           <div className="p-8 md:p-16 relative z-10">
             <header className="max-w-3xl mb-10 md:mb-14">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-6 shadow-glass-bubble relative overflow-hidden group/badge">
+              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-6 relative overflow-hidden group/badge">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
                 <Compass size={12} className="text-sky-light relative z-10" /> 
                 <span className="relative z-10 drop-shadow-md">Our Mission</span>
               </div>
               <h1 className="text-4xl md:text-7xl font-display font-black text-white leading-tight mb-5 tracking-tighter uppercase drop-shadow-lg">
                 Redefining the <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white drop-shadow-glow-sky">Digital Atlas</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Digital Atlas</span>
               </h1>
               <p className="text-white/60 text-base md:text-xl leading-relaxed font-bold max-w-2xl">
                 ExploreCapitals is a premier digital gateway designed to bridge the gap between complex global data and high-fidelity interactive education.
@@ -75,7 +75,7 @@ const About: React.FC = () => {
                     We architected ExploreCapitals from a singular vision: geography should be as beautiful as it is informative. Most educational tools prioritize function over form; we choose both.
                   </p>
                   <p className="text-lg md:text-2xl border-l-4 border-white/10 pl-8 leading-relaxed">
-                    By leveraging <strong className="text-sky-light font-black drop-shadow-glow-sky">high-fidelity interfaces</strong> and <strong className="text-white font-black drop-shadow-sm">gamified logic</strong>, we've created a premium environment for mastering the global landscape.
+                    By leveraging <strong className="text-sky-light font-black">high-fidelity interfaces</strong> and <strong className="text-white font-black">gamified logic</strong>, we've created a premium environment for mastering the global landscape.
                   </p>
                 </div>
               </div>
@@ -87,9 +87,9 @@ const About: React.FC = () => {
                   { icon: <Microscope size={22} />, title: "Analysis", text: "Deep demographic insights and analytics." },
                   { icon: <Award size={22} />, title: "Excellence", text: "A new benchmark for digital cartography." },
                 ].map((item, i) => (
-                  <article key={i} className="bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border-2 border-white/20 shadow-glass-bubble relative overflow-hidden flex flex-col h-full hover:border-white/40 transition-colors duration-300">
+                  <article key={i} className="bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border-2 border-white/20 relative overflow-hidden flex flex-col h-full hover:border-white/40 transition-colors duration-300">
                     <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                    <div className="text-sky mb-6 drop-shadow-glow-sky">{item.icon}</div>
+                    <div className="text-sky mb-6">{item.icon}</div>
                     <h3 className="font-display font-black text-white text-base mb-2 uppercase tracking-tighter drop-shadow-sm">{item.title}</h3>
                     <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em] leading-relaxed mt-auto">{item.text}</p>
                   </article>
@@ -98,20 +98,20 @@ const About: React.FC = () => {
             </div>
 
             {/* Section Divider */}
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14 shadow-glow-white/5"></div>
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14"></div>
 
             {/* Contact Section */}
             <div id="contact" className="scroll-mt-32 relative z-10">
               <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact</h2>
               <p className="text-white/50 text-sm md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
-                Direct all inquiries, technical feedback, or partnership requests to <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-white transition-all underline underline-offset-8 decoration-sky/30 hover:decoration-white/50 drop-shadow-glow-sky">anaximanderomiletus@gmail.com</a>.
+                Direct all inquiries, technical feedback, or partnership requests to <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-white transition-all underline underline-offset-8 decoration-sky/30 hover:decoration-white/50">anaximanderomiletus@gmail.com</a>.
               </p>
 
               {/* Protocols */}
               <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 shadow-glass-bubble hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
+                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                  <div className="w-14 h-14 rounded-2xl bg-sky/20 flex items-center justify-center text-sky border-2 border-white/30 shadow-glow-sky">
+                  <div className="w-14 h-14 rounded-2xl bg-sky/20 flex items-center justify-center text-sky border-2 border-white/30">
                     <ShieldCheck size={28} strokeWidth={2} />
                   </div>
                   <div>
@@ -122,9 +122,9 @@ const About: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 shadow-glass-bubble hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
+                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                  <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center text-accent border-2 border-white/30 shadow-glow-accent">
+                  <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center text-accent border-2 border-white/30">
                     <Clock size={28} strokeWidth={2} />
                   </div>
                   <div>
@@ -144,7 +144,7 @@ const About: React.FC = () => {
              <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
              
              <div className="relative z-10 max-w-3xl mx-auto">
-                <h2 className="text-3xl md:text-6xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">Start Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-light via-white to-sky-light drop-shadow-glow-sky">Expedition</span></h2>
+                <h2 className="text-3xl md:text-6xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">Start Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-light via-white to-sky-light">Expedition</span></h2>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                     <Link to="/map" className="w-full sm:w-auto">
                       <Button variant="secondary" size="lg" className="h-16 px-14 text-lg w-full uppercase tracking-[0.2em] font-black border-white/40">

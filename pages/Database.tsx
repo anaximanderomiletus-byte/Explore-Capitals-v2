@@ -73,13 +73,13 @@ interface MobileCountryCardProps {
 
 const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick, isTerritory, isDeFacto, sovereignty }) => {
   let titleColor = 'text-white';
-  if (isTerritory) titleColor = 'text-accent drop-shadow-glow';
-  if (isDeFacto) titleColor = 'text-warning drop-shadow-glow';
+  if (isTerritory) titleColor = 'text-accent';
+  if (isDeFacto) titleColor = 'text-warning';
 
   return (
     <div 
       onClick={onClick}
-      className="bg-white/10 backdrop-blur-3xl p-6 rounded-2xl shadow-glass border-2 border-white/40 transition-all hover:bg-white/15 cursor-pointer flex flex-col transform-gpu overflow-hidden relative group"
+      className="bg-white/10 backdrop-blur-3xl p-6 rounded-2xl border-2 border-white/40 transition-all hover:bg-white/15 cursor-pointer flex flex-col transform-gpu overflow-hidden relative group"
     >
       <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       <div className="flex items-start justify-between mb-6 relative z-10">
@@ -92,7 +92,7 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick,
             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">{country.capital}</div>
             {(isTerritory || isDeFacto) && (
               <div className="text-[8px] font-black uppercase tracking-[0.2em] text-primary mt-2 flex items-center gap-1.5">
-                <div className="w-1 h-1 rounded-full bg-primary animate-pulse shadow-logo-glow" />
+                <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
                 {sovereignty || 'Limited Recognition'}
               </div>
             )}
@@ -187,8 +187,8 @@ const Database: React.FC = () => {
     <div className="pt-32 pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[180px] animate-pulse-slow opacity-80" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-[150px] animate-pulse-slow opacity-60" />
+        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/3 rounded-full blur-[180px] opacity-30" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/2 rounded-full blur-[150px] opacity-20" />
       </div>
 
       <SEO 
@@ -199,7 +199,7 @@ const Database: React.FC = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/30 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 shadow-glow-sky relative overflow-hidden group">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/30 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                <Globe size={12} className="animate-spin-slow relative z-10 text-sky-light" />
                <span className="relative z-10 drop-shadow-md">GLOBAL DATABASE</span>
@@ -224,12 +224,12 @@ const Database: React.FC = () => {
         </div>
 
         {/* Sovereign Countries Section */}
-        <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border-2 border-white/40 mb-16 relative group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+        <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 mb-16 relative group">
+          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
           <div className="overflow-x-auto relative z-10">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-white/10 border-b border-white/30">
+                <tr className="bg-white/5 border-b border-white/15">
                   <SortHeader label="Country" field="name" sortConfig={sortConfig} onSort={handleSort} />
                   <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
                   <SortHeader label="Region" field="region" sortConfig={sortConfig} onSort={handleSort} />
@@ -254,7 +254,7 @@ const Database: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{country.capital}</td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 shadow-glow-sky/30 group-hover/row:shadow-glow-sky group-hover/row:bg-sky/50 transition-all whitespace-nowrap">
+                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 group-hover/row:bg-sky/50 transition-all whitespace-nowrap">
                         {country.region}
                       </span>
                     </td>
@@ -276,7 +276,7 @@ const Database: React.FC = () => {
         {/* --- Officially Recognized Territories Section --- */}
         <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-accent/30 rounded-xl text-white shadow-glow-accent/30 border border-white/40 flex items-center justify-center relative overflow-hidden">
+                <div className="w-12 h-12 bg-accent/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                     <Globe size={24} className="relative z-10 drop-shadow-md" />
                 </div>
@@ -286,12 +286,12 @@ const Database: React.FC = () => {
                 </div>
             </div>
             
-            <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border-2 border-white/40 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-accent/20 border-b border-white/30">
+                    <tr className="bg-accent/10 border-b border-white/20">
                       <SortHeader label="Territory" field="name" sortConfig={sortConfig} onSort={handleSort} />
                       <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Sovereignty</th>
                       <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
@@ -314,7 +314,7 @@ const Database: React.FC = () => {
                             <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-accent transition-colors drop-shadow-sm">{territory.name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em] drop-shadow-glow">
+                        <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
                             {territory.sovereignty}
                         </td>
                         <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{territory.capital}</td>
@@ -341,7 +341,7 @@ const Database: React.FC = () => {
         {/* --- De Facto States Section --- */}
         <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-warning/30 rounded-xl text-white shadow-glow-warning/30 border border-white/40 flex items-center justify-center relative overflow-hidden">
+                <div className="w-12 h-12 bg-warning/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                     <AlertTriangle size={24} className="relative z-10 drop-shadow-md" />
                 </div>
@@ -351,12 +351,12 @@ const Database: React.FC = () => {
                 </div>
             </div>
             
-            <div className="hidden lg:block bg-white/20 backdrop-blur-3xl rounded-3xl shadow-glass overflow-hidden border-2 border-white/40 relative group">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
+            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               <div className="overflow-x-auto relative z-10">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-warning/20 border-b border-white/30">
+                    <tr className="bg-warning/10 border-b border-white/20">
                       <SortHeader label="Entity" field="name" sortConfig={sortConfig} onSort={handleSort} />
                       <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Status</th>
                       <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
@@ -379,7 +379,7 @@ const Database: React.FC = () => {
                             <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-warning transition-colors drop-shadow-sm">{state.name}</span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-warning uppercase tracking-[0.2em] drop-shadow-glow">
+                        <td className="px-6 py-4 text-[9px] font-bold text-warning uppercase tracking-[0.2em]">
                             {state.sovereignty}
                         </td>
                         <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{state.capital}</td>
@@ -404,7 +404,7 @@ const Database: React.FC = () => {
         </div>
 
         {processedCountries.length === 0 && processedTerritories.length === 0 && processedDeFacto.length === 0 && (
-          <div className="bg-white/5 backdrop-blur-3xl rounded-2xl p-16 text-center border border-white/10 shadow-glass animate-in zoom-in-95">
+          <div className="bg-white/5 backdrop-blur-3xl rounded-2xl p-16 text-center border border-white/10 animate-in zoom-in-95">
             <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
                <Search className="w-8 h-8 text-white/10" />
             </div>
@@ -420,9 +420,9 @@ const Database: React.FC = () => {
               variant="secondary" 
               size="md" 
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="group h-14 px-10 border border-white/20 hover:border-white/40 shadow-glass-bubble text-[10px] uppercase tracking-[0.3em]"
+              className="group h-14 px-10 border border-white/20 hover:border-white/40 text-[10px] uppercase tracking-[0.3em]"
             >
-              <ArrowUp size={16} className="mr-2 transition-transform text-sky-light drop-shadow-glow-sky" />
+              <ArrowUp size={16} className="mr-2 transition-transform text-sky-light" />
               <span className="relative z-10">Back to Top</span>
             </Button>
           </div>

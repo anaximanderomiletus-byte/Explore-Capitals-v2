@@ -46,7 +46,7 @@ const AccountMenu: React.FC = () => {
       <Link
         to="/auth"
         state={{ from: location }}
-        className="shing-btn group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/10 backdrop-blur-xl border-2 border-white/60 text-white/50 hover:text-sky-light hover:border-sky/50 transition-all shadow-glass overflow-hidden"
+        className="shing-btn group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/10 backdrop-blur-xl border-2 border-white/60 text-white/50 hover:text-sky-light hover:border-sky/50 transition-all overflow-hidden"
         aria-label="Sign in"
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-40 transition-opacity" />
@@ -54,7 +54,7 @@ const AccountMenu: React.FC = () => {
           <span className="shing-glare" />
         </span>
         <UserIcon size={18} strokeWidth={2.5} className="relative z-10" />
-        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky rounded-full border border-surface-dark shadow-glow-sky z-20" />
+        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky rounded-full border border-surface-dark z-20" />
       </Link>
     );
   }
@@ -74,8 +74,8 @@ const AccountMenu: React.FC = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`shing-btn relative flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all overflow-hidden shadow-glass ${
-          isOpen ? 'border-sky-light shadow-glow-sky' : 'border-white/60 hover:border-sky/40'
+        className={`shing-btn relative flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all overflow-hidden ${
+          isOpen ? 'border-sky-light shadow-[0_0_8px_rgba(119,182,234,0.15)]' : 'border-white/60 hover:border-sky/40'
         } ${avatar ? avatar.color : 'bg-gel-blue'} text-white font-display font-bold`}
       >
         {avatar ? (
@@ -92,7 +92,7 @@ const AccountMenu: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-64 bg-surface-dark/90 backdrop-blur-3xl rounded-2xl shadow-[0_20px_50px_rgba(0,194,255,0.3)] border border-white/20 p-2.5 z-[3000] animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute right-0 mt-3 w-64 bg-surface-dark/90 backdrop-blur-3xl rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.25)] border border-white/20 p-2.5 z-[3000] animate-in fade-in zoom-in-95 duration-200">
           <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-2xl" />
           <div className="px-4 py-3 border-b border-white/10 mb-2 relative z-10">
             <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 mb-0.5">Authenticated Citizen</p>
@@ -105,7 +105,7 @@ const AccountMenu: React.FC = () => {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-sky-light transition-all group"
             >
-              <Award size={18} className="text-sky-light drop-shadow-glow-sky" />
+              <Award size={18} className="text-sky-light" />
               EXPEDITION STATS
             </Link>
             

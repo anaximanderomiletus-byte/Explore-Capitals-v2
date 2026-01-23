@@ -57,8 +57,8 @@ const Games: React.FC = () => {
     <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] animate-pulse-slow opacity-80" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-[150px] animate-pulse-slow opacity-60" />
+        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
       </div>
 
       <SEO 
@@ -80,7 +80,7 @@ const Games: React.FC = () => {
 
           <button 
             onClick={playRandomGame}
-            className="flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl text-[11px] font-black text-white uppercase tracking-[0.3em] hover:bg-white/20 transition-all shadow-glass group relative overflow-hidden"
+            className="flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl text-[11px] font-black text-white uppercase tracking-[0.3em] hover:bg-white/20 transition-all group relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
             <Shuffle size={18} className="text-sky-light transition-transform duration-700 relative z-10" />
@@ -92,7 +92,7 @@ const Games: React.FC = () => {
           {GAMES.map((game) => (
             <div 
               key={game.id} 
-              className={`group bg-white/20 backdrop-blur-3xl rounded-3xl overflow-hidden border-2 border-white/50 shadow-[0_20px_40px_rgba(0,194,255,0.1)] transition-all duration-700 hover:bg-white/30 relative ${game.status !== 'active' ? 'opacity-50 grayscale' : ''}`}
+              className={`group bg-white/20 backdrop-blur-3xl rounded-3xl overflow-hidden border-2 border-white/50 shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${game.status !== 'active' ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
               <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden border-b border-white/20">

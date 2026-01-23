@@ -194,11 +194,11 @@ const Navigation: React.FC = () => {
   
   let navClasses = "bg-transparent py-4 transition-all duration-500";
   let textColorClass = "text-white"; 
-  let logoBgClass = "bg-gel-blue text-white shadow-glow-sky border border-white/40";
+  let logoBgClass = "bg-gel-blue text-white border border-white/40";
 
   if (isOverMap) {
     textColorClass = "text-[#1A1C1E]"; // Deep dark color for light background
-    logoBgClass = "bg-primary text-white shadow-glow-primary border border-black/5";
+    logoBgClass = "bg-primary text-white border border-black/5";
     
     if (isScrolled) {
       navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
@@ -208,7 +208,7 @@ const Navigation: React.FC = () => {
   } else {
     // Default Mode (Dark Background Pages)
     textColorClass = "text-white";
-    logoBgClass = "bg-gel-blue text-white shadow-glow-sky border border-white/40";
+    logoBgClass = "bg-gel-blue text-white border border-white/40";
     
     if (isScrolled) {
       navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
@@ -221,7 +221,7 @@ const Navigation: React.FC = () => {
   if (isMobileMenuOpen) {
     navClasses = "bg-transparent py-4";
     textColorClass = "text-white";
-    logoBgClass = "bg-primary text-white shadow-glow-primary";
+    logoBgClass = "bg-primary text-white";
   }
 
   // Logic to hide header on Map Page in Landscape mode
@@ -243,7 +243,7 @@ const Navigation: React.FC = () => {
                 <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
               </div>
               <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
-                Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] drop-shadow-[0_0_15px_rgba(0,194,255,0.8)]">Capitals</span>
+                Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
               </span>
             </Link>
           </div>
@@ -255,7 +255,7 @@ const Navigation: React.FC = () => {
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-              const glowClass = isOverMap ? 'drop-shadow-sm' : 'drop-shadow-glow-sky';
+              const glowClass = isOverMap ? '' : '';
               
               return (
                 <Link 
@@ -270,7 +270,7 @@ const Navigation: React.FC = () => {
                   {link.label}
                   <div className={`absolute -bottom-1.5 left-0 h-0.5 transition-all duration-300 ${
                     active 
-                      ? `w-full ${isOverMap ? 'bg-primary shadow-sm' : 'bg-sky-light shadow-glow-sky'}` 
+                      ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
                       : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
                   }`} />
                 </Link>
@@ -279,7 +279,7 @@ const Navigation: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 border-l border-white/10 pl-8 shrink-0">
               <Link to="/games" className="shrink-0">
-                <Button variant="primary" size="sm" className="shadow-glow-sky h-9 px-5 border border-white/20 text-[11px] uppercase tracking-wider whitespace-nowrap">
+                <Button variant="primary" size="sm" className="h-9 px-5 border border-white/20 text-[11px] uppercase tracking-wider whitespace-nowrap">
                   Play Now
                 </Button>
               </Link>
@@ -387,7 +387,7 @@ const Navigation: React.FC = () => {
             className="mt-6"
           >
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg font-black uppercase tracking-widest shadow-glow-sky">
+              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg font-black uppercase tracking-widest">
                 Play Now
               </Button>
             </Link>
