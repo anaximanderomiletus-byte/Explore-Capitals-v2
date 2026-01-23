@@ -284,7 +284,7 @@ export default function LandmarkLegend() {
                    <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:py-4 overflow-hidden relative z-10">
                       <p className="text-sky-light font-black text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
                       <div 
-                       className="relative w-full max-w-sm md:max-w-md h-48 md:h-64 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 group"
+                       className="relative w-full max-w-sm md:max-w-md h-48 md:h-64 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20"
                        style={{ 
                          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 -20px 40px -20px rgba(56,189,248,0.15) inset',
                          transform: 'perspective(1000px) rotateX(2deg)',
@@ -295,7 +295,7 @@ export default function LandmarkLegend() {
                           <img 
                               src={currentQuestion.imageUrl} 
                               alt="Landmark" 
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 pointer-events-none" />
                           {/* Frame effect - top highlight */}
