@@ -19,8 +19,11 @@
     <meta name="keywords" content="world capitals, geography games, interactive world map, country database, educational geography, capital city quiz" />
     <link rel="canonical" href="https://explorecapitals.com/" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./logo.png">
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
+    <link rel="mask-icon" href="/logo.png" color="#00C2FF">
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Google Fonts: Inter (Variable) - Preconnect for faster loading -->
@@ -629,6 +632,28 @@
       /* Fix Firefox button inner focus ring */
       button::-moz-focus-inner {
         border: 0;
+      }
+      
+      /* ===== PREVENT iOS ZOOM ON INPUT FOCUS ===== */
+      /* iOS Safari zooms in on inputs with font-size < 16px - this prevents that */
+      @media screen and (max-width: 1024px) {
+        input,
+        select,
+        textarea,
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="number"],
+        input[type="date"],
+        input[type="datetime-local"],
+        input[type="month"],
+        input[type="week"],
+        input[type="time"] {
+          font-size: 16px !important;
+        }
       }
       
       /* Ensure consistent line-height across browsers */
