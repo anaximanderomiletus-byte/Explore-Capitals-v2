@@ -1,8 +1,18 @@
 
 import { COUNTRY_ALIASES } from './data/aliases';
 import { Country, Game } from './types';
-export { TERRITORIES } from './data/territories';
-export { DE_FACTO_COUNTRIES } from './data/deFacto';
+import { TERRITORIES as RAW_TERRITORIES } from './data/territories';
+import { DE_FACTO_COUNTRIES as RAW_DE_FACTO } from './data/deFacto';
+
+export const TERRITORIES: Country[] = RAW_TERRITORIES.map(t => ({
+  ...t,
+  alsoKnownAs: COUNTRY_ALIASES[t.id]
+}));
+
+export const DE_FACTO_COUNTRIES: Country[] = RAW_DE_FACTO.map(df => ({
+  ...df,
+  alsoKnownAs: COUNTRY_ALIASES[df.id]
+}));
 
 const RAW_COUNTRIES: Country[] = [
   // --- A ---

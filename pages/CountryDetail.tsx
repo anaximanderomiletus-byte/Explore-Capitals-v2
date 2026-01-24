@@ -57,7 +57,7 @@ const CountryDetail: React.FC = () => {
 
   const controlledTerritories = useMemo(() => {
     if (!country || isTerritory || isDeFacto) return [];
-    return TERRITORIES.filter(t => t.sovereignty === country.name).sort((a, b) => a.name.localeCompare(b.name));
+    return (TERRITORIES as any[]).filter(t => t.sovereignty === country.name).sort((a, b) => a.name.localeCompare(b.name));
   }, [country, isTerritory, isDeFacto]);
 
   // Determine scenic image and caption for the secondary card
@@ -152,11 +152,6 @@ const CountryDetail: React.FC = () => {
     .map((char: any) => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
     .join('');
 
-  // Filter aliases to exclude the official name and the standard country name to avoid redundancy
-  const filteredAliases = country.alsoKnownAs?.filter(alias => 
-    alias !== officialName && alias !== country.name
-  );
-
   // Reusable Stat Component for the card
   const StatItem = ({ label, value, icon: Icon }: { label: string, value: string | React.ReactNode, icon: any }) => (
     <div className="flex flex-col gap-2">
@@ -187,11 +182,11 @@ const CountryDetail: React.FC = () => {
     badges?: { isTerritory?: boolean; isDeFacto?: boolean; sovereignty?: string };
   }) => (
     <div className="flex justify-center w-full py-2">
-      <div className={`bg-[#FCFCFC] p-3 sm:p-4 pb-10 sm:pb-14 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-sm ${type === 'flag' ? '-rotate-1' : 'rotate-2'}`}>
+      <div className={`bg-[#FCFCFC] p-3 sm:p-4 pb-8 sm:pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-sm ${type === 'flag' ? '-rotate-1' : 'rotate-2'}`}>
         {/* Subtle Paper Texture */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
         
-        <div className={`w-full ${type === 'flag' ? 'aspect-[4/3]' : 'aspect-square'} bg-[#F5F5F0] overflow-hidden relative shadow-inner`}>
+        <div className={`w-full aspect-square bg-[#F5F5F0] overflow-hidden relative shadow-inner`}>
           {type === 'flag' ? (
             <>
               {/* Static Ink Stamp for flag */}
@@ -260,8 +255,8 @@ const CountryDetail: React.FC = () => {
                 </div>
               </>
             ) : (
-              <p className="text-base sm:text-lg font-display font-black text-gray-800 tracking-tighter leading-tight italic drop-shadow-sm flex items-center justify-center gap-2">
-                <MapPin size={18} className="text-sky shrink-0 fill-sky/10" strokeWidth={2.5} />
+              <p className="text-2xl sm:text-3xl font-cursive text-gray-700 leading-none flex items-center justify-center gap-2 py-2">
+                <MapPin size={20} className="text-sky/70 shrink-0" strokeWidth={2} />
                 {caption}
               </p>
             )}
@@ -292,11 +287,11 @@ const CountryDetail: React.FC = () => {
             {/* 1. Flag Section - Physical Photo Print (Desktop Only) - RIGHT SIDE */}
             <div className="hidden lg:flex lg:col-span-5 lg:col-start-8 lg:row-start-1 flex-col gap-5 mt-20">
                 <div className="relative group">
-                    <div className="bg-[#FCFCFC] p-4 pb-14 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-1 transition-all duration-700 flex flex-col items-center group/flag relative overflow-hidden">
+                    <div className="bg-[#FCFCFC] p-4 pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-1 group-hover:rotate-0 transition-all duration-700 flex flex-col items-center group/flag relative overflow-hidden w-full max-w-sm mx-auto">
                         {/* Subtle Paper Texture */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
                         
-                        <div className="w-full h-52 md:h-64 bg-[#F5F5F0] overflow-hidden relative group/image shadow-inner">
+                        <div className="w-full aspect-square bg-[#F5F5F0] overflow-hidden relative group/image shadow-inner">
                             {/* Static Ink Stamp */}
                             <div className="absolute top-6 right-6 z-20 transform rotate-12 opacity-[0.15] pointer-events-none flex items-center justify-center scale-75 md:scale-90">
                                 <div className="border-[2.5px] border-black rounded-full p-1 flex items-center justify-center">
@@ -391,8 +386,8 @@ const CountryDetail: React.FC = () => {
                         <Scroll className="text-sky-light opacity-[0.1] w-24 h-24" />
                      </div>
                      
-                     <header className="mb-8 lg:mb-10 pb-6 lg:pb-8 border-b border-white/20 shrink-0 relative z-10">
-                        <div className="flex items-center gap-4 mb-6 lg:mb-8">
+                     <header className="mb-6 lg:mb-8 pb-4 lg:pb-6 border-b border-white/20 shrink-0 relative z-10">
+                        <div className="flex items-center gap-4 mb-4 lg:mb-6">
                             <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-sky/30 flex items-center justify-center border border-white/40 relative overflow-hidden shrink-0">
                                 <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                                 <Compass className="text-sky-light relative z-10" size={20} />
@@ -404,8 +399,8 @@ const CountryDetail: React.FC = () => {
                             </div>
                         </div>
                         
-                        <div className="space-y-4 pl-0.5">
-                            <div className="mb-2">
+                        <div className="space-y-2 pl-0.5">
+                            <div>
                                 <span className="font-display font-bold text-base lg:text-lg text-white/80 leading-tight uppercase tracking-wide italic drop-shadow-sm">{officialName}</span>
                             </div>
                             
@@ -422,13 +417,6 @@ const CountryDetail: React.FC = () => {
                                             DE FACTO
                                         </span>
                                     )}
-                                </div>
-                            )}
-                            
-                            {filteredAliases && filteredAliases.length > 0 && (
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                                    <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.3em] shrink-0">Also Known As</span>
-                                    <span className="font-bold text-white/60 text-xs tracking-[0.1em] uppercase">{filteredAliases.join(' • ')}</span>
                                 </div>
                             )}
                         </div>
@@ -586,8 +574,8 @@ const CountryDetail: React.FC = () => {
             </div>
 
             {/* 3. Scenery Section (Desktop Only) - RIGHT SIDE */}
-            <div className="hidden lg:block lg:col-span-5 lg:col-start-8 lg:row-start-2 w-full -mt-3">
-                 <div className="bg-[#FCFCFC] p-4 pb-14 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 transition-all duration-700 flex flex-col items-center group/scenery relative overflow-hidden">
+            <div className="hidden lg:block lg:col-span-5 lg:col-start-8 lg:row-start-2 w-full -mt-3 group">
+                 <div className="bg-[#FCFCFC] p-4 pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 group-hover:rotate-0 transition-all duration-700 flex flex-col items-center group/scenery relative overflow-hidden w-full max-w-sm mx-auto">
                     {/* Subtle Paper Texture */}
                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
                     
@@ -617,9 +605,9 @@ const CountryDetail: React.FC = () => {
                         <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.8)] pointer-events-none" />
                     </div>
                     
-                    <div className="mt-6 w-full px-2 text-center">
-                        <p className="text-xl md:text-2xl font-display font-black text-gray-800 tracking-tighter leading-tight italic drop-shadow-sm flex items-center justify-center gap-2">
-                            <MapPin size={24} className="text-sky shrink-0 fill-sky/10" strokeWidth={2.5} />
+                    <div className="mt-8 w-full px-2 text-center">
+                        <p className="text-3xl font-cursive text-gray-700 flex items-center justify-center gap-2 py-2">
+                            <MapPin size={24} className="text-sky/70 shrink-0" strokeWidth={2} />
                             {scenicData?.caption}
                         </p>
                     </div>

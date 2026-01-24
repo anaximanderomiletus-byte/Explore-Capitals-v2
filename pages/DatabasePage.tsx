@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect, useCallback, useRef, memo, startTransition } from 'react';
-import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle } from 'lucide-react';
+import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle, Shuffle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
@@ -45,8 +45,8 @@ const SortHeader: React.FC<SortHeaderProps> = memo(({ label, field, align = 'lef
   const isAsc = sortConfig?.direction === 'asc';
 
   return (
-    <th 
-      className={`px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors group select-none ${align === 'right' ? 'text-right' : 'text-left'} whitespace-nowrap`}
+    <div 
+      className={`px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors group select-none ${align === 'right' ? 'text-right' : 'text-left'} whitespace-nowrap h-full w-full`}
       onClick={() => onSort(field)}
     >
       <div className={`flex items-center gap-3 ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
@@ -57,7 +57,7 @@ const SortHeader: React.FC<SortHeaderProps> = memo(({ label, field, align = 'lef
           {isActive ? (isAsc ? <ArrowUp size={12} /> : <ArrowDown size={12} />) : <ArrowUpDown size={12} />}
         </span>
       </div>
-    </th>
+    </div>
   );
 });
 
@@ -244,7 +244,7 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
   hoverColor,
   showSovereignty,
   titleColor,
-  headerBgClass = 'bg-white/5'
+  headerBgClass = 'bg-surface-dark'
 }) => {
   const ROW_HEIGHT = 65; // Approximate row height in pixels
   const BUFFER = 5; // Extra rows to render above/below viewport
@@ -288,20 +288,30 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
       className="overflow-auto rounded-3xl border border-white/20 bg-white/10"
       style={{ maxHeight: containerHeight }}
     >
-      <table className="w-full text-left border-collapse">
-        <thead className="sticky top-0 z-10">
-          <tr className={`${headerBgClass} border-b border-white/15`}>
-            <SortHeader label={showSovereignty ? "Territory" : "Country"} field="name" sortConfig={sortConfig} onSort={onSort} />
+      <table className="w-full text-left border-collapse table-fixed">
+        <thead className="sticky top-0 z-20">
+          <tr className={`${headerBgClass} border-b border-white/15 backdrop-blur-md`}>
+            <th className="w-[30%]">
+              <SortHeader label={showSovereignty ? "Territory" : "Country"} field="name" sortConfig={sortConfig} onSort={onSort} />
+            </th>
             {showSovereignty && (
-              <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">
+              <th className="w-[15%] px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">
                 {showSovereignty ? 'Sovereignty' : 'Status'}
               </th>
             )}
-            <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={onSort} />
-            <SortHeader label={showSovereignty ? "Sector" : "Region"} field="region" sortConfig={sortConfig} onSort={onSort} />
-            <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={onSort} align="right" />
+            <th className={showSovereignty ? "w-[20%]" : "w-[20%]"}>
+              <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={onSort} />
+            </th>
+            <th className={showSovereignty ? "w-[15%]" : "w-[15%]"}>
+              <SortHeader label={showSovereignty ? "Sector" : "Region"} field="region" sortConfig={sortConfig} onSort={onSort} />
+            </th>
+            <th className={showSovereignty ? "w-[20%]" : "w-[15%]"}>
+              <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={onSort} align="right" />
+            </th>
             {!showSovereignty && (
-              <SortHeader label="Area (km²)" field="area" sortConfig={sortConfig} onSort={onSort} align="right" />
+              <th className="w-[20%]">
+                <SortHeader label="Area (km²)" field="area" sortConfig={sortConfig} onSort={onSort} align="right" />
+              </th>
             )}
           </tr>
         </thead>
@@ -424,31 +434,83 @@ const sortAndFilter = <T extends Country>(
   if (!list) return [];
   
   const searchLower = (search || '').toLowerCase().trim();
+  const searchWithoutThe = searchLower.startsWith('the ') ? searchLower.replace(/^the\s+/, '') : searchLower;
   
-  let filtered = searchLower 
-    ? list.filter(c => {
-        if (!c) return false;
-        return (c.name || '').toLowerCase().includes(searchLower) ||
-               (c.capital || '').toLowerCase().includes(searchLower) ||
-               (c.region || '').toLowerCase().includes(searchLower);
-      })
-    : [...list];
+  if (!searchLower) {
+    if (sortConfig) {
+      return [...list].sort((a, b) => {
+        if (!a || !b) return 0;
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
 
-  if (sortConfig) {
-    filtered.sort((a, b) => {
-      if (!a || !b) return 0;
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          return sortConfig.direction === 'asc' 
+            ? aValue.localeCompare(bValue) 
+            : bValue.localeCompare(aValue);
+        }
+        return 0;
+      });
+    }
+    return [...list];
+  }
 
+  // Scoring-based filtering
+  const scored = list
+    .map(item => {
+      if (!item) return null;
+      const name = (item.name || '').toLowerCase();
+      const capital = (item.capital || '').toLowerCase();
+      const region = (item.region || '').toLowerCase();
+      const aliases = (item.alsoKnownAs || []).map(a => a.toLowerCase());
+      
+      let score = 0;
+
+      // Exact name match (highest priority)
+      if (name === searchLower || name === searchWithoutThe) score += 100;
+      // Name starts with search
+      else if (name.startsWith(searchLower) || name.startsWith(searchWithoutThe)) score += 80;
+      // Alias exact match
+      else if (aliases.some(a => a === searchLower || a === searchWithoutThe)) score += 75;
+      // Name contains search as a word boundary
+      else if (name.includes(' ' + searchLower) || name.includes(' ' + searchWithoutThe)) score += 60;
+      // Alias starts with search
+      else if (aliases.some(a => a.startsWith(searchLower) || a.startsWith(searchWithoutThe))) score += 55;
+      // Name contains search
+      else if (name.includes(searchLower) || name.includes(searchWithoutThe)) score += 40;
+      // Alias contains search
+      else if (aliases.some(a => a.includes(searchLower) || a.includes(searchWithoutThe))) score += 35;
+
+      // Capital matches
+      if (capital === searchLower || capital === searchWithoutThe) score += 30;
+      else if (capital.startsWith(searchLower) || capital.startsWith(searchWithoutThe)) score += 20;
+      else if (capital.includes(searchLower) || capital.includes(searchWithoutThe)) score += 10;
+
+      // Region matches (lowest priority)
+      if (region.includes(searchLower) || region.includes(searchWithoutThe)) score += 5;
+
+      return score > 0 ? { item, score } : null;
+    })
+    .filter((x): x is { item: T, score: number } => x !== null);
+
+  // Sort by score first, then by the user's chosen sort config
+  scored.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    
+    if (sortConfig) {
+      const aValue = a.item[sortConfig.key];
+      const bValue = b.item[sortConfig.key];
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortConfig.direction === 'asc' 
           ? aValue.localeCompare(bValue) 
           : bValue.localeCompare(aValue);
       }
-      return 0;
-    });
-  }
-  return filtered;
+    }
+    return 0;
+  });
+
+  return scored.map(x => x.item);
 };
 
 const DatabasePage: React.FC = () => {
@@ -484,6 +546,13 @@ const DatabasePage: React.FC = () => {
 
   const handleCountryClick = useCallback((id: string) => {
     navigate(`/country/${id}`);
+  }, [navigate]);
+
+  const handleRandomSearch = useCallback(() => {
+    const allItems = [...MOCK_COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES];
+    if (allItems.length === 0) return;
+    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+    navigate(`/country/${randomItem.id}`);
   }, [navigate]);
 
   // Use pre-sorted data for initial render (no search, default sort)
@@ -527,7 +596,7 @@ const DatabasePage: React.FC = () => {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
                <Globe size={12} className="relative z-10 text-sky-light" />
@@ -537,17 +606,28 @@ const DatabasePage: React.FC = () => {
             <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">Detailed data for 195 sovereign states.</p>
           </div>
           
-          <div className="relative w-full md:w-[400px] group">
-            <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-white/40 group-focus-within:text-sky-light transition-colors duration-300" />
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
+            <button
+              onClick={handleRandomSearch}
+              className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[58px]"
+              title="Random Search"
+            >
+              <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">Random</span>
+            </button>
+
+            <div className="relative w-full md:w-[400px] group">
+              <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-white/40 group-focus-within:text-sky-light transition-colors duration-300" />
+              </div>
+              <input
+                type="text"
+                placeholder="SEARCH COUNTRIES..."
+                className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-4 focus:ring-sky/20 focus:border-white/60 focus:bg-white/20 transition-all duration-300 h-[58px]"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
             </div>
-            <input
-              type="text"
-              placeholder="SEARCH COUNTRIES..."
-              className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-4 focus:ring-sky/20 focus:border-white/60 focus:bg-white/20 transition-all duration-300"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
           </div>
         </div>
 
@@ -591,7 +671,7 @@ const DatabasePage: React.FC = () => {
                 hoverColor="hover:bg-accent/20"
                 showSovereignty={true}
                 titleColor="group-hover/row:text-accent"
-                headerBgClass="bg-accent/10"
+                headerBgClass="bg-accent/10 backdrop-blur-md"
               />
             </div>
 
@@ -626,7 +706,7 @@ const DatabasePage: React.FC = () => {
                 hoverColor="hover:bg-warning/20"
                 showSovereignty={true}
                 titleColor="group-hover/row:text-warning"
-                headerBgClass="bg-warning/10"
+                headerBgClass="bg-warning/10 backdrop-blur-md"
               />
             </div>
 
