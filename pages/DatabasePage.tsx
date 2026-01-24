@@ -1,6 +1,6 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
-import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Banknote, Languages, Globe, AlertTriangle } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useCallback, useRef, memo } from 'react';
+import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
@@ -11,6 +11,21 @@ import Button from '../components/Button';
 type SortKey = 'name' | 'capital' | 'region' | 'population' | 'area';
 type SortDirection = 'asc' | 'desc';
 
+// Debounce hook for search input
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 interface SortHeaderProps {
   label: string;
   field: SortKey;
@@ -19,7 +34,7 @@ interface SortHeaderProps {
   onSort: (key: SortKey) => void;
 }
 
-const SortHeader: React.FC<SortHeaderProps> = ({ label, field, align = 'left', sortConfig, onSort }) => {
+const SortHeader: React.FC<SortHeaderProps> = memo(({ label, field, align = 'left', sortConfig, onSort }) => {
   const isActive = sortConfig?.key === field;
   const isAsc = sortConfig?.direction === 'asc';
 
@@ -38,31 +53,120 @@ const SortHeader: React.FC<SortHeaderProps> = ({ label, field, align = 'left', s
       </div>
     </th>
   );
+});
+
+SortHeader.displayName = 'SortHeader';
+
+// Helper to get ISO code for flags - memoized
+const countryCodeCache = new Map<string, string>();
+const getCountryCode = (emoji: string): string => {
+  if (countryCodeCache.has(emoji)) {
+    return countryCodeCache.get(emoji)!;
+  }
+  const code = Array.from(emoji)
+    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
+    .join('');
+  countryCodeCache.set(emoji, code);
+  return code;
 };
 
-// Helper to get ISO code for flags
-const getCountryCode = (emoji: string) => {
-    return Array.from(emoji)
-        .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-        .join('');
-};
-
-const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = ({ country, size }) => {
+// Lazy loading flag component with IntersectionObserver
+const LazyFlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef<HTMLDivElement>(null);
+  
   const code = getCountryCode(country.flag);
   const width = size === 'small' ? 'w-10' : 'w-16';
   const height = size === 'small' ? 'h-7' : 'h-11';
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px', threshold: 0 }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
   
   return (
-    <div className={`${width} ${height} flex items-center justify-center`}>
-      <img 
-        src={`https://flagcdn.com/w80/${code}.png`} 
-        alt={`${country.name} Flag`}
-        className="w-full h-full object-contain drop-shadow-lg"
-      />
+    <div ref={imgRef} className={`${width} ${height} flex items-center justify-center bg-white/5 rounded`}>
+      {isVisible && (
+        <img 
+          src={`https://flagcdn.com/w80/${code}.png`} 
+          alt={`${country.name} Flag`}
+          className={`w-full h-full object-contain transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+        />
+      )}
     </div>
   );
-};
+});
 
+LazyFlagIcon.displayName = 'LazyFlagIcon';
+
+// Memoized table row component
+interface TableRowProps {
+  country: Country;
+  onClick: () => void;
+  hoverColor?: string;
+  showSovereignty?: boolean;
+  sovereignty?: string;
+  titleColor?: string;
+}
+
+const TableRow: React.FC<TableRowProps> = memo(({ 
+  country, 
+  onClick, 
+  hoverColor = 'hover:bg-white/25',
+  showSovereignty = false,
+  sovereignty,
+  titleColor = 'group-hover/row:text-sky-light'
+}) => (
+  <tr 
+    onClick={onClick}
+    className={`group/row ${hoverColor} transition-colors duration-200 cursor-pointer`}
+  >
+    <td className="px-6 py-4 whitespace-nowrap">
+      <div className="flex items-center gap-4">
+        <div className="shrink-0">
+          <LazyFlagIcon country={country} size="small" />
+        </div>
+        <span className={`font-bold text-sm text-white/90 uppercase tracking-tighter ${titleColor} transition-colors`}>{country.name}</span>
+      </div>
+    </td>
+    {showSovereignty && (
+      <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
+        {sovereignty}
+      </td>
+    )}
+    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{country.capital}</td>
+    <td className="px-6 py-4">
+      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 whitespace-nowrap">
+        {country.region}
+      </span>
+    </td>
+    <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{country.population}</td>
+    {!showSovereignty && (
+      <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{country.area}</td>
+    )}
+  </tr>
+));
+
+TableRow.displayName = 'TableRow';
+
+// Memoized mobile card component
 interface MobileCountryCardProps {
   country: Country;
   onClick: () => void;
@@ -71,7 +175,7 @@ interface MobileCountryCardProps {
   sovereignty?: string;
 }
 
-const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick, isTerritory, isDeFacto, sovereignty }) => {
+const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onClick, isTerritory, isDeFacto, sovereignty }) => {
   let titleColor = 'text-white';
   if (isTerritory) titleColor = 'text-accent';
   if (isDeFacto) titleColor = 'text-warning';
@@ -79,35 +183,35 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick,
   return (
     <div 
       onClick={onClick}
-      className="bg-white/10 backdrop-blur-3xl p-6 rounded-2xl border border-white/40 transition-all hover:bg-white/15 cursor-pointer flex flex-col transform-gpu overflow-hidden relative group"
+      className="bg-white/10 p-6 rounded-2xl border border-white/40 transition-colors hover:bg-white/15 cursor-pointer flex flex-col overflow-hidden relative"
     >
       <div className="flex items-start justify-between mb-6 relative z-10">
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
-            <FlagIcon country={country} size="card" />
+            <LazyFlagIcon country={country} size="card" />
           </div>
           <div>
-            <h3 className={`font-black text-lg uppercase tracking-tighter leading-none mb-1.5 drop-shadow-md ${titleColor}`}>{country.name}</h3>
+            <h3 className={`font-black text-lg uppercase tracking-tighter leading-none mb-1.5 ${titleColor}`}>{country.name}</h3>
             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">{country.capital}</div>
             {(isTerritory || isDeFacto) && (
               <div className="text-[8px] font-black uppercase tracking-[0.2em] text-primary mt-2 flex items-center gap-1.5">
-                <div className="w-1 h-1 rounded-full bg-primary animate-pulse shadow-logo-glow" />
+                <div className="w-1 h-1 rounded-full bg-primary" />
                 {sovereignty || 'Limited Recognition'}
               </div>
             )}
           </div>
         </div>
-        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/20 group-hover:text-primary transition-colors duration-300 border border-white/10 shadow-inner">
+        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/20 border border-white/10">
           <ChevronRight size={18} />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-6 relative z-10">
-        <div className="bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+        <div className="bg-white/5 p-3 rounded-xl border border-white/10">
            <div className="text-[8px] text-white/30 uppercase font-black tracking-[0.2em] mb-1">Population</div>
            <div className="text-sm font-black text-white/80 tracking-tight">{country.population}</div>
         </div>
-        <div className="bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+        <div className="bg-white/5 p-3 rounded-xl border border-white/10">
            <div className="text-[8px] text-white/30 uppercase font-black tracking-[0.2em] mb-1 flex items-center gap-1.5">
               <Maximize2 size={10} /> Area
            </div>
@@ -117,27 +221,112 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = ({ country, onClick,
 
       <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 relative z-10">
          {country.languages.slice(0, 3).map((lang, idx) => (
-           <span key={idx} className="text-[8px] font-black uppercase tracking-[0.15em] px-3 py-1.5 bg-white/5 text-white/40 rounded-full flex items-center gap-1.5 border border-white/10 shadow-inner">
+           <span key={idx} className="text-[8px] font-black uppercase tracking-[0.15em] px-3 py-1.5 bg-white/5 text-white/40 rounded-full flex items-center gap-1.5 border border-white/10">
              <Languages size={10} className="opacity-50" /> {lang}
            </span>
          ))}
       </div>
     </div>
   );
-};
+});
 
-const sortAndFilter = <T extends Country>(list: T[], search: string, sortConfig: { key: SortKey; direction: SortDirection } | null) => {
+MobileCountryCard.displayName = 'MobileCountryCard';
+
+// Virtualized list for mobile cards
+interface VirtualizedMobileListProps {
+  items: Country[];
+  onItemClick: (id: string) => void;
+  isTerritory?: boolean;
+  isDeFacto?: boolean;
+  getSovereignty?: (item: Country) => string | undefined;
+}
+
+const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({ 
+  items, 
+  onItemClick,
+  isTerritory,
+  isDeFacto,
+  getSovereignty
+}) => {
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const containerTop = containerRef.current.offsetTop;
+      
+      // Estimate card height (roughly 200px per card including gap)
+      const cardHeight = 220;
+      const cardsPerRow = window.innerWidth >= 768 ? 2 : 1;
+      const rowHeight = cardHeight;
+      
+      const relativeScroll = Math.max(0, scrollTop - containerTop + windowHeight);
+      const visibleRows = Math.ceil(windowHeight / rowHeight) + 2; // Buffer
+      const startRow = Math.max(0, Math.floor((scrollTop - containerTop) / rowHeight) - 1);
+      
+      const start = Math.max(0, startRow * cardsPerRow);
+      const end = Math.min(items.length, (startRow + visibleRows) * cardsPerRow + cardsPerRow);
+      
+      setVisibleRange({ start, end });
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [items.length]);
+
+  const visibleItems = items.slice(visibleRange.start, visibleRange.end);
+  const topPadding = visibleRange.start * 110; // Half card height for 2 columns
+  const bottomPadding = (items.length - visibleRange.end) * 110;
+
+  return (
+    <div ref={containerRef} className="lg:hidden">
+      <div style={{ height: topPadding }} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {visibleItems.map((item, idx) => (
+          <MobileCountryCard 
+            key={item.id} 
+            country={item} 
+            onClick={() => onItemClick(item.id)}
+            isTerritory={isTerritory}
+            isDeFacto={isDeFacto}
+            sovereignty={getSovereignty?.(item)}
+          />
+        ))}
+      </div>
+      <div style={{ height: bottomPadding }} />
+    </div>
+  );
+});
+
+VirtualizedMobileList.displayName = 'VirtualizedMobileList';
+
+const sortAndFilter = <T extends Country>(
+  list: T[], 
+  search: string, 
+  sortConfig: { key: SortKey; direction: SortDirection } | null
+): T[] => {
   if (!list) return [];
   
-  const searchLower = (search || '').toLowerCase();
+  const searchLower = (search || '').toLowerCase().trim();
   
-  let filtered = list.filter(c => {
-    if (!c) return false;
-    const nameMatch = (c.name || '').toLowerCase().includes(searchLower);
-    const capitalMatch = (c.capital || '').toLowerCase().includes(searchLower);
-    const regionMatch = (c.region || '').toLowerCase().includes(searchLower);
-    return nameMatch || capitalMatch || regionMatch;
-  });
+  let filtered = searchLower 
+    ? list.filter(c => {
+        if (!c) return false;
+        return (c.name || '').toLowerCase().includes(searchLower) ||
+               (c.capital || '').toLowerCase().includes(searchLower) ||
+               (c.region || '').toLowerCase().includes(searchLower);
+      })
+    : [...list];
 
   if (sortConfig) {
     filtered.sort((a, b) => {
@@ -157,41 +346,53 @@ const sortAndFilter = <T extends Country>(list: T[], search: string, sortConfig:
 };
 
 const DatabasePage: React.FC = () => {
-  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearch = useDebounce(searchInput, 150);
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: SortDirection } | null>({ key: 'name', direction: 'asc' });
   const { setPageLoading } = useLayout();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Small delay to ensure the component has mounted and rendered correctly
-    const timer = setTimeout(() => {
-      setPageLoading(false);
-    }, 100);
-    return () => clearTimeout(timer);
+    setPageLoading(false);
   }, [setPageLoading]);
 
-  const handleSort = (key: SortKey) => {
-    let direction: SortDirection = 'asc';
-    if (sortConfig?.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
+  const handleSort = useCallback((key: SortKey) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev?.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+  }, []);
 
-  const handleCountryClick = (id: string) => {
+  const handleCountryClick = useCallback((id: string) => {
     navigate(`/country/${id}`);
-  };
+  }, [navigate]);
 
-  const processedCountries = useMemo(() => sortAndFilter(MOCK_COUNTRIES, search, sortConfig), [search, sortConfig]);
-  const processedTerritories = useMemo(() => sortAndFilter(TERRITORIES, search, sortConfig), [search, sortConfig]);
-  const processedDeFacto = useMemo(() => sortAndFilter(DE_FACTO_COUNTRIES, search, sortConfig), [search, sortConfig]);
+  const processedCountries = useMemo(() => 
+    sortAndFilter(MOCK_COUNTRIES, debouncedSearch, sortConfig), 
+    [debouncedSearch, sortConfig]
+  );
+  
+  const processedTerritories = useMemo(() => 
+    sortAndFilter(TERRITORIES, debouncedSearch, sortConfig), 
+    [debouncedSearch, sortConfig]
+  );
+  
+  const processedDeFacto = useMemo(() => 
+    sortAndFilter(DE_FACTO_COUNTRIES, debouncedSearch, sortConfig), 
+    [debouncedSearch, sortConfig]
+  );
+
+  const getTerritorysovereignty = useCallback((item: Country) => 
+    (item as Territory).sovereignty, []);
+
+  const hasResults = processedCountries.length > 0 || processedTerritories.length > 0 || processedDeFacto.length > 0;
 
   return (
     <div className="pt-32 pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
-      {/* Background Decor */}
+      {/* Simplified Background - reduced blur for performance */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[180px] animate-pulse-slow opacity-80" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-[150px] animate-pulse-slow opacity-60" />
+        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[100px] opacity-60" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/10 rounded-full blur-[80px] opacity-40" />
       </div>
 
       <SEO 
@@ -203,31 +404,30 @@ const DatabasePage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
-               <Globe size={12} className="animate-spin-slow relative z-10 text-sky-light" />
-               <span className="relative z-10 drop-shadow-md">GLOBAL DATABASE</span>
+               <Globe size={12} className="relative z-10 text-sky-light" />
+               <span className="relative z-10">GLOBAL DATABASE</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">Database</h1>
-            <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl drop-shadow-lg">Detailed data for 195 sovereign states.</p>
+            <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">Database</h1>
+            <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">Detailed data for 195 sovereign states.</p>
           </div>
           
           <div className="relative w-full md:w-[400px] group">
             <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-white/40 group-focus-within:text-sky-light transition-colors duration-500" />
+              <Search className="h-5 w-5 text-white/40 group-focus-within:text-sky-light transition-colors duration-300" />
             </div>
             <input
               type="text"
               placeholder="SEARCH COUNTRIES..."
-              className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl shadow-inner text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-8 focus:ring-sky/10 focus:border-white/60 focus:bg-white/25 transition-all duration-500"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-4 focus:ring-sky/20 focus:border-white/60 focus:bg-white/20 transition-all duration-300"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
-            <div className="absolute inset-0 bg-glossy-gradient opacity-20 rounded-2xl pointer-events-none" />
           </div>
         </div>
 
-        {/* Sovereign Countries Section */}
-        <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 mb-16 relative group">
-          <div className="overflow-x-auto relative z-10">
+        {/* Sovereign Countries Section - Desktop Table */}
+        <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20 mb-16">
+          <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-white/5 border-b border-white/15">
@@ -240,54 +440,40 @@ const DatabasePage: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-white/10">
                 {processedCountries.map((country) => (
-                  <tr 
-                    key={country.id} 
+                  <TableRow 
+                    key={country.id}
+                    country={country}
                     onClick={() => handleCountryClick(country.id)}
-                    className="group/row hover:bg-white/25 transition-all duration-500 cursor-pointer"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-4">
-                        <div className="shrink-0 transition-transform duration-500">
-                            <FlagIcon country={country} size="small" />
-                        </div>
-                        <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-sky-light transition-colors drop-shadow-sm">{country.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{country.capital}</td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-sky/30 text-white border border-white/40 group-hover/row:bg-sky/50 transition-all whitespace-nowrap">
-                        {country.region}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{country.population}</td>
-                    <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{country.area}</td>
-                  </tr>
+                  />
                 ))}
               </tbody>
             </table>
           </div>
         </div>
 
-        <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-          {processedCountries.map((country) => (
-             <MobileCountryCard key={country.id} country={country} onClick={() => handleCountryClick(country.id)} />
-          ))}
+        {/* Sovereign Countries - Mobile Virtualized List */}
+        <div className="mb-20">
+          <VirtualizedMobileList 
+            items={processedCountries}
+            onItemClick={handleCountryClick}
+          />
         </div>
 
-        {/* --- Officially Recognized Territories Section --- */}
-        <div className="mb-16">
+        {/* --- Autonomous Regions Section --- */}
+        {processedTerritories.length > 0 && (
+          <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-accent/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
-                    <Globe size={24} className="relative z-10 drop-shadow-md" />
-                </div>
-                <div>
-                    <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">Autonomous Regions</h2>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5 drop-shadow-lg">Major non-sovereign dependencies and territories.</p>
-                </div>
+              <div className="w-12 h-12 bg-accent/30 rounded-xl text-white border border-white/40 flex items-center justify-center">
+                <Globe size={24} />
+              </div>
+              <div>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">Autonomous Regions</h2>
+                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Major non-sovereign dependencies and territories.</p>
+              </div>
             </div>
             
-            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
-              <div className="overflow-x-auto relative z-10">
+            <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20">
+              <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-accent/10 border-b border-white/20">
@@ -300,57 +486,45 @@ const DatabasePage: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-white/10">
                     {processedTerritories.map((territory) => (
-                      <tr 
-                        key={territory.id} 
+                      <TableRow 
+                        key={territory.id}
+                        country={territory}
                         onClick={() => handleCountryClick(territory.id)}
-                        className="group/row hover:bg-accent/20 transition-all duration-500 cursor-pointer"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-4">
-                            <div className="shrink-0 transition-transform duration-500">
-                                <FlagIcon country={territory} size="small" />
-                            </div>
-                            <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-accent transition-colors drop-shadow-sm">{territory.name}</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
-                            {territory.sovereignty}
-                        </td>
-                        <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{territory.capital}</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-white/10 text-white border border-white/30 shadow-inner group-hover/row:bg-white/25 transition-all">
-                            {territory.region}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{territory.population}</td>
-                      </tr>
+                        hoverColor="hover:bg-accent/20"
+                        showSovereignty={true}
+                        sovereignty={territory.sovereignty}
+                        titleColor="group-hover/row:text-accent"
+                      />
                     ))}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-              {processedTerritories.map((territory) => (
-                 <MobileCountryCard key={territory.id} country={territory} onClick={() => handleCountryClick(territory.id)} isTerritory sovereignty={territory.sovereignty} />
-              ))}
-           </div>
-        </div>
+            <VirtualizedMobileList 
+              items={processedTerritories}
+              onItemClick={handleCountryClick}
+              isTerritory
+              getSovereignty={getTerritorysovereignty}
+            />
+          </div>
+        )}
 
         {/* --- De Facto States Section --- */}
-        <div className="mb-16">
+        {processedDeFacto.length > 0 && (
+          <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-warning/30 rounded-xl text-white border border-white/40 flex items-center justify-center relative overflow-hidden">
-                    <AlertTriangle size={24} className="relative z-10 drop-shadow-md" />
-                </div>
-                <div>
-                    <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">De Facto States</h2>
-                    <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5 drop-shadow-lg">Entities with limited international recognition.</p>
-                </div>
+              <div className="w-12 h-12 bg-warning/30 rounded-xl text-white border border-white/40 flex items-center justify-center">
+                <AlertTriangle size={24} />
+              </div>
+              <div>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">De Facto States</h2>
+                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Entities with limited international recognition.</p>
+              </div>
             </div>
             
-            <div className="hidden lg:block bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 relative group">
-              <div className="overflow-x-auto relative z-10">
+            <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20">
+              <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-warning/10 border-b border-white/20">
@@ -363,55 +537,42 @@ const DatabasePage: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-white/10">
                     {processedDeFacto.map((state) => (
-                      <tr 
-                        key={state.id} 
+                      <TableRow 
+                        key={state.id}
+                        country={state}
                         onClick={() => handleCountryClick(state.id)}
-                        className="group/row hover:bg-warning/20 transition-all duration-500 cursor-pointer"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-4">
-                            <div className="shrink-0 transition-transform duration-500">
-                                <FlagIcon country={state} size="small" />
-                            </div>
-                            <span className="font-bold text-sm text-white/90 uppercase tracking-tighter group-hover/row:text-warning transition-colors drop-shadow-sm">{state.name}</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-[9px] font-bold text-warning uppercase tracking-[0.2em]">
-                            {state.sovereignty}
-                        </td>
-                        <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 group-hover/row:text-white transition-colors">{state.capital}</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-white/10 text-white border border-white/30 shadow-inner group-hover/row:bg-white/25 transition-all">
-                            {state.region}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-xs font-bold text-white/80 tabular-nums text-right group-hover/row:text-white transition-colors">{state.population}</td>
-                      </tr>
+                        hoverColor="hover:bg-warning/20"
+                        showSovereignty={true}
+                        sovereignty={state.sovereignty}
+                        titleColor="group-hover/row:text-warning"
+                      />
                     ))}
                   </tbody>
                 </table>
               </div>
             </div>
 
-            <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-              {processedDeFacto.map((state) => (
-                 <MobileCountryCard key={state.id} country={state} onClick={() => handleCountryClick(state.id)} isDeFacto sovereignty={state.sovereignty} />
-              ))}
-           </div>
-        </div>
+            <VirtualizedMobileList 
+              items={processedDeFacto}
+              onItemClick={handleCountryClick}
+              isDeFacto
+              getSovereignty={getTerritorysovereignty}
+            />
+          </div>
+        )}
 
-        {processedCountries.length === 0 && processedTerritories.length === 0 && processedDeFacto.length === 0 && (
-          <div className="bg-white/5 backdrop-blur-3xl rounded-2xl p-16 text-center border border-white/10  animate-in zoom-in-95">
+        {!hasResults && (
+          <div className="bg-white/5 rounded-2xl p-16 text-center border border-white/10">
             <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
                <Search className="w-8 h-8 text-white/10" />
             </div>
             <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">No results found</h3>
-            <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">Protocol failed to match "{search}" within current dataset.</p>
+            <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">Protocol failed to match "{debouncedSearch}" within current dataset.</p>
           </div>
         )}
 
         {/* Scroll to Top Button */}
-        {(processedCountries.length > 0 || processedTerritories.length > 0 || processedDeFacto.length > 0) && (
+        {hasResults && (
           <div className="mt-20 flex justify-center">
             <Button 
               variant="secondary" 
