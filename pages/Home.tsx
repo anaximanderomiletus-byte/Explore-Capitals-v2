@@ -175,7 +175,7 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center lg:text-left lg:col-start-1"
+            className="text-center lg:text-left lg:col-start-1 mt-4 sm:mt-6 lg:mt-0"
           >
             <Link to="/games">
               <Button variant="primary" size="lg" className="w-64 sm:w-72 md:w-80 h-14 sm:h-16 md:h-18 text-xl sm:text-2xl group uppercase">
