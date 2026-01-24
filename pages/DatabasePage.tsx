@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useEffect, useCallback, useRef, memo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef, memo, startTransition } from 'react';
 import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
@@ -10,6 +10,11 @@ import Button from '../components/Button';
 
 type SortKey = 'name' | 'capital' | 'region' | 'population' | 'area';
 type SortDirection = 'asc' | 'desc';
+
+// Pre-sorted data for instant initial render (sorted by name ascending)
+const PRESORTED_COUNTRIES = [...MOCK_COUNTRIES].sort((a, b) => a.name.localeCompare(b.name));
+const PRESORTED_TERRITORIES = [...TERRITORIES].sort((a, b) => a.name.localeCompare(b.name));
+const PRESORTED_DEFACTO = [...DE_FACTO_COUNTRIES].sort((a, b) => a.name.localeCompare(b.name));
 
 // Debounce hook for search input
 function useDebounce<T>(value: T, delay: number): T {
@@ -70,51 +75,26 @@ const getCountryCode = (emoji: string): string => {
   return code;
 };
 
-// Lazy loading flag component with IntersectionObserver
-const LazyFlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const imgRef = useRef<HTMLDivElement>(null);
-  
+// Simple flag component - no lazy loading overhead for visible items
+const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
   const code = getCountryCode(country.flag);
   const width = size === 'small' ? 'w-10' : 'w-16';
   const height = size === 'small' ? 'h-7' : 'h-11';
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '100px', threshold: 0 }
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
   
   return (
-    <div ref={imgRef} className={`${width} ${height} flex items-center justify-center bg-white/5 rounded`}>
-      {isVisible && (
-        <img 
-          src={`https://flagcdn.com/w80/${code}.png`} 
-          alt={`${country.name} Flag`}
-          className={`w-full h-full object-contain transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setIsLoaded(true)}
-        />
-      )}
+    <div className={`${width} ${height} flex items-center justify-center bg-white/5 rounded overflow-hidden`}>
+      <img 
+        src={`https://flagcdn.com/w80/${code}.png`} 
+        alt={`${country.name} Flag`}
+        className="w-full h-full object-contain"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   );
 });
 
-LazyFlagIcon.displayName = 'LazyFlagIcon';
+FlagIcon.displayName = 'FlagIcon';
 
 // Memoized table row component
 interface TableRowProps {
@@ -141,7 +121,7 @@ const TableRow: React.FC<TableRowProps> = memo(({
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center gap-4">
         <div className="shrink-0">
-          <LazyFlagIcon country={country} size="small" />
+          <FlagIcon country={country} size="small" />
         </div>
         <span className={`font-bold text-sm text-white/90 uppercase tracking-tighter ${titleColor} transition-colors`}>{country.name}</span>
       </div>
@@ -188,7 +168,7 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
       <div className="flex items-start justify-between mb-6 relative z-10">
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
-            <LazyFlagIcon country={country} size="card" />
+            <FlagIcon country={country} size="card" />
           </div>
           <div>
             <h3 className={`font-black text-lg uppercase tracking-tighter leading-none mb-1.5 ${titleColor}`}>{country.name}</h3>
@@ -232,6 +212,119 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
 
 MobileCountryCard.displayName = 'MobileCountryCard';
 
+// Virtualized table for desktop - only render visible rows
+interface VirtualizedTableProps {
+  items: Country[];
+  onItemClick: (id: string) => void;
+  sortConfig: { key: SortKey; direction: SortDirection } | null;
+  onSort: (key: SortKey) => void;
+  hoverColor?: string;
+  showSovereignty?: boolean;
+  titleColor?: string;
+  headerBgClass?: string;
+}
+
+const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({ 
+  items, 
+  onItemClick,
+  sortConfig,
+  onSort,
+  hoverColor,
+  showSovereignty,
+  titleColor,
+  headerBgClass = 'bg-white/5'
+}) => {
+  const ROW_HEIGHT = 65; // Approximate row height in pixels
+  const BUFFER = 5; // Extra rows to render above/below viewport
+  
+  const [scrollTop, setScrollTop] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(600);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const updateHeight = () => {
+      setContainerHeight(Math.min(600, window.innerHeight - 300));
+    };
+    
+    const handleScroll = () => {
+      setScrollTop(container.scrollTop);
+    };
+    
+    updateHeight();
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateHeight, { passive: true });
+    
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, []);
+  
+  const totalHeight = items.length * ROW_HEIGHT;
+  const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER);
+  const visibleCount = Math.ceil(containerHeight / ROW_HEIGHT) + BUFFER * 2;
+  const endIndex = Math.min(items.length, startIndex + visibleCount);
+  const visibleItems = items.slice(startIndex, endIndex);
+  const offsetY = startIndex * ROW_HEIGHT;
+
+  return (
+    <div 
+      ref={containerRef}
+      className="overflow-auto rounded-3xl border border-white/20 bg-white/10"
+      style={{ maxHeight: containerHeight }}
+    >
+      <table className="w-full text-left border-collapse">
+        <thead className="sticky top-0 z-10">
+          <tr className={`${headerBgClass} border-b border-white/15`}>
+            <SortHeader label={showSovereignty ? "Territory" : "Country"} field="name" sortConfig={sortConfig} onSort={onSort} />
+            {showSovereignty && (
+              <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">
+                {showSovereignty ? 'Sovereignty' : 'Status'}
+              </th>
+            )}
+            <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={onSort} />
+            <SortHeader label={showSovereignty ? "Sector" : "Region"} field="region" sortConfig={sortConfig} onSort={onSort} />
+            <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={onSort} align="right" />
+            {!showSovereignty && (
+              <SortHeader label="Area (km²)" field="area" sortConfig={sortConfig} onSort={onSort} align="right" />
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {/* Spacer for items above viewport */}
+          {startIndex > 0 && (
+            <tr style={{ height: offsetY }}>
+              <td colSpan={showSovereignty ? 5 : 6} />
+            </tr>
+          )}
+          {visibleItems.map((country) => (
+            <TableRow 
+              key={country.id}
+              country={country}
+              onClick={() => onItemClick(country.id)}
+              hoverColor={hoverColor}
+              showSovereignty={showSovereignty}
+              sovereignty={(country as Territory).sovereignty}
+              titleColor={titleColor}
+            />
+          ))}
+          {/* Spacer for items below viewport */}
+          {endIndex < items.length && (
+            <tr style={{ height: (items.length - endIndex) * ROW_HEIGHT }}>
+              <td colSpan={showSovereignty ? 5 : 6} />
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+});
+
+VirtualizedTable.displayName = 'VirtualizedTable';
+
 // Virtualized list for mobile cards
 interface VirtualizedMobileListProps {
   items: Country[];
@@ -248,51 +341,43 @@ const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({
   isDeFacto,
   getSovereignty
 }) => {
-  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
+  const [visibleCount, setVisibleCount] = useState(12); // Start with 12 items
   const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       
-      const scrollTop = window.scrollY;
+      const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const containerTop = containerRef.current.offsetTop;
+      const containerBottom = containerTop + containerRef.current.offsetHeight;
       
-      // Estimate card height (roughly 200px per card including gap)
-      const cardHeight = 220;
-      const cardsPerRow = window.innerWidth >= 768 ? 2 : 1;
-      const rowHeight = cardHeight;
-      
-      const relativeScroll = Math.max(0, scrollTop - containerTop + windowHeight);
-      const visibleRows = Math.ceil(windowHeight / rowHeight) + 2; // Buffer
-      const startRow = Math.max(0, Math.floor((scrollTop - containerTop) / rowHeight) - 1);
-      
-      const start = Math.max(0, startRow * cardsPerRow);
-      const end = Math.min(items.length, (startRow + visibleRows) * cardsPerRow + cardsPerRow);
-      
-      setVisibleRange({ start, end });
+      // Load more when user scrolls near the bottom of visible items
+      if (scrollY + windowHeight > containerBottom - 500 && visibleCount < items.length) {
+        setVisibleCount(prev => Math.min(prev + 12, items.length));
+      }
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
     };
-  }, [items.length]);
+  }, [items.length, visibleCount]);
 
-  const visibleItems = items.slice(visibleRange.start, visibleRange.end);
-  const topPadding = visibleRange.start * 110; // Half card height for 2 columns
-  const bottomPadding = (items.length - visibleRange.end) * 110;
+  // Reset visible count when items change (e.g., search)
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [items]);
+
+  const visibleItems = items.slice(0, visibleCount);
 
   return (
     <div ref={containerRef} className="lg:hidden">
-      <div style={{ height: topPadding }} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {visibleItems.map((item, idx) => (
+        {visibleItems.map((item) => (
           <MobileCountryCard 
             key={item.id} 
             country={item} 
@@ -303,7 +388,16 @@ const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({
           />
         ))}
       </div>
-      <div style={{ height: bottomPadding }} />
+      {visibleCount < items.length && (
+        <div className="flex justify-center mt-8">
+          <button 
+            onClick={() => setVisibleCount(prev => Math.min(prev + 24, items.length))}
+            className="px-8 py-3 bg-white/10 border border-white/20 rounded-xl text-white/60 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white/15 transition-colors"
+          >
+            Load More ({items.length - visibleCount} remaining)
+          </button>
+        </div>
+      )}
     </div>
   );
 });
@@ -352,35 +446,45 @@ const DatabasePage: React.FC = () => {
   const { setPageLoading } = useLayout();
   const navigate = useNavigate();
 
+  // Mark page as loaded immediately
   useEffect(() => {
     setPageLoading(false);
   }, [setPageLoading]);
 
   const handleSort = useCallback((key: SortKey) => {
-    setSortConfig(prev => ({
-      key,
-      direction: prev?.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-    }));
+    startTransition(() => {
+      setSortConfig(prev => ({
+        key,
+        direction: prev?.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+      }));
+    });
   }, []);
 
   const handleCountryClick = useCallback((id: string) => {
     navigate(`/country/${id}`);
   }, [navigate]);
 
-  const processedCountries = useMemo(() => 
-    sortAndFilter(MOCK_COUNTRIES, debouncedSearch, sortConfig), 
-    [debouncedSearch, sortConfig]
-  );
+  // Use pre-sorted data for initial render (no search, default sort)
+  const processedCountries = useMemo(() => {
+    if (!debouncedSearch && sortConfig?.key === 'name' && sortConfig?.direction === 'asc') {
+      return PRESORTED_COUNTRIES;
+    }
+    return sortAndFilter(MOCK_COUNTRIES, debouncedSearch, sortConfig);
+  }, [debouncedSearch, sortConfig]);
   
-  const processedTerritories = useMemo(() => 
-    sortAndFilter(TERRITORIES, debouncedSearch, sortConfig), 
-    [debouncedSearch, sortConfig]
-  );
+  const processedTerritories = useMemo(() => {
+    if (!debouncedSearch && sortConfig?.key === 'name' && sortConfig?.direction === 'asc') {
+      return PRESORTED_TERRITORIES;
+    }
+    return sortAndFilter(TERRITORIES, debouncedSearch, sortConfig);
+  }, [debouncedSearch, sortConfig]);
   
-  const processedDeFacto = useMemo(() => 
-    sortAndFilter(DE_FACTO_COUNTRIES, debouncedSearch, sortConfig), 
-    [debouncedSearch, sortConfig]
-  );
+  const processedDeFacto = useMemo(() => {
+    if (!debouncedSearch && sortConfig?.key === 'name' && sortConfig?.direction === 'asc') {
+      return PRESORTED_DEFACTO;
+    }
+    return sortAndFilter(DE_FACTO_COUNTRIES, debouncedSearch, sortConfig);
+  }, [debouncedSearch, sortConfig]);
 
   const getTerritorysovereignty = useCallback((item: Country) => 
     (item as Territory).sovereignty, []);
@@ -425,30 +529,14 @@ const DatabasePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Sovereign Countries Section - Desktop Table */}
-        <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20 mb-16">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-white/5 border-b border-white/15">
-                  <SortHeader label="Country" field="name" sortConfig={sortConfig} onSort={handleSort} />
-                  <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
-                  <SortHeader label="Region" field="region" sortConfig={sortConfig} onSort={handleSort} />
-                  <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={handleSort} align="right" />
-                  <SortHeader label="Area (km²)" field="area" sortConfig={sortConfig} onSort={handleSort} align="right" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {processedCountries.map((country) => (
-                  <TableRow 
-                    key={country.id}
-                    country={country}
-                    onClick={() => handleCountryClick(country.id)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Sovereign Countries Section - Desktop Virtualized Table */}
+        <div className="hidden lg:block mb-16">
+          <VirtualizedTable
+            items={processedCountries}
+            onItemClick={handleCountryClick}
+            sortConfig={sortConfig}
+            onSort={handleSort}
+          />
         </div>
 
         {/* Sovereign Countries - Mobile Virtualized List */}
@@ -472,33 +560,17 @@ const DatabasePage: React.FC = () => {
               </div>
             </div>
             
-            <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-accent/10 border-b border-white/20">
-                      <SortHeader label="Territory" field="name" sortConfig={sortConfig} onSort={handleSort} />
-                      <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Sovereignty</th>
-                      <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
-                      <SortHeader label="Sector" field="region" sortConfig={sortConfig} onSort={handleSort} />
-                      <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={handleSort} align="right" />
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {processedTerritories.map((territory) => (
-                      <TableRow 
-                        key={territory.id}
-                        country={territory}
-                        onClick={() => handleCountryClick(territory.id)}
-                        hoverColor="hover:bg-accent/20"
-                        showSovereignty={true}
-                        sovereignty={territory.sovereignty}
-                        titleColor="group-hover/row:text-accent"
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="hidden lg:block">
+              <VirtualizedTable
+                items={processedTerritories}
+                onItemClick={handleCountryClick}
+                sortConfig={sortConfig}
+                onSort={handleSort}
+                hoverColor="hover:bg-accent/20"
+                showSovereignty={true}
+                titleColor="group-hover/row:text-accent"
+                headerBgClass="bg-accent/10"
+              />
             </div>
 
             <VirtualizedMobileList 
@@ -523,33 +595,17 @@ const DatabasePage: React.FC = () => {
               </div>
             </div>
             
-            <div className="hidden lg:block bg-white/10 rounded-3xl overflow-hidden border border-white/20">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-warning/10 border-b border-white/20">
-                      <SortHeader label="Entity" field="name" sortConfig={sortConfig} onSort={handleSort} />
-                      <th className="px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">Status</th>
-                      <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={handleSort} />
-                      <SortHeader label="Sector" field="region" sortConfig={sortConfig} onSort={handleSort} />
-                      <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={handleSort} align="right" />
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {processedDeFacto.map((state) => (
-                      <TableRow 
-                        key={state.id}
-                        country={state}
-                        onClick={() => handleCountryClick(state.id)}
-                        hoverColor="hover:bg-warning/20"
-                        showSovereignty={true}
-                        sovereignty={state.sovereignty}
-                        titleColor="group-hover/row:text-warning"
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="hidden lg:block">
+              <VirtualizedTable
+                items={processedDeFacto}
+                onItemClick={handleCountryClick}
+                sortConfig={sortConfig}
+                onSort={handleSort}
+                hoverColor="hover:bg-warning/20"
+                showSovereignty={true}
+                titleColor="group-hover/row:text-warning"
+                headerBgClass="bg-warning/10"
+              />
             </div>
 
             <VirtualizedMobileList 
