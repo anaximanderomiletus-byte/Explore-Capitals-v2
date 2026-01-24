@@ -257,63 +257,63 @@ export const GAMES: Game[] = [
   { 
     id: '1', 
     title: 'Capital Quiz', 
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/capital-quiz.png', 
+    image: './png/0-GAMES/capital-quiz.png', 
     status: 'active', 
     description: 'Test your knowledge against the clock.' 
   },
   { 
     id: '2', 
     title: 'Map Dash', 
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/map-dash.png', 
+    image: './png/0-GAMES/map-dash.png', 
     status: 'active', 
     description: 'Find the country before time runs out.' 
   },
   { 
     id: '3', 
     title: 'Flag Frenzy', 
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/flag-frenzy.png', 
+    image: './png/0-GAMES/flag-frenzy.png', 
     status: 'active', 
     description: 'Match the flags to their nations.' 
   },
   {
     id: '4',
     title: 'Know Your Neighbor',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/know-your-neighbor.png', 
+    image: './png/0-GAMES/know-your-neighbor.png', 
     status: 'active', 
     description: 'Identify all the bordering countries.'
   },
   {
     id: '5',
     title: 'Population Pursuit',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/population-pursuit.png',
+    image: './png/0-GAMES/population-pursuit.png',
     status: 'active', 
     description: 'Which country has more people?'
   },
   {
     id: '6',
     title: 'Global Detective',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/global-detective.png', 
+    image: './png/0-GAMES/global-detective.png', 
     status: 'active', 
     description: 'Deduce the mystery country from 3 clues.'
   },
   {
     id: '7',
     title: 'Capital Connection',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/capital-connection.png',
+    image: './png/0-GAMES/capital-connection.png',
     status: 'active', 
     description: 'Match countries to their capitals in a race against time.'
   },
   {
     id: '8',
     title: 'Region Roundup',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/region-roundup.png',
+    image: './png/0-GAMES/region-roundup.png',
     status: 'active', 
     description: 'Sort countries into their correct continents.'
   },
   {
     id: '9',
     title: 'Landmark Legend',
-    image: 'https://anaximanderomiletus-byte.github.io/Explore-Capitals-PNGs/0-GAMES/landmark-legend.png',
+    image: './png/0-GAMES/landmark-legend.png',
     status: 'active', 
     description: 'Identify the country from a famous landmark image.'
   }
