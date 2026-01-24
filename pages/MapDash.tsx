@@ -32,11 +32,27 @@ export default function MapDash() {
   const [feedbackKey, setFeedbackKey] = useState(0);
   const { recordGameResult } = useUser();
   const navigate = useNavigate();
-  const { setPageLoading } = useLayout();
+  const { setPageLoading, setHideFooter } = useLayout();
 
   useEffect(() => {
     setPageLoading(false);
-  }, [setPageLoading]);
+    setHideFooter(true); // Hide footer on Map Dash game
+    
+    // Lock body scroll to prevent scrolling off the map
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    
+    return () => {
+      setHideFooter(false); // Show footer again when leaving
+      // Restore body scroll
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, [setPageLoading, setHideFooter]);
 
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
