@@ -33,6 +33,7 @@ interface GameCard {
   isMatched: boolean;
   isSelected: boolean;
   isWrong: boolean;
+  isCorrect: boolean;
   flagCode?: string; // Just store the code, not the element
 }
 
@@ -100,6 +101,7 @@ export default function CapitalConnection() {
         isMatched: false,
         isSelected: false,
         isWrong: false,
+        isCorrect: false,
         flagCode: getCountryCode(country.flag)
       });
       
@@ -111,7 +113,8 @@ export default function CapitalConnection() {
         countryId: country.id,
         isMatched: false,
         isSelected: false,
-        isWrong: false
+        isWrong: false,
+        isCorrect: false
       });
     });
     
@@ -146,32 +149,49 @@ export default function CapitalConnection() {
         const card2 = newCards.find(c => c.id === newSelectedIds[1])!;
 
         if (card1.countryId === card2.countryId) {
-          // CORRECT MATCH
+          // CORRECT MATCH - trigger pop animation first
           setScore(s => s + 10);
           
+          // Show correct feedback immediately
+          setFeedback('correct');
+          setFeedbackKey(f => f + 1);
+          
+          // Check if this match completes the grid (all other cards already matched)
+          const willCompleteGrid = newCards.every(c => 
+            c.isMatched || c.id === card1.id || c.id === card2.id
+          );
+          
+          // Immediately show correct animation
+          setTimeout(() => {
+            setCards(finalCards => finalCards.map(c => 
+              (c.id === card1.id || c.id === card2.id) 
+                ? { ...c, isCorrect: true, isSelected: false } 
+                : c
+            ));
+          }, 50);
+          
+          // Then transition to matched state after animation completes
           setTimeout(() => {
             setCards(finalCards => {
               const matchedCards = finalCards.map(c => 
                 (c.id === card1.id || c.id === card2.id) 
-                  ? { ...c, isMatched: true, isSelected: false } 
+                  ? { ...c, isMatched: true, isCorrect: false } 
                   : c
               );
               
-              const allMatched = matchedCards.every(c => c.isMatched);
-              if (allMatched) {
-                // Show "Correct" feedback only when grid is complete
-                setFeedback('correct');
-                setFeedbackKey(f => f + 1);
-                setTimeout(generateBoard, 1000); // Slightly longer delay to show feedback
+              if (willCompleteGrid) {
+                setTimeout(generateBoard, 400); // Quick transition to next board
               }
               
               setIsProcessing(false);
             setSelectedIds([]);
               return matchedCards;
             });
-          }, 300);
+          }, 450);
         } else {
-          // INCORRECT MATCH - no feedback popup, just visual shake
+          // INCORRECT MATCH - show feedback popup and visual shake
+          setFeedback('incorrect');
+          setFeedbackKey(f => f + 1);
           
           setTimeout(() => {
             setCards(finalCards => finalCards.map(c => 
@@ -321,11 +341,16 @@ export default function CapitalConnection() {
 const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => void }) => {
   // No hover styles - prevents "pre-highlighted" appearance on touch devices
   let stateStyle = "bg-white/10 border-white/20 text-white active:bg-white/15 active:border-sky/40";
+  let animationClass = "";
   
   if (card.isMatched) {
     stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50";
+  } else if (card.isCorrect) {
+    stateStyle = "bg-emerald-500/40 border-emerald-400 text-white";
+    animationClass = "animate-correct-pop";
   } else if (card.isWrong) {
     stateStyle = "bg-red-500/30 border-red-400 text-white";
+    animationClass = "animate-shake";
   } else if (card.isSelected) {
     stateStyle = "bg-sky/25 border-sky text-white";
   }
@@ -333,8 +358,8 @@ const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => voi
   return (
     <button
       onClick={onClick}
-      disabled={card.isMatched}
-      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${card.isWrong ? 'animate-shake' : ''}`}
+      disabled={card.isMatched || card.isCorrect}
+      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass}`}
       style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>

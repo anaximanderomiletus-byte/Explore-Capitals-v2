@@ -74,6 +74,7 @@ module.exports = {
         'aero-curtain-in': 'aero-curtain-in 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards',
         'aero-curtain-out': 'aero-curtain-out 0.8s cubic-bezier(0.645, 0.045, 0.355, 1) forwards',
         'shake': 'shake 0.3s cubic-bezier(.36,.07,.19,.97) both',
+        'correct-pop': 'correct-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'timer-panic': 'timer-panic 0.5s ease-in-out infinite',
         'shing': 'shing 0.5s ease-out forwards',
       },
@@ -97,6 +98,11 @@ module.exports = {
           '20%, 80%': { transform: 'translate3d(4px, 0, 0)' },
           '30%, 50%, 70%': { transform: 'translate3d(-8px, 0, 0)' },
           '40%, 60%': { transform: 'translate3d(8px, 0, 0)' },
+        },
+        'correct-pop': {
+          '0%': { transform: 'scale(1)', boxShadow: '0 0 0 rgba(52, 199, 89, 0)' },
+          '50%': { transform: 'scale(1.15)', boxShadow: '0 0 30px rgba(52, 199, 89, 0.8), 0 0 60px rgba(52, 199, 89, 0.4)' },
+          '100%': { transform: 'scale(1)', boxShadow: '0 0 15px rgba(52, 199, 89, 0.3)' },
         },
         'aero-wipe-in': {
           '0%': { transform: 'translateX(100%)', opacity: '0', filter: 'blur(20px)' },

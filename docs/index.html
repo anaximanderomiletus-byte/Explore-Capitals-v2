@@ -23,32 +23,49 @@
     <link rel="icon" type="image/png" href="./logo.png">
     <link rel="manifest" href="./assets/manifest-Bl2P3K4f.json" />
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997"
-     crossorigin="anonymous"></script>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NEFW5WL3V"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8NEFW5WL3V');
-    </script>
-
-    <!-- Google Fonts: Inter (Variable) -->
+    <!-- Google Fonts: Inter (Variable) - Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <!-- Load font with display=swap for instant text rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS - Load early for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet CSS - Only needed for map pages, load with low priority -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" media="print" onload="this.media='all'" />
+    
+    <!-- Leaflet JS - Defer since it's only needed on map pages -->
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Analytics - Load after page is interactive -->
+    <script>
+      // Defer analytics loading until after first contentful paint
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          // Google Analytics
+          var gtag = document.createElement('script');
+          gtag.src = 'https://www.googletagmanager.com/gtag/js?id=G-8NEFW5WL3V';
+          gtag.async = true;
+          document.head.appendChild(gtag);
+          
+          window.dataLayer = window.dataLayer || [];
+          function gtagFn(){dataLayer.push(arguments);}
+          window.gtag = gtagFn;
+          gtagFn('js', new Date());
+          gtagFn('config', 'G-8NEFW5WL3V');
+          
+          // Google AdSense - load even later
+          setTimeout(function() {
+            var adsense = document.createElement('script');
+            adsense.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997';
+            adsense.async = true;
+            adsense.crossOrigin = 'anonymous';
+            document.head.appendChild(adsense);
+          }, 2000);
+        }, 100);
+      });
+    </script>
 
     <script>
       tailwind.config = {
@@ -399,13 +416,40 @@
       }
       
       /* Fix for Safari hover states sticking on touch devices */
-      @media (hover: none) {
+      /* On touch-only devices, disable ALL hover effects to prevent "pre-highlighted" appearance */
+      @media (hover: none) and (pointer: coarse) {
         .hover\:brightness-110:hover, 
         .hover\:bg-white\/20:hover,
         .hover\:shadow-premium-hover:hover {
           filter: none !important;
           background-color: inherit !important;
           box-shadow: inherit !important;
+        }
+        
+        /* Game answer buttons - remove hover highlights on touch devices */
+        button:hover,
+        [role="button"]:hover {
+          background-color: inherit !important;
+          border-color: inherit !important;
+          transform: none !important;
+        }
+      }
+      
+      /* Only apply hover effects on devices that support hover (mouse/trackpad) */
+      @media (hover: hover) and (pointer: fine) {
+        .touch-no-hover:hover {
+          /* Allow hover effects */
+        }
+      }
+      
+      /* Explicitly disable hover on game option buttons on touch devices */
+      @media (hover: none) {
+        .game-option {
+          /* Reset any hover-like visual states */
+        }
+        .game-option:hover {
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          border-color: rgba(255, 255, 255, 0.4) !important;
         }
       }
 
@@ -546,10 +590,18 @@
         touch-action: none;
       }
       
-      /* Fix touch delay on iOS for interactive elements */
-      a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]) {
+      /* Fix touch delay on iOS for interactive elements - CRITICAL for click responsiveness */
+      a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), .cursor-pointer {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
+        touch-action: manipulation;
+        /* Ensure elements are clickable */
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Ensure all Link components and interactive cards respond immediately */
+      a[href], button:not(:disabled) {
+        cursor: pointer;
         touch-action: manipulation;
       }
       
@@ -587,7 +639,7 @@
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
     </style>
-  <script type="module" crossorigin src="./assets/index-C-SKfJZn.js"></script>
+  <script type="module" crossorigin src="./assets/index-CJMXg5MG.js"></script>
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
     <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full [touch-action:pan-y_pinch-zoom]"></div>

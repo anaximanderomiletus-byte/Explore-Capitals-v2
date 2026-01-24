@@ -347,7 +347,7 @@ const CountryExploration: React.FC = () => {
   };
 
   const nextStop = () => {
-    if (!tourData) return;
+    if (!tourData || isTransitioning) return;
     setTransitionDirection('forward');
     // Set appropriate transition text based on whether this is the last stop
     if (stepIndex >= tourData.stops.length - 1) {
@@ -393,6 +393,7 @@ const CountryExploration: React.FC = () => {
   };
 
   const prevStop = () => {
+    if (isTransitioning) return;
     setTransitionDirection('backward');
     // Set the back destination text
     if (stepIndex > 0) {
@@ -434,9 +435,9 @@ const CountryExploration: React.FC = () => {
 
     if (correct) {
       setScore(s => s + 1);
-      setFeedbackMessage(currentQuestion.explanation ? `Excellent! ${currentQuestion.explanation}` : "Excellent! Great job.");
+      setFeedbackMessage(currentQuestion.explanation ? currentQuestion.explanation : "Great job.");
     } else {
-      setFeedbackMessage(currentQuestion.explanation ? `Incorrect. ${currentQuestion.explanation}` : `Incorrect. The correct answer is ${currentQuestion.answer}.`);
+      setFeedbackMessage(currentQuestion.explanation ? currentQuestion.explanation : `The correct answer is ${currentQuestion.answer}.`);
     }
   };
 
@@ -1105,39 +1106,49 @@ const CountryExploration: React.FC = () => {
               <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
               
               <div className="max-w-7xl mx-auto w-full p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-                  <div className="flex-1 text-center md:text-left min-h-0">
+                  <div className="flex-1 text-left min-h-0">
                       {selectedOption && (
                         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                          <div className="flex items-center justify-center md:justify-start gap-6">
+                          <div className="flex items-center justify-start gap-6">
                               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 border-white/40 relative overflow-hidden ${isCorrect ? 'bg-accent/60 text-white' : 'bg-red-500/60 text-white'}`}>
                                    <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
                                    {isCorrect ? <Trophy size={32} className="relative z-10" /> : <ImageOff size={32} className="relative z-10" />}
                                   </div>
                               <div>
                                  <h3 className="font-display font-black text-4xl md:text-5xl uppercase tracking-tighter drop-shadow-lg text-white leading-none mb-1">
-                                     {isCorrect ? 'Excellent' : 'Incorrect'}
+                                     {isCorrect ? 'Correct' : 'Incorrect'}
                               </h3>
                                  <p className={`text-[10px] font-black uppercase tracking-[0.4em] drop-shadow-sm ${isCorrect ? 'text-accent' : 'text-red-400'}`}>Mission Explanation</p>
                           </div>
                           </div>
-                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8">
-                              {feedbackMessage ? feedbackMessage.replace(/^(Correct!|Incorrect\.)\s*/, '') : ''}
+                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8 text-left">
+                              {feedbackMessage || ''}
                           </p>
                         </div>
                       )}
                   </div>
                   <div className="w-full md:w-auto shrink-0 animate-in fade-in zoom-in duration-700 delay-200">
-                       <Button 
+                       <button 
                          onClick={nextQuestion} 
-                         className="w-full md:min-w-[300px] h-20 rounded-full flex items-center justify-center gap-4 text-2xl uppercase tracking-widest border-2 border-white/40 group/next"
-                         variant="primary"
-                         size="lg"
                          disabled={!selectedOption}
+                         className="group relative w-full md:min-w-[300px] h-16 rounded-2xl overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
-                         <span className="relative z-10 flex items-center gap-3">
-                           {isLastQuestion ? 'FINISH TOUR' : 'NEXT STOP'} <ChevronRight size={36} className="transition-transform duration-500" />
-                         </span>
-                       </Button>
+                         {/* Gradient background */}
+                         <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
+                         
+                         {/* Subtle inner border */}
+                         <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                         
+                         {/* Content */}
+                         <div className="relative z-10 flex items-center justify-center gap-3 h-full">
+                           <span className="text-sm font-black uppercase tracking-[0.2em] text-white/90">
+                             {isLastQuestion ? 'Finish Tour' : 'Next Stop'}
+                           </span>
+                           <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                             <ChevronRight size={18} className="text-white/80 transition-all" />
+                           </div>
+                         </div>
+                       </button>
                   </div>
               </div>
            </div>
