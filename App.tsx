@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import React, { Suspense, lazy, memo, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, LazyMotion, domAnimation } from 'framer-motion';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Footer from './components/Footer';
@@ -48,15 +47,15 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
   }
 };
 
-// Loading fallback - visible indicator that page is loading
-const PageLoader = () => (
+// Loading fallback - memoized for performance
+const PageLoader = memo(() => (
   <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[50vh] gap-4">
     <div className="relative">
       <div className="w-10 h-10 rounded-full border-2 border-sky/20 border-t-sky animate-spin" />
     </div>
     <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Loading</p>
   </div>
-);
+));
 
 const SKIP_TRANSITION_ROUTES = ['/auth', '/profile', '/settings', '/loyalty', '/database', '/directory'];
 
@@ -102,26 +101,33 @@ const AppContent: React.FC = () => {
   
   // Preload key pages after initial render for faster subsequent navigation
   useEffect(() => {
-    // Wait for initial paint, then start preloading
-    const timer = setTimeout(() => {
-      // Preload in order of likely navigation
+    // Use requestIdleCallback for non-blocking preload (with fallback)
+    const preloadPages = () => {
       pageImports.games();
       pageImports.database();
       pageImports.map();
       pageImports.about();
-    }, 1500); // Delay to not compete with initial page load
+    };
     
-    return () => clearTimeout(timer);
+    // Wait for idle time to preload, or after 2s max
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(preloadPages, { timeout: 3000 });
+      return () => cancelIdleCallback(id);
+    } else {
+      const timer = setTimeout(preloadPages, 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
   
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
-      <ScrollToTop />
-      <Navigation />
-      <div className="flex-grow flex flex-col relative w-full">
-        <Suspense fallback={<PageLoader />}>
-          <AnimatePresence mode="popLayout" initial={false}>
-            <Routes location={location} key={location.pathname}>
+    <LazyMotion features={domAnimation}>
+      <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
+        <ScrollToTop />
+        <Navigation />
+        <div className="flex-grow flex flex-col relative w-full">
+          <Suspense fallback={<PageLoader />}>
+            <AnimatePresence mode="popLayout" initial={false}>
+              <Routes location={location} key={location.pathname}>
               <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
               <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
               <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
@@ -147,12 +153,13 @@ const AppContent: React.FC = () => {
               <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
               <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
               <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
-            </Routes>
-          </AnimatePresence>
-        </Suspense>
+              </Routes>
+            </AnimatePresence>
+          </Suspense>
+        </div>
+        <ConditionalFooter />
       </div>
-      <ConditionalFooter />
-    </div>
+    </LazyMotion>
   );
 };
 
