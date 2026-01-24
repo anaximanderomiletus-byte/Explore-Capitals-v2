@@ -98,9 +98,9 @@ const Home: React.FC = () => {
 
           {/* Globe - in the flow on mobile, spans right column on desktop */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.8 }}
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
             {/* Static glow using radial gradient instead of blur filter to prevent flickering */}
@@ -113,8 +113,6 @@ const Home: React.FC = () => {
             
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] flex-shrink-0 pointer-events-none">
               <motion.div
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                 className="w-full h-full"
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
@@ -123,6 +121,8 @@ const Home: React.FC = () => {
                     src={`${import.meta.env.BASE_URL}logo.png`} 
                     alt="Globe - Click to explore the map" 
                     className="w-full h-full object-contain scale-[1.35]"
+                    loading="eager"
+                    fetchPriority="high"
                   />
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
                 </Link>

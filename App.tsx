@@ -50,11 +50,10 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
 
 // Loading fallback - visible indicator that page is loading
 const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[50vh] gap-4">
+  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
     <div className="relative">
-      <div className="w-10 h-10 rounded-full border-2 border-sky/20 border-t-sky animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-sky/10 border-t-sky animate-spin" />
     </div>
-    <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Loading</p>
   </div>
 );
 
@@ -105,11 +104,20 @@ const AppContent: React.FC = () => {
     // Wait for initial paint, then start preloading
     const timer = setTimeout(() => {
       // Preload in order of likely navigation
-      pageImports.games();
-      pageImports.database();
-      pageImports.map();
-      pageImports.about();
-    }, 1500); // Delay to not compete with initial page load
+      // Using requestIdleCallback if available for even better performance
+      const preload = () => {
+        pageImports.games();
+        pageImports.database();
+        pageImports.map();
+        pageImports.about();
+      };
+
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(preload);
+      } else {
+        preload();
+      }
+    }, 2000); // Slightly longer delay to ensure main thread is free
     
     return () => clearTimeout(timer);
   }, []);
