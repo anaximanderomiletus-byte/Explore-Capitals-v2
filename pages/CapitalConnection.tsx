@@ -147,8 +147,6 @@ export default function CapitalConnection() {
 
         if (card1.countryId === card2.countryId) {
           // CORRECT MATCH
-          setFeedback('correct');
-          setFeedbackKey(f => f + 1);
           setScore(s => s + 10);
           
           setTimeout(() => {
@@ -161,7 +159,10 @@ export default function CapitalConnection() {
               
               const allMatched = matchedCards.every(c => c.isMatched);
               if (allMatched) {
-                setTimeout(generateBoard, 500);
+                // Show "Correct" feedback only when grid is complete
+                setFeedback('correct');
+                setFeedbackKey(f => f + 1);
+                setTimeout(generateBoard, 1000); // Slightly longer delay to show feedback
               }
               
               setIsProcessing(false);
@@ -170,9 +171,7 @@ export default function CapitalConnection() {
             });
           }, 300);
         } else {
-          // INCORRECT MATCH
-          setFeedback('incorrect');
-          setFeedbackKey(f => f + 1);
+          // INCORRECT MATCH - no feedback popup, just visual shake
           
           setTimeout(() => {
             setCards(finalCards => finalCards.map(c => 

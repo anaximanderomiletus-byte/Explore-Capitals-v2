@@ -434,7 +434,7 @@ const CountryExploration: React.FC = () => {
 
     if (correct) {
       setScore(s => s + 1);
-      setFeedbackMessage(currentQuestion.explanation ? `Correct! ${currentQuestion.explanation}` : "Correct! Great job.");
+      setFeedbackMessage(currentQuestion.explanation ? `Excellent! ${currentQuestion.explanation}` : "Excellent! Great job.");
     } else {
       setFeedbackMessage(currentQuestion.explanation ? `Incorrect. ${currentQuestion.explanation}` : `Incorrect. The correct answer is ${currentQuestion.answer}.`);
     }
@@ -1115,7 +1115,7 @@ const CountryExploration: React.FC = () => {
                                   </div>
                               <div>
                                  <h3 className="font-display font-black text-4xl md:text-5xl uppercase tracking-tighter drop-shadow-lg text-white leading-none mb-1">
-                                     {isCorrect ? 'Correct' : 'Incorrect'}
+                                     {isCorrect ? 'Excellent' : 'Incorrect'}
                               </h3>
                                  <p className={`text-[10px] font-black uppercase tracking-[0.4em] drop-shadow-sm ${isCorrect ? 'text-accent' : 'text-red-400'}`}>Mission Explanation</p>
                           </div>
@@ -1486,7 +1486,9 @@ const CountryExploration: React.FC = () => {
       <AnimatePresence mode="wait">
         {renderContent()}
       </AnimatePresence>
-      <FeedbackOverlay type={isCorrect === null ? null : (isCorrect ? 'correct' : 'incorrect')} triggerKey={feedbackKey} />
+      {view !== 'quiz' && (
+        <FeedbackOverlay type={isCorrect === null ? null : (isCorrect ? 'correct' : 'incorrect')} triggerKey={feedbackKey} />
+      )}
     </>
   );
 };
