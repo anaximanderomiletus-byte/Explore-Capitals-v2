@@ -8,9 +8,12 @@ import {
   ImageOff
 } from 'lucide-react';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
-import { STATIC_IMAGES } from '../data/images';
-import { staticTours } from '../data/staticTours';
-import { OFFICIAL_NAMES } from '../data/officialNames';
+
+// Dynamic imports for heavy data to speed up initial page load
+const getStaticImages = () => import('../data/images').then(m => m.STATIC_IMAGES);
+const getStaticTours = () => import('../data/staticTours').then(m => m.staticTours);
+const getOfficialNames = () => import('../data/officialNames').then(m => m.OFFICIAL_NAMES);
+
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
@@ -27,6 +30,27 @@ const CountryDetail: React.FC = () => {
   const navigate = useNavigate();
   const { setPageLoading, setTransitionStyle } = useLayout();
   
+  // State for dynamically loaded data
+  const [staticImages, setStaticImages] = React.useState<Record<string, string>>({});
+  const [staticTours, setStaticTours] = React.useState<any>({});
+  const [officialNamesData, setOfficialNamesData] = React.useState<Record<string, string>>({});
+  const [dataLoaded, setDataLoaded] = React.useState(false);
+
+  useEffect(() => {
+    // Load heavy data in parallel
+    Promise.all([
+      getStaticImages(),
+      getStaticTours(),
+      getOfficialNames()
+    ]).then(([images, tours, names]) => {
+      setStaticImages(images);
+      setStaticTours(tours);
+      setOfficialNamesData(names);
+      setDataLoaded(true);
+      setPageLoading(false);
+    });
+  }, [setPageLoading]);
+  
   const country = useMemo(() => MOCK_COUNTRIES.find(c => c.id === id) || TERRITORIES.find(t => t.id === id) || DE_FACTO_COUNTRIES.find(d => d.id === id), [id]);
   const isTerritory = useMemo(() => TERRITORIES.some(t => t.id === id), [id]);
   const isDeFacto = useMemo(() => DE_FACTO_COUNTRIES.some(d => d.id === id), [id]);
@@ -38,29 +62,30 @@ const CountryDetail: React.FC = () => {
 
   // Determine scenic image and caption for the secondary card
   const scenicData = useMemo(() => {
-      if (!country) return { image: '', caption: '' };
+      if (!country || !dataLoaded) return { image: '', caption: '' };
       
       // 1. Try Country Main Image (Usually Capital or Iconic)
-      if (STATIC_IMAGES[country.name]) {
-          return { image: STATIC_IMAGES[country.name], caption: `${country.capital}, ${country.name}` };
+      if (staticImages[country.name]) {
+          return { image: staticImages[country.name], caption: `${country.capital}, ${country.name}` };
       }
 
       // 2. Try Tour Stop Image
       const tourData = staticTours[country.name];
       if (tourData && tourData.stops.length > 0) {
           const stop = tourData.stops[0];
-          const img = STATIC_IMAGES[stop.imageKeyword || stop.stopName];
+          const img = staticImages[stop.imageKeyword || stop.stopName];
           if (img) return { image: img, caption: `${stop.stopName}, ${country.name}` };
       }
 
       // 3. Fallback
       const idx = (country.id.charCodeAt(0) + country.name.length) % FALLBACK_SCENES.length;
       return { image: FALLBACK_SCENES[idx], caption: `${country.capital}, ${country.name}` };
-  }, [country]);
+  }, [country, dataLoaded, staticImages, staticTours]);
 
-  useEffect(() => {
-    setPageLoading(false);
-  }, [setPageLoading, id]);
+  const officialName = useMemo(() => {
+    if (!country) return '';
+    return officialNamesData[country.name] || country.name;
+  }, [country, officialNamesData]);
 
   if (!country) {
     return (
@@ -126,8 +151,6 @@ const CountryDetail: React.FC = () => {
   const countryCode = Array.from(country.flag)
     .map((char: any) => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
     .join('');
-
-  const officialName = OFFICIAL_NAMES[country.name] || country.name;
 
   // Filter aliases to exclude the official name and the standard country name to avoid redundancy
   const filteredAliases = country.alsoKnownAs?.filter(alias => 
