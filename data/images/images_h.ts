@@ -9,17 +9,17 @@ export const imagesH: Record<string, string> = {
 
   // --- Honduras ---
   "Honduras": "/png/HONDURAS/tegucigalpa-honduras.png",
-  "Copán Ruinas": "/png/HONDURAS/copan-ruins-stairway.png",
-  "Roatán": "/png/HONDURAS/roatan-reef-diving.png",
-  "Cayos Cochinos": "/png/HONDURAS/cayos-cochinos-islands.png",
-  "Pico Bonito National Park": "/png/HONDURAS/pico-bonito-mountain.png",
+  "Copán Ruinas": "/png/HONDURAS/copán-ruinas.png",
+  "Roatán": "/png/HONDURAS/roatán-bay-islands.png",
+  "Cayos Cochinos": "/png/HONDURAS/cayos-cochinos.png",
+  "Pico Bonito National Park": "/png/HONDURAS/pico-bonito-national-park.png",
   "Lake Yojoa": "/png/HONDURAS/lake-yojoa.png",
 
   // --- Hungary ---
   "Hungary": "/png/HUNGARY/budapest-hungary.png",
-  "Hungarian Parliament Building": "/png/HUNGARY/hungarian-parliament.png",
-  "Széchenyi Thermal Bath": "/png/HUNGARY/szechenyi-thermal-bath.png",
-  "Fisherman's Bastion": "/png/HUNGARY/fishermans-bastion.png",
+  "Hungarian Parliament Building": "/png/HUNGARY/hungarian-parliament-building.png",
+  "Széchenyi Thermal Bath": "/png/HUNGARY/széchenyi-thermal-bath.png",
+  "Fisherman's Bastion": "/png/HUNGARY/buda-castle-and-fishermans-bastion.png",
   "Lake Balaton": "/png/HUNGARY/lake-balaton.png",
   "Tokaj Wine Region": "/png/HUNGARY/tokaj-wine-region.png"
 };
