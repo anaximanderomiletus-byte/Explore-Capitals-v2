@@ -10,10 +10,18 @@ import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 
 // Lazy load all pages except Home for instant initial load
-const Games = lazy(() => import('./pages/Games'));
-const DatabasePage = lazy(() => import('./pages/DatabasePage'));
-const MapPage = lazy(() => import('./pages/MapPage'));
-const About = lazy(() => import('./pages/About'));
+// Store import functions for prefetching on hover
+const pageImports = {
+  games: () => import('./pages/Games'),
+  database: () => import('./pages/DatabasePage'),
+  map: () => import('./pages/MapPage'),
+  about: () => import('./pages/About'),
+};
+
+const Games = lazy(pageImports.games);
+const DatabasePage = lazy(pageImports.database);
+const MapPage = lazy(pageImports.map);
+const About = lazy(pageImports.about);
 const CapitalQuiz = lazy(() => import('./pages/CapitalQuiz'));
 const MapDash = lazy(() => import('./pages/MapDash'));
 const FlagFrenzy = lazy(() => import('./pages/FlagFrenzy'));
@@ -32,10 +40,21 @@ const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 
-// Minimal loading fallback - just a subtle pulse, no heavy animations
+// Prefetch helper - call on hover to preload page chunks
+export const prefetchPage = (page: keyof typeof pageImports) => {
+  const importFn = pageImports[page];
+  if (importFn) {
+    importFn(); // Triggers the import, browser will cache it
+  }
+};
+
+// Loading fallback - visible indicator that page is loading
 const PageLoader = () => (
-  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[50vh]">
-    <div className="w-8 h-8 rounded-full bg-sky/30 animate-pulse" />
+  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[50vh] gap-4">
+    <div className="relative">
+      <div className="w-10 h-10 rounded-full border-2 border-sky/20 border-t-sky animate-spin" />
+    </div>
+    <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">Loading</p>
   </div>
 );
 
@@ -80,6 +99,20 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  
+  // Preload key pages after initial render for faster subsequent navigation
+  useEffect(() => {
+    // Wait for initial paint, then start preloading
+    const timer = setTimeout(() => {
+      // Preload in order of likely navigation
+      pageImports.games();
+      pageImports.database();
+      pageImports.map();
+      pageImports.about();
+    }, 1500); // Delay to not compete with initial page load
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   return (
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">

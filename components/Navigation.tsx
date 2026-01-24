@@ -9,6 +9,15 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
+import { prefetchPage } from '../App';
+
+// Map nav paths to prefetch keys
+const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
+  '/games': 'games',
+  '/database': 'database',
+  '/map': 'map',
+  '/about': 'about',
+};
 
 // Mobile Profile Link for Signed In Users
 const MobileProfileLinkSignedIn: React.FC<{
@@ -272,11 +281,14 @@ const Navigation: React.FC = () => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
               const glowClass = isOverMap ? '' : '';
+              const prefetchKey = prefetchMap[link.path];
               
               return (
                 <Link 
                   key={link.path} 
                   to={link.path}
+                  onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
+                  onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                     className={`font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300 relative group/link whitespace-nowrap ${
                     active 
                       ? `${activeColor} ${glowClass}` 
@@ -353,22 +365,26 @@ const Navigation: React.FC = () => {
         <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
         
         <div className="flex flex-col relative z-10">
-          {navLinks.map((link, index) => (
-            <Link 
-              key={link.path} 
-              to={link.path}
-              style={{
-                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
-                opacity: isMobileMenuOpen ? 1 : 0,
-                transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
-              }}
-              className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
-                isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link, index) => {
+            const prefetchKey = prefetchMap[link.path];
+            return (
+              <Link 
+                key={link.path} 
+                to={link.path}
+                onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
+                style={{
+                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+                  opacity: isMobileMenuOpen ? 1 : 0,
+                  transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+                }}
+                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
+                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           
           {/* Account Panel - right after nav links */}
           <div 
