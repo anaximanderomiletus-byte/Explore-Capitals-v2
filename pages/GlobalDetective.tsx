@@ -294,7 +294,8 @@ export default function GlobalDetective() {
                              const isCorrect = option.name === targetCountry.name;
                              const isWrong = isSelected && !isCorrect;
                              
-                             let stateStyles = "bg-white/10 border-2 border-white/40 text-white hover:bg-white/20 hover:border-sky/50";
+                             // No hover styles - prevents "pre-highlighted" appearance on touch devices
+                             let stateStyles = "bg-white/10 border-2 border-white/40 text-white active:bg-white/20 active:border-sky/50";
                              if (selectedAnswer) {
                                if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white";
                                else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white";
@@ -306,7 +307,7 @@ export default function GlobalDetective() {
                                  key={option.id} 
                                  onClick={() => handleAnswer(option.name)} 
                                  disabled={!!selectedAnswer} 
-                               className={`relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-all duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''} group`}
+                               className={`game-option relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                                style={{ WebkitTapHighlightColor: 'transparent' }}
                              >
                                <span className="px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>

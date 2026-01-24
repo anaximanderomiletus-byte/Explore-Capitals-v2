@@ -245,7 +245,8 @@ export default function KnowYourNeighbor() {
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
                 const isIncorrectSelection = isSelected && !isActualNeighbor;
                 
-                let btnStyle = "bg-white/5 border border-white/30 text-white/70 hover:bg-white/10 hover:border-sky/40 shadow-inner";
+                // No hover styles - prevents "pre-highlighted" appearance on touch devices
+                let btnStyle = "bg-white/5 border border-white/30 text-white/70 active:bg-white/10 active:border-sky/40 shadow-inner";
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {

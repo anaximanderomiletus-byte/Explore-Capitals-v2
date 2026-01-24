@@ -416,13 +416,40 @@
       }
       
       /* Fix for Safari hover states sticking on touch devices */
-      @media (hover: none) {
+      /* On touch-only devices, disable ALL hover effects to prevent "pre-highlighted" appearance */
+      @media (hover: none) and (pointer: coarse) {
         .hover\:brightness-110:hover, 
         .hover\:bg-white\/20:hover,
         .hover\:shadow-premium-hover:hover {
           filter: none !important;
           background-color: inherit !important;
           box-shadow: inherit !important;
+        }
+        
+        /* Game answer buttons - remove hover highlights on touch devices */
+        button:hover,
+        [role="button"]:hover {
+          background-color: inherit !important;
+          border-color: inherit !important;
+          transform: none !important;
+        }
+      }
+      
+      /* Only apply hover effects on devices that support hover (mouse/trackpad) */
+      @media (hover: hover) and (pointer: fine) {
+        .touch-no-hover:hover {
+          /* Allow hover effects */
+        }
+      }
+      
+      /* Explicitly disable hover on game option buttons on touch devices */
+      @media (hover: none) {
+        .game-option {
+          /* Reset any hover-like visual states */
+        }
+        .game-option:hover {
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          border-color: rgba(255, 255, 255, 0.4) !important;
         }
       }
 

@@ -320,7 +320,8 @@ export default function CapitalConnection() {
 
 // Memoized Card component to prevent unnecessary re-renders
 const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => void }) => {
-  let stateStyle = "bg-white/10 border-white/20 text-white hover:bg-white/15 hover:border-sky/40";
+  // No hover styles - prevents "pre-highlighted" appearance on touch devices
+  let stateStyle = "bg-white/10 border-white/20 text-white active:bg-white/15 active:border-sky/40";
   
   if (card.isMatched) {
     stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50";
