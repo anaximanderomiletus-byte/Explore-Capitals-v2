@@ -336,17 +336,18 @@ const Navigation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-transform duration-500 ease-in-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-500 ease-in-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
-            ? 'translate-x-0' 
-            : 'translate-x-full pointer-events-none'
+            ? 'translate-x-0 opacity-100 visible' 
+            : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
         style={{ 
           WebkitOverflowScrolling: 'touch',
           touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
         }}
+        aria-hidden={!isMobileMenuOpen}
       >
         {/* Background blobs for mobile menu */}
         <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />

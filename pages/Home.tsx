@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
@@ -11,60 +11,23 @@ import { useUser } from '../context/UserContext';
 const ParallaxSection: React.FC<{
   children: React.ReactNode;
   background?: React.ReactNode;
-  foreground?: React.ReactNode;
   className?: string;
-  speed?: number;
-  disableBackgroundParallax?: boolean;
   noPadding?: boolean;
-}> = ({ children, background, foreground, className = '', speed = 0.5, disableBackgroundParallax = false, noPadding = false }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  // Smoother physics for a high-end feel
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 20,
-    restDelta: 0.001
-  });
-
-  const yBackground = useTransform(smoothProgress, [0, 1], ["-10%", "10%"]);
-  const yForeground = useTransform(smoothProgress, [0, 1], ["5%", "-5%"]);
-
-  // Focused fade and growth - happens only at the edges of view
-  const opacity = useTransform(smoothProgress, [0, 0.1, 0.9, 1], [0.8, 1, 1, 0.8]);
-  const scale = useTransform(smoothProgress, [0, 0.1, 0.9, 1], [0.99, 1, 1, 0.99]);
-
+}> = ({ children, background, className = '', noPadding = false }) => {
+  // Simplified section - removed heavy parallax transforms for mobile performance
+  // Uses CSS-only effects instead of JS-driven animations
   return (
-    <section ref={ref} className={`relative overflow-hidden isolate w-full ${className}`}>
+    <section className={`relative overflow-hidden isolate w-full ${className}`}>
       {background && (
-        <motion.div 
-          style={disableBackgroundParallax ? { willChange: "transform" } : { y: yBackground, willChange: "transform" }}
-          className="absolute inset-0 z-0 pointer-events-none"
-        >
+        <div className="absolute inset-0 z-0 pointer-events-none">
           {background}
-        </motion.div>
+        </div>
       )}
-      <motion.div 
-        style={{ 
-          opacity,
-          scale,
-          willChange: "transform, opacity" 
-        }}
+      <div 
         className={`relative z-10 w-full max-w-7xl mx-auto ${noPadding ? 'px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12' : 'px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12'}`}
       >
         {children}
-      </motion.div>
-      {foreground && (
-        <motion.div 
-          style={{ y: yForeground, willChange: "transform" }}
-          className="absolute inset-0 z-20 pointer-events-none"
-        >
-          {foreground}
-        </motion.div>
-      )}
+      </div>
     </section>
   );
 };
@@ -94,20 +57,11 @@ const Home: React.FC = () => {
 
       <ParallaxSection
         className="min-h-[100svh] flex items-center justify-center"
-        disableBackgroundParallax={true}
         background={
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img 
-                src="https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57752/land_shallow_topo_2048.jpg" 
-                alt="" 
-                className="w-[150%] h-auto max-w-none object-cover opacity-[0.06] filter blur-[2px] saturate-0 brightness-[0.3] contrast-[0.8] translate-y-[10%]"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, black 0%, black 30%, transparent 70%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 30%, transparent 70%)'
-                }}
-              />
-            </div>
+            {/* CSS-only gradient background - no external image loading */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.08)_0%,transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,rgba(52,199,89,0.05)_0%,transparent_40%)]" />
             {/* Subtle top fade */}
             <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-[#0F172A] to-transparent" />
           </div>
@@ -174,7 +128,7 @@ const Home: React.FC = () => {
                 </Link>
               </motion.div>
               
-              {/* Decorative floating bubbles - in front of globe */}
+              {/* Decorative floating bubbles - purely decorative, no click blocking */}
               <motion.div
                 animate={{ 
                   y: [0, -6, 2, -4, 1, -7, 0], 
@@ -182,9 +136,9 @@ const Home: React.FC = () => {
                   rotate: [0, 2, -1, 3, -2, 1, 0]
                 }}
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10"
+                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
                 </div>
               </motion.div>
@@ -195,9 +149,9 @@ const Home: React.FC = () => {
                   rotate: [0, -2, 3, -1, 2, -3, 1, 0]
                 }}
                 transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10"
+                className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
                 </div>
               </motion.div>
@@ -390,11 +344,8 @@ const Home: React.FC = () => {
         className="pt-8 sm:pt-12 md:pt-20 pb-16 sm:pb-24 md:pb-32"
         background={
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/World_map_blank_without_borders.svg/1000px-World_map_blank_without_borders.svg.png" 
-              alt="" 
-              className="w-[85%] h-[85%] max-w-none object-contain opacity-[0.15] filter blur-[6px] brightness-0"
-            />
+            {/* CSS-only decorative background - no external image */}
+            <div className="w-[80%] h-[60%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(0,194,255,0.06)_0%,transparent_60%)] blur-[30px]" />
           </div>
         }
       >

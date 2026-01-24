@@ -1,35 +1,43 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Globe, Compass } from 'lucide-react';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
-import Games from './pages/Games';
-import DatabasePage from './pages/DatabasePage';
-import MapPage from './pages/MapPage';
-import About from './pages/About';
-import CapitalQuiz from './pages/CapitalQuiz';
-import MapDash from './pages/MapDash';
-import FlagFrenzy from './pages/FlagFrenzy';
-import KnowYourNeighbor from './pages/KnowYourNeighbor';
-import PopulationPursuit from './pages/PopulationPursuit';
-import GlobalDetective from './pages/GlobalDetective';
-import CapitalConnection from './pages/CapitalConnection';
-import RegionRoundup from './pages/RegionRoundup';
-import LandmarkLegend from './pages/LandmarkLegend';
-import CountryExploration from './pages/CountryExploration';
-import CountryDetail from './pages/CountryDetail';
 import Footer from './components/Footer';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
-import Settings from './pages/Settings';
-import Profile from './pages/Profile';
-import Auth from './pages/Auth';
-import AuthAction from './pages/AuthAction';
-import Loyalty from './pages/Loyalty';
-import Terms from './pages/Terms';
+
+// Lazy load all pages except Home for instant initial load
+const Games = lazy(() => import('./pages/Games'));
+const DatabasePage = lazy(() => import('./pages/DatabasePage'));
+const MapPage = lazy(() => import('./pages/MapPage'));
+const About = lazy(() => import('./pages/About'));
+const CapitalQuiz = lazy(() => import('./pages/CapitalQuiz'));
+const MapDash = lazy(() => import('./pages/MapDash'));
+const FlagFrenzy = lazy(() => import('./pages/FlagFrenzy'));
+const KnowYourNeighbor = lazy(() => import('./pages/KnowYourNeighbor'));
+const PopulationPursuit = lazy(() => import('./pages/PopulationPursuit'));
+const GlobalDetective = lazy(() => import('./pages/GlobalDetective'));
+const CapitalConnection = lazy(() => import('./pages/CapitalConnection'));
+const RegionRoundup = lazy(() => import('./pages/RegionRoundup'));
+const LandmarkLegend = lazy(() => import('./pages/LandmarkLegend'));
+const CountryExploration = lazy(() => import('./pages/CountryExploration'));
+const CountryDetail = lazy(() => import('./pages/CountryDetail'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Auth = lazy(() => import('./pages/Auth'));
+const AuthAction = lazy(() => import('./pages/AuthAction'));
+const Loyalty = lazy(() => import('./pages/Loyalty'));
+const Terms = lazy(() => import('./pages/Terms'));
+
+// Minimal loading fallback - just a subtle pulse, no heavy animations
+const PageLoader = () => (
+  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[50vh]">
+    <div className="w-8 h-8 rounded-full bg-sky/30 animate-pulse" />
+  </div>
+);
 
 const SKIP_TRANSITION_ROUTES = ['/auth', '/profile', '/settings', '/loyalty', '/database', '/directory'];
 
@@ -78,35 +86,37 @@ const AppContent: React.FC = () => {
       <ScrollToTop />
       <Navigation />
       <div className="flex-grow flex flex-col relative w-full">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-            <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
-            <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
-            <Route path="/games/map-dash" element={<PageWrapper><MapDash /></PageWrapper>} />
-            <Route path="/games/flag-frenzy" element={<PageWrapper><FlagFrenzy /></PageWrapper>} />
-            <Route path="/games/know-your-neighbor" element={<PageWrapper><KnowYourNeighbor /></PageWrapper>} />
-            <Route path="/games/population-pursuit" element={<PageWrapper><PopulationPursuit /></PageWrapper>} />
-            <Route path="/games/global-detective" element={<PageWrapper><GlobalDetective /></PageWrapper>} />
-            <Route path="/games/capital-connection" element={<PageWrapper><CapitalConnection /></PageWrapper>} />
-            <Route path="/games/region-roundup" element={<PageWrapper><RegionRoundup /></PageWrapper>} />
-            <Route path="/games/landmark-legend" element={<PageWrapper><LandmarkLegend /></PageWrapper>} />
-            <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
-            <Route path="/directory" element={<DirectoryRedirect />} />
-            <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />
-            <Route path="/map" element={<PageWrapper><MapPage /></PageWrapper>} />
-            <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-            <Route path="/expedition/:id" element={<PageWrapper><CountryExploration /></PageWrapper>} />
-            <Route path="/explore/:id" element={<ExploreRedirect />} />
-            <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
-            <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
-            <Route path="/auth" element={<PageWrapper><Auth /></PageWrapper>} />
-            <Route path="/auth-action" element={<PageWrapper><AuthAction /></PageWrapper>} />
-            <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
-            <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
-            <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
-          </Routes>
-        </AnimatePresence>
+        <Suspense fallback={<PageLoader />}>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+              <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
+              <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
+              <Route path="/games/map-dash" element={<PageWrapper><MapDash /></PageWrapper>} />
+              <Route path="/games/flag-frenzy" element={<PageWrapper><FlagFrenzy /></PageWrapper>} />
+              <Route path="/games/know-your-neighbor" element={<PageWrapper><KnowYourNeighbor /></PageWrapper>} />
+              <Route path="/games/population-pursuit" element={<PageWrapper><PopulationPursuit /></PageWrapper>} />
+              <Route path="/games/global-detective" element={<PageWrapper><GlobalDetective /></PageWrapper>} />
+              <Route path="/games/capital-connection" element={<PageWrapper><CapitalConnection /></PageWrapper>} />
+              <Route path="/games/region-roundup" element={<PageWrapper><RegionRoundup /></PageWrapper>} />
+              <Route path="/games/landmark-legend" element={<PageWrapper><LandmarkLegend /></PageWrapper>} />
+              <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
+              <Route path="/directory" element={<DirectoryRedirect />} />
+              <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />
+              <Route path="/map" element={<PageWrapper><MapPage /></PageWrapper>} />
+              <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+              <Route path="/expedition/:id" element={<PageWrapper><CountryExploration /></PageWrapper>} />
+              <Route path="/explore/:id" element={<ExploreRedirect />} />
+              <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+              <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
+              <Route path="/auth" element={<PageWrapper><Auth /></PageWrapper>} />
+              <Route path="/auth-action" element={<PageWrapper><AuthAction /></PageWrapper>} />
+              <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
+              <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
+              <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
       </div>
       <ConditionalFooter />
     </div>
