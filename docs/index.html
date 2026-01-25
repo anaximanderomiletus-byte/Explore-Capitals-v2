@@ -452,41 +452,36 @@
       }
       
       /* Fix for Safari hover states sticking on touch devices */
-      /* On touch-only devices, disable ALL hover effects to prevent "pre-highlighted" appearance */
+      /* On touch-only devices, disable sticky hover effects */
       @media (hover: none) and (pointer: coarse) {
         .hover\:brightness-110:hover, 
         .hover\:bg-white\/20:hover,
         .hover\:shadow-premium-hover:hover {
           filter: none !important;
-          background-color: inherit !important;
           box-shadow: inherit !important;
         }
         
         /* Game answer buttons - remove hover highlights on touch devices */
         button:hover,
         [role="button"]:hover {
-          background-color: inherit !important;
-          border-color: inherit !important;
           transform: none !important;
+          -webkit-tap-highlight-color: transparent;
         }
       }
       
       /* Only apply hover effects on devices that support hover (mouse/trackpad) */
       @media (hover: hover) and (pointer: fine) {
-        .touch-no-hover:hover {
-          /* Allow hover effects */
-        }
+        /* Standard hover styles allowed here */
       }
       
-      /* Explicitly disable hover on game option buttons on touch devices */
-      @media (hover: none) {
-        .game-option {
-          /* Reset any hover-like visual states */
-        }
-        .game-option:hover {
-          background-color: rgba(255, 255, 255, 0.1) !important;
-          border-color: rgba(255, 255, 255, 0.4) !important;
-        }
+      /* Explicitly disable focus rings globally for a cleaner mobile experience */
+      button:focus, 
+      button:focus-visible,
+      a:focus,
+      a:focus-visible,
+      [role="button"]:focus {
+        outline: none !important;
+        box-shadow: none !important;
       }
 
       /* Ensure interactive elements are recognized by Safari */
@@ -494,6 +489,16 @@
         cursor: pointer;
         touch-action: manipulation;
         -webkit-appearance: none;
+        appearance: none;
+        outline: none !important;
+      }
+      
+      /* Ensure consistent user-select across browsers */
+      .select-none {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       /* Fix touch response and scrolling */
@@ -630,6 +635,7 @@
       a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), .cursor-pointer {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
+        user-select: none;
         touch-action: manipulation;
         /* Ensure elements are clickable */
         -webkit-tap-highlight-color: transparent;
@@ -652,14 +658,6 @@
         .marker-pin {
           forced-color-adjust: none;
         }
-      }
-      
-      /* Ensure emoji flags render consistently */
-      .select-none {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
       }
       
       /* Fix Firefox button inner focus ring */
@@ -697,7 +695,7 @@
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
     </style>
-  <script type="module" crossorigin src="./assets/index-Bolt_HwO.js"></script>
+  <script type="module" crossorigin src="./assets/index-DUyATDXp.js"></script>
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
     <!-- Initial Splash Screen -->
