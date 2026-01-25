@@ -49,7 +49,7 @@ const Terms: React.FC = () => {
                 Terms of <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Service</span>
               </h1>
-              <p className="text-white/40 text-xs font-black uppercase tracking-widest">Effective Date: December 28, 2025</p>
+              <p className="text-white/40 text-xs font-black uppercase tracking-widest">Effective Date: January 25, 2026</p>
             </header>
 
             <div className="space-y-12">
