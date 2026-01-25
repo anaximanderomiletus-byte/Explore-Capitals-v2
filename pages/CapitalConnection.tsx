@@ -339,27 +339,27 @@ export default function CapitalConnection() {
 
 // Memoized Card component to prevent unnecessary re-renders
 const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => void }) => {
-  // No hover styles - prevents "pre-highlighted" appearance on touch devices
-  let stateStyle = "bg-white/10 border-white/20 text-white active:bg-white/15 active:border-sky/40";
+  // No hover or focus styles - prevents "pre-highlighted" appearance on touch devices
+  let stateStyle = "bg-white/10 border-white/20 text-white active:bg-white/15 active:border-sky/40 focus:outline-none focus:ring-0 select-none";
   let animationClass = "";
   
   if (card.isMatched) {
-    stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50";
+    stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50 focus:outline-none focus:ring-0";
   } else if (card.isCorrect) {
-    stateStyle = "bg-emerald-500/40 border-emerald-400 text-white";
+    stateStyle = "bg-emerald-500/40 border-emerald-400 text-white focus:outline-none focus:ring-0";
     animationClass = "animate-correct-pop";
   } else if (card.isWrong) {
-    stateStyle = "bg-red-500/30 border-red-400 text-white";
+    stateStyle = "bg-red-500/30 border-red-400 text-white focus:outline-none focus:ring-0";
     animationClass = "animate-shake";
   } else if (card.isSelected) {
-    stateStyle = "bg-sky/25 border-sky text-white";
+    stateStyle = "bg-sky/25 border-sky/40 text-white focus:outline-none focus:ring-0";
   }
 
   return (
     <button
       onClick={onClick}
       disabled={card.isMatched || card.isCorrect}
-      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass}`}
+      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0`}
       style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>

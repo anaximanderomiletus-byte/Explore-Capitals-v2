@@ -228,21 +228,21 @@ export default function FlagFrenzy() {
                    transition={{ duration: 0.3 }}
                    className="flex-1 flex flex-col min-h-0"
                  >
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-3 md:py-6 relative z-10">
-                      <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-8 font-sans mt-[-1rem] md:mt-[-2rem]">IDENTIFY FLAG</p>
+                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-10 md:pt-4 md:pb-24 relative z-10">
+                      <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-4 md:mb-8 font-sans mt-[-1rem] md:mt-[-2rem]">IDENTIFY FLAG</p>
                       <div className="flex-1 flex items-center justify-center w-full min-h-[80px] max-h-[140px] relative">
                         {!imgError ? (
                           <img 
                             src={`https://flagcdn.com/w640/${currentCountryCode}.png`}
                             alt="Target Flag"
-                            className="max-w-full max-h-[80px] md:max-h-[140px] object-contain drop-shadow-2xl transform scale-105"
+                            className="max-w-full max-h-[100px] md:max-h-[140px] object-contain drop-shadow-2xl transform scale-110 md:scale-105"
                             onError={() => setImgError(true)}
                           />
                         ) : (
                           <img 
                             src={`https://flagcdn.com/w160/${getCountryCode(currentQuestion.country.flag)}.png`}
                             alt="Target Flag Fallback"
-                            className="max-w-full max-h-[80px] md:max-h-[140px] object-contain drop-shadow-2xl"
+                            className="max-w-full max-h-[100px] md:max-h-[140px] object-contain drop-shadow-2xl"
                           />
                         )}
                       </div>

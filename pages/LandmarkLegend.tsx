@@ -275,12 +275,11 @@ export default function LandmarkLegend() {
                    className="flex-1 flex flex-col min-h-0"
                  >
                    {/* Centered image area */}
-                   <div className="flex flex-col items-center justify-center md:justify-start flex-1 min-h-0 py-2 md:pt-2 md:pb-6 overflow-hidden relative z-10">
-                      <p className="text-sky-light font-black text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
+                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 overflow-hidden relative z-10">
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
                       <div 
-                       className="relative w-full max-w-sm md:max-w-md h-48 md:h-64 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20"
+                       className="relative w-full max-w-sm md:max-w-md h-60 md:h-96 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
                        style={{ 
-                         boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset, 0 -20px 40px -20px rgba(56,189,248,0.15) inset',
                          transform: 'perspective(1000px) rotateX(2deg)',
                        }}
                      >

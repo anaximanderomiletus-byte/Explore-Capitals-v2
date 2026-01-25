@@ -224,16 +224,16 @@ export default function CapitalQuiz() {
                    transition={{ duration: 0.3 }}
                    className="flex-1 flex flex-col min-h-0"
                  >
-         <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-3 md:py-6 overflow-hidden relative z-10">
+         <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-6 md:pt-4 md:pb-16 overflow-hidden relative z-10">
+            <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80">IDENTIFY CAPITAL</p>
+            <h3 className="text-xl md:text-4xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] mb-4 md:mb-6">
+              {currentQuestion.country.name}
+            </h3>
             <img 
               src={`https://flagcdn.com/w320/${getCountryCode(currentQuestion.country.flag)}.png`}
               alt={`${currentQuestion.country.name} Flag`}
-              className="h-24 md:h-36 w-auto mb-6 drop-shadow-2xl object-contain"
+              className="h-20 md:h-40 w-auto drop-shadow-2xl object-contain"
             />
-            <p className="text-sky-light font-black text-xs uppercase tracking-[0.4em] mb-2 font-sans opacity-80">IDENTIFY CAPITAL</p>
-            <h3 className="text-3xl md:text-5xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)]">
-              {currentQuestion.country.name}
-            </h3>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">

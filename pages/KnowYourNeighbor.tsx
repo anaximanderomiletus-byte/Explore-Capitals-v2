@@ -245,22 +245,22 @@ export default function KnowYourNeighbor() {
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
                 const isIncorrectSelection = isSelected && !isActualNeighbor;
                 
-                // No hover styles - prevents "pre-highlighted" appearance on touch devices
-                let btnStyle = "bg-white/5 border border-white/30 text-white/70 active:bg-white/10 active:border-sky/40 shadow-inner";
+                // No hover or focus styles - prevents "pre-highlighted" appearance on touch devices
+                let btnStyle = "bg-white/5 border border-white/30 text-white/70 active:bg-white/10 active:border-sky/40 shadow-inner outline-none focus:outline-none focus:ring-0 select-none";
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {
-                    btnStyle = "bg-accent/70 border-accent text-white";
+                    btnStyle = "bg-accent/70 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else if (isActualNeighbor && !isSelected) {
-                    btnStyle = "bg-warning/40 border-warning text-white";
+                    btnStyle = "bg-warning/40 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else if (isSelected && !isActualNeighbor) {
-                    btnStyle = "bg-red-500/70 border-red-500 text-white";
+                    btnStyle = "bg-red-500/70 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else {
-                    btnStyle = "bg-white/5 border-white/5 text-white/10 opacity-40 grayscale blur-[1px]";
+                    btnStyle = "bg-white/5 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
                   }
                 } else {
                   if (isSelected) {
-                    btnStyle = "bg-sky/60 border-sky text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)]";
+                    btnStyle = "bg-sky/60 border-sky/30 text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)] outline-none focus:outline-none focus:ring-0 select-none";
                   }
                 }
 
@@ -269,7 +269,7 @@ export default function KnowYourNeighbor() {
                     key={countryName}
                     onClick={() => toggleOption(countryName)}
                     disabled={!!roundResult}
-                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[44px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''}`}
+                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[44px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     <span className="leading-tight line-clamp-2 relative z-10 drop-shadow-md">{countryName}</span>
