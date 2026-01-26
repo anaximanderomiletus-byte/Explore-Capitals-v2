@@ -1,145 +1,145 @@
 export const imagesM: Record<string, string> = {
-  // --- Madagascar ---
-  "Madagascar": "/png/MADAGASCAR/antananarivo-madagascar.png",
-  "Avenue of the Baobabs": "/png/MADAGASCAR/avenue-of-the-baobabs.png",
-  "Tsingy de Bemaraha": "/png/MADAGASCAR/tsingy-de-bemaraha.png",
-  "Andasibe-Mantadia National Park": "/png/MADAGASCAR/andasibe-indri-lemur.png",
-  "Isalo National Park": "/png/MADAGASCAR/isalo-national-park.png",
-  "Royal Hill of Ambohimanga": "/png/MADAGASCAR/royal-hill-ambohimanga.png",
+  // --- Madagascar --- (placeholder until images added)
+  "Madagascar": "/logo.png",
+  "Avenue of the Baobabs": "/logo.png",
+  "Tsingy de Bemaraha": "/logo.png",
+  "Andasibe-Mantadia National Park": "/logo.png",
+  "Isalo National Park": "/logo.png",
+  "Royal Hill of Ambohimanga": "/logo.png",
 
-  // --- Malawi ---
-  "Malawi": "/png/MALAWI/lilongwe-malawi.png",
-  "Lake Malawi National Park": "/png/MALAWI/lake-malawi-cichlids.png",
-  "Mount Mulanje": "/png/MALAWI/mount-mulanje-tea.png",
-  "Liwonde National Park": "/png/MALAWI/liwonde-elephant-shire-river.png",
-  "Chongoni Rock Art Area": "/png/MALAWI/chongoni-rock-art.png",
-  "Likoma Island": "/png/MALAWI/likoma-island-cathedral.png",
+  // --- Malawi --- (placeholder until images added)
+  "Malawi": "/logo.png",
+  "Lake Malawi National Park": "/logo.png",
+  "Mount Mulanje": "/logo.png",
+  "Liwonde National Park": "/logo.png",
+  "Chongoni Rock Art Area": "/logo.png",
+  "Likoma Island": "/logo.png",
 
-  // --- Malaysia ---
-  "Malaysia": "/png/MALAYSIA/kuala-lumpur-malaysia.png",
-  "Petronas Twin Towers": "/png/MALAYSIA/petronas-twin-towers.png",
-  "Batu Caves": "/png/MALAYSIA/batu-caves.png",
-  "George Town Penang": "/png/MALAYSIA/george-town-street-art.png",
-  "Mount Kinabalu": "/png/MALAYSIA/mount-kinabalu.png",
-  "Taman Negara": "/png/MALAYSIA/taman-negara-canopy.png",
+  // --- Malaysia --- (placeholder until images added)
+  "Malaysia": "/logo.png",
+  "Petronas Twin Towers": "/logo.png",
+  "Batu Caves": "/logo.png",
+  "George Town Penang": "/logo.png",
+  "Mount Kinabalu": "/logo.png",
+  "Taman Negara": "/logo.png",
 
-  // --- Maldives ---
-  "Maldives": "/png/MALDIVES/male-maldives.png",
-  "Male City": "/png/MALDIVES/male-city-mosque.png",
-  "Ithaa Undersea Restaurant": "/png/MALDIVES/ithaa-undersea-restaurant.png",
-  "Hanifaru Bay": "/png/MALDIVES/hanifaru-bay-manta.png",
-  "Vaadhoo Island": "/png/MALDIVES/vaadhoo-sea-of-stars.png",
-  "Overwater Bungalows": "/png/MALDIVES/overwater-bungalows.png",
+  // --- Maldives --- (placeholder until images added)
+  "Maldives": "/logo.png",
+  "Male City": "/logo.png",
+  "Ithaa Undersea Restaurant": "/logo.png",
+  "Hanifaru Bay": "/logo.png",
+  "Vaadhoo Island": "/logo.png",
+  "Overwater Bungalows": "/logo.png",
 
-  // --- Mali ---
-  "Mali": "/png/MALI/bamako-mali.png",
-  "The Great Mosque of Djenné": "/png/MALI/great-mosque-djenne.png",
-  "Timbuktu": "/png/MALI/timbuktu-library.png",
-  "Dogon Country": "/png/MALI/dogon-country-cliff.png",
-  "River Niger Mopti": "/png/MALI/river-niger-mopti-boats.png",
-  "Tomb of Askia": "/png/MALI/tomb-of-askia.png",
+  // --- Mali --- (placeholder until images added)
+  "Mali": "/logo.png",
+  "The Great Mosque of Djenné": "/logo.png",
+  "Timbuktu": "/logo.png",
+  "Dogon Country": "/logo.png",
+  "River Niger Mopti": "/logo.png",
+  "Tomb of Askia": "/logo.png",
 
-  // --- Malta ---
-  "Malta": "/png/MALTA/valletta-malta.png",
-  "St. John's Co-Cathedral": "/png/MALTA/st-johns-co-cathedral.png",
-  "Mdina": "/png/MALTA/mdina-silent-city.png",
-  "Hypogeum Malta": "/png/MALTA/hypogeum-underground.png",
-  "Blue Grotto Malta": "/png/MALTA/blue-grotto-arch.png",
-  "Ggantija Temples": "/png/MALTA/ggantija-temples.png",
+  // --- Malta --- (placeholder until images added)
+  "Malta": "/logo.png",
+  "St. John's Co-Cathedral": "/logo.png",
+  "Mdina": "/logo.png",
+  "Hypogeum Malta": "/logo.png",
+  "Blue Grotto Malta": "/logo.png",
+  "Ggantija Temples": "/logo.png",
 
-  // --- Marshall Islands ---
-  "Marshall Islands": "/png/MARSHALL-ISLANDS/majuro-marshall-islands.png",
-  "Bikini Atoll": "/png/MARSHALL-ISLANDS/bikini-atoll-wreck.png",
-  "Runit Dome": "/png/MARSHALL-ISLANDS/runit-dome-tomb.png",
-  "Majuro Atoll": "/png/MARSHALL-ISLANDS/majuro-strip.png",
-  "Arno Atoll": "/png/MARSHALL-ISLANDS/arno-atoll-weaving.png",
-  "Shark Sanctuary": "/png/MARSHALL-ISLANDS/shark-sanctuary.png",
+  // --- Marshall Islands --- (placeholder until images added)
+  "Marshall Islands": "/logo.png",
+  "Bikini Atoll": "/logo.png",
+  "Runit Dome": "/logo.png",
+  "Majuro Atoll": "/logo.png",
+  "Arno Atoll": "/logo.png",
+  "Shark Sanctuary": "/logo.png",
 
-  // --- Mauritania ---
-  "Mauritania": "/png/MAURITANIA/nouakchott-mauritania.png",
-  "The Eye of the Sahara": "/png/MAURITANIA/eye-of-the-sahara.png",
-  "The Iron Ore Train": "/png/MAURITANIA/iron-ore-train.png",
-  "Chinguetti": "/png/MAURITANIA/chinguetti-desert-library.png",
-  "Banc d'Arguin National Park": "/png/MAURITANIA/banc-darguin-fishing.png",
-  "Terjit Oasis": "/png/MAURITANIA/terjit-oasis.png",
+  // --- Mauritania --- (placeholder until images added)
+  "Mauritania": "/logo.png",
+  "The Eye of the Sahara": "/logo.png",
+  "The Iron Ore Train": "/logo.png",
+  "Chinguetti": "/logo.png",
+  "Banc d'Arguin National Park": "/logo.png",
+  "Terjit Oasis": "/logo.png",
 
-  // --- Mauritius ---
-  "Mauritius": "/png/MAURITIUS/port-louis-mauritius.png",
-  "Seven Colored Earths": "/png/MAURITIUS/seven-colored-earths.png",
-  "Le Morne Brabant": "/png/MAURITIUS/le-morne-brabant.png",
-  "Black River Gorges National Park": "/png/MAURITIUS/black-river-gorges.png",
-  "Pamplemousses Garden": "/png/MAURITIUS/pamplemousses-water-lilies.png",
-  "Ile aux Aigrettes": "/png/MAURITIUS/ile-aux-aigrettes-tortoise.png",
+  // --- Mauritius --- (placeholder until images added)
+  "Mauritius": "/logo.png",
+  "Seven Colored Earths": "/logo.png",
+  "Le Morne Brabant": "/logo.png",
+  "Black River Gorges National Park": "/logo.png",
+  "Pamplemousses Garden": "/logo.png",
+  "Ile aux Aigrettes": "/logo.png",
 
-  // --- Mexico ---
-  "Mexico": "/png/MEXICO/mexico-city-mexico.png",
-  "Chichén Itzá": "/png/MEXICO/chichen-itza.png",
-  "Teotihuacan": "/png/MEXICO/teotihuacan-pyramid-of-the-sun.png",
-  "Cenotes of Yucatán": "/png/MEXICO/cenote-yucatan.png",
-  "Xochimilco": "/png/MEXICO/xochimilco-canals.png",
-  "Copper Canyon": "/png/MEXICO/copper-canyon-train.png",
+  // --- Mexico --- (placeholder until images added)
+  "Mexico": "/logo.png",
+  "Chichén Itzá": "/logo.png",
+  "Teotihuacan": "/logo.png",
+  "Cenotes of Yucatán": "/logo.png",
+  "Xochimilco": "/logo.png",
+  "Copper Canyon": "/logo.png",
 
-  // --- Micronesia ---
-  "Micronesia": "/png/MICRONESIA/palikir-micronesia.png",
-  "Nan Madol": "/png/MICRONESIA/nan-madol-ruins.png",
-  "Chuuk Lagoon": "/png/MICRONESIA/chuuk-lagoon-wreck.png",
-  "Yap Stone Money": "/png/MICRONESIA/yap-stone-money.png",
-  "Sleeping Lady": "/png/MICRONESIA/kosrae-sleeping-lady.png",
-  "Kepirohi Waterfall": "/png/MICRONESIA/kepirohi-waterfall.png",
+  // --- Micronesia --- (placeholder until images added)
+  "Micronesia": "/logo.png",
+  "Nan Madol": "/logo.png",
+  "Chuuk Lagoon": "/logo.png",
+  "Yap Stone Money": "/logo.png",
+  "Sleeping Lady": "/logo.png",
+  "Kepirohi Waterfall": "/logo.png",
 
-  // --- Moldova ---
-  "Moldova": "/png/MOLDOVA/chisinau-moldova.png",
-  "Milestii Mici": "/png/MOLDOVA/milestii-mici-wine-tunnel.png",
-  "Old Orhei": "/png/MOLDOVA/old-orhei-monastery.png",
-  "Cricova Winery": "/png/MOLDOVA/cricova-tasting-room.png",
-  "Transnistria Lenin": "/png/MOLDOVA/transnistria-lenin-statue.png",
-  "Soroca Fortress": "/png/MOLDOVA/soroca-fortress.png",
+  // --- Moldova --- (placeholder until images added)
+  "Moldova": "/logo.png",
+  "Milestii Mici": "/logo.png",
+  "Old Orhei": "/logo.png",
+  "Cricova Winery": "/logo.png",
+  "Transnistria Lenin": "/logo.png",
+  "Soroca Fortress": "/logo.png",
 
-  // --- Monaco ---
-  "Monaco": "/png/MONACO/monaco-city-monaco.png",
-  "Monte Carlo Casino": "/png/MONACO/monte-carlo-casino.png",
-  "The Prince's Palace": "/png/MONACO/princes-palace-monaco.png",
-  "Circuit de Monaco": "/png/MONACO/monaco-grand-prix.png",
-  "Oceanographic Museum": "/png/MONACO/oceanographic-museum.png",
-  "Larvotto Beach": "/png/MONACO/larvotto-beach.png",
+  // --- Monaco --- (placeholder until images added)
+  "Monaco": "/logo.png",
+  "Monte Carlo Casino": "/logo.png",
+  "The Prince's Palace": "/logo.png",
+  "Circuit de Monaco": "/logo.png",
+  "Oceanographic Museum": "/logo.png",
+  "Larvotto Beach": "/logo.png",
 
-  // --- Mongolia ---
-  "Mongolia": "/png/MONGOLIA/ulaanbaatar-mongolia.png",
-  "Gobi Desert Dunes": "/png/MONGOLIA/gobi-desert-dunes.png",
-  "Genghis Khan Statue": "/png/MONGOLIA/genghis-khan-statue.png",
-  "Orkhon Valley": "/png/MONGOLIA/orkhon-valley-yurts.png",
-  "Lake Khövsgöl": "/png/MONGOLIA/lake-khovsgol-reindeer.png",
-  "Naadam Festival": "/png/MONGOLIA/naadam-festival-wrestling.png",
+  // --- Mongolia --- (placeholder until images added)
+  "Mongolia": "/logo.png",
+  "Gobi Desert Dunes": "/logo.png",
+  "Genghis Khan Statue": "/logo.png",
+  "Orkhon Valley": "/logo.png",
+  "Lake Khövsgöl": "/logo.png",
+  "Naadam Festival": "/logo.png",
 
-  // --- Montenegro ---
-  "Montenegro": "/png/MONTENEGRO/podgorica-montenegro.png",
-  "Bay of Kotor": "/png/MONTENEGRO/bay-of-kotor.png",
-  "Tara River Canyon": "/png/MONTENEGRO/tara-river-canyon.png",
-  "Sveti Stefan": "/png/MONTENEGRO/sveti-stefan-island.png",
-  "Our Lady of the Rocks": "/png/MONTENEGRO/our-lady-of-the-rocks.png",
-  "Lovcen Mausoleum": "/png/MONTENEGRO/lovcen-mausoleum.png",
+  // --- Montenegro --- (placeholder until images added)
+  "Montenegro": "/logo.png",
+  "Bay of Kotor": "/logo.png",
+  "Tara River Canyon": "/logo.png",
+  "Sveti Stefan": "/logo.png",
+  "Our Lady of the Rocks": "/logo.png",
+  "Lovcen Mausoleum": "/logo.png",
 
-  // --- Morocco ---
-  "Morocco": "/png/MOROCCO/rabat-morocco.png",
-  "Chefchaouen Blue City": "/png/MOROCCO/chefchaouen-blue-city.png",
-  "Jemaa el-Fnaa": "/png/MOROCCO/jemaa-el-fnaa-market.png",
-  "Hassan II Mosque": "/png/MOROCCO/hassan-ii-mosque.png",
-  "Erg Chebbi Dunes": "/png/MOROCCO/erg-chebbi-dunes.png",
-  "Ait Benhaddou": "/png/MOROCCO/ait-benhaddou-clay-city.png",
+  // --- Morocco --- (placeholder until images added)
+  "Morocco": "/logo.png",
+  "Chefchaouen Blue City": "/logo.png",
+  "Jemaa el-Fnaa": "/logo.png",
+  "Hassan II Mosque": "/logo.png",
+  "Erg Chebbi Dunes": "/logo.png",
+  "Ait Benhaddou": "/logo.png",
 
-  // --- Mozambique ---
-  "Mozambique": "/png/MOZAMBIQUE/maputo-mozambique.png",
-  "Bazaruto Archipelago": "/png/MOZAMBIQUE/bazaruto-archipelago.png",
-  "Island of Mozambique": "/png/MOZAMBIQUE/island-of-mozambique-fort.png",
-  "Gorongosa National Park": "/png/MOZAMBIQUE/gorongosa-national-park-lion.png",
-  "Maputo Railway Station": "/png/MOZAMBIQUE/maputo-railway-station.png",
-  "Tofo Beach": "/png/MOZAMBIQUE/tofo-beach-whale-shark.png",
+  // --- Mozambique --- (placeholder until images added)
+  "Mozambique": "/logo.png",
+  "Bazaruto Archipelago": "/logo.png",
+  "Island of Mozambique": "/logo.png",
+  "Gorongosa National Park": "/logo.png",
+  "Maputo Railway Station": "/logo.png",
+  "Tofo Beach": "/logo.png",
 
-  // --- Myanmar ---
-  "Myanmar": "/png/MYANMAR/naypyidaw-myanmar.png",
-  "Bagan": "/png/MYANMAR/bagan-temples.png",
-  "Inle Lake": "/png/MYANMAR/inle-lake-fisherman.png",
-  "Shwedagon Pagoda": "/png/MYANMAR/shwedagon-pagoda.png",
-  "Golden Rock": "/png/MYANMAR/golden-rock.png",
-  "U Bein Bridge": "/png/MYANMAR/u-bein-bridge.png"
+  // --- Myanmar --- (placeholder until images added)
+  "Myanmar": "/logo.png",
+  "Bagan": "/logo.png",
+  "Inle Lake": "/logo.png",
+  "Shwedagon Pagoda": "/logo.png",
+  "Golden Rock": "/logo.png",
+  "U Bein Bridge": "/logo.png"
 };

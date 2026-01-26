@@ -35,7 +35,7 @@ export const imagesG: Record<string, string> = {
   "Ghana": "/png/GHANA/accra-ghana.png",
   "Cape Coast Castle": "/png/GHANA/cape-coast-castle.png",
   "Kakum National Park": "/png/GHANA/kakum-canopy-walkway.png",
-  "Manhyia Palace": "/png/GHANA/manhyia-palace.png",
+  "Manhyia Palace": "/png/GHANA/manhyia-palace-golden-stool.png",
   "Lake Volta": "/png/GHANA/lake-volta.png",
   "Black Star Square": "/png/GHANA/black-star-square-accra.png",
 

@@ -1,91 +1,90 @@
-
 export const imagesT: Record<string, string> = {
-  // --- Tajikistan ---
-  "Tajikistan": "/png/TAJIKISTAN/dushanbe-tajikistan.png",
-  "The Pamir Highway": "/png/TAJIKISTAN/pamir-highway-mountains.png",
-  "Iskanderkul": "/png/TAJIKISTAN/iskanderkul-lake.png",
-  "Dushanbe Flagpole": "/png/TAJIKISTAN/dushanbe-flagpole.png",
-  "Yamchun Fortress": "/png/TAJIKISTAN/yamchun-fortress.png",
-  "Sarazm": "/png/TAJIKISTAN/sarazm-ruins.png",
+  // --- Tajikistan --- (placeholder until images added)
+  "Tajikistan": "/logo.png",
+  "The Pamir Highway": "/logo.png",
+  "Iskanderkul": "/logo.png",
+  "Dushanbe Flagpole": "/logo.png",
+  "Yamchun Fortress": "/logo.png",
+  "Sarazm": "/logo.png",
 
-  // --- Tanzania ---
-  "Tanzania": "/png/TANZANIA/dodoma-tanzania.png",
-  "Mount Kilimanjaro": "/png/TANZANIA/mount-kilimanjaro.png",
-  "Serengeti National Park": "/png/TANZANIA/serengeti-lion.png",
-  "Ngorongoro Crater": "/png/TANZANIA/ngorongoro-crater.png",
-  "Stone Town Zanzibar": "/png/TANZANIA/stone-town-zanzibar.png",
-  "Lake Natron": "/png/TANZANIA/lake-natron-flamingos.png",
+  // --- Tanzania --- (placeholder until images added)
+  "Tanzania": "/logo.png",
+  "Mount Kilimanjaro": "/logo.png",
+  "Serengeti National Park": "/logo.png",
+  "Ngorongoro Crater": "/logo.png",
+  "Stone Town Zanzibar": "/logo.png",
+  "Lake Natron": "/logo.png",
 
-  // --- Thailand ---
-  "Thailand": "/png/THAILAND/bangkok-thailand.png",
-  "The Grand Palace Bangkok": "/png/THAILAND/grand-palace-bangkok.png",
-  "The White Temple": "/png/THAILAND/white-temple-chiang-rai.png",
-  "Maya Bay": "/png/THAILAND/maya-bay.png",
-  "Ayutthaya": "/png/THAILAND/ayutthaya-buddha-head.png",
-  "Railay Beach": "/png/THAILAND/railay-beach-cliffs.png",
-  "Damnoen Saduak Floating Market": "/png/THAILAND/floating-market.png",
+  // --- Thailand --- (placeholder until images added)
+  "Thailand": "/logo.png",
+  "The Grand Palace Bangkok": "/logo.png",
+  "The White Temple": "/logo.png",
+  "Maya Bay": "/logo.png",
+  "Ayutthaya": "/logo.png",
+  "Railay Beach": "/logo.png",
+  "Damnoen Saduak Floating Market": "/logo.png",
 
-  // --- Timor-Leste ---
-  "Timor-Leste": "/png/TIMOR-LESTE/dili-timor-leste.png",
-  "Christo Rei Dili": "/png/TIMOR-LESTE/christo-rei-statue.png",
-  "Atauro Island": "/png/TIMOR-LESTE/atauro-island-reef.png",
-  "Mount Ramelau": "/png/TIMOR-LESTE/mount-ramelau-summit.png",
-  "Jaco Island": "/png/TIMOR-LESTE/jaco-island-beach.png",
-  "Tais Market": "/png/TIMOR-LESTE/tais-textiles.png",
+  // --- Timor-Leste --- (placeholder until images added)
+  "Timor-Leste": "/logo.png",
+  "Christo Rei Dili": "/logo.png",
+  "Atauro Island": "/logo.png",
+  "Mount Ramelau": "/logo.png",
+  "Jaco Island": "/logo.png",
+  "Tais Market": "/logo.png",
 
-  // --- Togo ---
-  "Togo": "/png/TOGO/lome-togo.png",
-  "Koutammakou": "/png/TOGO/koutammakou-mud-houses.png",
-  "Akodessewa Fetish Market": "/png/TOGO/akodessewa-market.png",
-  "Lake Togo": "/png/TOGO/lake-togo-pirogue.png",
-  "Kpalimé": "/png/TOGO/kpalime-coffee-region.png",
-  "Cascade de Kpimé": "/png/TOGO/cascade-de-kpime-waterfall.png",
+  // --- Togo --- (placeholder until images added)
+  "Togo": "/logo.png",
+  "Koutammakou": "/logo.png",
+  "Akodessewa Fetish Market": "/logo.png",
+  "Lake Togo": "/logo.png",
+  "Kpalimé": "/logo.png",
+  "Cascade de Kpimé": "/logo.png",
 
-  // --- Tonga ---
-  "Tonga": "/png/TONGA/nuku-alofa-tonga.png",
-  "Mapu'a 'a Vaea Blowholes": "/png/TONGA/mapua-a-vaea-blowholes.png",
-  "Ha'amonga 'a Maui": "/png/TONGA/haamonga-a-maui-trilithon.png",
-  "Vava'u Whales": "/png/TONGA/vavau-humpback-whale.png",
-  "Royal Palace Tonga": "/png/TONGA/royal-palace-nuku-alofa.png",
-  "Anahulu Cave": "/png/TONGA/anahulu-cave-pool.png",
+  // --- Tonga --- (placeholder until images added)
+  "Tonga": "/logo.png",
+  "Mapu'a 'a Vaea Blowholes": "/logo.png",
+  "Ha'amonga 'a Maui": "/logo.png",
+  "Vava'u Whales": "/logo.png",
+  "Royal Palace Tonga": "/logo.png",
+  "Anahulu Cave": "/logo.png",
 
-  // --- Trinidad and Tobago ---
-  "Trinidad and Tobago": "/png/TRINIDAD-AND-TOBAGO/port-of-spain-trinidad.png",
-  "Pitch Lake": "/png/TRINIDAD-AND-TOBAGO/pitch-lake-asphalt.png",
-  "The Nylon Pool": "/png/TRINIDAD-AND-TOBAGO/nylon-pool.png",
-  "Caroni Bird Sanctuary": "/png/TRINIDAD-AND-TOBAGO/caroni-scarlet-ibis.png",
-  "Steel Pan Drums": "/png/TRINIDAD-AND-TOBAGO/steel-pan-drums.png",
-  "Leatherback Turtle Trinidad": "/png/TRINIDAD-AND-TOBAGO/leatherback-turtle-nesting.png",
+  // --- Trinidad and Tobago --- (placeholder until images added)
+  "Trinidad and Tobago": "/logo.png",
+  "Pitch Lake": "/logo.png",
+  "The Nylon Pool": "/logo.png",
+  "Caroni Bird Sanctuary": "/logo.png",
+  "Steel Pan Drums": "/logo.png",
+  "Leatherback Turtle Trinidad": "/logo.png",
 
-  // --- Tunisia ---
-  "Tunisia": "/png/TUNISIA/tunis-tunisia.png",
-  "El Jem Amphitheatre": "/png/TUNISIA/el-jem-amphitheatre.png",
-  "Sidi Bou Said": "/png/TUNISIA/sidi-bou-said-blue-doors.png",
-  "Carthage Ruins": "/png/TUNISIA/carthage-ruins.png",
-  "Matmata": "/png/TUNISIA/matmata-underground-homes.png",
-  "Great Mosque of Kairouan": "/png/TUNISIA/kairouan-mosque.png",
+  // --- Tunisia --- (placeholder until images added)
+  "Tunisia": "/logo.png",
+  "El Jem Amphitheatre": "/logo.png",
+  "Sidi Bou Said": "/logo.png",
+  "Carthage Ruins": "/logo.png",
+  "Matmata": "/logo.png",
+  "Great Mosque of Kairouan": "/logo.png",
 
-  // --- Turkey ---
-  "Turkey": "/png/TURKEY/ankara-turkey.png",
-  "Hagia Sophia": "/png/TURKEY/hagia-sophia-istanbul.png",
-  "Cappadocia": "/png/TURKEY/cappadocia-balloons.png",
-  "Pamukkale": "/png/TURKEY/pamukkale-travertine-pools.png",
-  "Ephesus Library": "/png/TURKEY/ephesus-library-celsus.png",
-  "Grand Bazaar Istanbul": "/png/TURKEY/grand-bazaar-istanbul.png",
+  // --- Turkey --- (placeholder until images added)
+  "Turkey": "/logo.png",
+  "Hagia Sophia": "/logo.png",
+  "Cappadocia": "/logo.png",
+  "Pamukkale": "/logo.png",
+  "Ephesus Library": "/logo.png",
+  "Grand Bazaar Istanbul": "/logo.png",
 
-  // --- Turkmenistan ---
-  "Turkmenistan": "/png/TURKMENISTAN/ashgabat-turkmenistan.png",
-  "Darvaza Gas Crater": "/png/TURKMENISTAN/darvaza-gas-crater.png",
-  "Ashgabat": "/png/TURKMENISTAN/ashgabat-white-marble.png",
-  "Ancient Merv": "/png/TURKMENISTAN/ancient-merv-ruins.png",
-  "Yangykala Canyon": "/png/TURKMENISTAN/yangykala-canyon.png",
-  "Kow Ata": "/png/TURKMENISTAN/kow-ata-underground-lake.png",
+  // --- Turkmenistan --- (placeholder until images added)
+  "Turkmenistan": "/logo.png",
+  "Darvaza Gas Crater": "/logo.png",
+  "Ashgabat": "/logo.png",
+  "Ancient Merv": "/logo.png",
+  "Yangykala Canyon": "/logo.png",
+  "Kow Ata": "/logo.png",
 
-  // --- Tuvalu ---
-  "Tuvalu": "/png/TUVALU/funafuti-tuvalu.png",
-  "Funafuti Runway": "/png/TUVALU/funafuti-airport-runway.png",
-  "Funafuti Conservation Area": "/png/TUVALU/funafuti-conservation-area.png",
-  "Tuvalu Stamps": "/png/TUVALU/tuvalu-stamps.png",
-  "Nanumea Atoll": "/png/TUVALU/nanumea-wwii-plane.png",
-  "Tuvalu Lagoon": "/png/TUVALU/tuvalu-lagoon.png"
+  // --- Tuvalu --- (placeholder until images added)
+  "Tuvalu": "/logo.png",
+  "Funafuti Runway": "/logo.png",
+  "Funafuti Conservation Area": "/logo.png",
+  "Tuvalu Stamps": "/logo.png",
+  "Nanumea Atoll": "/logo.png",
+  "Tuvalu Lagoon": "/logo.png"
 };

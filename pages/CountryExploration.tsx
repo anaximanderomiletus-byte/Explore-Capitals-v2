@@ -755,7 +755,7 @@ const CountryExploration: React.FC = () => {
 
     if (view === 'intro') {
       return (
-        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-12 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
+        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-20 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
             title={`Expedition - ${country.name}`} 
             description={`Explore ${country.name} with a virtual expedition.`}
@@ -769,25 +769,29 @@ const CountryExploration: React.FC = () => {
             <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
           </div>
           
-          <div className={`relative z-10 w-full max-w-4xl flex flex-col items-center transition-all duration-500 px-1 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
-            <div className="p-2 sm:p-4 md:p-6 text-center relative w-full overflow-hidden">
+          <div className={`relative z-10 w-full max-w-6xl flex flex-col transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+            <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 lg:gap-x-16 lg:gap-y-1 items-center lg:items-start">
               
-              <div className="space-y-1 mb-2 text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-0.5 bg-sky/30 rounded-full border border-white/40 text-[7px] font-black tracking-[0.4em] text-white relative overflow-hidden mx-auto">
-                  <Compass size={10} className="text-sky-light" /> 
-                  <span className="relative z-10 uppercase">Virtual Tour</span>
+              {/* 1. Text Block: Top-Left on Desktop */}
+              <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-3 order-1 w-full">
+                <div className="space-y-3 w-full">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-sky/30 rounded-full border border-white/40 text-[8px] font-black tracking-[0.4em] text-white relative overflow-hidden">
+                    <Compass size={12} className="text-sky-light" /> 
+                    <span className="relative z-10 uppercase">Virtual Tour</span>
+                  </div>
+                  <h1 className="text-2xl md:text-4xl lg:text-6xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
+                    {tourData.tourTitle}
+                  </h1>
+                  <p className="text-xs md:text-sm lg:text-base text-white/70 font-bold italic leading-relaxed drop-shadow-sm max-w-2xl">
+                    {tourData.introText}
+                  </p>
                 </div>
-                <h1 className="text-xl md:text-2xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
-                  {tourData.tourTitle}
-                </h1>
-                <p className="text-[10px] md:text-[11px] text-white/70 font-bold italic leading-snug drop-shadow-sm max-w-2xl mx-auto">
-                  {tourData.introText}
-                </p>
               </div>
 
-              <div className="flex flex-col items-center gap-2.5 mb-1.5 w-full overflow-hidden">
-                {/* Main Featured Image - Centered TV */}
-                <div className="max-w-lg w-full relative group px-1">
+              {/* 2. Visual Block (TV): Under Text on Desktop */}
+              <div className="lg:col-span-7 w-full flex flex-col items-center lg:items-start order-2 mt-1 lg:mt-3 mb-4 lg:mb-0">
+                {/* Main Featured Image - TV (Larger) */}
+                <div className="max-w-[280px] md:max-w-md lg:max-w-2xl w-full relative group">
                   <PhotoPrint 
                     src={introImage} 
                     alt={country.name} 
@@ -795,79 +799,82 @@ const CountryExploration: React.FC = () => {
                     caption={`${country.capital}, ${country.name}`}
                     region={country.region}
                     rotation="rotate-0"
-                    className="w-full"
+                    className="w-full shadow-2xl shadow-black/50"
                   />
-                </div>
-
-                {/* Itinerary Preview - Horizontal Under TV */}
-                <div className="flex flex-col items-center gap-1 w-full">
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="text-[7px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
-                    <div className="h-0.5 w-10 bg-sky/40 rounded-full" />
-                  </div>
-                  
-                  <div className="relative flex justify-center w-full">
-                    {/* Connecting Line */}
-                    <div className="absolute top-5 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-white/30 to-transparent z-0 hidden md:block" />
-                    
-                    <div className="flex flex-wrap justify-center gap-3 md:gap-6 relative z-10">
-                      {tourData.stops.map((stop, idx) => {
-                        const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
-                        
-                        return (
-                          <div key={idx} className="flex flex-col items-center gap-2 group/stop w-20 md:w-24">
-                            <div className="w-10 h-10 shrink-0 rounded-lg bg-black/40 border border-white/10 overflow-hidden relative shadow-inner">
-                              <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
-                              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
-                              <div className="absolute bottom-0 right-0 bg-sky/80 text-white text-[6px] font-black px-0.5 rounded-tl-md">
-                                0{idx + 1}
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center text-center w-full">
-                              <span className="text-[8px] font-black text-white uppercase tracking-wider group-hover/stop:text-sky-light transition-colors leading-tight w-full line-clamp-2">{displayLabel}</span>
-                              <span className="text-[6px] font-bold text-white/20 uppercase tracking-widest">Waypoint</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  {/* Decorative Elements for TV */}
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-48 h-1.5 bg-sky/20 blur-2xl rounded-full" />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 w-full items-center pt-0.5">
-                <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-yellow-400/10 hover:bg-yellow-400/20 rounded-full border border-yellow-400/30 hover:border-yellow-400/60 shadow-inner group/warning transition-all duration-300 cursor-default mb-1">
-                   <AlertCircle size={10} className="text-yellow-400 group-hover/warning:text-yellow-300 transition-colors" />
-                   <span className="text-[7px] font-black text-yellow-400/90 group-hover/warning:text-white uppercase tracking-wider transition-colors">This tour ends with a brief assessment to test your knowledge.</span>
+              {/* 3. Itinerary Block & Actions: Right Side on Desktop */}
+              <div className="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 flex flex-col items-start gap-4 order-3 w-full lg:pl-4 pt-4 lg:pt-16">
+                <div className="flex flex-col items-start gap-1">
+                  <span className="text-[10px] lg:text-[11px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
+                  <div className="h-0.5 w-12 bg-sky/40 rounded-full" />
+                </div>
+                
+                <div className="relative w-full overflow-visible">
+                  {/* Connecting Line (Vertical for both Mobile & Desktop) */}
+                  <div className="absolute top-4 bottom-4 left-[22px] w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-0" />
+                  
+                  <div className="flex flex-col items-start gap-5 lg:gap-6 relative z-10 w-full">
+                    {tourData.stops.map((stop, idx) => {
+                      const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
+                      
+                      return (
+                        <div key={idx} className="flex flex-row items-center gap-4 group/stop w-full">
+                          {/* Icon Container */}
+                          <div className="w-11 h-11 shrink-0 rounded-xl bg-black/60 border border-white/10 overflow-hidden relative shadow-lg group-hover/stop:border-sky/50 transition-all duration-300">
+                            <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500 scale-110 group-hover/stop:scale-100" />
+                            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
+                            <div className="absolute top-0 left-0 bg-sky/80 text-white text-[6px] font-black px-1.5 py-0.5 rounded-br-lg">
+                              {idx + 1}
+                            </div>
+                          </div>
+
+                          {/* Label Container */}
+                          <div className="flex flex-col items-start text-left flex-1">
+                            <span className="text-[6px] lg:text-[7px] font-bold text-white/20 uppercase tracking-widest mb-0.5">Waypoint 0{idx + 1}</span>
+                            <span className="text-[13px] lg:text-sm font-black text-white/80 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors">{displayLabel}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <button 
-                  onClick={startTour} 
-                  className="group relative w-full max-w-[320px] h-12 rounded-2xl overflow-hidden transition-all duration-500"
-                >
-                  {/* Gradient background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
-                  
-                  {/* Subtle inner border */}
-                  <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
-                  
-                  {/* Content */}
-                  <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-white/90">
-                      Start Tour
-                    </span>
-                    <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                      <ChevronRight size={14} className="text-white/80 transition-all" />
-                    </div>
-                  </div>
-                </button>
+                {/* Integrated Bottom Actions (Moved under Itinerary) */}
+                <div className="flex flex-col gap-4 w-full items-center mt-3 pt-6 border-t border-white/5">
+                  <div className="flex flex-col items-center gap-4 w-full">
+                    <button 
+                      onClick={startTour} 
+                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-2xl overflow-hidden transition-all duration-500 shadow-2xl shadow-sky/20"
+                    >
+                      {/* Gradient background */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
+                      
+                      {/* Subtle inner border */}
+                      <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                      
+                      {/* Content */}
+                      <div className="relative z-10 flex items-center justify-center gap-3 h-full">
+                        <span className="text-sm lg:text-base font-black uppercase tracking-[0.2em] text-white">
+                          Start Tour
+                        </span>
+                        <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                          <ChevronRight size={20} className="text-white transition-all" />
+                        </div>
+                      </div>
+                    </button>
 
-                <button 
-                  onClick={() => navigate(`/country/${country.id}`)}
-                  className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 hover:text-sky transition-colors py-1"
-                >
-                  GO BACK
-                </button>
+                    <button 
+                      onClick={() => navigate(`/country/${country.id}`)}
+                      className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
+                    >
+                      GO BACK
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

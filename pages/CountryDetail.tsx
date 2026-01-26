@@ -492,7 +492,7 @@ const CountryDetail: React.FC = () => {
 
                      {/* Territories */}
                      {controlledTerritories.length > 0 && (
-                        <div className="mb-10 lg:mb-16 shrink-0 relative z-10">
+                        <div className="mb-8 lg:mb-10 shrink-0 relative z-10">
                              <p className="text-[9px] font-black text-accent uppercase tracking-[0.3em] mb-4 lg:mb-5">Territories</p>
                              <div className="flex flex-wrap gap-2 lg:gap-3">
                                 {controlledTerritories.map(t => (
@@ -507,6 +507,31 @@ const CountryDetail: React.FC = () => {
                              </div>
                         </div>
                      )}
+
+                     {/* Coordinates Terminal Overlay */}
+                     <div className="mb-8 lg:mb-10 flex flex-col items-center gap-4 lg:gap-5 relative z-10">
+                        <div className="inline-flex flex-col items-center gap-3 lg:gap-4">
+                             <div className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em] drop-shadow-sm">Global Coordinates</div>
+                             <div className="inline-flex items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 lg:py-4 bg-white/20 backdrop-blur-3xl text-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.12)] border-2 border-white/60 group transition-all duration-700 relative overflow-hidden whitespace-nowrap">
+                                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
+                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
+                                     {Math.abs(country.lat).toFixed(4)}° {country.lat >= 0 ? 'N' : 'S'}
+                                  </span>
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-light animate-pulse relative z-10"></div>
+                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
+                                     {Math.abs(country.lng).toFixed(4)}° {country.lng >= 0 ? 'E' : 'W'}
+                                  </span>
+                             </div>
+                        </div>
+
+                        <Link 
+                            to={`/map?country=${country.id}`}
+                            className="group flex items-center gap-3 text-[9px] font-black text-white/50 hover:text-sky transition-all uppercase tracking-[0.3em] py-1"
+                        >
+                             <Map size={16} className="transition-all text-sky opacity-80 group-hover:opacity-100" />
+                             VIEW ON MAP
+                        </Link>
+                     </div>
 
                      {!isTerritory && !isDeFacto ? (
                         <div className="pt-8 lg:pt-12 border-t border-white/10 flex flex-col items-center gap-6 lg:gap-10 shrink-0 text-center relative z-10">
@@ -537,30 +562,8 @@ const CountryDetail: React.FC = () => {
                         </div>
                      ) : null}
 
-                     {/* Coordinates Terminal Overlay */}
-                     <div className="mt-8 lg:mt-12 flex flex-col items-center gap-6 lg:gap-8 relative z-10">
-                        <div className="inline-flex flex-col items-center gap-3 lg:gap-4">
-                             <div className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em] drop-shadow-sm">Global Coordinates</div>
-                             <div className="inline-flex items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 lg:py-4 bg-white/20 backdrop-blur-3xl text-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.12)] border-2 border-white/60 group transition-all duration-700 relative overflow-hidden whitespace-nowrap">
-                                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
-                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
-                                     {Math.abs(country.lat).toFixed(4)}° {country.lat >= 0 ? 'N' : 'S'}
-                                  </span>
-                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-light animate-pulse relative z-10"></div>
-                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
-                                     {Math.abs(country.lng).toFixed(4)}° {country.lng >= 0 ? 'E' : 'W'}
-                                  </span>
-                             </div>
-                        </div>
-
-                        <Link 
-                            to={`/map?country=${country.id}`}
-                            className="group flex items-center gap-3 text-[9px] font-black text-white/50 hover:text-sky transition-all uppercase tracking-[0.3em] py-3"
-                        >
-                             <Map size={16} className="transition-all text-sky opacity-80 group-hover:opacity-100" />
-                             VIEW ON MAP
-                        </Link>
-
+                     {/* Back to Directory */}
+                     <div className="mt-6 lg:mt-8 flex justify-center relative z-10">
                         <button 
                             onClick={() => navigate('/database')}
                             className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-2"

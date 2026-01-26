@@ -1,17 +1,17 @@
 export const imagesZ: Record<string, string> = {
-  // --- Zambia ---
-  "Zambia": "/png/ZAMBIA/lusaka-zambia.png",
-  "Victoria Falls Zambia": "/png/ZAMBIA/victoria-falls-devils-pool.png",
-  "South Luangwa National Park": "/png/ZAMBIA/south-luangwa-leopard.png",
-  "Lake Kariba": "/png/ZAMBIA/lake-kariba-dead-trees.png",
-  "Kasanka Bat Migration": "/png/ZAMBIA/kasanka-bat-migration.png",
-  "Mukuni Village": "/png/ZAMBIA/mukuni-village-huts.png",
+  // --- Zambia --- (placeholder until images added)
+  "Zambia": "/logo.png",
+  "Victoria Falls Zambia": "/logo.png",
+  "South Luangwa National Park": "/logo.png",
+  "Lake Kariba": "/logo.png",
+  "Kasanka Bat Migration": "/logo.png",
+  "Mukuni Village": "/logo.png",
 
-  // --- Zimbabwe ---
-  "Zimbabwe": "/png/ZIMBABWE/harare-zimbabwe.png",
-  "Great Zimbabwe Walls": "/png/ZIMBABWE/great-zimbabwe-ruins.png",
-  "Hwange Elephants": "/png/ZIMBABWE/hwange-elephants-waterhole.png",
-  "Mana Pools Elephant": "/png/ZIMBABWE/mana-pools-elephant.png",
-  "Matobo Balancing Rocks": "/png/ZIMBABWE/matobo-balancing-rocks.png",
-  "Birchenough Bridge": "/png/ZIMBABWE/birchenough-bridge.png"
+  // --- Zimbabwe --- (placeholder until images added)
+  "Zimbabwe": "/logo.png",
+  "Great Zimbabwe Walls": "/logo.png",
+  "Hwange Elephants": "/logo.png",
+  "Mana Pools Elephant": "/logo.png",
+  "Matobo Balancing Rocks": "/logo.png",
+  "Birchenough Bridge": "/logo.png"
 };

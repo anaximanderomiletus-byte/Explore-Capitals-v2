@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                 className="w-full h-full"
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
-                <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img 
                     src={`${import.meta.env.BASE_URL}logo.png`} 
                     alt="Globe - Click to explore the map" 
@@ -138,7 +138,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
                 </div>
               </motion.div>
@@ -151,7 +151,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                 className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
                 </div>
               </motion.div>

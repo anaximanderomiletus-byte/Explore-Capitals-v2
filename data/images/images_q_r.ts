@@ -1,33 +1,33 @@
 export const imagesQR: Record<string, string> = {
-  // --- Qatar ---
-  "Qatar": "/png/QATAR/doha-qatar.png",
-  "Museum of Islamic Art": "/png/QATAR/museum-islamic-art.png",
-  "Souq Waqif": "/png/QATAR/souq-waqif.png",
-  "The Pearl-Qatar": "/png/QATAR/pearl-qatar-aerial.png",
-  "Khor Al Adaid": "/png/QATAR/inland-sea-dunes.png",
-  "Zubarah Fort": "/png/QATAR/zubarah-fort.png",
+  // --- Qatar --- (placeholder until images added)
+  "Qatar": "/logo.png",
+  "Museum of Islamic Art": "/logo.png",
+  "Souq Waqif": "/logo.png",
+  "The Pearl-Qatar": "/logo.png",
+  "Khor Al Adaid": "/logo.png",
+  "Zubarah Fort": "/logo.png",
 
-  // --- Romania ---
-  "Romania": "/png/ROMANIA/bucharest-romania.png",
-  "Bran Castle": "/png/ROMANIA/bran-castle-dracula.png",
-  "Palace of the Parliament": "/png/ROMANIA/palace-of-parliament.png",
-  "Transfagarasan Highway": "/png/ROMANIA/transfagarasan-highway.png",
-  "Merry Cemetery": "/png/ROMANIA/merry-cemetery.png",
-  "Voronet Monastery": "/png/ROMANIA/voronet-monastery-blue.png",
+  // --- Romania --- (placeholder until images added)
+  "Romania": "/logo.png",
+  "Bran Castle": "/logo.png",
+  "Palace of the Parliament": "/logo.png",
+  "Transfagarasan Highway": "/logo.png",
+  "Merry Cemetery": "/logo.png",
+  "Voronet Monastery": "/logo.png",
 
-  // --- Russia ---
-  "Russia": "/png/RUSSIA/moscow-russia.png",
-  "Saint Basil's Cathedral": "/png/RUSSIA/saint-basils-cathedral.png",
-  "Hermitage Museum": "/png/RUSSIA/hermitage-museum.png",
-  "Lake Baikal": "/png/RUSSIA/lake-baikal-ice.png",
-  "Trans-Siberian Railway": "/png/RUSSIA/trans-siberian-railway.png",
-  "The Kremlin": "/png/RUSSIA/kremlin-walls.png",
+  // --- Russia --- (placeholder until images added)
+  "Russia": "/logo.png",
+  "Saint Basil's Cathedral": "/logo.png",
+  "Hermitage Museum": "/logo.png",
+  "Lake Baikal": "/logo.png",
+  "Trans-Siberian Railway": "/logo.png",
+  "The Kremlin": "/logo.png",
 
-  // --- Rwanda ---
-  "Rwanda": "/png/RWANDA/kigali-rwanda.png",
-  "Volcanoes National Park": "/png/RWANDA/volcanoes-national-park-gorilla.png",
-  "Kigali Genocide Memorial": "/png/RWANDA/kigali-genocide-memorial.png",
-  "Nyungwe Forest": "/png/RWANDA/nyungwe-forest-canopy.png",
-  "Lake Kivu": "/png/RWANDA/lake-kivu.png",
-  "King's Palace Nyanza": "/png/RWANDA/kings-palace-nyanza-cows.png"
+  // --- Rwanda --- (placeholder until images added)
+  "Rwanda": "/logo.png",
+  "Volcanoes National Park": "/logo.png",
+  "Kigali Genocide Memorial": "/logo.png",
+  "Nyungwe Forest": "/logo.png",
+  "Lake Kivu": "/logo.png",
+  "King's Palace Nyanza": "/logo.png"
 };

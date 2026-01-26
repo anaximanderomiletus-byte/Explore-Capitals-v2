@@ -22,14 +22,20 @@ export const imagesC: Record<string, string> = {
   "Waza National Park": "/png/CAMEROON/waza-national-park.png",
   "The Lobé Waterfalls": "/png/CAMEROON/the-lobe-waterfalls.png",
   "The Royal Palace of Foumban": "/png/CAMEROON/royal-palace-of-foumban.png",
+  "Royal Palace of Foumban": "/png/CAMEROON/royal-palace-of-foumban.png",
   "Rhumsiki Peaks": "/png/CAMEROON/rhumsiki-peaks.png",
 
   // --- Canada ---
   "Canada": "/png/CANADA/ottawa-canada.png",
   "Banff National Park (Moraine Lake)": "/png/CANADA/banff-moraine-lake.png",
+  "Moraine Lake": "/png/CANADA/banff-moraine-lake.png",
   "The CN Tower": "/png/CANADA/cn-tower.png",
+  "CN Tower": "/png/CANADA/cn-tower.png",
   "Old Quebec (Quebec City)": "/png/CANADA/old-quebec.png",
+  "Old Quebec": "/png/CANADA/old-quebec.png",
   "The Bay of Fundy (Hopewell Rocks)": "/png/CANADA/bay-of-fundy-hopewell-rocks.png",
+  "The Bay of Fundy": "/png/CANADA/bay-of-fundy-hopewell-rocks.png",
+  "Hopewell Rocks": "/png/CANADA/bay-of-fundy-hopewell-rocks.png",
   "L'Anse aux Meadows": "/png/CANADA/lanse-aux-meadows.png",
 
   // --- Central African Republic ---
@@ -43,18 +49,22 @@ export const imagesC: Record<string, string> = {
   // --- Chad ---
   "Chad": "/png/CHAD/ndjamena-chad.png",
   "Ennedi Plateau (Guelta d'Archei)": "/png/CHAD/ennedi-plateau.png",
+  "Ennedi Plateau": "/png/CHAD/ennedi-plateau.png",
   "Lake Chad": "/png/CHAD/lake-chad.png",
   "Zakouma National Park": "/png/CHAD/zakouma-national-park.png",
   "Emi Koussi (Tibesti Mountains)": "/png/CHAD/emi-koussi.png",
+  "Emi Koussi": "/png/CHAD/emi-koussi.png",
   "Gaoui Village": "/png/CHAD/gaoui-village.png",
 
   // --- Chile ---
   "Chile": "/png/CHILE/santiago-chile.png",
   "Torres del Paine": "/png/CHILE/torres-del-paine.png",
-  "Rapa Nui (Easter Island)": "/png/CHILE/rapa-nui-easter-island.png",
+  "Rapa Nui (Easter Island)": "/png/CHILE/moai-statues.png",
+  "Rapa Nui": "/png/CHILE/moai-statues.png",
   "Valparaíso": "/png/CHILE/valparaiso.png",
-  "The Atacama Desert (Moon Valley)": "/png/CHILE/atacama-desert-moon-valley.png",
-  "The Marble Caves": "/png/CHILE/the-marble-caves.png",
+  "The Atacama Desert (Moon Valley)": "/png/CHILE/moon-valley-atacama.png",
+  "The Atacama Desert": "/png/CHILE/moon-valley-atacama.png",
+  "The Marble Caves": "/png/CHILE/marble-caves.png",
 
   // --- China ---
   "China": "/png/CHINA/beijing-china.png",
@@ -77,6 +87,7 @@ export const imagesC: Record<string, string> = {
   "Mount Karthala": "/png/COMOROS/mount-karthala.png",
   "Mohéli Marine Park": "/png/COMOROS/moheli-marine-park.png",
   "Lac Salé (Salt Lake)": "/png/COMOROS/lac-sale.png",
+  "Lac Salé": "/png/COMOROS/lac-sale.png",
   "Ylang-Ylang Plantations": "/png/COMOROS/ylang-ylang-plantations.png",
   "The Coelacanth Discovery": "/png/COMOROS/the-coelacanth-discovery.png",
 
@@ -102,15 +113,19 @@ export const imagesC: Record<string, string> = {
   "Grand-Bassam": "/png/COTE-DIVOIRE/grand-bassam.png",
   "Taï National Park": "/png/COTE-DIVOIRE/tai-national-park.png",
   "La Dent de Man (The Tooth of Man)": "/png/COTE-DIVOIRE/la-dent-de-man.png",
+  "La Dent de Man": "/png/COTE-DIVOIRE/la-dent-de-man.png",
   "St. Paul's Cathedral (Abidjan)": "/png/COTE-DIVOIRE/st-pauls-cathedral.png",
+  "St. Paul's Cathedral": "/png/COTE-DIVOIRE/st-pauls-cathedral.png",
 
   // --- Croatia ---
   "Croatia": "/png/CROATIA/zagreb-croatia.png",
   "The Walls of Dubrovnik": "/png/CROATIA/walls-of-dubrovnik.png",
   "Plitvice Lakes National Park": "/png/CROATIA/plitvice-lakes-national-park.png",
   "Diocletian's Palace (Split)": "/png/CROATIA/diocletians-palace-split.png",
+  "Diocletian's Palace": "/png/CROATIA/diocletians-palace-split.png",
   "Pula Arena": "/png/CROATIA/pula-arena.png",
   "The Sea Organ (Zadar)": "/png/CROATIA/sea-organ-zadar.png",
+  "The Sea Organ": "/png/CROATIA/sea-organ-zadar.png",
 
   // --- Cuba ---
   "Cuba": "/png/CUBA/havana-cuba.png",

@@ -1,9 +1,9 @@
 export const imagesO: Record<string, string> = {
-  // --- Oman ---
-  "Oman": "/png/OMAN/muscat-oman.png",
-  "Sultan Qaboos Grand Mosque": "/png/OMAN/sultan-qaboos-grand-mosque-carpet.png",
-  "Wadi Shab": "/png/OMAN/wadi-shab-keyhole-cave.png",
-  "Nizwa Fort": "/png/OMAN/nizwa-fort-tower.png",
-  "Wahiba Sands": "/png/OMAN/wahiba-sands-dunes.png",
-  "Jebel Shams": "/png/OMAN/jebel-shams-grand-canyon.png"
+  // --- Oman --- (placeholder until images added)
+  "Oman": "/logo.png",
+  "Sultan Qaboos Grand Mosque": "/logo.png",
+  "Wadi Shab": "/logo.png",
+  "Nizwa Fort": "/logo.png",
+  "Wahiba Sands": "/logo.png",
+  "Jebel Shams": "/logo.png"
 };
