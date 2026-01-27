@@ -183,7 +183,13 @@ export default function MapDash() {
       markerInstancesRef.current.set(country.id, marker);
 
       marker.on('click', (e: any) => {
+        // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
+        if (e && e.originalEvent) {
+          e.originalEvent.stopPropagation();
+          e.originalEvent.preventDefault();
+        }
         L.DomEvent.stopPropagation(e);
+        
         const currentTarget = targetCountryRef.current;
         if (gameStateRef.current !== 'playing' || !currentTarget || isTransitioningRef.current) return;
 

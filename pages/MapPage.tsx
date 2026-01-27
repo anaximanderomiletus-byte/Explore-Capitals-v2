@@ -49,7 +49,9 @@ const MapPage: React.FC = () => {
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const isLoadingRandomRef = useRef(false);
   useEffect(() => { isLoadingRandomRef.current = isLoadingRandom; }, [isLoadingRandom]);
-  const ignoreMapClickUntilRef = useRef(0);
+  
+  // Track when a marker was just clicked to prevent map click from clearing it
+  const markerClickedRef = useRef(false);
   
   const desktopResultsRef = useRef<HTMLDivElement>(null);
   const mobileResultsRef = useRef<HTMLDivElement>(null);
@@ -276,13 +278,19 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
+                            // Handle click with proper event propagation control for mobile/tablet
                             marker.on('click', (e: any) => {
-                                ignoreMapClickUntilRef.current = Date.now() + 450;
-                                if (e?.originalEvent) {
-                                  L.DomEvent.stopPropagation(e.originalEvent);
-                                  L.DomEvent.preventDefault(e.originalEvent);
+                                // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
+                                if (e && e.originalEvent) {
+                                  e.originalEvent.stopPropagation();
+                                  e.originalEvent.preventDefault();
                                 }
-                                L.DomEvent.stop(e);
+                                L.DomEvent.stopPropagation(e);
+                                
+                                // Set flag to prevent map click handler from clearing the selection
+                                markerClickedRef.current = true;
+                                setTimeout(() => { markerClickedRef.current = false; }, 100);
+                                
                                 setActiveCountryId(country.id);
                                 centerMapOnMarker(marker);
                                 // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
@@ -311,10 +319,12 @@ const MapPage: React.FC = () => {
             createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
 
+        // Only clear active country if a marker wasn't just clicked
+        // This prevents the map click from firing immediately after marker click on mobile
         map.on('click', () => {
-          if (Date.now() < ignoreMapClickUntilRef.current) return;
-          setActiveCountryId(null);
-          map.closePopup();
+          if (!markerClickedRef.current) {
+            setActiveCountryId(null);
+          }
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);
