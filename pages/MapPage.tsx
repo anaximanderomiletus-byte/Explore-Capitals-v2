@@ -208,11 +208,10 @@ const MapPage: React.FC = () => {
           wheelDebounceTime: 40,
           wheelPxPerZoomLevel: 60,
           updateWhenIdle: true,
-          // CRITICAL FOR MOBILE: Disable automatic popup closing on map click
-          // We handle popup closing manually via our click handler
-          closePopupOnClick: false,
-          // Disable Leaflet's tap handler which can cause double-firing on mobile
-          tap: false,
+          // Mobile/touch improvements
+          tap: true,
+          tapTolerance: 15,
+          closePopupOnClick: false, // Prevent popup from closing during map interactions
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -283,30 +282,53 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
-                            marker.on('click', (e: any) => {
-                                // CRITICAL: Stop all event propagation for mobile/touch compatibility
-                                // Use L.DomEvent.stop which handles both stopPropagation and preventDefault
-                                try {
-                                    L.DomEvent.stop(e);
-                                } catch (err) {
-                                    // Fallback for edge cases
-                                    if (e?.originalEvent) {
-                                        e.originalEvent.stopPropagation?.();
-                                        e.originalEvent.preventDefault?.();
-                                    }
+                            // Handler function for marker interaction (works for both click and touch)
+                            const handleMarkerActivation = (e: any) => {
+                                // CRITICAL: Stop propagation to prevent map click from firing
+                                if (e && e.originalEvent) {
+                                    L.DomEvent.stopPropagation(e);
+                                    L.DomEvent.preventDefault(e);
+                                    e.originalEvent.stopPropagation();
+                                    e.originalEvent.preventDefault();
                                 }
                                 
-                                // Record the timestamp of this marker click for debounce protection
+                                // Record the timestamp for debounce protection
                                 lastMarkerClickRef.current = Date.now();
+                                
+                                // Close any existing popup first
+                                if (mapInstanceRef.current) {
+                                    mapInstanceRef.current.closePopup();
+                                }
                                 
                                 setActiveCountryId(country.id);
                                 centerMapOnMarker(marker);
-                                // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
+                                
+                                // Wait for the flyTo animation (0.8s) plus buffer for stabilization
                                 setTimeout(() => {
-                                  marker.openPopup();
-                                  // Force immediate position update
-                                  if (marker.getPopup()) marker.getPopup().update();
+                                    if (marker && markersLayerRef.current?.hasLayer(marker)) {
+                                        marker.openPopup();
+                                        if (marker.getPopup()) marker.getPopup().update();
+                                    }
                                 }, 900);
+                            };
+                            
+                            // Standard click event (works on desktop)
+                            marker.on('click', handleMarkerActivation);
+                            
+                            // For iOS/touch devices: Add direct touch event handling on the marker element
+                            // This is more reliable than relying on Leaflet's tap-to-click conversion
+                            marker.once('add', () => {
+                                const el = marker.getElement();
+                                if (el) {
+                                    el.addEventListener('touchend', (touchEvent: TouchEvent) => {
+                                        // Prevent ghost clicks and double-firing
+                                        touchEvent.preventDefault();
+                                        touchEvent.stopPropagation();
+                                        
+                                        // Create a synthetic event object for the handler
+                                        handleMarkerActivation({ originalEvent: touchEvent });
+                                    }, { passive: false });
+                                }
                             });
 
                             allMarkersRef.current.push({
@@ -327,17 +349,24 @@ const MapPage: React.FC = () => {
             createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
 
-        map.on('click', () => {
-          // Debounce protection for mobile/touch devices:
-          // Ignore map clicks that happen within 500ms of a marker click
-          // This prevents the popup from being immediately closed on touch devices
-          const timeSinceMarkerClick = Date.now() - lastMarkerClickRef.current;
-          if (timeSinceMarkerClick < 500) {
+        map.on('click', (e: any) => {
+          // Check if the click originated from a marker (by checking target)
+          if (e.originalEvent?.target?.closest('.custom-map-marker')) {
             return;
           }
+          
+          // Debounce protection for mobile/touch devices:
+          // Ignore map clicks that happen within 1000ms of a marker click
+          // This covers the full flyTo animation duration and prevents race conditions
+          const timeSinceMarkerClick = Date.now() - lastMarkerClickRef.current;
+          if (timeSinceMarkerClick < 1000) {
+            return;
+          }
+          
           setActiveCountryId(null);
-          // Explicitly close popup since we disabled closePopupOnClick
-          map.closePopup();
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.closePopup();
+          }
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);
