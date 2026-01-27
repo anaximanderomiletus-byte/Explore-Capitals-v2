@@ -208,6 +208,11 @@ const MapPage: React.FC = () => {
           wheelDebounceTime: 40,
           wheelPxPerZoomLevel: 60,
           updateWhenIdle: true,
+          // CRITICAL FOR MOBILE: Disable automatic popup closing on map click
+          // We handle popup closing manually via our click handler
+          closePopupOnClick: false,
+          // Disable Leaflet's tap handler which can cause double-firing on mobile
+          tap: false,
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -279,12 +284,16 @@ const MapPage: React.FC = () => {
                             marker.addTo(markersLayerRef.current);
 
                             marker.on('click', (e: any) => {
-                                // CRITICAL: Stop propagation to prevent map click from firing on mobile/touch
-                                // This fixes the issue where tapping a marker also triggers the map's click handler
-                                // which would immediately clear the active country and close the popup
-                                if (e && e.originalEvent) {
-                                    L.DomEvent.stopPropagation(e);
-                                    L.DomEvent.preventDefault(e);
+                                // CRITICAL: Stop all event propagation for mobile/touch compatibility
+                                // Use L.DomEvent.stop which handles both stopPropagation and preventDefault
+                                try {
+                                    L.DomEvent.stop(e);
+                                } catch (err) {
+                                    // Fallback for edge cases
+                                    if (e?.originalEvent) {
+                                        e.originalEvent.stopPropagation?.();
+                                        e.originalEvent.preventDefault?.();
+                                    }
                                 }
                                 
                                 // Record the timestamp of this marker click for debounce protection
@@ -320,13 +329,15 @@ const MapPage: React.FC = () => {
 
         map.on('click', () => {
           // Debounce protection for mobile/touch devices:
-          // Ignore map clicks that happen within 300ms of a marker click
+          // Ignore map clicks that happen within 500ms of a marker click
           // This prevents the popup from being immediately closed on touch devices
           const timeSinceMarkerClick = Date.now() - lastMarkerClickRef.current;
-          if (timeSinceMarkerClick < 300) {
+          if (timeSinceMarkerClick < 500) {
             return;
           }
           setActiveCountryId(null);
+          // Explicitly close popup since we disabled closePopupOnClick
+          map.closePopup();
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);
