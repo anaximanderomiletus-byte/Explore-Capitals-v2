@@ -52,6 +52,9 @@ const MapPage: React.FC = () => {
   
   const desktopResultsRef = useRef<HTMLDivElement>(null);
   const mobileResultsRef = useRef<HTMLDivElement>(null);
+  
+  // Track when a marker was last clicked to prevent map click from interfering on touch devices
+  const lastMarkerClickRef = useRef<number>(0);
 
   // Track previous region to determine if we should re-center the map
   const prevRegionRef = useRef(selectedRegion);
@@ -275,7 +278,18 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
-                            marker.on('click', () => {
+                            marker.on('click', (e: any) => {
+                                // CRITICAL: Stop propagation to prevent map click from firing on mobile/touch
+                                // This fixes the issue where tapping a marker also triggers the map's click handler
+                                // which would immediately clear the active country and close the popup
+                                if (e && e.originalEvent) {
+                                    L.DomEvent.stopPropagation(e);
+                                    L.DomEvent.preventDefault(e);
+                                }
+                                
+                                // Record the timestamp of this marker click for debounce protection
+                                lastMarkerClickRef.current = Date.now();
+                                
                                 setActiveCountryId(country.id);
                                 centerMapOnMarker(marker);
                                 // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
@@ -304,7 +318,16 @@ const MapPage: React.FC = () => {
             createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
 
-        map.on('click', () => setActiveCountryId(null));
+        map.on('click', () => {
+          // Debounce protection for mobile/touch devices:
+          // Ignore map clicks that happen within 300ms of a marker click
+          // This prevents the popup from being immediately closed on touch devices
+          const timeSinceMarkerClick = Date.now() - lastMarkerClickRef.current;
+          if (timeSinceMarkerClick < 300) {
+            return;
+          }
+          setActiveCountryId(null);
+        });
       } catch (err) {
         console.error("Critical error initializing map:", err);
         setMapReady(false);
