@@ -52,9 +52,6 @@ const MapPage: React.FC = () => {
   
   const desktopResultsRef = useRef<HTMLDivElement>(null);
   const mobileResultsRef = useRef<HTMLDivElement>(null);
-  
-  // Track when a marker was last clicked to prevent map click from interfering on touch devices
-  const lastMarkerClickRef = useRef<number>(0);
 
   // Track previous region to determine if we should re-center the map
   const prevRegionRef = useRef(selectedRegion);
@@ -110,11 +107,10 @@ const MapPage: React.FC = () => {
   }, []);
 
   // Smart centering function to handle UI obstructions
-  // Returns true if using animation (flyTo), false if instant (setView)
-  const centerMapOnMarker = useCallback((marker: any): boolean => {
+  const centerMapOnMarker = useCallback((marker: any) => {
       const map = mapInstanceRef.current;
       const L = (window as any).L;
-      if (!map || !L) return false;
+      if (!map || !L) return;
 
       const isMobile = window.innerWidth < 768;
       
@@ -158,18 +154,10 @@ const MapPage: React.FC = () => {
       
       const newCenterLatLng = map.unproject(newCenterGlobal, targetZoom);
       
-      // On mobile: Use instant positioning for more reliable popup display
-      // On desktop: Use animation for smoother experience
-      if (isMobile) {
-          map.setView(newCenterLatLng, targetZoom, { animate: false });
-          return false; // No animation
-      } else {
-          map.flyTo(newCenterLatLng, targetZoom, {
-              duration: 0.8,
-              easeLinearity: 0.25
-          });
-          return true; // Using animation
-      }
+      map.flyTo(newCenterLatLng, targetZoom, {
+          duration: 0.8, // Slightly longer for the zoom feel
+          easeLinearity: 0.25
+      });
   }, []);
 
   // Effect: Ensure page loading state is cleared when component mounts
@@ -217,10 +205,6 @@ const MapPage: React.FC = () => {
           wheelDebounceTime: 40,
           wheelPxPerZoomLevel: 60,
           updateWhenIdle: true,
-          // Mobile/touch improvements
-          tap: true,
-          tapTolerance: 15,
-          closePopupOnClick: false, // Prevent popup from closing during map interactions
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -282,100 +266,40 @@ const MapPage: React.FC = () => {
                             }).bindPopup(createPopupContent(country, type), {
                                 closeButton: false,
                                 className: 'custom-popup',
-                                autoPan: true, // Enable autoPan so popup is always visible
+                                autoPan: false,
                                 maxWidth: 320,
                                 minWidth: 320,
                                 offset: L.point(0, -10)
                             });
 
-                            // Handler function for marker interaction (works for both click and touch)
-                            const handleMarkerActivation = (e: any) => {
-                                // CRITICAL: Stop propagation to prevent map click from firing
-                                if (e && e.originalEvent) {
-                                    L.DomEvent.stopPropagation(e);
-                                    L.DomEvent.preventDefault(e);
-                                    e.originalEvent.stopPropagation?.();
-                                    e.originalEvent.preventDefault?.();
-                                }
-                                
-                                // Record the timestamp for debounce protection
-                                lastMarkerClickRef.current = Date.now();
-                                
-                                // Close any existing popup first
-                                if (mapInstanceRef.current) {
-                                    mapInstanceRef.current.closePopup();
-                                }
-                                
-                                setActiveCountryId(country.id);
-                                
-                                // Center the map on the marker
-                                // Returns true if using animation (desktop), false if instant (mobile)
-                                const isAnimating = centerMapOnMarker(marker);
-                                
-                                // Function to open the popup
-                                const openThePopup = () => {
-                                    if (marker && markersLayerRef.current?.hasLayer(marker)) {
-                                        marker.openPopup();
-                                        const popup = marker.getPopup();
-                                        if (popup) {
-                                            popup.update();
-                                        }
-                                    }
-                                };
-                                
-                                if (isAnimating) {
-                                    // Desktop: Use moveend event to open popup after animation
-                                    const openPopupAfterMove = () => {
-                                        setTimeout(openThePopup, 100);
-                                        mapInstanceRef.current?.off('moveend', openPopupAfterMove);
-                                    };
-                                    
-                                    mapInstanceRef.current?.once('moveend', openPopupAfterMove);
-                                    
-                                    // Safety timeout in case moveend doesn't fire
-                                    setTimeout(() => {
-                                        if (marker && !marker.isPopupOpen()) {
-                                            openThePopup();
-                                        }
-                                    }, 1200);
-                                } else {
-                                    // Mobile: Open popup immediately since we used instant positioning
-                                    // Small delay to ensure DOM is ready
-                                    setTimeout(openThePopup, 50);
-                                }
-                            };
-                            
-                            // For iOS/touch devices: Add direct touch event handling on the marker element
-                            // This MUST be set up BEFORE adding to map so the 'add' event fires correctly
-                            marker.once('add', () => {
-                                const el = marker.getElement();
-                                if (el) {
-                                    // Use touchstart + touchend combo for reliable iOS handling
-                                    let touchStarted = false;
-                                    
-                                    el.addEventListener('touchstart', () => {
-                                        touchStarted = true;
-                                    }, { passive: true });
-                                    
-                                    el.addEventListener('touchend', (touchEvent: TouchEvent) => {
-                                        if (!touchStarted) return;
-                                        touchStarted = false;
-                                        
-                                        // Prevent ghost clicks and double-firing
-                                        touchEvent.preventDefault();
-                                        touchEvent.stopPropagation();
-                                        
-                                        // Create a synthetic event object for the handler
-                                        handleMarkerActivation({ originalEvent: touchEvent });
-                                    }, { passive: false });
-                                }
-                            });
-                            
-                            // Standard click event (works on desktop)
-                            marker.on('click', handleMarkerActivation);
-                            
-                            // Add to map AFTER setting up the 'add' listener
+                            // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
+
+                            marker.on('click', (e: any) => {
+                                // Prevent the map's click handler from firing when a marker is clicked
+                                if (e.originalEvent) {
+                                  e.originalEvent.stopPropagation();
+                                  // Mark the event as a marker click for the map click handler
+                                  (e.originalEvent as any)._markerClick = true;
+                                }
+                                
+                                // On mobile/tablet, if we are already centered on this country, just ensure popup is open
+                                // This helps if the user clicks the marker again while the popup is closing or missing
+                                if (activeCountryId === country.id) {
+                                  marker.openPopup();
+                                  if (marker.getPopup()) marker.getPopup().update();
+                                  return;
+                                }
+
+                                setActiveCountryId(country.id);
+                                centerMapOnMarker(marker);
+                                // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
+                                setTimeout(() => {
+                                  marker.openPopup();
+                                  // Force immediate position update
+                                  if (marker.getPopup()) marker.getPopup().update();
+                                }, 900);
+                            });
 
                             allMarkersRef.current.push({
                                 id: country.id,
@@ -396,23 +320,10 @@ const MapPage: React.FC = () => {
         }
 
         map.on('click', (e: any) => {
-          // Check if the click originated from a marker (by checking target)
-          if (e.originalEvent?.target?.closest('.custom-map-marker')) {
-            return;
-          }
-          
-          // Debounce protection for mobile/touch devices:
-          // Ignore map clicks that happen within 1000ms of a marker click
-          // This covers the full flyTo animation duration and prevents race conditions
-          const timeSinceMarkerClick = Date.now() - lastMarkerClickRef.current;
-          if (timeSinceMarkerClick < 1000) {
-            return;
-          }
-          
+          // Only clear if the click was actually on the map background, not a marker
+          // Leaflet's marker click stopPropagation should handle this, but this is a safety check
+          if (e.originalEvent && e.originalEvent._markerClick) return;
           setActiveCountryId(null);
-          if (mapInstanceRef.current) {
-            mapInstanceRef.current.closePopup();
-          }
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);

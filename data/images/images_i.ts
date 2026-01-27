@@ -15,21 +15,21 @@ export const imagesI: Record<string, string> = {
   "Kerala Backwaters": "/png/INDIA/kerala-backwaters.png",
   "Hampi Stone Chariot": "/png/INDIA/hampi.png",
 
-  // --- Indonesia --- (placeholder until images added)
-  "Indonesia": "/logo.png",
-  "Komodo National Park": "/logo.png",
-  "Borobudur Temple": "/logo.png",
-  "Mount Bromo": "/logo.png",
-  "Tegalalang Rice Terraces": "/logo.png",
-  "Raja Ampat Islands": "/logo.png",
+  // --- Indonesia ---
+  "Indonesia": "/png/INDONESIA/jakarta-indonesia.png",
+  "Komodo National Park": "/png/INDONESIA/komodo-national-park.png",
+  "Borobudur Temple": "/png/INDONESIA/borobudur-temple.png",
+  "Mount Bromo": "/png/INDONESIA/mount-bromo.png",
+  "Tegalalang Rice Terraces": "/png/INDONESIA/tegalalang-rice-terraces -bali.png",
+  "Raja Ampat Islands": "/png/INDONESIA/raja-ampat-islands.png",
 
-  // --- Iran --- (placeholder until images added)
-  "Iran": "/logo.png",
-  "Persepolis": "/logo.png",
-  "Naqsh-e Jahan Square": "/logo.png",
-  "Nasir al-Mulk Mosque": "/logo.png",
-  "Yazd Windcatchers": "/logo.png",
-  "The Lut Desert": "/logo.png",
+  // --- Iran ---
+  "Iran": "/png/IRAN/tehran-iran.png",
+  "Persepolis": "/png/IRAN/persepolis.png",
+  "Naqsh-e Jahan Square": "/png/IRAN/naqsh-e-jahan-square-isfahan.png",
+  "Nasir al-Mulk Mosque": "/png/IRAN/nasir-al-mulk-mosque-the-pink-mosque.png",
+  "Yazd Windcatchers": "/png/IRAN/yazd-the-city-of-windcatchers.png",
+  "The Lut Desert": "/png/IRAN/lut-desert-kaluts.png",
 
   // --- Iraq --- (placeholder until images added)
   "Iraq": "/logo.png",
