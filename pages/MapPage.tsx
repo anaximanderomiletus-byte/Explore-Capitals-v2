@@ -49,6 +49,7 @@ const MapPage: React.FC = () => {
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const isLoadingRandomRef = useRef(false);
   useEffect(() => { isLoadingRandomRef.current = isLoadingRandom; }, [isLoadingRandom]);
+  const ignoreMapClickUntilRef = useRef(0);
   
   const desktopResultsRef = useRef<HTMLDivElement>(null);
   const mobileResultsRef = useRef<HTMLDivElement>(null);
@@ -276,21 +277,12 @@ const MapPage: React.FC = () => {
                             marker.addTo(markersLayerRef.current);
 
                             marker.on('click', (e: any) => {
-                                // Prevent the map's click handler from firing when a marker is clicked
-                                if (e.originalEvent) {
-                                  e.originalEvent.stopPropagation();
-                                  // Mark the event as a marker click for the map click handler
-                                  (e.originalEvent as any)._markerClick = true;
+                                ignoreMapClickUntilRef.current = Date.now() + 450;
+                                if (e?.originalEvent) {
+                                  L.DomEvent.stopPropagation(e.originalEvent);
+                                  L.DomEvent.preventDefault(e.originalEvent);
                                 }
-                                
-                                // On mobile/tablet, if we are already centered on this country, just ensure popup is open
-                                // This helps if the user clicks the marker again while the popup is closing or missing
-                                if (activeCountryId === country.id) {
-                                  marker.openPopup();
-                                  if (marker.getPopup()) marker.getPopup().update();
-                                  return;
-                                }
-
+                                L.DomEvent.stop(e);
                                 setActiveCountryId(country.id);
                                 centerMapOnMarker(marker);
                                 // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
@@ -319,11 +311,10 @@ const MapPage: React.FC = () => {
             createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
 
-        map.on('click', (e: any) => {
-          // Only clear if the click was actually on the map background, not a marker
-          // Leaflet's marker click stopPropagation should handle this, but this is a safety check
-          if (e.originalEvent && e.originalEvent._markerClick) return;
+        map.on('click', () => {
+          if (Date.now() < ignoreMapClickUntilRef.current) return;
           setActiveCountryId(null);
+          map.closePopup();
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);
