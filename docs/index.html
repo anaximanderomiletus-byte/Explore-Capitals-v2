@@ -784,9 +784,36 @@
           a:active,
           [role="button"]:active {
             opacity: 0.7;
-            transition: opacity 0.1s ease-out;
+            transition: opacity 0.05s ease-out !important;
           }
         }
+      }
+      
+      /* ===== INSTANT TOUCH FEEDBACK FOR iOS ===== */
+      /* Make ALL clickable elements respond INSTANTLY on touch */
+      @media (pointer: coarse) {
+        a, button, [role="button"], .cursor-pointer, [onclick], [data-clickable] {
+          /* Instant active state */
+          transition: transform 0.05s ease-out, opacity 0.05s ease-out !important;
+        }
+        
+        a:active, button:active, [role="button"]:active, .cursor-pointer:active {
+          transform: scale(0.97) !important;
+          opacity: 0.8 !important;
+        }
+        
+        /* Disable ALL hover transitions on touch devices - they cause delays */
+        a, button, [role="button"], .cursor-pointer {
+          transition-duration: 0.05s !important;
+        }
+      }
+      
+      /* GPU accelerate all interactive elements */
+      a, button, [role="button"], nav, .cursor-pointer {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
       }
       
       /* Prevent pull-to-refresh on iOS when not wanted */
