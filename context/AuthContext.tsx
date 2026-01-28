@@ -27,7 +27,7 @@ import {
   applyActionCode,
   verifyBeforeUpdateEmail
 } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { auth, db, initializeFirebase } from '../firebase';
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 type AuthContextType = {
@@ -102,33 +102,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     let unsub: (() => void) | null = null;
+    let mounted = true;
     
-    // Check for Firebase Auth initialization
-    const checkAuth = setInterval(() => {
+    // PERFORMANCE: Initialize Firebase lazily, then set up auth listener
+    const setupAuth = async () => {
+      await initializeFirebase();
+      
+      if (!mounted) return;
+      
       if (auth) {
-        clearInterval(checkAuth);
-        
-        // Wire up the state listener
         unsub = onAuthStateChanged(auth, (u) => {
-          setUser(u);
-          setLoading(false);
+          if (mounted) {
+            setUser(u);
+            setLoading(false);
+          }
         });
-        
         auth.useDeviceLanguage();
+      } else {
+        // No auth available, stop loading
+        setLoading(false);
       }
-    }, 50);
+    };
 
-    // Safety timeout: increased to 3 seconds for slower connections
+    setupAuth();
+
+    // Safety timeout: 3 seconds max wait
     const timeout = setTimeout(() => {
-      if (loading) {
-        console.warn("Auth initialization timed out. Proceeding with limited state.");
-        clearInterval(checkAuth);
+      if (mounted && loading) {
+        console.warn("Auth initialization timed out.");
         setLoading(false);
       }
     }, 3000);
 
     return () => {
-      clearInterval(checkAuth);
+      mounted = false;
       clearTimeout(timeout);
       if (unsub) unsub();
     };
