@@ -182,30 +182,36 @@ export default function MapDash() {
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
 
-      // Track if touch already handled this interaction to prevent double-firing
-      let touchHandledRef = { current: false };
+      // iOS-optimized touch handling with timestamp-based debouncing
+      let lastInteractionTime = 0;
+      const DEBOUNCE_MS = 300;
       
-      // Unified handler for marker interactions (click and touch)
-      const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
-        // If touch already handled this, skip the click handler
-        if (!isTouchEvent && touchHandledRef.current) {
-          touchHandledRef.current = false;
+      // Unified handler for marker interactions
+      const handleMarkerInteraction = (e: any, source: 'click' | 'touch' = 'click') => {
+        const now = Date.now();
+        
+        // Debounce: skip if we just handled an interaction
+        if (now - lastInteractionTime < DEBOUNCE_MS) {
           return;
         }
+        lastInteractionTime = now;
         
-        // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
-        if (e && e.originalEvent) {
-          e.originalEvent.stopPropagation();
-          e.originalEvent.preventDefault();
-        }
-        if (e && typeof L.DomEvent?.stopPropagation === 'function') {
-          L.DomEvent.stopPropagation(e);
+        // Stop all propagation
+        if (e) {
+          if (e.originalEvent) {
+            e.originalEvent.stopPropagation();
+            e.originalEvent.stopImmediatePropagation?.();
+            e.originalEvent.preventDefault();
+          }
+          if (typeof L.DomEvent?.stop === 'function') {
+            L.DomEvent.stop(e);
+          }
         }
         
         const currentTarget = targetCountryRef.current;
         if (gameStateRef.current !== 'playing' || !currentTarget || isTransitioningRef.current) return;
 
-        // Reset previous feedback state immediately on click
+        // Reset previous feedback state immediately
         if (feedbackTimeoutRef.current) {
           clearTimeout(feedbackTimeoutRef.current);
           feedbackTimeoutRef.current = null;
@@ -253,64 +259,36 @@ export default function MapDash() {
         }
       };
       
-      // Handle click (works for desktop and as fallback)
-      marker.on('click', (e: any) => handleMarkerInteraction(e, false));
+      // Desktop click handler
+      marker.on('click', (e: any) => handleMarkerInteraction(e, 'click'));
       
-      // Bind touch events after marker is added to map for reliable mobile handling
+      // iOS/Touch optimization: bind touch events after marker is added
       marker.on('add', () => {
         const markerElement = marker.getElement?.();
-        if (markerElement && !(markerElement as any)._touchBound) {
-          (markerElement as any)._touchBound = true;
+        if (markerElement && !(markerElement as any)._touchOptimized) {
+          (markerElement as any)._touchOptimized = true;
           
-          // Track touch position for tap detection
-          let touchStartPos: { x: number, y: number } | null = null;
+          // Add CSS for immediate touch response
+          markerElement.style.touchAction = 'manipulation';
+          markerElement.style.webkitTouchCallout = 'none';
+          markerElement.style.webkitUserSelect = 'none';
+          markerElement.style.cursor = 'pointer';
           
-          // Use touchstart to capture initial position
-          markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-            if (e.touches.length === 1) {
-              touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-              // Mark that touch handled this to prevent click from double-firing
-              touchHandledRef.current = true;
-            }
-          }, { passive: true });
-          
+          // Use touchend for the actual interaction (more reliable on iOS)
           markerElement.addEventListener('touchend', (e: TouchEvent) => {
-            // Reset flag after a longer delay for iOS
-            setTimeout(() => { touchHandledRef.current = false; }, 600);
-            
-            // Only handle as tap if touch didn't move much (not a drag)
-            if (touchStartPos && e.changedTouches.length === 1) {
-              const endX = e.changedTouches[0].clientX;
-              const endY = e.changedTouches[0].clientY;
-              const distance = Math.sqrt(
-                Math.pow(endX - touchStartPos.x, 2) + 
-                Math.pow(endY - touchStartPos.y, 2)
-              );
-              
-              // If touch moved less than 10px, it's a tap
-              if (distance < 10) {
-                e.preventDefault();
-                e.stopPropagation();
-                handleMarkerInteraction({ originalEvent: e }, true);
-              }
+            // Only handle single-touch taps
+            if (e.changedTouches.length === 1) {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              handleMarkerInteraction({ originalEvent: e }, 'touch');
             }
-            touchStartPos = null;
-          }, { passive: false });
+          }, { passive: false, capture: true });
           
-          // Cancel on touchmove if significant movement
-          markerElement.addEventListener('touchmove', (e: TouchEvent) => {
-            if (touchStartPos && e.touches.length === 1) {
-              const moveX = e.touches[0].clientX;
-              const moveY = e.touches[0].clientY;
-              const distance = Math.sqrt(
-                Math.pow(moveX - touchStartPos.x, 2) + 
-                Math.pow(moveY - touchStartPos.y, 2)
-              );
-              if (distance > 10) {
-                touchStartPos = null; // Cancel the tap
-              }
-            }
-          }, { passive: true });
+          // Prevent click from firing after touch via debounce
+          markerElement.addEventListener('click', (e: MouseEvent) => {
+            e.stopPropagation();
+          }, { capture: true });
         }
       });
 

@@ -534,7 +534,7 @@
         touch-action: manipulation;
       }
       
-      /* Updated Marker Styles for Performance */
+      /* Updated Marker Styles for Performance - iOS Optimized */
       .custom-map-marker { 
         background: transparent; 
         border: none; 
@@ -550,6 +550,15 @@
         transform: translate3d(0,0,0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+        /* iOS Touch Optimization */
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        /* Increase tap target for mobile */
+        min-width: 44px;
+        min-height: 44px;
       }
       
       .marker-pin { 
@@ -559,12 +568,14 @@
         border: 2px solid #FFFFFF; 
         border-radius: 50%; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-        -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        -webkit-transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         cursor: pointer; 
         will-change: transform;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
+        /* Pointer events only on the visible pin */
+        pointer-events: auto;
       }
       
       .marker-pin.territory { background: #22c55e; }

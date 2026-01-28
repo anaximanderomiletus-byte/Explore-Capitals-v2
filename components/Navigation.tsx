@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
 import Button from './Button';
@@ -217,8 +217,7 @@ const Navigation: React.FC = () => {
   // 2. Adaptive text color based on background (Map = Light background = Dark text)
   // 3. Subtle backdrop blur on scroll for legibility
   
-  // Use CSS custom properties for smoother transitions
-  let navClasses = "bg-transparent py-4";
+  let navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
   let textColorClass = "text-white"; 
   let logoBgClass = "bg-gel-blue text-white border border-white/40";
 
@@ -227,9 +226,9 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-primary text-white border border-black/5";
     
     if (isScrolled) {
-      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
+      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     }
   } else {
     // Default Mode (Dark Background Pages)
@@ -237,15 +236,15 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-gel-blue text-white border border-white/40";
     
     if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
+      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg transition-[background-color,padding,box-shadow] duration-200";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     }
   }
 
   // Mobile menu open overrides - keep nav transparent, only override text color
   if (isMobileMenuOpen) {
-    navClasses = "bg-transparent py-4";
+    navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     textColorClass = "text-white";
     logoBgClass = "bg-primary text-white";
   }
@@ -256,15 +255,9 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav 
-        className={`fixed w-full z-[2000] ${
+        className={`fixed w-full z-[2000] transition-all duration-500 ease-out ${
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
         } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
-        style={{
-          transition: 'transform 300ms ease-out, background-color 200ms ease-out, padding 200ms ease-out, box-shadow 200ms ease-out',
-          willChange: 'transform',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden'
-        }}
       >
         <div className="w-full px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap">
           {/* Logo */}
@@ -303,33 +296,21 @@ const Navigation: React.FC = () => {
                   }`}
                   style={{ 
                     transform: 'translateZ(0)',
-                    transition: 'color 50ms ease-out, opacity 50ms ease-out',
-                    willChange: 'opacity'
+                    transition: 'color 50ms ease-out, opacity 50ms ease-out'
                   }}
                 >
                   {link.label}
                   <div 
-                    className={`absolute -bottom-1.5 left-0 h-0.5 origin-left ${
+                    className={`absolute -bottom-1.5 left-0 h-0.5 ${
                       active 
-                        ? `${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
-                        : `${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
+                        ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
+                        : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
                     }`} 
                     style={{ 
-                      transform: active ? 'scaleX(1)' : 'scaleX(0)',
-                      transition: 'transform 100ms ease-out',
-                      willChange: 'transform'
+                      transition: 'width 80ms ease-out',
+                      willChange: 'width'
                     }} 
                   />
-                  {/* Hover underline - uses transform for GPU acceleration */}
-                  {!active && (
-                    <div 
-                      className={`absolute -bottom-1.5 left-0 h-0.5 w-full origin-left scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`}
-                      style={{ 
-                        transition: 'transform 100ms ease-out',
-                        willChange: 'transform'
-                      }} 
-                    />
-                  )}
                 </Link>
               );
             })}
@@ -347,33 +328,54 @@ const Navigation: React.FC = () => {
           {/* Mobile Toggle - hamburger menu - optimized for instant touch response */}
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
-              onClick={() => setIsMobileMenuOpen(prev => !prev)}
-              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-75 select-none"
+              onClick={(e) => {
+                // Only handle if not already processed by touch
+                if (!(e.nativeEvent as any)._touchProcessed) {
+                  setIsMobileMenuOpen(prev => !prev);
+                }
+              }}
+              onTouchEnd={(e) => {
+                // Prevent ghost click and handle touch immediately
+                e.preventDefault();
+                (e.nativeEvent as any)._touchProcessed = true;
+                setIsMobileMenuOpen(prev => !prev);
+              }}
+              className="relative w-10 h-10 flex items-center justify-center select-none"
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
               style={{ 
                 touchAction: 'manipulation', 
                 WebkitTapHighlightColor: 'transparent',
+                WebkitTouchCallout: 'none',
                 WebkitUserSelect: 'none',
                 userSelect: 'none'
               }}
             >
               <div className="relative w-5 h-3 flex flex-col justify-between pointer-events-none">
-                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen 
-                    ? 'bg-sky-light rotate-45 translate-y-[5px]' 
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-150 ${
-                  isMobileMenuOpen 
-                    ? 'opacity-0 scale-0' 
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen 
-                    ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
+                <span 
+                  className={`block h-[2px] rounded-full origin-center ${
+                    isMobileMenuOpen 
+                      ? 'bg-sky-light rotate-45 translate-y-[5px]' 
+                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                  }`}
+                  style={{ transition: 'transform 0.15s ease-out, background-color 0.15s ease-out' }}
+                />
+                <span 
+                  className={`block h-[2px] rounded-full ${
+                    isMobileMenuOpen 
+                      ? 'opacity-0 scale-0' 
+                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                  }`}
+                  style={{ transition: 'opacity 0.1s ease-out, transform 0.1s ease-out' }}
+                />
+                <span 
+                  className={`block h-[2px] rounded-full origin-center ${
+                    isMobileMenuOpen 
+                      ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
+                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                  }`}
+                  style={{ transition: 'transform 0.15s ease-out, background-color 0.15s ease-out' }}
+                />
               </div>
             </button>
           </div>
@@ -382,14 +384,15 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0 opacity-100 visible' 
             : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
         style={{ 
           WebkitOverflowScrolling: 'touch',
-          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
+          touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
+          transition: 'transform 200ms cubic-bezier(0.32, 0.72, 0, 1), opacity 150ms ease-out, visibility 200ms'
         }}
         aria-hidden={!isMobileMenuOpen}
       >

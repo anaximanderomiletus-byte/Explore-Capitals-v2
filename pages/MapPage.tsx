@@ -278,124 +278,104 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
-                            // Track if touch already handled this interaction to prevent double-firing
-                            let touchHandledRef = { current: false };
+                            // iOS-optimized touch handling with robust deduplication
+                            // Using a timestamp-based approach for more reliable detection
+                            let lastInteractionTime = 0;
+                            const DEBOUNCE_MS = 300; // Prevent double-firing within this window
                             
-                            // Unified handler for both click and touch
-                            const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
-                                // If touch already handled this, skip the click handler
-                                if (!isTouchEvent && touchHandledRef.current) {
-                                  touchHandledRef.current = false;
+                            // Unified handler for marker interactions
+                            const handleMarkerInteraction = (e: any, source: 'click' | 'touch' = 'click') => {
+                                const now = Date.now();
+                                
+                                // Debounce: skip if we just handled an interaction
+                                if (now - lastInteractionTime < DEBOUNCE_MS) {
                                   return;
                                 }
+                                lastInteractionTime = now;
                                 
-                                // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
-                                if (e && e.originalEvent) {
-                                  e.originalEvent.stopPropagation();
-                                  e.originalEvent.preventDefault();
-                                }
-                                if (e && typeof L.DomEvent?.stopPropagation === 'function') {
-                                  L.DomEvent.stopPropagation(e);
+                                // CRITICAL: Stop all propagation to prevent map click from interfering
+                                if (e) {
+                                  if (e.originalEvent) {
+                                    e.originalEvent.stopPropagation();
+                                    e.originalEvent.stopImmediatePropagation?.();
+                                    e.originalEvent.preventDefault();
+                                  }
+                                  if (typeof L.DomEvent?.stop === 'function') {
+                                    L.DomEvent.stop(e);
+                                  } else if (typeof L.DomEvent?.stopPropagation === 'function') {
+                                    L.DomEvent.stopPropagation(e);
+                                  }
                                 }
                                 
                                 // Set flag to prevent map click handler from clearing the selection
-                                // Extended timeout for iOS which can have very delayed click events
+                                // Increased timeout for iOS which has delayed synthetic click events
                                 markerClickedRef.current = true;
                                 setTimeout(() => { markerClickedRef.current = false; }, 800);
                                 
                                 setActiveCountryId(country.id);
                                 
-                                // On mobile/touch, open popup immediately without animation for instant feedback
-                                if (isTouchEvent || window.innerWidth < 768) {
-                                  // Open popup immediately for instant touch feedback
-                                  // Use requestAnimationFrame to ensure DOM is ready
+                                // Always open popup immediately for instant feedback
+                                // Then center the map
+                                const isMobile = window.innerWidth < 768 || source === 'touch';
+                                
+                                // Open popup synchronously first
+                                marker.openPopup();
+                                
+                                // Center map with slight delay to let popup render
+                                setTimeout(() => {
+                                  centerMapOnMarker(marker);
+                                  // Re-confirm popup stays open after map animation starts
                                   requestAnimationFrame(() => {
-                                    marker.openPopup();
-                                    const popup = marker.getPopup();
-                                    if (popup) {
-                                      popup.update();
+                                    if (!marker.isPopupOpen()) {
+                                      marker.openPopup();
                                     }
-                                    // Multiple checks to ensure popup stays open (iOS Safari fix)
-                                    // iOS can fire delayed events that close the popup
-                                    const ensurePopupOpen = () => {
-                                      if (!marker.isPopupOpen() && markerClickedRef.current) {
-                                        marker.openPopup();
-                                      }
-                                    };
-                                    setTimeout(ensurePopupOpen, 50);
-                                    setTimeout(ensurePopupOpen, 150);
-                                    setTimeout(ensurePopupOpen, 300);
+                                    const popup = marker.getPopup();
+                                    if (popup) popup.update();
                                   });
-                                  // Then animate to center
-                                  centerMapOnMarker(marker);
-                                } else {
-                                  // Desktop: animate first, then open popup
-                                  centerMapOnMarker(marker);
+                                }, isMobile ? 50 : 100);
+                                
+                                // Final safety check for iOS - ensure popup stays open
+                                if (isMobile) {
                                   setTimeout(() => {
-                                    marker.openPopup();
-                                    if (marker.getPopup()) marker.getPopup().update();
-                                  }, 900);
+                                    if (!marker.isPopupOpen()) {
+                                      marker.openPopup();
+                                    }
+                                  }, 300);
                                 }
                             };
                             
-                            // Handle click (works for both desktop and as fallback)
-                            marker.on('click', (e: any) => handleMarkerInteraction(e, false));
+                            // Desktop click handler
+                            marker.on('click', (e: any) => handleMarkerInteraction(e, 'click'));
                             
-                            // Bind touch events after marker is added to map (element available then)
+                            // iOS/Touch optimization: bind touch events after marker is added
                             marker.on('add', () => {
                               const markerElement = marker.getElement?.();
-                              if (markerElement && !markerElement._touchBound) {
-                                markerElement._touchBound = true;
+                              if (markerElement && !(markerElement as any)._touchOptimized) {
+                                (markerElement as any)._touchOptimized = true;
                                 
-                                // Track touch position for tap detection
-                                let touchStartPos: { x: number, y: number } | null = null;
+                                // Add CSS for immediate touch response
+                                markerElement.style.touchAction = 'manipulation';
+                                markerElement.style.webkitTouchCallout = 'none';
+                                markerElement.style.webkitUserSelect = 'none';
+                                markerElement.style.cursor = 'pointer';
                                 
-                                // Use touchstart to capture initial position and mark as handled
-                                markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-                                  if (e.touches.length === 1) {
-                                    touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-                                    // Mark that touch handled this to prevent click from double-firing
-                                    touchHandledRef.current = true;
-                                  }
-                                }, { passive: true });
-                                
+                                // Use touchend for the actual interaction (more reliable than touchstart)
                                 markerElement.addEventListener('touchend', (e: TouchEvent) => {
-                                  // Reset flag after a longer delay for iOS
-                                  setTimeout(() => { touchHandledRef.current = false; }, 600);
-                                  
-                                  // Only handle as tap if touch didn't move much (not a drag)
-                                  if (touchStartPos && e.changedTouches.length === 1) {
-                                    const endX = e.changedTouches[0].clientX;
-                                    const endY = e.changedTouches[0].clientY;
-                                    const distance = Math.sqrt(
-                                      Math.pow(endX - touchStartPos.x, 2) + 
-                                      Math.pow(endY - touchStartPos.y, 2)
-                                    );
-                                    
-                                    // If touch moved less than 10px, it's a tap
-                                    if (distance < 10) {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      handleMarkerInteraction({ originalEvent: e }, true);
-                                    }
+                                  // Only handle single-touch taps
+                                  if (e.changedTouches.length === 1) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    e.stopImmediatePropagation();
+                                    handleMarkerInteraction({ originalEvent: e }, 'touch');
                                   }
-                                  touchStartPos = null;
-                                }, { passive: false });
+                                }, { passive: false, capture: true });
                                 
-                                // Cancel on touchmove if significant movement
-                                markerElement.addEventListener('touchmove', (e: TouchEvent) => {
-                                  if (touchStartPos && e.touches.length === 1) {
-                                    const moveX = e.touches[0].clientX;
-                                    const moveY = e.touches[0].clientY;
-                                    const distance = Math.sqrt(
-                                      Math.pow(moveX - touchStartPos.x, 2) + 
-                                      Math.pow(moveY - touchStartPos.y, 2)
-                                    );
-                                    if (distance > 10) {
-                                      touchStartPos = null; // Cancel the tap
-                                    }
-                                  }
-                                }, { passive: true });
+                                // Prevent click from firing after touch
+                                markerElement.addEventListener('click', (e: MouseEvent) => {
+                                  // If this was triggered by touch, the debounce will catch it
+                                  // Just stop propagation to be safe
+                                  e.stopPropagation();
+                                }, { capture: true });
                               }
                             });
 
@@ -419,10 +399,14 @@ const MapPage: React.FC = () => {
 
         // Only clear active country if a marker wasn't just clicked
         // This prevents the map click from firing immediately after marker click on mobile
-        map.on('click', () => {
-          if (!markerClickedRef.current) {
-            setActiveCountryId(null);
-          }
+        // Use a delayed check for iOS which has unreliable event timing
+        map.on('click', (e: any) => {
+          // Double-check the flag with a microtask delay for iOS Safari
+          setTimeout(() => {
+            if (!markerClickedRef.current) {
+              setActiveCountryId(null);
+            }
+          }, 10);
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);

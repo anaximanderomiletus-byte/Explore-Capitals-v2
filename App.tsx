@@ -50,11 +50,20 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
 
 // Loading fallback - visible indicator that page is loading
 const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
+  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[50vh] gap-4">
     <div className="relative">
-      <div className="w-10 h-10 rounded-full border-3 border-sky/10 border-t-sky animate-spin" 
-           style={{ borderWidth: '3px' }} />
+      <div 
+        className="w-12 h-12 rounded-full border-sky/10 border-t-sky animate-spin" 
+        style={{ 
+          borderWidth: '3px',
+          borderStyle: 'solid',
+          animationDuration: '0.8s'
+        }} 
+      />
     </div>
+    <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
+      Loading...
+    </p>
   </div>
 );
 
@@ -121,33 +130,39 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const [isNavigating, setIsNavigating] = useState(false);
   const prevPathRef = useRef(location.pathname);
-  const navigationTimeoutRef = useRef<number | null>(null);
+  const navigationTimerRef = useRef<number | null>(null);
+  
+  // Heavy routes that need longer loading indication
+  const heavyRoutes = ['/map', '/games/map-dash', '/database'];
   
   // Track navigation loading state
   useEffect(() => {
     // Only show loader for actual navigation, not initial load
     if (prevPathRef.current !== location.pathname) {
-      // Clear any pending timeout
-      if (navigationTimeoutRef.current) {
-        clearTimeout(navigationTimeoutRef.current);
+      // Clear any existing timer
+      if (navigationTimerRef.current) {
+        clearTimeout(navigationTimerRef.current);
       }
       
-      // Show navigation loader immediately
+      // Check if navigating to a heavy route
+      const isHeavyRoute = heavyRoutes.some(route => location.pathname.startsWith(route));
+      
       setIsNavigating(true);
       
-      // Keep showing for a minimum time to prevent flash, then let Suspense take over
-      // The loader will hide once the page component is ready
-      navigationTimeoutRef.current = window.setTimeout(() => {
+      // Show loader longer for heavy routes to cover Suspense loading
+      const hideDelay = isHeavyRoute ? 300 : 150;
+      
+      navigationTimerRef.current = window.setTimeout(() => {
         setIsNavigating(false);
-        navigationTimeoutRef.current = null;
-      }, 300);
+        navigationTimerRef.current = null;
+      }, hideDelay);
       
       prevPathRef.current = location.pathname;
     }
     
     return () => {
-      if (navigationTimeoutRef.current) {
-        clearTimeout(navigationTimeoutRef.current);
+      if (navigationTimerRef.current) {
+        clearTimeout(navigationTimerRef.current);
       }
     };
   }, [location.pathname]);
@@ -170,7 +185,7 @@ const AppContent: React.FC = () => {
       } else {
         preload();
       }
-    }, 2000); // Slightly longer delay to ensure main thread is free
+    }, 1500); // Slightly reduced for faster preloading
     
     return () => clearTimeout(timer);
   }, []);
