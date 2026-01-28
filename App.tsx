@@ -121,17 +121,35 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const [isNavigating, setIsNavigating] = useState(false);
   const prevPathRef = useRef(location.pathname);
+  const navigationTimeoutRef = useRef<number | null>(null);
   
   // Track navigation loading state
   useEffect(() => {
     // Only show loader for actual navigation, not initial load
     if (prevPathRef.current !== location.pathname) {
+      // Clear any pending timeout
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+      
+      // Show navigation loader immediately
       setIsNavigating(true);
-      // Hide after a short delay to allow Suspense to kick in
-      const timer = setTimeout(() => setIsNavigating(false), 100);
+      
+      // Keep showing for a minimum time to prevent flash, then let Suspense take over
+      // The loader will hide once the page component is ready
+      navigationTimeoutRef.current = window.setTimeout(() => {
+        setIsNavigating(false);
+        navigationTimeoutRef.current = null;
+      }, 300);
+      
       prevPathRef.current = location.pathname;
-      return () => clearTimeout(timer);
     }
+    
+    return () => {
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+    };
   }, [location.pathname]);
   
   // Preload key pages after initial render for faster subsequent navigation

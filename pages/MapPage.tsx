@@ -299,9 +299,9 @@ const MapPage: React.FC = () => {
                                 }
                                 
                                 // Set flag to prevent map click handler from clearing the selection
-                                // Extended timeout for iOS which can have delayed click events
+                                // Extended timeout for iOS which can have very delayed click events
                                 markerClickedRef.current = true;
-                                setTimeout(() => { markerClickedRef.current = false; }, 500);
+                                setTimeout(() => { markerClickedRef.current = false; }, 800);
                                 
                                 setActiveCountryId(country.id);
                                 
@@ -314,13 +314,17 @@ const MapPage: React.FC = () => {
                                     const popup = marker.getPopup();
                                     if (popup) {
                                       popup.update();
-                                      // Double-ensure popup stays open after a brief delay (iOS Safari fix)
-                                      setTimeout(() => {
-                                        if (!marker.isPopupOpen()) {
-                                          marker.openPopup();
-                                        }
-                                      }, 50);
                                     }
+                                    // Multiple checks to ensure popup stays open (iOS Safari fix)
+                                    // iOS can fire delayed events that close the popup
+                                    const ensurePopupOpen = () => {
+                                      if (!marker.isPopupOpen() && markerClickedRef.current) {
+                                        marker.openPopup();
+                                      }
+                                    };
+                                    setTimeout(ensurePopupOpen, 50);
+                                    setTimeout(ensurePopupOpen, 150);
+                                    setTimeout(ensurePopupOpen, 300);
                                   });
                                   // Then animate to center
                                   centerMapOnMarker(marker);
@@ -342,19 +346,56 @@ const MapPage: React.FC = () => {
                               const markerElement = marker.getElement?.();
                               if (markerElement && !markerElement._touchBound) {
                                 markerElement._touchBound = true;
-                                // Use touchstart for immediate response on iOS
+                                
+                                // Track touch position for tap detection
+                                let touchStartPos: { x: number, y: number } | null = null;
+                                
+                                // Use touchstart to capture initial position and mark as handled
                                 markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-                                  // Mark that touch handled this to prevent click from double-firing
-                                  touchHandledRef.current = true;
-                                  // Reset after a delay in case click doesn't fire
-                                  setTimeout(() => { touchHandledRef.current = false; }, 400);
+                                  if (e.touches.length === 1) {
+                                    touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                                    // Mark that touch handled this to prevent click from double-firing
+                                    touchHandledRef.current = true;
+                                  }
                                 }, { passive: true });
                                 
                                 markerElement.addEventListener('touchend', (e: TouchEvent) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  handleMarkerInteraction({ originalEvent: e }, true);
+                                  // Reset flag after a longer delay for iOS
+                                  setTimeout(() => { touchHandledRef.current = false; }, 600);
+                                  
+                                  // Only handle as tap if touch didn't move much (not a drag)
+                                  if (touchStartPos && e.changedTouches.length === 1) {
+                                    const endX = e.changedTouches[0].clientX;
+                                    const endY = e.changedTouches[0].clientY;
+                                    const distance = Math.sqrt(
+                                      Math.pow(endX - touchStartPos.x, 2) + 
+                                      Math.pow(endY - touchStartPos.y, 2)
+                                    );
+                                    
+                                    // If touch moved less than 10px, it's a tap
+                                    if (distance < 10) {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleMarkerInteraction({ originalEvent: e }, true);
+                                    }
+                                  }
+                                  touchStartPos = null;
                                 }, { passive: false });
+                                
+                                // Cancel on touchmove if significant movement
+                                markerElement.addEventListener('touchmove', (e: TouchEvent) => {
+                                  if (touchStartPos && e.touches.length === 1) {
+                                    const moveX = e.touches[0].clientX;
+                                    const moveY = e.touches[0].clientY;
+                                    const distance = Math.sqrt(
+                                      Math.pow(moveX - touchStartPos.x, 2) + 
+                                      Math.pow(moveY - touchStartPos.y, 2)
+                                    );
+                                    if (distance > 10) {
+                                      touchStartPos = null; // Cancel the tap
+                                    }
+                                  }
+                                }, { passive: true });
                               }
                             });
 
