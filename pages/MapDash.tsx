@@ -164,6 +164,9 @@ export default function MapDash() {
       maxBounds: [[-85, -5000], [85, 5000]],
       maxBoundsViscosity: 1.0,
       preferCanvas: false,
+      // CRITICAL: Enable tap for better mobile touch support
+      tap: true,
+      tapTolerance: 15,
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(map);

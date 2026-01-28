@@ -208,6 +208,9 @@ const MapPage: React.FC = () => {
           wheelDebounceTime: 40,
           wheelPxPerZoomLevel: 60,
           updateWhenIdle: true,
+          // CRITICAL: Enable tap for better mobile touch support
+          tap: true,
+          tapTolerance: 15,
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -289,16 +292,31 @@ const MapPage: React.FC = () => {
                                 
                                 // Set flag to prevent map click handler from clearing the selection
                                 markerClickedRef.current = true;
-                                setTimeout(() => { markerClickedRef.current = false; }, 100);
+                                setTimeout(() => { markerClickedRef.current = false; }, 300);
                                 
                                 setActiveCountryId(country.id);
-                                centerMapOnMarker(marker);
-                                // Wait for the flyTo animation (0.8s) plus a small buffer for stabilization
-                                setTimeout(() => {
+                                
+                                const isMobileDevice = window.innerWidth < 768 || ('ontouchstart' in window);
+                                
+                                if (isMobileDevice) {
+                                  // On mobile: Open popup IMMEDIATELY, then fly to center
+                                  // This ensures the popup is visible right away
                                   marker.openPopup();
-                                  // Force immediate position update
                                   if (marker.getPopup()) marker.getPopup().update();
-                                }, 900);
+                                  // Then smoothly center the map
+                                  centerMapOnMarker(marker);
+                                  // Update popup position after animation completes
+                                  setTimeout(() => {
+                                    if (marker.getPopup()) marker.getPopup().update();
+                                  }, 850);
+                                } else {
+                                  // On desktop: Fly first, then show popup for smoother experience
+                                  centerMapOnMarker(marker);
+                                  setTimeout(() => {
+                                    marker.openPopup();
+                                    if (marker.getPopup()) marker.getPopup().update();
+                                  }, 850);
+                                }
                             });
 
                             allMarkersRef.current.push({

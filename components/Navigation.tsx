@@ -319,11 +319,17 @@ const Navigation: React.FC = () => {
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`relative w-7 h-7 flex items-center justify-center transition-all duration-500 ${
+              onTouchEnd={(e) => {
+                // Immediately toggle on touch for faster response
+                e.preventDefault();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              className={`relative w-10 h-10 flex items-center justify-center transition-all duration-300 active:scale-95 ${
                 isMobileMenuOpen 
                   ? '' 
                   : ''
               }`}
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               aria-label="Toggle menu"
             >
               <div className="relative w-5 h-3 flex flex-col justify-between">
@@ -350,7 +356,7 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-500 ease-in-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0 opacity-100 visible' 
             : 'translate-x-full opacity-0 invisible pointer-events-none'
