@@ -312,7 +312,44 @@
         border: none !important;
       }
       .leaflet-popup-content { margin: 0 !important; width: auto !important; }
-      .leaflet-container { font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important; }
+      .leaflet-container { 
+        font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important;
+      }
+      
+      /* Safari/iOS Performance Mode - reduce GPU layers and animations */
+      @supports (-webkit-touch-callout: none) {
+        .leaflet-container {
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+        }
+        .leaflet-tile-container {
+          -webkit-transform: translate3d(0,0,0) !important;
+          transform: translate3d(0,0,0) !important;
+        }
+        .leaflet-zoom-animated {
+          -webkit-transition: none !important;
+          transition: none !important;
+        }
+        .leaflet-fade-anim .leaflet-tile {
+          -webkit-transition: none !important;
+          transition: none !important;
+        }
+        .leaflet-zoom-anim .leaflet-zoom-animated {
+          -webkit-transition: none !important;
+          transition: none !important;
+        }
+        /* Disable tile fade on Safari */
+        .leaflet-tile {
+          opacity: 1 !important;
+          -webkit-transition: none !important;
+          transition: none !important;
+        }
+        /* Simpler marker animations on Safari */
+        .marker-pin {
+          -webkit-transition: transform 0.1s ease-out !important;
+          transition: transform 0.1s ease-out !important;
+        }
+      }
       .leaflet-popup-tip-container {
         margin-top: -1px; /* Bring tip closer to content */
         z-index: 20;
@@ -777,7 +814,7 @@
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
     </style>
-  <script type="module" crossorigin src="./assets/index-BWlJl7v5.js"></script>
+  <script type="module" crossorigin src="./assets/index-BsyiR2Ov.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/vendor-react-CJteECPR.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-motion-CUvbj6jv.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-firebase-BmNGKg-n.js">

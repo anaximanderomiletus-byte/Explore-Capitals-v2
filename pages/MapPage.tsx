@@ -169,32 +169,50 @@ const MapPage: React.FC = () => {
 
     if (mapRef.current && !mapInstanceRef.current) {
       try {
+        // Detect Safari/iOS for performance optimizations
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const needsPerformanceMode = isSafari || isIOS;
+        
         const map = L.map(mapRef.current, {
           center: [20, 0],
           zoom: 3,
           zoomControl: false,
           attributionControl: false,
           minZoom: 2,
-          worldCopyJump: true,
-          // Allow infinite horizontal scrolling but lock vertical bounds to prevent seeing gray void
+          worldCopyJump: !needsPerformanceMode, // Disable on Safari - causes lag
           maxBounds: [[-85, -5000], [85, 5000]],
           maxBoundsViscosity: 1.0,
           preferCanvas: true,
-          wheelDebounceTime: 40,
-          wheelPxPerZoomLevel: 60,
-          updateWhenIdle: true,
+          // Safari/iOS specific: disable all animations
+          fadeAnimation: !needsPerformanceMode,
+          zoomAnimation: !needsPerformanceMode,
+          markerZoomAnimation: !needsPerformanceMode,
+          // Reduce update frequency on Safari
+          wheelDebounceTime: needsPerformanceMode ? 100 : 40,
+          wheelPxPerZoomLevel: needsPerformanceMode ? 120 : 60,
+          updateWhenIdle: needsPerformanceMode,
+          updateWhenZooming: !needsPerformanceMode,
         });
 
+        // Base map tiles - optimized for Safari
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
           subdomains: 'abcd',
-          maxZoom: 20
+          maxZoom: 20,
+          // Safari optimizations
+          updateWhenIdle: needsPerformanceMode,
+          updateWhenZooming: !needsPerformanceMode,
+          keepBuffer: needsPerformanceMode ? 1 : 2,
         }).addTo(map);
         
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-          subdomains: 'abcd',
-          maxZoom: 20,
-          zIndex: 10
-        }).addTo(map);
+        // Labels layer - only add on non-Safari or when zoomed in enough
+        if (!needsPerformanceMode) {
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
+            subdomains: 'abcd',
+            maxZoom: 20,
+            zIndex: 10
+          }).addTo(map);
+        }
 
         markersLayerRef.current = L.layerGroup().addTo(map);
         mapInstanceRef.current = map;
