@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
 import Button from './Button';
@@ -8,6 +8,12 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
+
+// Sliding indicator position type
+interface IndicatorPos {
+  left: number;
+  width: number;
+}
 
 // Mobile Profile Link for Signed In Users
 const MobileProfileLinkSignedIn: React.FC<{
@@ -103,7 +109,11 @@ const Navigation: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
+  const [indicatorPos, setIndicatorPos] = useState<IndicatorPos>({ left: 0, width: 0 });
+  const [indicatorReady, setIndicatorReady] = useState(false);
   const lastScrollY = useRef(0);
+  const navLinksRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -243,6 +253,44 @@ const Navigation: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+  
+  // Calculate sliding indicator position
+  const updateIndicator = useCallback(() => {
+    const container = navLinksRef.current;
+    if (!container) return;
+    
+    // Find active link
+    const activePath = navLinks.find(link => isActive(link.path))?.path;
+    if (!activePath) {
+      setIndicatorReady(false);
+      return;
+    }
+    
+    const activeLink = linkRefs.current.get(activePath);
+    if (!activeLink) return;
+    
+    const containerRect = container.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    
+    setIndicatorPos({
+      left: linkRect.left - containerRect.left,
+      width: linkRect.width,
+    });
+    setIndicatorReady(true);
+  }, [location.pathname]);
+  
+  // Update indicator on route change and initial mount
+  useEffect(() => {
+    // Small delay to ensure refs are populated
+    const timer = setTimeout(updateIndicator, 10);
+    return () => clearTimeout(timer);
+  }, [location.pathname, updateIndicator]);
+  
+  // Update indicator on resize
+  useEffect(() => {
+    window.addEventListener('resize', updateIndicator);
+    return () => window.removeEventListener('resize', updateIndicator);
+  }, [updateIndicator]);
 
   // Navigation Logic:
   // 1. Hero Mode:
@@ -316,34 +364,41 @@ const Navigation: React.FC = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-8">
-            <div className="flex items-center gap-8">
-            {navLinks.map((link) => {
-              const active = isActive(link.path);
-              const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
+            <div ref={navLinksRef} className="relative flex items-center gap-8">
+              {/* Sliding indicator */}
+              <div 
+                className={`absolute -bottom-1.5 h-0.5 rounded-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}`}
+                style={{ 
+                  left: indicatorPos.left,
+                  width: indicatorPos.width,
+                  opacity: indicatorReady ? 1 : 0,
+                  transition: 'left 250ms cubic-bezier(0.4, 0, 0.2, 1), width 250ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms ease-out',
+                  pointerEvents: 'none',
+                }}
+              />
               
-              return (
-                <Link 
-                  key={link.path} 
-                  to={link.path}
-                  className={`font-black text-[10px] uppercase tracking-[0.2em] relative group/link whitespace-nowrap ${
-                    active 
-                      ? activeColor 
-                      : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
-                  }`}
-                  style={{ transition: 'color 100ms ease-out, opacity 100ms ease-out' }}
-                >
-                  {link.label}
-                  <div 
-                    className={`absolute -bottom-1.5 left-0 right-0 mx-auto h-0.5 origin-center ${
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
+                
+                return (
+                  <Link 
+                    key={link.path} 
+                    to={link.path}
+                    ref={(el) => {
+                      if (el) linkRefs.current.set(link.path, el);
+                    }}
+                    className={`font-black text-[10px] uppercase tracking-[0.2em] relative whitespace-nowrap ${
                       active 
-                        ? `w-full scale-x-100 ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
-                        : `w-full scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
-                    }`} 
-                    style={{ transition: 'transform 150ms ease-out' }} 
-                  />
-                </Link>
-              );
-            })}
+                        ? activeColor 
+                        : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
+                    }`}
+                    style={{ transition: 'color 100ms ease-out, opacity 100ms ease-out' }}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
             <div className="flex items-center gap-3 border-l border-white/10 pl-8 shrink-0">
               <Link to="/games" className="shrink-0">
