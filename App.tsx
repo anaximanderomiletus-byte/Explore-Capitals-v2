@@ -2,17 +2,29 @@ import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
 import Footer from './components/Footer';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 
-// Lazy load all pages except Home
-const Games = lazy(() => import('./pages/Games'));
+// ============================================
+// INSTANT LOAD PAGES (no lazy loading)
+// These pages load immediately with the main bundle
+// ============================================
+import Home from './pages/Home';
+import Games from './pages/Games';
+import About from './pages/About';
+
+// ============================================
+// HEAVY PAGES (lazy loaded with loading screen)
+// These pages show a loading screen while loading
+// ============================================
 const DatabasePage = lazy(() => import('./pages/DatabasePage'));
 const MapPage = lazy(() => import('./pages/MapPage'));
-const About = lazy(() => import('./pages/About'));
+
+// ============================================
+// OTHER PAGES (lazy loaded, lighter weight)
+// ============================================
 const CapitalQuiz = lazy(() => import('./pages/CapitalQuiz'));
 const MapDash = lazy(() => import('./pages/MapDash'));
 const FlagFrenzy = lazy(() => import('./pages/FlagFrenzy'));
@@ -31,50 +43,50 @@ const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 
-// Full-screen loading overlay with spinner
-const LoadingOverlay = ({ visible }: { visible: boolean }) => {
-  if (!visible) return null;
-  
-  return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15 }}
-      className="fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A]"
-    >
-      <div className="flex flex-col items-center gap-4">
-        <div 
-          className="w-12 h-12 rounded-full"
-          style={{ 
-            border: '3px solid rgba(0, 194, 255, 0.2)',
-            borderTopColor: '#00C2FF',
-            animation: 'spin 0.8s linear infinite'
-          }} 
-        />
-        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">
-          Loading
-        </p>
-      </div>
-    </motion.div>
-  );
-};
+// Routes that require the full-screen loading overlay
+const HEAVY_ROUTES = ['/database', '/map', '/games/map-dash'];
 
-// Inline loading spinner for Suspense fallback
-const PageLoader = () => (
-  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[60vh]">
+// Full-screen loading overlay - smooth and polished
+const LoadingOverlay = ({ visible }: { visible: boolean }) => (
+  <AnimatePresence>
+    {visible && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        className="fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A]"
+      >
+        <div className="flex flex-col items-center gap-5">
+          <div 
+            className="w-12 h-12 rounded-full"
+            style={{ 
+              border: '3px solid rgba(0, 194, 255, 0.15)',
+              borderTopColor: '#00C2FF',
+              animation: 'spin 0.8s linear infinite'
+            }} 
+          />
+          <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
+            Loading
+          </p>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+// Inline loading for Suspense fallback (lighter pages)
+const InlineLoader = () => (
+  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[50vh]">
     <div className="flex flex-col items-center gap-4">
       <div 
         className="w-10 h-10 rounded-full"
         style={{ 
-          border: '3px solid rgba(0, 194, 255, 0.2)',
+          border: '3px solid rgba(0, 194, 255, 0.15)',
           borderTopColor: '#00C2FF',
           animation: 'spin 0.8s linear infinite'
         }} 
       />
-      <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.25em]">
-        Loading
-      </p>
     </div>
   </div>
 );
@@ -88,13 +100,13 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
-// Page wrapper with fade animation
+// Page wrapper with smooth fade animation
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    transition={{ duration: 0.2, ease: "easeOut" }}
+    transition={{ duration: 0.15, ease: 'easeOut' }}
     className="flex-grow flex flex-col w-full"
   >
     {children}
@@ -103,35 +115,39 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const prevPathRef = useRef(location.pathname);
-  const timeoutRef = useRef<number | null>(null);
+  const loaderTimeoutRef = useRef<number | null>(null);
   
-  // Show loading overlay when route changes (except for initial load)
+  // Detect navigation to heavy routes
   useEffect(() => {
     const newPath = location.pathname;
-    const isInitialLoad = prevPathRef.current === newPath;
+    const wasHeavyRoute = HEAVY_ROUTES.some(r => prevPathRef.current.startsWith(r));
+    const isHeavyRoute = HEAVY_ROUTES.some(r => newPath.startsWith(r));
     
-    if (!isInitialLoad && prevPathRef.current !== newPath) {
-      // Show loading immediately on navigation
-      setIsLoading(true);
+    // Clear any pending timeout
+    if (loaderTimeoutRef.current) {
+      clearTimeout(loaderTimeoutRef.current);
+      loaderTimeoutRef.current = null;
+    }
+    
+    // Only show loader when navigating TO a heavy route (not from one)
+    if (isHeavyRoute && prevPathRef.current !== newPath) {
+      setShowLoader(true);
       
-      // Clear any pending timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      
-      // Hide loading after a minimum display time (ensures smooth transition)
-      timeoutRef.current = window.setTimeout(() => {
-        setIsLoading(false);
-      }, 400); // Minimum loading display time
+      // Minimum display time for smooth appearance, then hide
+      loaderTimeoutRef.current = window.setTimeout(() => {
+        setShowLoader(false);
+      }, 500);
+    } else {
+      setShowLoader(false);
     }
     
     prevPathRef.current = newPath;
     
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (loaderTimeoutRef.current) {
+        clearTimeout(loaderTimeoutRef.current);
       }
     };
   }, [location.pathname]);
@@ -140,46 +156,51 @@ const AppContent: React.FC = () => {
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden">
       <ScrollToTop />
       
-      {/* Navigation - always visible and interactive */}
+      {/* Navigation - always visible */}
       <Navigation />
       
-      {/* Loading overlay - shows on navigation */}
-      <AnimatePresence>
-        {isLoading && <LoadingOverlay visible={true} />}
-      </AnimatePresence>
+      {/* Loading overlay for heavy routes */}
+      <LoadingOverlay visible={showLoader} />
       
       {/* Page content */}
       <div className="flex-grow flex flex-col w-full">
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<InlineLoader />}>
           <AnimatePresence mode="wait" initial={false}>
             <div key={location.pathname}>
-            <Routes location={location}>
-              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
-              <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
-              <Route path="/games/map-dash" element={<PageWrapper><MapDash /></PageWrapper>} />
-              <Route path="/games/flag-frenzy" element={<PageWrapper><FlagFrenzy /></PageWrapper>} />
-              <Route path="/games/know-your-neighbor" element={<PageWrapper><KnowYourNeighbor /></PageWrapper>} />
-              <Route path="/games/population-pursuit" element={<PageWrapper><PopulationPursuit /></PageWrapper>} />
-              <Route path="/games/global-detective" element={<PageWrapper><GlobalDetective /></PageWrapper>} />
-              <Route path="/games/capital-connection" element={<PageWrapper><CapitalConnection /></PageWrapper>} />
-              <Route path="/games/region-roundup" element={<PageWrapper><RegionRoundup /></PageWrapper>} />
-              <Route path="/games/landmark-legend" element={<PageWrapper><LandmarkLegend /></PageWrapper>} />
-              <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
-              <Route path="/directory" element={<DirectoryRedirect />} />
-              <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />
-              <Route path="/map" element={<PageWrapper><MapPage /></PageWrapper>} />
-              <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-              <Route path="/expedition/:id" element={<PageWrapper><CountryExploration /></PageWrapper>} />
-              <Route path="/explore/:id" element={<ExploreRedirect />} />
-              <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
-              <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
-              <Route path="/auth" element={<PageWrapper><Auth /></PageWrapper>} />
-              <Route path="/auth-action" element={<PageWrapper><AuthAction /></PageWrapper>} />
-              <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
-              <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
-              <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
-            </Routes>
+              <Routes location={location}>
+                {/* Instant load pages */}
+                <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+                <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
+                <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+                
+                {/* Heavy pages (lazy loaded) */}
+                <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
+                <Route path="/map" element={<PageWrapper><MapPage /></PageWrapper>} />
+                
+                {/* Game pages */}
+                <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
+                <Route path="/games/map-dash" element={<PageWrapper><MapDash /></PageWrapper>} />
+                <Route path="/games/flag-frenzy" element={<PageWrapper><FlagFrenzy /></PageWrapper>} />
+                <Route path="/games/know-your-neighbor" element={<PageWrapper><KnowYourNeighbor /></PageWrapper>} />
+                <Route path="/games/population-pursuit" element={<PageWrapper><PopulationPursuit /></PageWrapper>} />
+                <Route path="/games/global-detective" element={<PageWrapper><GlobalDetective /></PageWrapper>} />
+                <Route path="/games/capital-connection" element={<PageWrapper><CapitalConnection /></PageWrapper>} />
+                <Route path="/games/region-roundup" element={<PageWrapper><RegionRoundup /></PageWrapper>} />
+                <Route path="/games/landmark-legend" element={<PageWrapper><LandmarkLegend /></PageWrapper>} />
+                
+                {/* Other pages */}
+                <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />
+                <Route path="/expedition/:id" element={<PageWrapper><CountryExploration /></PageWrapper>} />
+                <Route path="/explore/:id" element={<ExploreRedirect />} />
+                <Route path="/directory" element={<DirectoryRedirect />} />
+                <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+                <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
+                <Route path="/auth" element={<PageWrapper><Auth /></PageWrapper>} />
+                <Route path="/auth-action" element={<PageWrapper><AuthAction /></PageWrapper>} />
+                <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
+                <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
+                <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
+              </Routes>
             </div>
           </AnimatePresence>
         </Suspense>
@@ -190,19 +211,17 @@ const AppContent: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
-  return (
-    <AuthProvider>
-      <UserProvider>
-        <LayoutProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </LayoutProvider>
-      </UserProvider>
-    </AuthProvider>
-  );
-};
+const App: React.FC = () => (
+  <AuthProvider>
+    <UserProvider>
+      <LayoutProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </LayoutProvider>
+    </UserProvider>
+  </AuthProvider>
+);
 
 const ExploreRedirect: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -210,16 +229,13 @@ const ExploreRedirect: React.FC = () => {
   return <Navigate to={{ pathname: `/expedition/${id}`, search: location.search }} replace />;
 };
 
-const DirectoryRedirect: React.FC = () => {
-  return <Navigate to="/database" replace />;
-};
+const DirectoryRedirect: React.FC = () => <Navigate to="/database" replace />;
 
 const ConditionalFooter: React.FC = () => {
   const location = useLocation();
   const { isFooterHidden } = useLayout();
   
   if (location.pathname === '/map' || isFooterHidden) return null;
-  
   return <Footer />;
 };
 
