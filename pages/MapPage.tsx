@@ -62,105 +62,80 @@ const MapPage: React.FC = () => {
   // Track processed URL country to prevent loops/locking
   const processedCountryRef = useRef<string | null>(null);
 
-  // Memoize Popup Content Creator
+  // Memoize Popup Content Creator - simplified for iOS performance
   const createPopupContent = useCallback((country: Country, type: 'sovereign' | 'territory' | 'defacto') => {
     const flagCode = getCountryCode(country.flag);
     const flagUrl = `https://flagcdn.com/w80/${flagCode}.png`;
     
     let subheader = '';
     let linkClass = 'text-sky';
-    let linkGlow = '';
     
     if (type === 'territory') {
       subheader = `<div class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-3">Territory of ${(country as any).sovereignty}</div>`;
       linkClass = 'text-accent';
     } else if (type === 'defacto') {
-      subheader = `<div class="text-[10px] font-black text-warning uppercase tracking-[0.2em] mb-3"> ${(country as any).sovereignty}</div>`;
+      subheader = `<div class="text-[10px] font-black text-warning uppercase tracking-[0.2em] mb-3">${(country as any).sovereignty}</div>`;
       linkClass = 'text-warning';
     } else {
       subheader = `<div class="text-[10px] font-black text-sky uppercase tracking-[0.2em] mb-3">Sovereign State</div>`;
     }
     
+    // Simplified popup - no shadows, no gradients, minimal nesting
     return `
-      <div class="flex flex-col font-sans relative">
-        <div class="flex items-center gap-4 mb-5 relative">
-           <div class="w-12 h-8 shrink-0 flex items-center justify-center">
-             <img src="${flagUrl}" alt="${country.name} Flag" class="w-full h-full object-contain filter drop-shadow-lg" />
+      <div class="flex flex-col font-sans">
+        <div class="flex items-center gap-4 mb-4">
+           <div class="w-12 h-8 shrink-0">
+             <img src="${flagUrl}" alt="${country.name} Flag" class="w-full h-full object-contain" />
            </div>
-           <h3 class="font-display font-black text-2xl text-white tracking-tighter uppercase leading-none m-0 drop-shadow-xl">${country.name}</h3>
+           <h3 class="font-display font-black text-2xl text-white tracking-tighter uppercase leading-none m-0">${country.name}</h3>
         </div>
-        
         ${subheader}
-
-        <div class="mb-6 bg-black/40 p-4 rounded-2xl border border-white/10 shadow-inner relative text-center">
+        <div class="mb-5 bg-black/30 p-4 rounded-xl border border-white/10 text-center">
            <span class="text-[10px] font-black text-sky-light uppercase tracking-[0.2em] block mb-1">Capital City</span>
-           <span class="font-display font-black text-white text-lg uppercase tracking-tight drop-shadow-sm">${country.capital}</span>
+           <span class="font-display font-black text-white text-lg uppercase tracking-tight">${country.capital}</span>
         </div>
-
-        <div class="text-center relative">
-          <button 
-            data-country-id="${country.id}" 
-            class="learn-more-btn ${linkClass} ${linkGlow} w-full h-12 bg-white/10 border-2 border-white/40 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all outline-none"
-          >
-            Launch Profile
-          </button>
-        </div>
+        <button data-country-id="${country.id}" class="learn-more-btn ${linkClass} w-full h-12 bg-white/10 border border-white/30 rounded-xl text-[11px] font-black uppercase tracking-[0.3em] active:bg-white/20">
+          Launch Profile
+        </button>
       </div>
     `;
   }, []);
 
-  // Smart centering function to handle UI obstructions
+  // Smart centering function - optimized for iOS
   const centerMapOnMarker = useCallback((marker: any) => {
       const map = mapInstanceRef.current;
       const L = (window as any).L;
       if (!map || !L) return;
 
       const isMobile = window.innerWidth < 768;
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       
-      // Define UI Obstruction Dimensions
-      const topNavHeight = isMobile ? 80 : 100; // Navigation bar height
-      
-      // For desktop, we want the marker (and popup) to be visually centered in the viewport.
-      // Even though there is a sidebar, centering on the screen looks more balanced for a focused view.
+      const topNavHeight = isMobile ? 80 : 100;
       const sidebarWidth = 0; 
-      
-      const bottomSheetHeight = isMobile ? 240 : 0; // Mobile bottom panel height
+      const bottomSheetHeight = isMobile ? 240 : 0;
       
       const mapSize = map.getSize();
-      
-      // Calculate "Safe Zone" center relative to the map container
-      // For desktop: Center is horizontal center
-      // For mobile: Center is shifted up to avoid bottom sheet
       const targetX = sidebarWidth + ((mapSize.x - sidebarWidth) / 2);
       const targetY = topNavHeight + ((mapSize.y - topNavHeight - bottomSheetHeight) / 2);
-
-      // We want the marker to be at (targetX, targetY + offset)
-      // The offset pushes the marker down so the POPUP (which opens above the marker) is centered in the safe zone
-      // Reduced offset (from 150 to 75) to move the popup higher up, closer to the visual center
       const popupOffset = 75; 
       const desiredMarkerScreenY = targetY + popupOffset;
 
-      // Determine target zoom level for "fair view"
-      // If current zoom is already quite deep, keep it, otherwise zoom in to ~5.5
       const targetZoom = Math.max(map.getZoom(), isMobile ? 4.5 : 5.5);
-
-      // CRITICAL: We MUST project and unproject using the TARGET zoom level.
-      // If we calculate offsets at zoom 3 but fly to zoom 5.5, the pixel centering will be wrong.
       const markerGlobal = map.project(marker.getLatLng(), targetZoom);
-      
-      // Calculate the screen offset from the true center of the map container
       const screenOffsetX = targetX - (mapSize.x / 2);
       const screenOffsetY = desiredMarkerScreenY - (mapSize.y / 2);
-      
-      // Calculate new center in global pixels
       const newCenterGlobal = markerGlobal.subtract(L.point(screenOffsetX, screenOffsetY));
-      
       const newCenterLatLng = map.unproject(newCenterGlobal, targetZoom);
       
-      map.flyTo(newCenterLatLng, targetZoom, {
-          duration: 0.8, // Slightly longer for the zoom feel
-          easeLinearity: 0.25
-      });
+      // iOS: use setView for instant response, desktop: use flyTo for smooth animation
+      if (isIOS) {
+        map.setView(newCenterLatLng, targetZoom, { animate: false });
+      } else {
+        map.flyTo(newCenterLatLng, targetZoom, {
+          duration: 0.6,
+          easeLinearity: 0.3
+        });
+      }
   }, []);
 
   // Effect: Ensure page loading state is cleared when component mounts
@@ -236,6 +211,9 @@ const MapPage: React.FC = () => {
         }, 100);
 
         if (allMarkersRef.current.length === 0) {
+            // Detect iOS once for all markers
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
             const createMarkers = (list: Country[], type: 'sovereign' | 'territory' | 'defacto') => {
                 list.forEach(country => {
                     try {
@@ -253,9 +231,11 @@ const MapPage: React.FC = () => {
                           zIndex = -50;
                         }
 
-                        // Create 3 markers for each country to support infinite horizontal scrolling
-                        // This allows markers to appear on adjacent copies of the world (e.g. over the Pacific)
-                        [-360, 0, 360].forEach(offset => {
+                        // iOS: only create 1 marker copy to reduce DOM load
+                        // Desktop: create 3 copies for infinite scroll
+                        const offsets = isIOS ? [0] : [-360, 0, 360];
+                        
+                        offsets.forEach(offset => {
                             const icon = L.divIcon({
                                 className: `custom-map-marker ${markerClass}`,
                                 html: `<div class="marker-pin ${pinClass}"></div>`,
@@ -270,145 +250,63 @@ const MapPage: React.FC = () => {
                                 closeButton: false,
                                 className: 'custom-popup',
                                 autoPan: false,
-                                maxWidth: 320,
-                                minWidth: 320,
+                                maxWidth: 300,
+                                minWidth: 280,
                                 offset: L.point(0, -10)
                             });
 
-                            // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
-                            // Safari/iOS-optimized touch handling
-                            // Safari has unique touch behavior that requires special handling
-                            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-                            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                            let lastTap = 0;
                             
-                            let lastInteractionTime = 0;
-                            let touchStartTime = 0;
-                            const DEBOUNCE_MS = isSafari ? 400 : 300; // Longer debounce for Safari
-                            
-                            // Unified handler for marker interactions
-                            const handleMarkerInteraction = (e: any, source: 'click' | 'touch' = 'click') => {
+                            // Simple unified handler
+                            const handleTap = (e: any) => {
                                 const now = Date.now();
+                                if (now - lastTap < 300) return; // Debounce
+                                lastTap = now;
                                 
-                                // Debounce: skip if we just handled an interaction
-                                if (now - lastInteractionTime < DEBOUNCE_MS) {
-                                  return;
+                                if (e?.originalEvent) {
+                                  e.originalEvent.stopPropagation();
                                 }
-                                lastInteractionTime = now;
+                                L.DomEvent?.stop?.(e);
                                 
-                                // CRITICAL: Stop all propagation
-                                if (e) {
-                                  if (e.originalEvent) {
-                                    e.originalEvent.stopPropagation();
-                                    e.originalEvent.stopImmediatePropagation?.();
-                                    e.originalEvent.preventDefault();
-                                  }
-                                  if (typeof L.DomEvent?.stop === 'function') {
-                                    L.DomEvent.stop(e);
-                                  }
-                                }
-                                
-                                // Extended flag timeout for Safari's delayed synthetic events
                                 markerClickedRef.current = true;
-                                setTimeout(() => { markerClickedRef.current = false; }, isSafari ? 1000 : 800);
+                                setTimeout(() => { markerClickedRef.current = false; }, 500);
                                 
                                 setActiveCountryId(country.id);
                                 
-                                const isMobile = window.innerWidth < 768 || source === 'touch';
-                                
-                                // Safari-specific: Close any existing popup first to prevent stacking
-                                if (isSafari && mapInstanceRef.current) {
+                                // Close existing popup first
+                                if (mapInstanceRef.current) {
                                   mapInstanceRef.current.closePopup();
                                 }
                                 
-                                // Open popup synchronously
                                 marker.openPopup();
-                                
-                                // Center map with delay
-                                setTimeout(() => {
-                                  centerMapOnMarker(marker);
-                                  // Re-confirm popup stays open
-                                  requestAnimationFrame(() => {
-                                    if (!marker.isPopupOpen()) {
-                                      marker.openPopup();
-                                    }
-                                    const popup = marker.getPopup();
-                                    if (popup) popup.update();
-                                  });
-                                }, isMobile ? 50 : 100);
-                                
-                                // Safari needs multiple safety checks
-                                if (isSafari || isIOS) {
-                                  [100, 200, 400].forEach(delay => {
-                                    setTimeout(() => {
-                                      if (!marker.isPopupOpen() && markerClickedRef.current) {
-                                        marker.openPopup();
-                                      }
-                                    }, delay);
-                                  });
-                                }
+                                centerMapOnMarker(marker);
                             };
                             
-                            // Desktop click handler
-                            marker.on('click', (e: any) => handleMarkerInteraction(e, 'click'));
+                            marker.on('click', handleTap);
                             
-                            // iOS/Safari Touch optimization
-                            marker.on('add', () => {
-                              const markerElement = marker.getElement?.();
-                              if (markerElement && !(markerElement as any)._touchOptimized) {
-                                (markerElement as any)._touchOptimized = true;
-                                
-                                // Safari-specific CSS
-                                Object.assign(markerElement.style, {
-                                  touchAction: 'manipulation',
-                                  webkitTouchCallout: 'none',
-                                  webkitUserSelect: 'none',
-                                  userSelect: 'none',
-                                  cursor: 'pointer',
-                                  // Safari tap highlight
-                                  webkitTapHighlightColor: 'transparent'
-                                });
-                                
-                                // Track touch start for tap detection
-                                markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-                                  touchStartTime = Date.now();
-                                }, { passive: true });
-                                
-                                // Handle touch end
-                                markerElement.addEventListener('touchend', (e: TouchEvent) => {
-                                  const touchDuration = Date.now() - touchStartTime;
+                            // iOS touch optimization
+                            if (isIOS) {
+                              marker.on('add', () => {
+                                const el = marker.getElement?.();
+                                if (el && !(el as any)._opt) {
+                                  (el as any)._opt = true;
+                                  el.style.touchAction = 'manipulation';
+                                  el.style.cursor = 'pointer';
                                   
-                                  // Only handle quick taps (not scrolls/drags)
-                                  if (e.changedTouches.length === 1 && touchDuration < 500) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    e.stopImmediatePropagation();
-                                    
-                                    // Small delay for Safari to settle
-                                    if (isSafari) {
-                                      setTimeout(() => {
-                                        handleMarkerInteraction({ originalEvent: e }, 'touch');
-                                      }, 10);
-                                    } else {
-                                      handleMarkerInteraction({ originalEvent: e }, 'touch');
+                                  let touchStart = 0;
+                                  el.addEventListener('touchstart', () => { touchStart = Date.now(); }, { passive: true });
+                                  el.addEventListener('touchend', (e: TouchEvent) => {
+                                    if (Date.now() - touchStart < 300) {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleTap({ originalEvent: e });
                                     }
-                                  }
-                                }, { passive: false, capture: true });
-                                
-                                // Prevent synthetic click after touch on Safari
-                                markerElement.addEventListener('click', (e: MouseEvent) => {
-                                  const now = Date.now();
-                                  // If we recently handled a touch, block the click
-                                  if (now - lastInteractionTime < DEBOUNCE_MS) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    e.stopImmediatePropagation();
-                                    return;
-                                  }
-                                }, { capture: true });
-                              }
-                            });
+                                  }, { passive: false });
+                                }
+                              });
+                            }
 
                             allMarkersRef.current.push({
                                 id: country.id,
@@ -548,10 +446,8 @@ const MapPage: React.FC = () => {
         if (regionChanged) {
             const map = mapInstanceRef.current;
             const isMobile = window.innerWidth < 768;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
-            // Fixed Region Views for better continent visibility
-            // Offset logic: [lat, lng], zoom
-            // lng offset to the right to avoid side menu, lat offset up to avoid bottom UI
             const views: Record<string, { center: [number, number], zoom: number }> = {
               'Africa': { center: isMobile ? [5, 20] : [0, 50], zoom: isMobile ? 2.3 : 3.2 },
               'Asia': { center: isMobile ? [35, 95] : [30, 115], zoom: isMobile ? 1.8 : 3.0 },
@@ -563,10 +459,13 @@ const MapPage: React.FC = () => {
             };
 
             const view = views[selectedRegion] || views['All'];
-            map.flyTo(view.center, view.zoom, {
-                duration: 1.2,
-                easeLinearity: 0.25
-            });
+            
+            // iOS: instant view change, Desktop: smooth animation
+            if (isIOS) {
+              map.setView(view.center, view.zoom, { animate: false });
+            } else {
+              map.flyTo(view.center, view.zoom, { duration: 0.8, easeLinearity: 0.3 });
+            }
         }
     });
 
@@ -896,48 +795,48 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* --- DESKTOP SHOW UI BUTTON (when hidden) --- */}
-      <div className={`fixed bottom-10 left-6 z-[2000] pointer-events-auto hidden md:block transition-all duration-700 ease-out ${showUI ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'}`}>
+      <div className={`fixed bottom-10 left-6 z-[2000] pointer-events-auto hidden md:block transition-opacity duration-300 ${showUI ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <button 
           onClick={() => setShowUI(true)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+          className="w-12 h-12 bg-white/80 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] active:bg-white"
           title="Show UI"
         >
-          <Eye size={20} className="relative z-10 drop-shadow-sm" />
+          <Eye size={20} />
         </button>
       </div>
 
-      <div className={`fixed z-[2000] pointer-events-auto md:hidden transition-all duration-700 ease-out ${showUI ? 'opacity-0 pointer-events-none' : 'bottom-10 left-6 opacity-100'}`}>
+      <div className={`fixed z-[2000] pointer-events-auto md:hidden transition-opacity duration-300 ${showUI ? 'opacity-0 pointer-events-none' : 'bottom-10 left-6 opacity-100'}`}>
         <button 
           onClick={() => setShowUI(!showUI)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+          className="w-12 h-12 bg-white/80 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] active:bg-white"
           title="Show UI"
         >
-          <Eye size={20} className="relative z-10 drop-shadow-sm" />
+          <Eye size={20} />
         </button>
       </div>
 
 
       {/* --- DESKTOP UI --- */}
-      <div className={`hidden md:flex absolute top-24 left-6 w-60 flex-col gap-3 z-[1000] pointer-events-none transition-all duration-700 ease-out transform ${showUI ? 'translate-x-0 opacity-100' : '-translate-x-full -translate-y-10 opacity-0'}`}>
+      <div className={`hidden md:flex absolute top-24 left-6 w-60 flex-col gap-3 z-[1000] pointer-events-none transition-opacity duration-300 ${showUI ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           {/* Search Bar */}
           <div className="pointer-events-auto relative z-50">
-              <div className="bg-white/40 backdrop-blur-2xl rounded-xl  border border-black/20 flex items-center px-3.5 py-2.5 focus-within:ring-4 focus-within:ring-primary/10 focus-within:border-black/30 group relative overflow-hidden">
+              <div className="bg-white/90 rounded-xl border border-black/20 flex items-center px-3.5 py-2.5">
                   <button 
                     onClick={() => filteredSearchResults.length > 0 && handleResultClick(filteredSearchResults[0])} 
-                    className="mr-3 text-black/40 hover:text-primary transition-all focus:outline-none relative z-10"
+                    className="mr-3 text-black/40"
                   >
                     <Search size={16} />
                   </button>
                   <input 
                       type="text" 
                       placeholder="SEARCH..." 
-                      className="bg-transparent border-none outline-none text-[9px] text-[#1A1C1E] w-full placeholder:text-black/30 font-black uppercase tracking-[0.2em] relative z-10"
+                      className="bg-transparent border-none outline-none text-[9px] text-[#1A1C1E] w-full placeholder:text-black/30 font-black uppercase tracking-[0.2em]"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyDown={handleKeyDown}
                   />
                   {searchQuery && (
-                      <button onClick={() => setSearchQuery('')} className="text-black/40 hover:text-black relative z-10 p-1">
+                      <button onClick={() => setSearchQuery('')} className="text-black/40 p-1">
                           <X size={16} />
                       </button>
                   )}
@@ -946,39 +845,31 @@ const MapPage: React.FC = () => {
               {searchQuery && (
                   <div 
                     ref={desktopResultsRef}
-                    className="absolute left-0 w-full bg-surface-dark/95 backdrop-blur-3xl rounded-xl  border border-white/40 overflow-y-auto custom-scrollbar animate-in fade-in z-[60] overflow-hidden max-h-[50vh] top-full mt-2 slide-in-from-top-2"
+                    className="absolute left-0 w-full bg-[#1a1c2e] rounded-xl border border-white/20 overflow-y-auto max-h-[50vh] top-full mt-2"
                   >
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />
                       {filteredSearchResults.length > 0 ? (
-                          <ul className="py-1 relative z-10">
+                          <ul className="py-1">
                               {filteredSearchResults.map((country, index) => {
                                   const flagCode = getCountryCode(country.flag);
                                   const isTerritory = TERRITORIES.some(t => t.id === country.id);
                                   const isDeFacto = DE_FACTO_COUNTRIES.some(d => d.id === country.id);
                                   let nameClass = 'text-white';
-                                  let glowClass = 'drop-shadow-md';
-                                  if (isTerritory) {
-                                    nameClass = 'text-accent';
-                                    glowClass = '';
-                                  }
-                                  if (isDeFacto) {
-                                    nameClass = 'text-warning';
-                                    glowClass = '';
-                                  }
+                                  if (isTerritory) nameClass = 'text-accent';
+                                  if (isDeFacto) nameClass = 'text-warning';
 
                                   return (
                                     <li key={country.id}>
                                         <button 
                                             onClick={() => handleResultClick(country)}
                                             onMouseEnter={() => setSelectedIndex(index)}
-                                            className={`w-full text-left px-3.5 py-2.5 flex items-center gap-3 transition-all border-b border-white/5 last:border-none uppercase tracking-tighter ${index === selectedIndex ? 'bg-white/10 scale-[1.02] translate-x-1' : 'hover:bg-white/5'}`}
+                                            className={`w-full text-left px-3.5 py-2.5 flex items-center gap-3 border-b border-white/5 last:border-none uppercase tracking-tighter ${index === selectedIndex ? 'bg-white/10' : ''}`}
                                         >
-                                            <div className="w-8 h-5 shrink-0 flex items-center justify-center">
-                                              <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
+                                            <div className="w-8 h-5 shrink-0">
+                                              <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain" />
                                             </div>
                                             <div>
-                                                <p className={`text-[10px] font-black ${nameClass} ${glowClass}`}>{country.name}</p>
-                                                <p className="text-[8px] font-bold text-white/30 tracking-widest whitespace-nowrap">{country.region}</p>
+                                                <p className={`text-[10px] font-black ${nameClass}`}>{country.name}</p>
+                                                <p className="text-[8px] font-bold text-white/30 tracking-widest">{country.region}</p>
                                             </div>
                                         </button>
                                     </li>
@@ -986,7 +877,7 @@ const MapPage: React.FC = () => {
                               })}
                           </ul>
                       ) : (
-                          <div className="p-8 text-center text-[9px] text-white/30 font-black uppercase tracking-[0.3em] relative z-10">
+                          <div className="p-8 text-center text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">
                               No matches found
                           </div>
                       )}
@@ -995,18 +886,18 @@ const MapPage: React.FC = () => {
           </div>
 
           {/* Region Card */}
-          <div className="bg-white/40 backdrop-blur-3xl p-4 rounded-3xl  border border-black/20 pointer-events-auto relative overflow-hidden">
-            <div className="flex items-center gap-2.5 mb-5 relative z-10">
+          <div className="bg-white/90 p-4 rounded-3xl border border-black/20 pointer-events-auto">
+            <div className="flex items-center gap-2.5 mb-5">
               <div className="p-2 bg-primary/10 rounded-xl text-primary border border-primary/20">
                 <MapIcon size={18} />
               </div>
               <div>
-                <h2 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter drop-shadow-sm">Atlas</h2>
+                <h2 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter">Atlas</h2>
                 <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{MOCK_COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Nodes</p>
               </div>
             </div>
 
-            <div className="space-y-4 relative z-10">
+            <div className="space-y-4">
             <div className="space-y-2.5">
                 <div className="flex items-center gap-2 text-[8px] font-black text-black/30 uppercase tracking-[0.4em] mb-1 ml-1">
                   <Filter size={10} />
@@ -1017,10 +908,10 @@ const MapPage: React.FC = () => {
                     <button
                       key={region}
                       onClick={() => handleRegionSelect(region)}
-                      className={`px-3 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg transition-all duration-500  border-2 whitespace-nowrap ${
+                      className={`px-3 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg border-2 whitespace-nowrap ${
                         selectedRegion === region
-                          ? 'bg-primary text-white border-white/60' 
-                          : 'bg-black/5 text-black/40 border-black/30 hover:bg-black/10 hover:text-black'
+                          ? 'bg-primary text-white border-primary' 
+                          : 'bg-black/5 text-black/40 border-black/20 active:bg-black/10'
                       }`}
                     >
                       {region}
@@ -1032,94 +923,87 @@ const MapPage: React.FC = () => {
               <div className="pt-4 border-t border-black/20 flex flex-col gap-2">
                 <button 
                   onClick={() => setShowTerritories(!showTerritories)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-500 text-[8px] font-black uppercase tracking-[0.2em] shadow-inner border ${showTerritories ? 'bg-accent/20 text-[#166534] border-accent/40' : 'bg-black/5 text-black/20 border-black/20 opacity-40 hover:opacity-100 hover:bg-black/10'}`}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] border ${showTerritories ? 'bg-accent/20 text-[#166534] border-accent/40' : 'bg-black/5 text-black/30 border-black/10'}`}
                 >
                   <span className="flex items-center gap-2">
                     <Globe size={12} /> Territories
                   </span>
-                  <div className={`w-7 h-3.5 rounded-full p-0.5 transition-all duration-500 ${showTerritories ? 'bg-accent' : 'bg-white/10'}`}>
-                      <div className={`w-2.5 h-2.5 bg-white rounded-full shadow-md transform transition-transform duration-500 ${showTerritories ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                  <div className={`w-7 h-3.5 rounded-full p-0.5 ${showTerritories ? 'bg-accent' : 'bg-black/10'}`}>
+                      <div className={`w-2.5 h-2.5 bg-white rounded-full ${showTerritories ? 'translate-x-3.5' : 'translate-x-0'}`} style={{ transition: 'transform 0.15s' }}></div>
                   </div>
                 </button>
 
                 <button 
                   onClick={() => setShowDeFacto(!showDeFacto)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-500 text-[8px] font-black uppercase tracking-[0.2em] shadow-inner border ${showDeFacto ? 'bg-warning/20 text-[#92400e] border-warning/40' : 'bg-black/5 text-black/20 border-black/20 opacity-40 hover:opacity-100 hover:bg-black/10'}`}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] border ${showDeFacto ? 'bg-warning/20 text-[#92400e] border-warning/40' : 'bg-black/5 text-black/30 border-black/10'}`}
                 >
                   <span className="flex items-center gap-2">
                     <AlertTriangle size={12} /> De Facto
                   </span>
-                  <div className={`w-7 h-3.5 rounded-full p-0.5 transition-all duration-500 ${showDeFacto ? 'bg-warning' : 'bg-white/10'}`}>
-                      <div className={`w-2.5 h-2.5 bg-white rounded-full shadow-md transform transition-transform duration-500 ${showDeFacto ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                  <div className={`w-7 h-3.5 rounded-full p-0.5 ${showDeFacto ? 'bg-warning' : 'bg-black/10'}`}>
+                      <div className={`w-2.5 h-2.5 bg-white rounded-full ${showDeFacto ? 'translate-x-3.5' : 'translate-x-0'}`} style={{ transition: 'transform 0.15s' }}></div>
                   </div>
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/40 backdrop-blur-3xl p-3.5 rounded-2xl  border border-black/20 pointer-events-auto relative overflow-hidden">
-            <div className="flex flex-col gap-2 text-[8px] font-black uppercase tracking-[0.3em] text-black/40 relative z-10">
+          <div className="bg-white/90 p-3.5 rounded-2xl border border-black/20 pointer-events-auto">
+            <div className="flex flex-col gap-2 text-[8px] font-black uppercase tracking-[0.3em] text-black/40">
               <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary border border-black/10"></div>
-                  <span className="drop-shadow-sm">Sovereign</span>
+                  <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  <span>Sovereign</span>
               </div>
               <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent border border-black/10"></div>
-                  <span className="drop-shadow-sm">Territory</span>
+                  <div className="w-2 h-2 rounded-full bg-accent"></div>
+                  <span>Territory</span>
               </div>
               <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-warning border border-black/10"></div>
-                  <span className="drop-shadow-sm">De Facto</span>
+                  <div className="w-2 h-2 rounded-full bg-warning"></div>
+                  <span>De Facto</span>
               </div>
             </div>
           </div>
       </div>
 
-      {/* Desktop Bottom Bar - Hide UI, Random Search, Zoom Controls aligned horizontally */}
-      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
-        {/* Hide UI Button */}
+      {/* Desktop Bottom Bar */}
+      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-opacity duration-300 ${showUI ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <button 
           onClick={() => setShowUI(false)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+          className="w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] active:bg-white"
           title="Hide UI"
         >
-          <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
+          <EyeOff size={20} />
         </button>
 
-        {/* Random Search Button */}
         <button 
           onClick={flyToRandom}
           disabled={isLoadingRandom}
-          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl  border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60"
+          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/90 border border-black/20 uppercase tracking-[0.15em] text-[#1A1C1E] font-display font-black disabled:opacity-40 active:bg-white"
         >
-          <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
-            <Compass size={24} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
-            <span className="tracking-tighter">{!mapReady ? 'Initializing...' : isLoadingRandom ? 'Scanning...' : 'Random Search'}</span>
-          </div>
+          <Compass size={24} className={`text-primary ${isLoadingRandom || !mapReady ? 'animate-spin' : ''}`} />
+          <span className="tracking-tighter">{!mapReady ? 'Initializing...' : isLoadingRandom ? 'Scanning...' : 'Random Search'}</span>
         </button>
 
-        {/* Zoom Controls */}
         <div className="hidden lg:flex items-center gap-2">
-          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-            <Minus size={22} className="relative z-10 drop-shadow-sm" />
+          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] active:bg-white">
+            <Minus size={22} />
           </button>
-          <button onClick={handleZoomIn} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-            <Plus size={22} className="relative z-10 drop-shadow-sm" />
+          <button onClick={handleZoomIn} className="w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] active:bg-white">
+            <Plus size={22} />
           </button>
         </div>
       </div>
 
       {/* --- MOBILE UI --- */}
-      <div className={`md:hidden fixed bottom-0 left-0 w-full z-[1000] flex flex-col items-center pointer-events-none transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} [@media(max-height:620px)]:hidden`}>
+      <div className={`md:hidden fixed bottom-0 left-0 w-full z-[1000] flex flex-col items-center pointer-events-none transition-opacity duration-300 ${showUI ? 'opacity-100' : 'opacity-0 pointer-events-none'} [@media(max-height:620px)]:hidden`}>
           {/* Action Row */}
           <div className="w-full px-4 pb-4 flex items-end justify-between pointer-events-none">
             <button 
                 onClick={() => setShowUI(false)}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden flex-shrink-0 group"
+                className="pointer-events-auto w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] flex-shrink-0"
             >
-                <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
+                <EyeOff size={20} />
             </button>
 
             {/* Random FAB */}
@@ -1127,12 +1011,10 @@ const MapPage: React.FC = () => {
               <button 
                   onClick={flyToRandom}
                   disabled={isLoadingRandom || !mapReady}
-                  className="pointer-events-auto  bg-white/40 backdrop-blur-3xl text-[#1A1C1E] border border-black/20 px-8 py-3.5 rounded-full flex items-center gap-3 transition-all group relative overflow-hidden disabled:opacity-40 disabled:saturate-50 hover:bg-white/60"
+                  className="pointer-events-auto bg-white/90 text-[#1A1C1E] border border-black/20 px-8 py-3.5 rounded-full flex items-center gap-3 disabled:opacity-40"
               >
-                  <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
-                    <Compass size={20} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
-                    <span className="font-display font-black text-xs uppercase tracking-[0.1em] whitespace-nowrap">{!mapReady ? 'INITIALIZING...' : isLoadingRandom ? 'SEARCHING...' : 'Random Search'}</span>
-                  </div>
+                  <Compass size={20} className={`text-primary ${isLoadingRandom || !mapReady ? 'animate-spin' : ''}`} />
+                  <span className="font-display font-black text-xs uppercase tracking-[0.1em] whitespace-nowrap">{!mapReady ? 'INITIALIZING...' : isLoadingRandom ? 'SEARCHING...' : 'Random Search'}</span>
               </button>
             </div>
 
@@ -1140,31 +1022,28 @@ const MapPage: React.FC = () => {
             <div className="flex flex-col gap-2 flex-shrink-0">
               <button 
                 onClick={handleZoomIn}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E]"
               >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-                <Plus size={20} className="relative z-10 drop-shadow-sm" />
+                <Plus size={20} />
               </button>
               <button 
                 onClick={handleZoomOut}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/90 border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E]"
               >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-                <Minus size={20} className="relative z-10 drop-shadow-sm" />
+                <Minus size={20} />
               </button>
             </div>
           </div>
 
 
           {/* Combined Bottom Panel */}
-          <div className="w-full pointer-events-auto bg-white/40 backdrop-blur-3xl border-t border-x border-black/20 shadow-xl rounded-t-3xl p-4 pb-4 flex flex-col gap-3 relative overflow-hidden">
-
+          <div className="w-full pointer-events-auto bg-white/95 border-t border-x border-black/20 rounded-t-3xl p-4 pb-4 flex flex-col gap-3">
               
               {/* Search Section */}
               <div className="relative z-20">
-                  <div className="relative group bg-black/5 rounded-xl border border-black/20 focus-within:bg-black/10 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-500 overflow-hidden">
+                  <div className="relative bg-black/5 rounded-xl border border-black/20">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                          <Search size={18} className="text-black/30 group-focus-within:text-primary transition-colors" />
+                          <Search size={18} className="text-black/30" />
                       </div>
                       <input 
                           type="text" 
@@ -1183,41 +1062,32 @@ const MapPage: React.FC = () => {
                       )}
                   </div>
 
-
-
                   {searchQuery && (
                       <div 
                         ref={mobileResultsRef}
-                        className="absolute bottom-full left-0 w-full mb-4 bg-white/95 backdrop-blur-3xl rounded-2xl shadow-2xl border border-black/20 overflow-hidden max-h-[45vh] overflow-y-auto custom-scrollbar animate-in slide-in-from-bottom-4 fade-in"
+                        className="absolute bottom-full left-0 w-full mb-4 bg-white rounded-2xl border border-black/20 overflow-hidden max-h-[45vh] overflow-y-auto"
                       >
                           {filteredSearchResults.length > 0 ? (
-                              <ul className="py-2 relative z-10">
+                              <ul className="py-2">
                                   {filteredSearchResults.map((country) => {
                                       const flagCode = getCountryCode(country.flag);
                                       const isTerritory = TERRITORIES.some(t => t.id === country.id);
                                       const isDeFacto = DE_FACTO_COUNTRIES.some(d => d.id === country.id);
                                       let nameClass = 'text-[#1A1C1E]';
-                                      let glowClass = '';
-                                      if (isTerritory) {
-                                        nameClass = 'text-[#166534]';
-                                        glowClass = '';
-                                      }
-                                      if (isDeFacto) {
-                                        nameClass = 'text-[#92400e]';
-                                        glowClass = '';
-                                      }
+                                      if (isTerritory) nameClass = 'text-[#166534]';
+                                      if (isDeFacto) nameClass = 'text-[#92400e]';
 
                                       return (
                                         <li key={country.id}>
                                             <button 
                                                 onClick={() => handleResultClick(country)}
-                                                className="w-full text-left px-6 py-4 flex items-center gap-4 transition-all border-b border-black/5 last:border-none active:bg-black/5 uppercase tracking-tighter"
+                                                className="w-full text-left px-6 py-4 flex items-center gap-4 border-b border-black/5 last:border-none active:bg-black/5 uppercase tracking-tighter"
                                             >
-                                                <div className="w-10 h-7 shrink-0 flex items-center justify-center">
-                                                  <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
+                                                <div className="w-10 h-7 shrink-0">
+                                                  <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain" />
                                                 </div>
                                                 <div>
-                                                    <p className={`text-xs font-black ${nameClass} ${glowClass}`}>{country.name}</p>
+                                                    <p className={`text-xs font-black ${nameClass}`}>{country.name}</p>
                                                     <p className="text-[9px] font-bold text-black/40 tracking-widest">{country.region}</p>
                                                 </div>
                                             </button>
@@ -1226,8 +1096,8 @@ const MapPage: React.FC = () => {
                                   })}
                               </ul>
                           ) : (
-                              <div className="p-10 text-center text-[10px] text-black/40 font-black uppercase tracking-[0.3em] relative z-10">
-                                  No matches detected in archives
+                              <div className="p-10 text-center text-[10px] text-black/40 font-black uppercase tracking-[0.3em]">
+                                  No matches detected
                               </div>
                           )}
                       </div>
@@ -1235,29 +1105,17 @@ const MapPage: React.FC = () => {
               </div>
 
               {/* Filters Section */}
-              <div ref={regionScrollRef} className="w-full overflow-x-auto no-scrollbar relative z-10" style={{ scrollbarWidth: 'none' }}>
+              <div ref={regionScrollRef} className="w-full overflow-x-auto no-scrollbar" style={{ scrollbarWidth: 'none' }}>
                 <div className="flex gap-3 px-0.5 items-center min-w-max">
                   <button 
                       onClick={() => setShowTerritories(!showTerritories)}
-                      className={`
-                        whitespace-nowrap flex-shrink-0 px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-500 border select-none flex items-center gap-2 shadow-sm
-                        ${showTerritories 
-                          ? 'bg-accent/20 text-[#166534] border-accent/40' 
-                          : 'bg-black/5 text-black/40 border-black/20 active:bg-black/10'
-                        }
-                      `}
+                      className={`whitespace-nowrap flex-shrink-0 px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border select-none flex items-center gap-2 ${showTerritories ? 'bg-accent/20 text-[#166534] border-accent/40' : 'bg-black/5 text-black/40 border-black/20'}`}
                   >
                       <Globe size={14} /> Territories
                   </button>
                   <button 
                       onClick={() => setShowDeFacto(!showDeFacto)}
-                      className={`
-                        whitespace-nowrap flex-shrink-0 px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-500 border select-none flex items-center gap-2 shadow-sm
-                        ${showDeFacto 
-                          ? 'bg-warning/20 text-[#92400e] border-warning/40' 
-                          : 'bg-black/5 text-black/40 border-black/20 active:bg-black/10'
-                        }
-                      `}
+                      className={`whitespace-nowrap flex-shrink-0 px-4 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border select-none flex items-center gap-2 ${showDeFacto ? 'bg-warning/20 text-[#92400e] border-warning/40' : 'bg-black/5 text-black/40 border-black/20'}`}
                   >
                       <AlertTriangle size={14} /> De Facto
                   </button>
@@ -1267,21 +1125,13 @@ const MapPage: React.FC = () => {
                       key={region}
                       data-region={region}
                       onClick={() => handleRegionSelect(region)}
-                      className={`
-                        whitespace-nowrap flex-shrink-0 px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-500 border-2 select-none shadow-sm
-                        ${selectedRegion === region 
-                          ? 'bg-primary text-white border-white/60' 
-                          : 'bg-black/5 text-black/40 border-black/30 active:bg-black/10'
-                        }
-                      `}
+                      className={`whitespace-nowrap flex-shrink-0 px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border-2 select-none ${selectedRegion === region ? 'bg-primary text-white border-primary' : 'bg-black/5 text-black/40 border-black/20'}`}
                     >
                       {region}
                     </button>
                   ))}
                 </div>
               </div>
-
-
           </div>
       </div>
     </div>
