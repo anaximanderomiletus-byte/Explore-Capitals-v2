@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
 import Button from './Button';
@@ -9,15 +8,6 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
-import { prefetchPage } from '../App';
-
-// Map nav paths to prefetch keys
-const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
-  '/games': 'games',
-  '/database': 'database',
-  '/map': 'map',
-  '/about': 'about',
-};
 
 // Mobile Profile Link for Signed In Users
 const MobileProfileLinkSignedIn: React.FC<{
@@ -330,24 +320,17 @@ const Navigation: React.FC = () => {
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-              const glowClass = isOverMap ? '' : '';
-              const prefetchKey = prefetchMap[link.path];
               
-                  return (
+              return (
                 <Link 
                   key={link.path} 
                   to={link.path}
-                  onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
-                  onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                   className={`font-black text-[10px] uppercase tracking-[0.2em] relative group/link whitespace-nowrap ${
                     active 
-                      ? `${activeColor} ${glowClass}` 
+                      ? activeColor 
                       : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
                   }`}
-                  style={{ 
-                    transform: 'translateZ(0)',
-                    transition: 'color 50ms ease-out, opacity 50ms ease-out'
-                  }}
+                  style={{ transition: 'color 100ms ease-out, opacity 100ms ease-out' }}
                 >
                   {link.label}
                   <div 
@@ -356,10 +339,7 @@ const Navigation: React.FC = () => {
                         ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
                         : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
                     }`} 
-                    style={{ 
-                      transition: 'width 80ms ease-out',
-                      willChange: 'width'
-                    }} 
+                    style={{ transition: 'width 150ms ease-out' }} 
                   />
                 </Link>
               );
@@ -464,26 +444,22 @@ const Navigation: React.FC = () => {
         <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
         
         <div className="flex flex-col relative z-10">
-          {navLinks.map((link, index) => {
-            const prefetchKey = prefetchMap[link.path];
-            return (
-              <Link 
-                key={link.path} 
-                to={link.path}
-                onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
-                style={{
-                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
-                  opacity: isMobileMenuOpen ? 1 : 0,
-                  transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
-                }}
-                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
-                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+          {navLinks.map((link, index) => (
+            <Link 
+              key={link.path} 
+              to={link.path}
+              style={{
+                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+                opacity: isMobileMenuOpen ? 1 : 0,
+                transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+              }}
+              className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
+                isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
           
           {/* Account Panel - right after nav links */}
           <div 

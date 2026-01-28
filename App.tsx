@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useRef, Suspense, lazy, startTransition } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -9,19 +8,11 @@ import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 
-// Lazy load all pages except Home for instant initial load
-// Store import functions for prefetching on hover
-const pageImports = {
-  games: () => import('./pages/Games'),
-  database: () => import('./pages/DatabasePage'),
-  map: () => import('./pages/MapPage'),
-  about: () => import('./pages/About'),
-};
-
-const Games = lazy(pageImports.games);
-const DatabasePage = lazy(pageImports.database);
-const MapPage = lazy(pageImports.map);
-const About = lazy(pageImports.about);
+// Lazy load all pages except Home
+const Games = lazy(() => import('./pages/Games'));
+const DatabasePage = lazy(() => import('./pages/DatabasePage'));
+const MapPage = lazy(() => import('./pages/MapPage'));
+const About = lazy(() => import('./pages/About'));
 const CapitalQuiz = lazy(() => import('./pages/CapitalQuiz'));
 const MapDash = lazy(() => import('./pages/MapDash'));
 const FlagFrenzy = lazy(() => import('./pages/FlagFrenzy'));
@@ -40,27 +31,45 @@ const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 
-// Prefetch helper - call on hover to preload page chunks
-export const prefetchPage = (page: keyof typeof pageImports) => {
-  const importFn = pageImports[page];
-  if (importFn) {
-    importFn(); // Triggers the import, browser will cache it
-  }
+// Full-screen loading overlay with spinner
+const LoadingOverlay = ({ visible }: { visible: boolean }) => {
+  if (!visible) return null;
+  
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className="fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A]"
+    >
+      <div className="flex flex-col items-center gap-4">
+        <div 
+          className="w-12 h-12 rounded-full"
+          style={{ 
+            border: '3px solid rgba(0, 194, 255, 0.2)',
+            borderTopColor: '#00C2FF',
+            animation: 'spin 0.8s linear infinite'
+          }} 
+        />
+        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">
+          Loading
+        </p>
+      </div>
+    </motion.div>
+  );
 };
 
-// Heavy routes that show a full-screen loader
-const HEAVY_ROUTES = ['/map', '/games/map-dash', '/database', '/expedition'];
-
-// Loading fallback - clean, minimal spinner for page content
+// Inline loading spinner for Suspense fallback
 const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[60vh]">
-    <div className="relative flex flex-col items-center gap-4">
+  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[60vh]">
+    <div className="flex flex-col items-center gap-4">
       <div 
-        className="w-10 h-10 rounded-full border-sky/20 border-t-sky"
+        className="w-10 h-10 rounded-full"
         style={{ 
-          borderWidth: '3px',
-          borderStyle: 'solid',
-          animation: 'spin 0.7s linear infinite'
+          border: '3px solid rgba(0, 194, 255, 0.2)',
+          borderTopColor: '#00C2FF',
+          animation: 'spin 0.8s linear infinite'
         }} 
       />
       <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.25em]">
@@ -70,62 +79,23 @@ const PageLoader = () => (
   </div>
 );
 
-// Full-screen loading overlay for heavy routes - appears INSTANTLY
-const FullScreenLoader = ({ isVisible, isHeavyRoute }: { isVisible: boolean; isHeavyRoute: boolean }) => {
-  // Don't show for light routes
-  if (!isVisible) return null;
-  
-  return (
-    <div 
-      className={`fixed inset-0 z-[1500] flex items-center justify-center transition-opacity duration-150 ${
-        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}
-      style={{ 
-        backgroundColor: 'rgba(15, 23, 42, 0.92)',
-        backdropFilter: 'blur(4px)',
-        WebkitBackdropFilter: 'blur(4px)'
-      }}
-    >
-      <div className="flex flex-col items-center gap-4">
-        <div 
-          className="w-12 h-12 rounded-full border-sky/20 border-t-sky"
-          style={{ 
-            borderWidth: '3px',
-            borderStyle: 'solid',
-            animation: 'spin 0.7s linear infinite'
-          }} 
-        />
-        {isHeavyRoute && (
-          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-            Loading...
-          </p>
-        )}
-      </div>
-    </div>
-  );
-};
-
-/**
- * ScrollToTop - Instant scroll on route change
- */
+// Scroll to top on route change
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   }, [pathname]);
   return null;
 };
 
-/**
- * PageWrapper - Fast fade-in animation for page content
- */
+// Page wrapper with fade animation
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
     transition={{ duration: 0.2, ease: "easeOut" }}
-    className="flex-grow flex flex-col w-full overflow-x-hidden"
+    className="flex-grow flex flex-col w-full"
   >
     {children}
   </motion.div>
@@ -133,87 +103,53 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [targetRoute, setTargetRoute] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const prevPathRef = useRef(location.pathname);
-  const loadingTimeoutRef = useRef<number | null>(null);
-  const hideTimeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
   
-  // Check if current target is a heavy route
-  const isHeavyRoute = HEAVY_ROUTES.some(route => targetRoute.startsWith(route));
-  
-  // Track navigation - show loader IMMEDIATELY for heavy routes
+  // Show loading overlay when route changes (except for initial load)
   useEffect(() => {
-    if (prevPathRef.current !== location.pathname) {
-      const newPath = location.pathname;
-      const isHeavy = HEAVY_ROUTES.some(route => newPath.startsWith(route));
+    const newPath = location.pathname;
+    const isInitialLoad = prevPathRef.current === newPath;
+    
+    if (!isInitialLoad && prevPathRef.current !== newPath) {
+      // Show loading immediately on navigation
+      setIsLoading(true);
       
-      // Clear any existing timers
-      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-      
-      // For heavy routes, show loader immediately
-      if (isHeavy) {
-        setTargetRoute(newPath);
-        setIsNavigating(true);
-        
-        // Hide after content should be loaded
-        hideTimeoutRef.current = window.setTimeout(() => {
-          setIsNavigating(false);
-        }, 600); // Give heavy pages time to mount
-      } else {
-        // For light routes, brief flash if needed
-        setTargetRoute(newPath);
-        setIsNavigating(true);
-        
-        hideTimeoutRef.current = window.setTimeout(() => {
-          setIsNavigating(false);
-        }, 100);
+      // Clear any pending timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
       
-      prevPathRef.current = newPath;
+      // Hide loading after a minimum display time (ensures smooth transition)
+      timeoutRef.current = window.setTimeout(() => {
+        setIsLoading(false);
+      }, 400); // Minimum loading display time
     }
     
+    prevPathRef.current = newPath;
+    
     return () => {
-      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
-      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
   }, [location.pathname]);
   
-  // Aggressive preloading - start early for snappy navigation
-  useEffect(() => {
-    // Preload immediately after first paint
-    const timer = setTimeout(() => {
-      const preloadAll = () => {
-        // Preload in priority order
-        pageImports.games();
-        setTimeout(() => pageImports.map(), 100);
-        setTimeout(() => pageImports.database(), 200);
-        setTimeout(() => pageImports.about(), 300);
-      };
-
-      if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(preloadAll, { timeout: 2000 });
-      } else {
-        preloadAll();
-      }
-    }, 800); // Start preloading sooner
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
+    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden">
       <ScrollToTop />
       
-      {/* Navigation is ALWAYS rendered and interactive - never blocked by loading */}
+      {/* Navigation - always visible and interactive */}
       <Navigation />
       
-      {/* Loading overlay - below navbar (z-1500) so navbar stays interactive */}
-      <FullScreenLoader isVisible={isNavigating} isHeavyRoute={isHeavyRoute} />
+      {/* Loading overlay - shows on navigation */}
+      <AnimatePresence>
+        {isLoading && <LoadingOverlay visible={true} />}
+      </AnimatePresence>
       
-      {/* Page content area */}
-      <div className="flex-grow flex flex-col relative w-full">
+      {/* Page content */}
+      <div className="flex-grow flex flex-col w-full">
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="wait" initial={false}>
             <div key={location.pathname}>
@@ -248,6 +184,7 @@ const AppContent: React.FC = () => {
           </AnimatePresence>
         </Suspense>
       </div>
+      
       <ConditionalFooter />
     </div>
   );
@@ -281,10 +218,7 @@ const ConditionalFooter: React.FC = () => {
   const location = useLocation();
   const { isFooterHidden } = useLayout();
   
-  // Always hide on the map page, but otherwise respect component-level overrides
-  const isMap = location.pathname === '/map';
-  
-  if (isMap || isFooterHidden) return null;
+  if (location.pathname === '/map' || isFooterHidden) return null;
   
   return <Footer />;
 };
