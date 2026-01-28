@@ -19,70 +19,40 @@ let auth: Auth | null = null;
 let db: Firestore | null = null;
 let analytics: Promise<Analytics | null> = Promise.resolve(null);
 
-// PERFORMANCE: Track initialization state
-let isInitialized = false;
-let initPromise: Promise<void> | null = null;
+try {
+  // Only attempt initialization if we have the critical API key
+  if (firebaseConfig.apiKey) {
+    app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    analytics = isSupported().then(yes => yes ? getAnalytics(app!) : null).catch(() => null);
 
-// PERFORMANCE: Lazy initialization function - call this when Firebase is actually needed
-export const initializeFirebase = (): Promise<void> => {
-  if (isInitialized) return Promise.resolve();
-  if (initPromise) return initPromise;
-  
-  initPromise = new Promise((resolve) => {
-    try {
-      if (firebaseConfig.apiKey) {
-        app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        // Defer analytics - not critical for app function
-        analytics = isSupported().then(yes => yes ? getAnalytics(app!) : null).catch(() => null);
-
-        const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY;
-        const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
-        
-        if (import.meta.env.DEV) {
-          (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true;
-          if (auth) {
-            auth.settings.appVerificationDisabledForTesting = true;
-          }
-        }
-
-        if (appCheckSiteKey) {
-          initializeAppCheck(app, {
-            provider: new ReCaptchaV3Provider(appCheckSiteKey),
-            isTokenAutoRefreshEnabled: true
-          });
-        }
+    // Initialize App Check
+    const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY;
+    const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
+    
+    if (import.meta.env.DEV) {
+      // Use the manual token from .env if it exists, otherwise use 'true' to auto-generate
+      (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true;
+      
+      // NOTE: Only enable this for fictional phone numbers. 
+      // For real SMS, this MUST be false or commented out.
+      if (auth) {
+        auth.settings.appVerificationDisabledForTesting = true;
       }
-      isInitialized = true;
-      resolve();
-    } catch (error) {
-      console.error("Firebase initialization failed:", error);
-      resolve(); // Still resolve to not block the app
     }
-  });
-  
-  return initPromise;
-};
 
-// PERFORMANCE: Initialize Firebase after a short delay to not block initial render
-// This allows the app shell to render first
-if (typeof window !== 'undefined') {
-  // Use requestIdleCallback if available, otherwise setTimeout
-  const scheduleInit = () => {
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => initializeFirebase(), { timeout: 2000 });
-    } else {
-      setTimeout(initializeFirebase, 100);
+    if (appCheckSiteKey) {
+      initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider(appCheckSiteKey),
+        isTokenAutoRefreshEnabled: true
+      });
+    } else if (import.meta.env.DEV) {
+      console.warn("App Check Site Key is missing. Requests will fail if Enforcement is enabled in Firebase.");
     }
-  };
-  
-  // Schedule after initial paint
-  if (document.readyState === 'complete') {
-    scheduleInit();
-  } else {
-    window.addEventListener('load', scheduleInit, { once: true });
   }
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
 }
 
 export { app, auth, db, analytics };

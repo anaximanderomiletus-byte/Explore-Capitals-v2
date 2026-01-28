@@ -164,9 +164,6 @@ export default function MapDash() {
       maxBounds: [[-85, -5000], [85, 5000]],
       maxBoundsViscosity: 1.0,
       preferCanvas: false,
-      // CRITICAL: Enable tap for better mobile touch support
-      tap: true,
-      tapTolerance: 15,
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(map);
@@ -185,13 +182,16 @@ export default function MapDash() {
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
 
-      marker.on('click', (e: any) => {
+      // Unified handler for marker interactions (click and touch)
+      const handleMarkerInteraction = (e: any) => {
         // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
         if (e && e.originalEvent) {
           e.originalEvent.stopPropagation();
           e.originalEvent.preventDefault();
         }
-        L.DomEvent.stopPropagation(e);
+        if (e && typeof L.DomEvent?.stopPropagation === 'function') {
+          L.DomEvent.stopPropagation(e);
+        }
         
         const currentTarget = targetCountryRef.current;
         if (gameStateRef.current !== 'playing' || !currentTarget || isTransitioningRef.current) return;
@@ -241,6 +241,22 @@ export default function MapDash() {
             setWrongSelectionData(null);
             feedbackTimeoutRef.current = null;
           }, 1000);
+        }
+      };
+      
+      // Handle click (works for desktop and as fallback)
+      marker.on('click', handleMarkerInteraction);
+      
+      // Bind touch events after marker is added to map for reliable mobile handling
+      marker.on('add', () => {
+        const markerElement = marker.getElement?.();
+        if (markerElement && !(markerElement as any)._touchBound) {
+          (markerElement as any)._touchBound = true;
+          markerElement.addEventListener('touchend', (e: TouchEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleMarkerInteraction({ originalEvent: e });
+          }, { passive: false });
         }
       });
 

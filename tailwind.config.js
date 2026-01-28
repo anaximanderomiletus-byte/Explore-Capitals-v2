@@ -13,7 +13,6 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
         display: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
-        cursive: ['Caveat', 'cursive'],
       },
       colors: {
         primary: '#007AFF', // iOS Blue

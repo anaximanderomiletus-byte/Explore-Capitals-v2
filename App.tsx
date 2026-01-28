@@ -81,23 +81,14 @@ const ScrollToTop: React.FC = () => {
 /**
  * PageWrapper
  * Provides a standard animation for page transitions.
- * PERFORMANCE: Simplified animations on mobile for better performance
  */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Detect if user prefers reduced motion or is on mobile
-  const prefersReducedMotion = typeof window !== 'undefined' && 
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  
-  // Use simpler/faster animations on mobile
-  const animationDuration = isMobile || prefersReducedMotion ? 0.15 : 0.25;
-  
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: animationDuration, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className="flex-grow flex flex-col w-full overflow-x-hidden"
     >
       {children}
@@ -110,32 +101,23 @@ const AppContent: React.FC = () => {
   
   // Preload key pages after initial render for faster subsequent navigation
   useEffect(() => {
-    // PERFORMANCE: Use a longer delay and staggered loading to prevent blocking
+    // Wait for initial paint, then start preloading
     const timer = setTimeout(() => {
-      const preloadWithPriority = async () => {
-        // Load pages one at a time with delays to prevent blocking
-        if ('requestIdleCallback' in window) {
-          (window as any).requestIdleCallback(() => pageImports.games(), { timeout: 3000 });
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.database(), { timeout: 3000 });
-          }, 1000);
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.about(), { timeout: 3000 });
-          }, 2000);
-          // Map is heavy - load last with more delay
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.map(), { timeout: 5000 });
-          }, 3000);
-        } else {
-          // Fallback for browsers without requestIdleCallback
-          pageImports.games();
-          setTimeout(() => pageImports.database(), 1500);
-          setTimeout(() => pageImports.about(), 3000);
-          setTimeout(() => pageImports.map(), 4500);
-        }
+      // Preload in order of likely navigation
+      // Using requestIdleCallback if available for even better performance
+      const preload = () => {
+        pageImports.games();
+        pageImports.database();
+        pageImports.map();
+        pageImports.about();
       };
-      preloadWithPriority();
-    }, 3000); // Wait 3 seconds after initial load
+
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(preload);
+      } else {
+        preload();
+      }
+    }, 2000); // Slightly longer delay to ensure main thread is free
     
     return () => clearTimeout(timer);
   }, []);

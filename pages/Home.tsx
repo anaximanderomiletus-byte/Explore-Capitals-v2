@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap } from 'lucide-react';
@@ -7,12 +7,6 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
-
-// PERFORMANCE: Detect if we should use reduced animations
-const shouldReduceMotion = () => {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 768;
-};
 
 const ParallaxSection: React.FC<{
   children: React.ReactNode;
@@ -41,14 +35,6 @@ const ParallaxSection: React.FC<{
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { isAuthenticated, isLoading: loading } = useUser();
-  
-  // PERFORMANCE: Memoize animation settings to avoid recalculation
-  const animSettings = useMemo(() => ({
-    reducedMotion: shouldReduceMotion(),
-    duration: shouldReduceMotion() ? 0.3 : 0.8,
-    staggerDelay: shouldReduceMotion() ? 0.05 : 0.1,
-  }), []);
-  
   useEffect(() => {
     setPageLoading(false);
   }, [setPageLoading]);

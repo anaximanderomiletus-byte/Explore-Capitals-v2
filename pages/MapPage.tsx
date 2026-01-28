@@ -208,9 +208,6 @@ const MapPage: React.FC = () => {
           wheelDebounceTime: 40,
           wheelPxPerZoomLevel: 60,
           updateWhenIdle: true,
-          // CRITICAL: Enable tap for better mobile touch support
-          tap: true,
-          tapTolerance: 15,
         });
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -239,151 +236,114 @@ const MapPage: React.FC = () => {
         }, 100);
 
         if (allMarkersRef.current.length === 0) {
-            // PERFORMANCE: Create a single marker for a country (used in batched creation)
-            const createSingleMarker = (country: Country, type: 'sovereign' | 'territory' | 'defacto', offset: number) => {
-                let markerClass = '';
-                let pinClass = '';
-                let zIndex = 0;
+            const createMarkers = (list: Country[], type: 'sovereign' | 'territory' | 'defacto') => {
+                list.forEach(country => {
+                    try {
+                        let markerClass = '';
+                        let pinClass = '';
+                        let zIndex = 0;
 
-                if (type === 'territory') {
-                  markerClass = 'territory-marker';
-                  pinClass = 'territory';
-                  zIndex = -100;
-                } else if (type === 'defacto') {
-                  markerClass = 'defacto-marker';
-                  pinClass = 'defacto';
-                  zIndex = -50;
-                }
+                        if (type === 'territory') {
+                          markerClass = 'territory-marker';
+                          pinClass = 'territory';
+                          zIndex = -100;
+                        } else if (type === 'defacto') {
+                          markerClass = 'defacto-marker';
+                          pinClass = 'defacto';
+                          zIndex = -50;
+                        }
 
-                const icon = L.divIcon({
-                    className: `custom-map-marker ${markerClass}`,
-                    html: `<div class="marker-pin ${pinClass}"></div>`,
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 10]
-                });
+                        // Create 3 markers for each country to support infinite horizontal scrolling
+                        // This allows markers to appear on adjacent copies of the world (e.g. over the Pacific)
+                        [-360, 0, 360].forEach(offset => {
+                            const icon = L.divIcon({
+                                className: `custom-map-marker ${markerClass}`,
+                                html: `<div class="marker-pin ${pinClass}"></div>`,
+                                iconSize: [20, 20],
+                                iconAnchor: [10, 10]
+                            });
 
-                const marker = L.marker([country.lat, country.lng + offset], { 
-                    icon: icon,
-                    zIndexOffset: zIndex
-                }).bindPopup(createPopupContent(country, type), {
-                    closeButton: false,
-                    className: 'custom-popup',
-                    autoPan: false,
-                    maxWidth: 320,
-                    minWidth: 320,
-                    offset: L.point(0, -10)
-                });
+                            const marker = L.marker([country.lat, country.lng + offset], { 
+                                icon: icon,
+                                zIndexOffset: zIndex
+                            }).bindPopup(createPopupContent(country, type), {
+                                closeButton: false,
+                                className: 'custom-popup',
+                                autoPan: false,
+                                maxWidth: 320,
+                                minWidth: 320,
+                                offset: L.point(0, -10)
+                            });
 
-                marker.addTo(markersLayerRef.current);
+                            // Add to map immediately for first load performance
+                            marker.addTo(markersLayerRef.current);
 
-                // Handle click with proper event propagation control for mobile/tablet
-                marker.on('click', (e: any) => {
-                    if (e && e.originalEvent) {
-                      e.originalEvent.stopPropagation();
-                      e.originalEvent.preventDefault();
+                            // Unified handler for both click and touch
+                            const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
+                                // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
+                                if (e && e.originalEvent) {
+                                  e.originalEvent.stopPropagation();
+                                  e.originalEvent.preventDefault();
+                                }
+                                if (e && typeof L.DomEvent?.stopPropagation === 'function') {
+                                  L.DomEvent.stopPropagation(e);
+                                }
+                                
+                                // Set flag to prevent map click handler from clearing the selection
+                                markerClickedRef.current = true;
+                                setTimeout(() => { markerClickedRef.current = false; }, 300);
+                                
+                                setActiveCountryId(country.id);
+                                
+                                // On mobile/touch, open popup immediately without animation for instant feedback
+                                if (isTouchEvent || window.innerWidth < 768) {
+                                  // Open popup immediately for instant touch feedback
+                                  marker.openPopup();
+                                  if (marker.getPopup()) marker.getPopup().update();
+                                  // Then animate to center
+                                  centerMapOnMarker(marker);
+                                } else {
+                                  // Desktop: animate first, then open popup
+                                  centerMapOnMarker(marker);
+                                  setTimeout(() => {
+                                    marker.openPopup();
+                                    if (marker.getPopup()) marker.getPopup().update();
+                                  }, 900);
+                                }
+                            };
+                            
+                            // Handle click (works for both desktop and as fallback)
+                            marker.on('click', (e: any) => handleMarkerInteraction(e, false));
+                            
+                            // Bind touch events after marker is added to map (element available then)
+                            marker.on('add', () => {
+                              const markerElement = marker.getElement?.();
+                              if (markerElement && !markerElement._touchBound) {
+                                markerElement._touchBound = true;
+                                markerElement.addEventListener('touchend', (e: TouchEvent) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleMarkerInteraction({ originalEvent: e }, true);
+                                }, { passive: false });
+                              }
+                            });
+
+                            allMarkersRef.current.push({
+                                id: country.id,
+                                region: country.region,
+                                type: type,
+                                marker: marker
+                            });
+                        });
+                    } catch (e) {
+                        console.error("Error creating marker for", country.name, e);
                     }
-                    L.DomEvent.stopPropagation(e);
-                    
-                    markerClickedRef.current = true;
-                    setTimeout(() => { markerClickedRef.current = false; }, 300);
-                    
-                    setActiveCountryId(country.id);
-                    
-                    const isMobileDevice = window.innerWidth < 768 || ('ontouchstart' in window);
-                    
-                    if (isMobileDevice) {
-                      marker.openPopup();
-                      if (marker.getPopup()) marker.getPopup().update();
-                      centerMapOnMarker(marker);
-                      setTimeout(() => {
-                        if (marker.getPopup()) marker.getPopup().update();
-                      }, 850);
-                    } else {
-                      centerMapOnMarker(marker);
-                      setTimeout(() => {
-                        marker.openPopup();
-                        if (marker.getPopup()) marker.getPopup().update();
-                      }, 850);
-                    }
-                });
-
-                allMarkersRef.current.push({
-                    id: country.id,
-                    region: country.region,
-                    type: type,
-                    marker: marker
                 });
             };
 
-            // PERFORMANCE: Create all marker tasks, then process in batches
-            const allTasks: Array<{ country: Country; type: 'sovereign' | 'territory' | 'defacto'; offset: number }> = [];
-            
-            // Only create center (offset 0) markers initially for faster load
-            // Side copies (-360, 360) will be created after initial render
-            MOCK_COUNTRIES.forEach(c => allTasks.push({ country: c, type: 'sovereign', offset: 0 }));
-            TERRITORIES.forEach(c => allTasks.push({ country: c, type: 'territory', offset: 0 }));
-            DE_FACTO_COUNTRIES.forEach(c => allTasks.push({ country: c, type: 'defacto', offset: 0 }));
-
-            // PERFORMANCE: Process markers in batches to prevent blocking
-            const BATCH_SIZE = 30; // Process 30 markers per frame
-            let currentIndex = 0;
-
-            const processBatch = () => {
-              const endIndex = Math.min(currentIndex + BATCH_SIZE, allTasks.length);
-              
-              for (let i = currentIndex; i < endIndex; i++) {
-                const task = allTasks[i];
-                try {
-                  createSingleMarker(task.country, task.type, task.offset);
-                } catch (e) {
-                  console.error("Error creating marker:", e);
-                }
-              }
-              
-              currentIndex = endIndex;
-              
-              if (currentIndex < allTasks.length) {
-                // Use requestAnimationFrame for smooth batching
-                requestAnimationFrame(processBatch);
-              } else {
-                // After main markers are done, create side copies for infinite scroll
-                // Do this in the background with low priority
-                setTimeout(() => {
-                  const sideTasks: Array<{ country: Country; type: 'sovereign' | 'territory' | 'defacto'; offset: number }> = [];
-                  MOCK_COUNTRIES.forEach(c => {
-                    sideTasks.push({ country: c, type: 'sovereign', offset: -360 });
-                    sideTasks.push({ country: c, type: 'sovereign', offset: 360 });
-                  });
-                  TERRITORIES.forEach(c => {
-                    sideTasks.push({ country: c, type: 'territory', offset: -360 });
-                    sideTasks.push({ country: c, type: 'territory', offset: 360 });
-                  });
-                  DE_FACTO_COUNTRIES.forEach(c => {
-                    sideTasks.push({ country: c, type: 'defacto', offset: -360 });
-                    sideTasks.push({ country: c, type: 'defacto', offset: 360 });
-                  });
-                  
-                  let sideIndex = 0;
-                  const processSideBatch = () => {
-                    const endIdx = Math.min(sideIndex + BATCH_SIZE, sideTasks.length);
-                    for (let i = sideIndex; i < endIdx; i++) {
-                      const task = sideTasks[i];
-                      try {
-                        createSingleMarker(task.country, task.type, task.offset);
-                      } catch (e) { /* ignore */ }
-                    }
-                    sideIndex = endIdx;
-                    if (sideIndex < sideTasks.length) {
-                      requestAnimationFrame(processSideBatch);
-                    }
-                  };
-                  processSideBatch();
-                }, 500); // Delay side markers to prioritize main view
-              }
-            };
-
-            // Start batched processing
-            processBatch();
+            createMarkers(MOCK_COUNTRIES, 'sovereign');
+            createMarkers(TERRITORIES, 'territory');
+            createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
 
         // Only clear active country if a marker wasn't just clicked

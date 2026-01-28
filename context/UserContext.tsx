@@ -1,6 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-// PERFORMANCE: Use lightweight region map instead of full 92KB constants
-import { COUNTRY_REGIONS } from '../data/regionMap';
+import { MOCK_COUNTRIES } from '../constants';
 import {
   Achievement,
   GameResultPayload,
@@ -388,10 +387,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [profile]);
 
-  // PERFORMANCE: Use pre-built lightweight map instead of building from full country data
   const countryLookup = useMemo(() => {
     const map = new Map<string, string>();
-    Object.entries(COUNTRY_REGIONS).forEach(([id, region]) => map.set(id, region));
+    MOCK_COUNTRIES.forEach((c) => map.set(c.id, c.region));
     return map;
   }, []);
 
