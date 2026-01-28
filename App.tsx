@@ -43,10 +43,10 @@ const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 
-// Routes that require the full-screen loading overlay
+// Routes that require the full-screen loading overlay (heavy pages only)
 const HEAVY_ROUTES = ['/database', '/map', '/games/map-dash'];
 
-// Full-screen loading overlay - smooth and polished
+// Full-screen loading overlay - only for heavy pages
 const LoadingOverlay = ({ visible }: { visible: boolean }) => (
   <AnimatePresence>
     {visible && (
@@ -54,7 +54,7 @@ const LoadingOverlay = ({ visible }: { visible: boolean }) => (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
         className="fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A]"
       >
         <div className="flex flex-col items-center gap-5">
@@ -75,21 +75,8 @@ const LoadingOverlay = ({ visible }: { visible: boolean }) => (
   </AnimatePresence>
 );
 
-// Inline loading for Suspense fallback (lighter pages)
-const InlineLoader = () => (
-  <div className="flex-grow flex items-center justify-center bg-[#0F172A] min-h-[50vh]">
-    <div className="flex flex-col items-center gap-4">
-      <div 
-        className="w-10 h-10 rounded-full"
-        style={{ 
-          border: '3px solid rgba(0, 194, 255, 0.15)',
-          borderTopColor: '#00C2FF',
-          animation: 'spin 0.8s linear infinite'
-        }} 
-      />
-    </div>
-  </div>
-);
+// Empty fallback - no visible loader for instant pages
+const EmptyFallback = () => <div className="flex-grow bg-[#0F172A]" />;
 
 // Scroll to top on route change
 const ScrollToTop: React.FC = () => {
@@ -100,13 +87,13 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
-// Page wrapper with smooth fade animation
+// Page wrapper - instant for main pages, smooth for others
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    transition={{ duration: 0.15, ease: 'easeOut' }}
+    transition={{ duration: 0.1, ease: 'easeOut' }}
     className="flex-grow flex flex-col w-full"
   >
     {children}
@@ -119,11 +106,12 @@ const AppContent: React.FC = () => {
   const prevPathRef = useRef(location.pathname);
   const loaderTimeoutRef = useRef<number | null>(null);
   
-  // Detect navigation to heavy routes
+  // Only show loader for HEAVY routes (Database, Map, MapDash)
+  // Home, Games, About = NO loader, instant transition
   useEffect(() => {
     const newPath = location.pathname;
-    const wasHeavyRoute = HEAVY_ROUTES.some(r => prevPathRef.current.startsWith(r));
     const isHeavyRoute = HEAVY_ROUTES.some(r => newPath.startsWith(r));
+    const pathChanged = prevPathRef.current !== newPath;
     
     // Clear any pending timeout
     if (loaderTimeoutRef.current) {
@@ -131,15 +119,16 @@ const AppContent: React.FC = () => {
       loaderTimeoutRef.current = null;
     }
     
-    // Only show loader when navigating TO a heavy route (not from one)
-    if (isHeavyRoute && prevPathRef.current !== newPath) {
+    // Only show loader for heavy routes
+    if (isHeavyRoute && pathChanged) {
       setShowLoader(true);
       
-      // Minimum display time for smooth appearance, then hide
+      // Hide after content loads
       loaderTimeoutRef.current = window.setTimeout(() => {
         setShowLoader(false);
-      }, 500);
+      }, 400);
     } else {
+      // Instant - no loader
       setShowLoader(false);
     }
     
@@ -164,7 +153,7 @@ const AppContent: React.FC = () => {
       
       {/* Page content */}
       <div className="flex-grow flex flex-col w-full">
-        <Suspense fallback={<InlineLoader />}>
+        <Suspense fallback={<EmptyFallback />}>
           <AnimatePresence mode="wait" initial={false}>
             <div key={location.pathname}>
               <Routes location={location}>
