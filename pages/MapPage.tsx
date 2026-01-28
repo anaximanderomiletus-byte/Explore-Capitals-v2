@@ -278,8 +278,17 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
+                            // Track if touch already handled this interaction to prevent double-firing
+                            let touchHandledRef = { current: false };
+                            
                             // Unified handler for both click and touch
                             const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
+                                // If touch already handled this, skip the click handler
+                                if (!isTouchEvent && touchHandledRef.current) {
+                                  touchHandledRef.current = false;
+                                  return;
+                                }
+                                
                                 // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
                                 if (e && e.originalEvent) {
                                   e.originalEvent.stopPropagation();
@@ -290,16 +299,29 @@ const MapPage: React.FC = () => {
                                 }
                                 
                                 // Set flag to prevent map click handler from clearing the selection
+                                // Extended timeout for iOS which can have delayed click events
                                 markerClickedRef.current = true;
-                                setTimeout(() => { markerClickedRef.current = false; }, 300);
+                                setTimeout(() => { markerClickedRef.current = false; }, 500);
                                 
                                 setActiveCountryId(country.id);
                                 
                                 // On mobile/touch, open popup immediately without animation for instant feedback
                                 if (isTouchEvent || window.innerWidth < 768) {
                                   // Open popup immediately for instant touch feedback
-                                  marker.openPopup();
-                                  if (marker.getPopup()) marker.getPopup().update();
+                                  // Use requestAnimationFrame to ensure DOM is ready
+                                  requestAnimationFrame(() => {
+                                    marker.openPopup();
+                                    const popup = marker.getPopup();
+                                    if (popup) {
+                                      popup.update();
+                                      // Double-ensure popup stays open after a brief delay (iOS Safari fix)
+                                      setTimeout(() => {
+                                        if (!marker.isPopupOpen()) {
+                                          marker.openPopup();
+                                        }
+                                      }, 50);
+                                    }
+                                  });
                                   // Then animate to center
                                   centerMapOnMarker(marker);
                                 } else {
@@ -320,6 +342,14 @@ const MapPage: React.FC = () => {
                               const markerElement = marker.getElement?.();
                               if (markerElement && !markerElement._touchBound) {
                                 markerElement._touchBound = true;
+                                // Use touchstart for immediate response on iOS
+                                markerElement.addEventListener('touchstart', (e: TouchEvent) => {
+                                  // Mark that touch handled this to prevent click from double-firing
+                                  touchHandledRef.current = true;
+                                  // Reset after a delay in case click doesn't fire
+                                  setTimeout(() => { touchHandledRef.current = false; }, 400);
+                                }, { passive: true });
+                                
                                 markerElement.addEventListener('touchend', (e: TouchEvent) => {
                                   e.preventDefault();
                                   e.stopPropagation();

@@ -182,8 +182,17 @@ export default function MapDash() {
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
 
+      // Track if touch already handled this interaction to prevent double-firing
+      let touchHandledRef = { current: false };
+      
       // Unified handler for marker interactions (click and touch)
-      const handleMarkerInteraction = (e: any) => {
+      const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
+        // If touch already handled this, skip the click handler
+        if (!isTouchEvent && touchHandledRef.current) {
+          touchHandledRef.current = false;
+          return;
+        }
+        
         // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
         if (e && e.originalEvent) {
           e.originalEvent.stopPropagation();
@@ -245,17 +254,25 @@ export default function MapDash() {
       };
       
       // Handle click (works for desktop and as fallback)
-      marker.on('click', handleMarkerInteraction);
+      marker.on('click', (e: any) => handleMarkerInteraction(e, false));
       
       // Bind touch events after marker is added to map for reliable mobile handling
       marker.on('add', () => {
         const markerElement = marker.getElement?.();
         if (markerElement && !(markerElement as any)._touchBound) {
           (markerElement as any)._touchBound = true;
+          // Use touchstart for immediate response on iOS
+          markerElement.addEventListener('touchstart', (e: TouchEvent) => {
+            // Mark that touch handled this to prevent click from double-firing
+            touchHandledRef.current = true;
+            // Reset after a delay in case click doesn't fire
+            setTimeout(() => { touchHandledRef.current = false; }, 400);
+          }, { passive: true });
+          
           markerElement.addEventListener('touchend', (e: TouchEvent) => {
             e.preventDefault();
             e.stopPropagation();
-            handleMarkerInteraction({ originalEvent: e });
+            handleMarkerInteraction({ originalEvent: e }, true);
           }, { passive: false });
         }
       });

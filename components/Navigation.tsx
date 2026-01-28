@@ -217,7 +217,7 @@ const Navigation: React.FC = () => {
   // 2. Adaptive text color based on background (Map = Light background = Dark text)
   // 3. Subtle backdrop blur on scroll for legibility
   
-  let navClasses = "bg-transparent py-4 transition-all duration-500";
+  let navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
   let textColorClass = "text-white"; 
   let logoBgClass = "bg-gel-blue text-white border border-white/40";
 
@@ -226,9 +226,9 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-primary text-white border border-black/5";
     
     if (isScrolled) {
-      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
+      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     }
   } else {
     // Default Mode (Dark Background Pages)
@@ -236,15 +236,15 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-gel-blue text-white border border-white/40";
     
     if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
+      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg transition-[background-color,padding,box-shadow] duration-200";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     }
   }
 
   // Mobile menu open overrides - keep nav transparent, only override text color
   if (isMobileMenuOpen) {
-    navClasses = "bg-transparent py-4";
+    navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     textColorClass = "text-white";
     logoBgClass = "bg-primary text-white";
   }
@@ -283,24 +283,25 @@ const Navigation: React.FC = () => {
               const glowClass = isOverMap ? '' : '';
               const prefetchKey = prefetchMap[link.path];
               
-              return (
+                  return (
                 <Link 
                   key={link.path} 
                   to={link.path}
                   onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
                   onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
-                    className={`font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-150 relative group/link whitespace-nowrap ${
+                  className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
                     active 
                       ? `${activeColor} ${glowClass}` 
                       : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
                   }`}
+                  style={{ transform: 'translateZ(0)' }}
                 >
                   {link.label}
-                  <div className={`absolute -bottom-1.5 left-0 h-0.5 transition-all duration-150 ${
+                  <div className={`absolute -bottom-1.5 left-0 h-0.5 transition-[width] duration-100 ease-out ${
                     active 
                       ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
                       : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
-                  }`} />
+                  }`} style={{ willChange: 'width' }} />
                 </Link>
               );
             })}
@@ -318,13 +319,19 @@ const Navigation: React.FC = () => {
           {/* Mobile Toggle - hamburger menu - optimized for instant touch response */}
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+              onClick={(e) => {
+                // Prevent double-firing on touch devices by checking if this was a touch event
+                // If it was triggered by touch, the touchstart handler already handled it
+                if ((e.nativeEvent as any)._touchHandled) return;
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-100"
+              onTouchStart={(e) => {
+                // Mark this event chain as handled by touch to prevent onClick from also firing
+                (e.nativeEvent as any)._touchHandled = true;
+                // Immediate response - no waiting for touchend
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-75"
               aria-label="Toggle menu"
               style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >

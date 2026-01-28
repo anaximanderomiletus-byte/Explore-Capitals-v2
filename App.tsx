@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy, useTransition, useCallback } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -52,9 +52,30 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
 const PageLoader = () => (
   <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
     <div className="relative">
-      <div className="w-8 h-8 rounded-full border-2 border-sky/10 border-t-sky animate-spin" />
+      <div className="w-10 h-10 rounded-full border-3 border-sky/10 border-t-sky animate-spin" 
+           style={{ borderWidth: '3px' }} />
     </div>
   </div>
+);
+
+// Navigation loading overlay - shows during route transitions
+const NavigationLoader = ({ isVisible }: { isVisible: boolean }) => (
+  <AnimatePresence>
+    {isVisible && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0F172A]/80 backdrop-blur-sm pointer-events-none"
+      >
+        <div className="relative">
+          <div className="w-12 h-12 rounded-full border-sky/10 border-t-sky animate-spin" 
+               style={{ borderWidth: '3px', borderStyle: 'solid' }} />
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
 );
 
 const SKIP_TRANSITION_ROUTES = ['/auth', '/profile', '/settings', '/loyalty', '/database', '/directory'];
@@ -98,6 +119,20 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const [isNavigating, setIsNavigating] = useState(false);
+  const prevPathRef = useRef(location.pathname);
+  
+  // Track navigation loading state
+  useEffect(() => {
+    // Only show loader for actual navigation, not initial load
+    if (prevPathRef.current !== location.pathname) {
+      setIsNavigating(true);
+      // Hide after a short delay to allow Suspense to kick in
+      const timer = setTimeout(() => setIsNavigating(false), 100);
+      prevPathRef.current = location.pathname;
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
   
   // Preload key pages after initial render for faster subsequent navigation
   useEffect(() => {
@@ -126,10 +161,12 @@ const AppContent: React.FC = () => {
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
       <ScrollToTop />
       <Navigation />
+      <NavigationLoader isVisible={isNavigating} />
       <div className="flex-grow flex flex-col relative w-full">
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="popLayout" initial={false}>
-            <Routes location={location} key={location.pathname}>
+            <div key={location.pathname}>
+            <Routes location={location}>
               <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
               <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
               <Route path="/games/capital-quiz" element={<PageWrapper><CapitalQuiz /></PageWrapper>} />
@@ -156,6 +193,7 @@ const AppContent: React.FC = () => {
               <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
               <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
             </Routes>
+            </div>
           </AnimatePresence>
         </Suspense>
       </div>
