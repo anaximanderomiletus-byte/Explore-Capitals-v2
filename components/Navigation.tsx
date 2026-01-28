@@ -334,12 +334,12 @@ const Navigation: React.FC = () => {
                 >
                   {link.label}
                   <div 
-                    className={`absolute -bottom-1.5 left-0 h-0.5 ${
+                    className={`absolute -bottom-1.5 left-0 right-0 mx-auto h-0.5 origin-center ${
                       active 
-                        ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
-                        : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
+                        ? `w-full scale-x-100 ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
+                        : `w-full scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
                     }`} 
-                    style={{ transition: 'width 150ms ease-out' }} 
+                    style={{ transition: 'transform 150ms ease-out' }} 
                   />
                 </Link>
               );
