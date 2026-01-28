@@ -71,6 +71,11 @@
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
+      
+      /* Optimized spin animation for loaders */
+      .animate-spin {
+        animation: spin 0.7s linear infinite;
+      }
     </style>
 
     <!-- Analytics - Load after page is interactive -->
@@ -773,18 +778,41 @@
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
-      // Remove loader once React has hydrated
-      window.addEventListener('load', function() {
-        // Small delay to ensure React is actually rendering
-        setTimeout(function() {
-          const loader = document.getElementById('initial-loader');
-          if (loader) {
+      // Remove loader once React has hydrated - optimized for speed
+      (function() {
+        var loaderRemoved = false;
+        
+        function hideLoader() {
+          if (loaderRemoved) return;
+          var loader = document.getElementById('initial-loader');
+          if (loader && document.getElementById('root').children.length > 0) {
+            loaderRemoved = true;
             loader.style.opacity = '0';
             loader.style.visibility = 'hidden';
-            setTimeout(() => loader.remove(), 500);
+            setTimeout(function() { loader.remove(); }, 300);
           }
-        }, 300);
-      });
+        }
+        
+        // Try to hide as soon as React renders
+        var checkInterval = setInterval(function() {
+          if (document.getElementById('root').children.length > 0) {
+            clearInterval(checkInterval);
+            // Small delay to let React stabilize
+            setTimeout(hideLoader, 100);
+          }
+        }, 50);
+        
+        // Fallback: hide after load event
+        window.addEventListener('load', function() {
+          setTimeout(hideLoader, 200);
+        });
+        
+        // Safety fallback - always hide after 3 seconds
+        setTimeout(function() {
+          clearInterval(checkInterval);
+          hideLoader();
+        }, 3000);
+      })();
     </script>
   </body>
 </html>

@@ -137,29 +137,45 @@ const Navigation: React.FC = () => {
   const isOverMap = isMapPage || isMapDash;
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+    // Throttled scroll handler for maximum performance
+    let ticking = false;
+    let lastKnownScrollY = 0;
+    
+    const updateNavbar = () => {
+      const currentScrollY = lastKnownScrollY;
       
-      // Determine visibility based on scroll direction
-      // Hide when scrolling down, show when scrolling up
-      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
+      // Batch state updates - only update if values actually changed
+      const shouldHide = currentScrollY > lastScrollY.current && currentScrollY > 50;
+      const shouldBeScrolled = currentScrollY > scrollThreshold;
+      
+      if (shouldHide !== !isVisible) {
+        setIsVisible(!shouldHide);
       }
-
-      // Check threshold from context
-      setIsScrolled(currentScrollY > scrollThreshold);
+      if (shouldBeScrolled !== isScrolled) {
+        setIsScrolled(shouldBeScrolled);
+      }
       
       lastScrollY.current = currentScrollY;
+      ticking = false;
+    };
+    
+    const handleScroll = () => {
+      lastKnownScrollY = window.scrollY;
+      
+      if (!ticking) {
+        // Use RAF for smooth, non-blocking updates
+        requestAnimationFrame(updateNavbar);
+        ticking = true;
+      }
     };
     
     // Check initially
-    handleScroll();
+    lastKnownScrollY = window.scrollY;
+    updateNavbar();
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrollThreshold]);
+  }, [scrollThreshold, isVisible, isScrolled]);
 
   // Close mobile menu when route changes
   useEffect(() => {

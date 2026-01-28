@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, Suspense, lazy, useTransition, useCallback } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy, startTransition } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -48,144 +48,156 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
   }
 };
 
-// Loading fallback - visible indicator that page is loading
+// Heavy routes that show a full-screen loader
+const HEAVY_ROUTES = ['/map', '/games/map-dash', '/database', '/expedition'];
+
+// Loading fallback - clean, minimal spinner for page content
 const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[50vh] gap-4">
-    <div className="relative">
+  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[60vh]">
+    <div className="relative flex flex-col items-center gap-4">
       <div 
-        className="w-12 h-12 rounded-full border-sky/10 border-t-sky animate-spin" 
+        className="w-10 h-10 rounded-full border-sky/20 border-t-sky"
         style={{ 
           borderWidth: '3px',
           borderStyle: 'solid',
-          animationDuration: '0.8s'
+          animation: 'spin 0.7s linear infinite'
         }} 
       />
+      <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.25em]">
+        Loading
+      </p>
     </div>
-    <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-      Loading...
-    </p>
   </div>
 );
 
-// Navigation loading overlay - shows during route transitions
-const NavigationLoader = ({ isVisible }: { isVisible: boolean }) => (
-  <AnimatePresence>
-    {isVisible && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.15 }}
-        className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0F172A]/80 backdrop-blur-sm pointer-events-none"
-      >
-        <div className="relative">
-          <div className="w-12 h-12 rounded-full border-sky/10 border-t-sky animate-spin" 
-               style={{ borderWidth: '3px', borderStyle: 'solid' }} />
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
-
-const SKIP_TRANSITION_ROUTES = ['/auth', '/profile', '/settings', '/loyalty', '/database', '/directory'];
+// Full-screen loading overlay for heavy routes - appears INSTANTLY
+const FullScreenLoader = ({ isVisible, isHeavyRoute }: { isVisible: boolean; isHeavyRoute: boolean }) => {
+  // Don't show for light routes
+  if (!isVisible) return null;
+  
+  return (
+    <div 
+      className={`fixed inset-0 z-[1500] flex items-center justify-center transition-opacity duration-150 ${
+        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+      style={{ 
+        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)'
+      }}
+    >
+      <div className="flex flex-col items-center gap-4">
+        <div 
+          className="w-12 h-12 rounded-full border-sky/20 border-t-sky"
+          style={{ 
+            borderWidth: '3px',
+            borderStyle: 'solid',
+            animation: 'spin 0.7s linear infinite'
+          }} 
+        />
+        {isHeavyRoute && (
+          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
+            Loading...
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
 
 /**
- * ScrollToTop
- * Ensures every page navigation starts at the top instantly.
+ * ScrollToTop - Instant scroll on route change
  */
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    // Immediate scroll for faster feeling on Safari
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
-    
-    // Fallback for some mobile browsers
-    const timer = setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 0);
-    return () => clearTimeout(timer);
   }, [pathname]);
   return null;
 };
 
 /**
- * PageWrapper
- * Provides a standard animation for page transitions.
+ * PageWrapper - Fast fade-in animation for page content
  */
-const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex-grow flex flex-col w-full overflow-x-hidden"
-    >
-      {children}
-    </motion.div>
-  );
-};
+const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.2, ease: "easeOut" }}
+    className="flex-grow flex flex-col w-full overflow-x-hidden"
+  >
+    {children}
+  </motion.div>
+);
 
 const AppContent: React.FC = () => {
   const location = useLocation();
   const [isNavigating, setIsNavigating] = useState(false);
+  const [targetRoute, setTargetRoute] = useState('');
   const prevPathRef = useRef(location.pathname);
-  const navigationTimerRef = useRef<number | null>(null);
+  const loadingTimeoutRef = useRef<number | null>(null);
+  const hideTimeoutRef = useRef<number | null>(null);
   
-  // Heavy routes that need longer loading indication
-  const heavyRoutes = ['/map', '/games/map-dash', '/database'];
+  // Check if current target is a heavy route
+  const isHeavyRoute = HEAVY_ROUTES.some(route => targetRoute.startsWith(route));
   
-  // Track navigation loading state
+  // Track navigation - show loader IMMEDIATELY for heavy routes
   useEffect(() => {
-    // Only show loader for actual navigation, not initial load
     if (prevPathRef.current !== location.pathname) {
-      // Clear any existing timer
-      if (navigationTimerRef.current) {
-        clearTimeout(navigationTimerRef.current);
+      const newPath = location.pathname;
+      const isHeavy = HEAVY_ROUTES.some(route => newPath.startsWith(route));
+      
+      // Clear any existing timers
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      
+      // For heavy routes, show loader immediately
+      if (isHeavy) {
+        setTargetRoute(newPath);
+        setIsNavigating(true);
+        
+        // Hide after content should be loaded
+        hideTimeoutRef.current = window.setTimeout(() => {
+          setIsNavigating(false);
+        }, 600); // Give heavy pages time to mount
+      } else {
+        // For light routes, brief flash if needed
+        setTargetRoute(newPath);
+        setIsNavigating(true);
+        
+        hideTimeoutRef.current = window.setTimeout(() => {
+          setIsNavigating(false);
+        }, 100);
       }
       
-      // Check if navigating to a heavy route
-      const isHeavyRoute = heavyRoutes.some(route => location.pathname.startsWith(route));
-      
-      setIsNavigating(true);
-      
-      // Show loader longer for heavy routes to cover Suspense loading
-      const hideDelay = isHeavyRoute ? 300 : 150;
-      
-      navigationTimerRef.current = window.setTimeout(() => {
-        setIsNavigating(false);
-        navigationTimerRef.current = null;
-      }, hideDelay);
-      
-      prevPathRef.current = location.pathname;
+      prevPathRef.current = newPath;
     }
     
     return () => {
-      if (navigationTimerRef.current) {
-        clearTimeout(navigationTimerRef.current);
-      }
+      if (loadingTimeoutRef.current) clearTimeout(loadingTimeoutRef.current);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
     };
   }, [location.pathname]);
   
-  // Preload key pages after initial render for faster subsequent navigation
+  // Aggressive preloading - start early for snappy navigation
   useEffect(() => {
-    // Wait for initial paint, then start preloading
+    // Preload immediately after first paint
     const timer = setTimeout(() => {
-      // Preload in order of likely navigation
-      // Using requestIdleCallback if available for even better performance
-      const preload = () => {
+      const preloadAll = () => {
+        // Preload in priority order
         pageImports.games();
-        pageImports.database();
-        pageImports.map();
-        pageImports.about();
+        setTimeout(() => pageImports.map(), 100);
+        setTimeout(() => pageImports.database(), 200);
+        setTimeout(() => pageImports.about(), 300);
       };
 
       if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(preload);
+        (window as any).requestIdleCallback(preloadAll, { timeout: 2000 });
       } else {
-        preload();
+        preloadAll();
       }
-    }, 1500); // Slightly reduced for faster preloading
+    }, 800); // Start preloading sooner
     
     return () => clearTimeout(timer);
   }, []);
@@ -193,11 +205,17 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
       <ScrollToTop />
+      
+      {/* Navigation is ALWAYS rendered and interactive - never blocked by loading */}
       <Navigation />
-      <NavigationLoader isVisible={isNavigating} />
+      
+      {/* Loading overlay - below navbar (z-1500) so navbar stays interactive */}
+      <FullScreenLoader isVisible={isNavigating} isHeavyRoute={isHeavyRoute} />
+      
+      {/* Page content area */}
       <div className="flex-grow flex flex-col relative w-full">
         <Suspense fallback={<PageLoader />}>
-          <AnimatePresence mode="popLayout" initial={false}>
+          <AnimatePresence mode="wait" initial={false}>
             <div key={location.pathname}>
             <Routes location={location}>
               <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
