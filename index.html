@@ -339,6 +339,31 @@
         border: none !important;
       }
       
+      /* Safari/iOS: Ensure popups stay visible and interactive */
+      .leaflet-popup {
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        /* Prevent Safari from hiding popups */
+        -webkit-backface-visibility: visible !important;
+        backface-visibility: visible !important;
+        pointer-events: auto !important;
+      }
+      
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-content {
+        pointer-events: auto !important;
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Safari: Fix popup button interactions */
+      .leaflet-popup button,
+      .leaflet-popup a,
+      .leaflet-popup [role="button"] {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+      }
+      
       /* Hide scrollbars globally while maintaining scroll functionality */
       ::-webkit-scrollbar { display: none; }
       * { 
@@ -534,7 +559,7 @@
         touch-action: manipulation;
       }
       
-      /* Updated Marker Styles for Performance - iOS Optimized */
+      /* Updated Marker Styles for Performance - Safari/iOS Optimized */
       .custom-map-marker { 
         background: transparent; 
         border: none; 
@@ -550,15 +575,29 @@
         transform: translate3d(0,0,0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        /* iOS Touch Optimization */
+        /* iOS/Safari Touch Optimization */
         touch-action: manipulation;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         user-select: none;
         cursor: pointer;
-        /* Increase tap target for mobile */
+        /* Increase tap target for mobile (Apple HIG recommends 44px) */
         min-width: 44px;
         min-height: 44px;
+        /* Safari tap highlight */
+        -webkit-tap-highlight-color: transparent;
+        /* Ensure marker is tappable */
+        pointer-events: auto !important;
+        z-index: 500;
+      }
+      
+      /* Safari-specific: ensure markers are interactive */
+      @supports (-webkit-touch-callout: none) {
+        .custom-map-marker {
+          /* Safari needs explicit sizing sometimes */
+          width: 44px;
+          height: 44px;
+        }
       }
       
       .marker-pin { 
@@ -574,8 +613,10 @@
         will-change: transform;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
-        /* Pointer events only on the visible pin */
+        /* Ensure the pin is the clickable element */
         pointer-events: auto;
+        /* Safari tap highlight */
+        -webkit-tap-highlight-color: transparent;
       }
       
       .marker-pin.territory { background: #22c55e; }
@@ -642,7 +683,7 @@
         touch-action: none;
       }
       
-      /* Fix touch delay on iOS for interactive elements - CRITICAL for click responsiveness */
+      /* Fix touch delay on iOS/Safari for interactive elements - CRITICAL for click responsiveness */
       a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), .cursor-pointer {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -650,12 +691,27 @@
         touch-action: manipulation;
         /* Ensure elements are clickable */
         -webkit-tap-highlight-color: transparent;
+        /* Safari: Prevent 300ms delay */
+        -webkit-appearance: none;
       }
       
       /* Ensure all Link components and interactive cards respond immediately */
       a[href], button:not(:disabled) {
         cursor: pointer;
         touch-action: manipulation;
+      }
+      
+      /* Safari-specific: Fix sticky hover states on touch */
+      @supports (-webkit-touch-callout: none) {
+        /* On Safari touch devices, remove hover effects immediately */
+        @media (hover: none) {
+          button:active,
+          a:active,
+          [role="button"]:active {
+            opacity: 0.7;
+            transition: opacity 0.1s ease-out;
+          }
+        }
       }
       
       /* Prevent pull-to-refresh on iOS when not wanted */

@@ -166,31 +166,65 @@ const Navigation: React.FC = () => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  // Lock body scroll when mobile menu is open to prevent background scrolling
+  // Lock body scroll when mobile menu is open - Safari/iOS optimized
   useEffect(() => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
     if (isMobileMenuOpen) {
-      // Improved iOS scroll lock
+      // Store scroll position
       const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
+      
+      // iOS Safari needs special handling
+      if (isIOS || isSafari) {
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100%';
+        // Prevent iOS rubber-banding
+        document.documentElement.style.overflow = 'hidden';
+        document.documentElement.style.height = '100%';
+      } else {
+        document.body.style.overflow = 'hidden';
+      }
+      
+      // Store scroll position for restoration
+      document.body.dataset.scrollY = String(scrollY);
     } else {
-      // Improved iOS scroll unlock
-      const scrollY = document.body.style.top;
+      const scrollY = document.body.dataset.scrollY || '0';
+      
+      // Reset all styles
       document.body.style.position = '';
       document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+      
+      // Restore scroll position
+      if (scrollY && scrollY !== '0') {
+        window.scrollTo(0, parseInt(scrollY, 10));
       }
+      
+      delete document.body.dataset.scrollY;
     }
+    
     return () => {
       document.body.style.position = '';
       document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -325,22 +359,33 @@ const Navigation: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile Toggle - hamburger menu - optimized for instant touch response */}
+          {/* Mobile Toggle - hamburger menu - Safari/iOS optimized */}
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
               onClick={(e) => {
-                // Only handle if not already processed by touch
-                if (!(e.nativeEvent as any)._touchProcessed) {
+                // Safari: check if touch already handled this
+                const now = Date.now();
+                const lastTouch = (window as any).__menuLastTouch || 0;
+                if (now - lastTouch < 400) {
+                  e.preventDefault();
+                  return;
+                }
+                setIsMobileMenuOpen(prev => !prev);
+              }}
+              onTouchStart={(e) => {
+                // Mark touch start time for debouncing
+                (window as any).__menuTouchStart = Date.now();
+              }}
+              onTouchEnd={(e) => {
+                const touchDuration = Date.now() - ((window as any).__menuTouchStart || 0);
+                // Only handle quick taps
+                if (touchDuration < 500) {
+                  e.preventDefault();
+                  (window as any).__menuLastTouch = Date.now();
                   setIsMobileMenuOpen(prev => !prev);
                 }
               }}
-              onTouchEnd={(e) => {
-                // Prevent ghost click and handle touch immediately
-                e.preventDefault();
-                (e.nativeEvent as any)._touchProcessed = true;
-                setIsMobileMenuOpen(prev => !prev);
-              }}
-              className="relative w-10 h-10 flex items-center justify-center select-none"
+              className="relative w-11 h-11 flex items-center justify-center select-none"
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
               style={{ 
@@ -348,7 +393,10 @@ const Navigation: React.FC = () => {
                 WebkitTapHighlightColor: 'transparent',
                 WebkitTouchCallout: 'none',
                 WebkitUserSelect: 'none',
-                userSelect: 'none'
+                userSelect: 'none',
+                // Increase touch target
+                minWidth: '44px',
+                minHeight: '44px'
               }}
             >
               <div className="relative w-5 h-3 flex flex-col justify-between pointer-events-none">
