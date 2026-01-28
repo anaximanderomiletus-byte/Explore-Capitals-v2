@@ -3,20 +3,23 @@ import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
 import Footer from './components/Footer';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 
-// Lazy load all pages except Home for instant initial load
+// PERFORMANCE: Lazy load ALL pages including Home for smaller initial bundle
 // Store import functions for prefetching on hover
 const pageImports = {
+  home: () => import('./pages/Home'),
   games: () => import('./pages/Games'),
   database: () => import('./pages/DatabasePage'),
   map: () => import('./pages/MapPage'),
   about: () => import('./pages/About'),
 };
+
+// Lazy load Home page too for faster initial load
+const Home = lazy(pageImports.home);
 
 const Games = lazy(pageImports.games);
 const DatabasePage = lazy(pageImports.database);
@@ -41,19 +44,30 @@ const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 
 // Prefetch helper - call on hover to preload page chunks
-export const prefetchPage = (page: keyof typeof pageImports) => {
+export const prefetchPage = (page: 'home' | 'games' | 'database' | 'map' | 'about') => {
   const importFn = pageImports[page];
   if (importFn) {
     importFn(); // Triggers the import, browser will cache it
   }
 };
 
-// Loading fallback - visible indicator that page is loading
+// Loading fallback - matches the initial site loader for consistent experience
 const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
+  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[60vh] gap-4">
     <div className="relative">
-      <div className="w-8 h-8 rounded-full border-2 border-sky/10 border-t-sky animate-spin" />
+      {/* Matching the loader-circle from index.html */}
+      <div 
+        className="w-12 h-12 rounded-full animate-spin"
+        style={{
+          border: '4px solid rgba(0, 194, 255, 0.1)',
+          borderTop: '4px solid #00C2FF',
+          filter: 'drop-shadow(0 0 10px rgba(0, 194, 255, 0.3))'
+        }}
+      />
     </div>
+    <p className="text-white/30 text-xs font-medium uppercase tracking-widest animate-pulse">
+      Loading...
+    </p>
   </div>
 );
 
@@ -110,32 +124,26 @@ const AppContent: React.FC = () => {
   
   // Preload key pages after initial render for faster subsequent navigation
   useEffect(() => {
-    // PERFORMANCE: Use a longer delay and staggered loading to prevent blocking
+    // PERFORMANCE: Only preload after user has been on page for a while
+    // and only preload the most likely next pages
     const timer = setTimeout(() => {
-      const preloadWithPriority = async () => {
-        // Load pages one at a time with delays to prevent blocking
+      const preloadWithPriority = () => {
+        // Only preload games page initially - it's the most likely next click
         if ('requestIdleCallback' in window) {
-          (window as any).requestIdleCallback(() => pageImports.games(), { timeout: 3000 });
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.database(), { timeout: 3000 });
-          }, 1000);
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.about(), { timeout: 3000 });
-          }, 2000);
-          // Map is heavy - load last with more delay
-          setTimeout(() => {
-            (window as any).requestIdleCallback(() => pageImports.map(), { timeout: 5000 });
-          }, 3000);
+          (window as any).requestIdleCallback(() => pageImports.games(), { timeout: 5000 });
         } else {
-          // Fallback for browsers without requestIdleCallback
           pageImports.games();
-          setTimeout(() => pageImports.database(), 1500);
-          setTimeout(() => pageImports.about(), 3000);
-          setTimeout(() => pageImports.map(), 4500);
         }
+        
+        // Preload other pages much later to avoid blocking
+        setTimeout(() => {
+          if ('requestIdleCallback' in window) {
+            (window as any).requestIdleCallback(() => pageImports.about(), { timeout: 5000 });
+          }
+        }, 5000);
       };
       preloadWithPriority();
-    }, 3000); // Wait 3 seconds after initial load
+    }, 4000); // Wait 4 seconds after initial load
     
     return () => clearTimeout(timer);
   }, []);
