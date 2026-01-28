@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
@@ -46,33 +45,31 @@ const Terms = lazy(() => import('./pages/Terms'));
 // Routes that require the full-screen loading overlay (heavy pages only)
 const HEAVY_ROUTES = ['/database', '/map', '/games/map-dash'];
 
-// Full-screen loading overlay - only for heavy pages
+// Full-screen loading overlay - CSS only, no framer-motion
 const LoadingOverlay = ({ visible }: { visible: boolean }) => (
-  <AnimatePresence>
-    {visible && (
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        className="fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A]"
-      >
-        <div className="flex flex-col items-center gap-5">
-          <div 
-            className="w-12 h-12 rounded-full"
-            style={{ 
-              border: '3px solid rgba(0, 194, 255, 0.15)',
-              borderTopColor: '#00C2FF',
-              animation: 'spin 0.8s linear infinite'
-            }} 
-          />
-          <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
-            Loading
-          </p>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
+  <div 
+    className={`fixed inset-0 z-[1500] flex items-center justify-center bg-[#0F172A] pointer-events-none ${
+      visible ? 'opacity-100' : 'opacity-0'
+    }`}
+    style={{ 
+      transition: 'opacity 0.15s ease-out',
+      visibility: visible ? 'visible' : 'hidden'
+    }}
+  >
+    <div className="flex flex-col items-center gap-5">
+      <div 
+        className="w-12 h-12 rounded-full"
+        style={{ 
+          border: '3px solid rgba(0, 194, 255, 0.15)',
+          borderTopColor: '#00C2FF',
+          animation: 'spin 0.8s linear infinite'
+        }} 
+      />
+      <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
+        Loading
+      </p>
+    </div>
+  </div>
 );
 
 // Empty fallback - no visible loader for instant pages
@@ -87,17 +84,14 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
-// Page wrapper - instant for main pages, smooth for others
+// Page wrapper - CSS fade in, no framer-motion
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.1, ease: 'easeOut' }}
-    className="flex-grow flex flex-col w-full"
+  <div 
+    className="flex-grow flex flex-col w-full animate-fadeInUp"
+    style={{ animationDuration: '0.15s' }}
   >
     {children}
-  </motion.div>
+  </div>
 );
 
 const AppContent: React.FC = () => {
@@ -154,9 +148,7 @@ const AppContent: React.FC = () => {
       {/* Page content */}
       <div className="flex-grow flex flex-col w-full">
         <Suspense fallback={<EmptyFallback />}>
-          <AnimatePresence mode="wait" initial={false}>
-            <div key={location.pathname}>
-              <Routes location={location}>
+            <Routes location={location} key={location.pathname}>
                 {/* Instant load pages */}
                 <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
                 <Route path="/games" element={<PageWrapper><Games /></PageWrapper>} />
@@ -189,9 +181,7 @@ const AppContent: React.FC = () => {
                 <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
                 <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
                 <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
-              </Routes>
-            </div>
-          </AnimatePresence>
+            </Routes>
         </Suspense>
       </div>
       
