@@ -1,17 +1,37 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Camera, Check, X, MapPin, Loader2, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
-import { staticTours } from '../data/staticTours';
-import { STATIC_IMAGES } from '../data/images';
 import Button from '../components/Button';
-import { Country } from '../types';
+import { Country, TourData } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
+
+// PERFORMANCE: Lazy load heavy data only when game starts
+let _cachedCountries: Country[] | null = null;
+let _cachedTours: Record<string, TourData> | null = null;
+let _cachedImages: Record<string, string> | null = null;
+
+const loadGameData = async () => {
+  if (!_cachedCountries || !_cachedTours || !_cachedImages) {
+    const [countriesModule, toursModule, imagesModule] = await Promise.all([
+      import('../constants'),
+      import('../data/staticTours'),
+      import('../data/images')
+    ]);
+    _cachedCountries = countriesModule.MOCK_COUNTRIES;
+    _cachedTours = toursModule.staticTours;
+    _cachedImages = imagesModule.STATIC_IMAGES;
+  }
+  return { 
+    countries: _cachedCountries, 
+    tours: _cachedTours, 
+    images: _cachedImages 
+  };
+};
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -76,20 +96,24 @@ export default function LandmarkLegend() {
     }
   }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft]);
 
+  // Cached game data ref to avoid re-fetching
+  const gameDataRef = useRef<{ countries: Country[], tours: Record<string, TourData>, images: Record<string, string> } | null>(null);
+
   // Generate a finite list of questions for this session (Limit to 15 for faster loading)
-  const getQuestionsList = useCallback((): Question[] => {
-    const validCountries = MOCK_COUNTRIES.filter(c => staticTours[c.name]);
+  const getQuestionsList = useCallback((data: { countries: Country[], tours: Record<string, TourData>, images: Record<string, string> }): Question[] => {
+    const { countries, tours, images } = data;
+    const validCountries = countries.filter(c => tours[c.name]);
     const shuffledValid = shuffle(validCountries).slice(0, 15); // Limit to 15 questions per game
     
     return shuffledValid.map(country => {
-        const tour = staticTours[country.name];
+        const tour = tours[country.name];
         const stop = tour.stops[Math.floor(Math.random() * tour.stops.length)];
         const landmarkName = stop.stopName;
-        const imageUrl = STATIC_IMAGES[stop.imageKeyword || landmarkName] || STATIC_IMAGES[country.name];
+        const imageUrl = images[stop.imageKeyword || landmarkName] || images[country.name];
         
         const distractors: Country[] = [];
         while (distractors.length < 3) {
-            const c = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+            const c = countries[Math.floor(Math.random() * countries.length)];
             if (c.id !== country.id && !distractors.find(d => d.id === c.id)) {
                 distractors.push(c);
             }
@@ -106,7 +130,12 @@ export default function LandmarkLegend() {
 
   const startGame = async () => {
     setGameState('preparing');
-    const newQuestions = getQuestionsList();
+    
+    // PERFORMANCE: Load game data only when user starts the game
+    if (!gameDataRef.current) {
+      gameDataRef.current = await loadGameData();
+    }
+    const newQuestions = getQuestionsList(gameDataRef.current);
     
     // Pre-load all images for the current set
     const imagePromises = newQuestions.map(q => {

@@ -565,6 +565,26 @@
         will-change: transform;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
+        /* Larger touch target for mobile */
+        position: relative;
+      }
+      
+      /* Expand touch target on touch devices without changing visual size */
+      @media (hover: none) and (pointer: coarse) {
+        .marker-pin::before {
+          content: '';
+          position: absolute;
+          top: -15px;
+          left: -15px;
+          right: -15px;
+          bottom: -15px;
+          background: transparent;
+        }
+        .custom-map-marker {
+          /* Larger clickable area on mobile */
+          min-width: 44px !important;
+          min-height: 44px !important;
+        }
       }
       
       .marker-pin.territory { background: #22c55e; }
@@ -695,7 +715,11 @@
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
     </style>
-  <script type="module" crossorigin src="./assets/index-DUyATDXp.js"></script>
+  <script type="module" crossorigin src="./assets/index-CcyCdUdq.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/vendor-react-CJteECPR.js">
+  <link rel="modulepreload" crossorigin href="./assets/vendor-motion-CUvbj6jv.js">
+  <link rel="modulepreload" crossorigin href="./assets/vendor-firebase-BmNGKg-n.js">
+  <link rel="modulepreload" crossorigin href="./assets/vendor-icons-DnoOvNGG.js">
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
     <!-- Initial Splash Screen -->

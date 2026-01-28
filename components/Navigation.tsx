@@ -12,7 +12,8 @@ import ConfirmationModal from './ConfirmationModal';
 import { prefetchPage } from '../App';
 
 // Map nav paths to prefetch keys
-const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
+const prefetchMap: Record<string, 'home' | 'games' | 'database' | 'map' | 'about'> = {
+  '/': 'home',
   '/games': 'games',
   '/database': 'database',
   '/map': 'map',
@@ -217,7 +218,8 @@ const Navigation: React.FC = () => {
   // 2. Adaptive text color based on background (Map = Light background = Dark text)
   // 3. Subtle backdrop blur on scroll for legibility
   
-  let navClasses = "bg-transparent py-4 transition-all duration-500";
+  // PERFORMANCE: Faster transitions for snappier feel
+  let navClasses = "bg-transparent py-4 transition-all duration-150";
   let textColorClass = "text-white"; 
   let logoBgClass = "bg-gel-blue text-white border border-white/40";
 
@@ -226,9 +228,9 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-primary text-white border border-black/5";
     
     if (isScrolled) {
-      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
+      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-all duration-150";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-all duration-150";
     }
   } else {
     // Default Mode (Dark Background Pages)
@@ -236,9 +238,9 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-gel-blue text-white border border-white/40";
     
     if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
+      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg transition-all duration-150";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent py-4 transition-all duration-150";
     }
   }
 
@@ -255,7 +257,7 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav 
-        className={`fixed w-full z-[2000] transition-all duration-500 ease-out ${
+        className={`fixed w-full z-[2000] transition-transform duration-200 ease-out ${
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
         } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
       >
@@ -263,11 +265,11 @@ const Navigation: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
-              <div className={`w-7 h-7 rounded-full transition-all duration-500 relative overflow-hidden flex items-center justify-center shrink-0 ${logoBgClass}`}>
+              <div className={`w-7 h-7 rounded-full transition-colors duration-100 relative overflow-hidden flex items-center justify-center shrink-0 ${logoBgClass}`}>
                 <img src={`${import.meta.env.BASE_URL}logo.png`} alt="ExploreCapitals Logo" className="w-full h-full object-contain scale-[1.5] relative z-10 drop-shadow-md" />
                 <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
               </div>
-              <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
+              <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-100 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
                 Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
               </span>
             </Link>
@@ -289,14 +291,14 @@ const Navigation: React.FC = () => {
                   to={link.path}
                   onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
                   onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
-                    className={`font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-300 relative group/link whitespace-nowrap ${
+                  className={`font-black text-[10px] uppercase tracking-[0.2em] transition-colors duration-100 relative group/link whitespace-nowrap ${
                     active 
                       ? `${activeColor} ${glowClass}` 
                       : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
                   }`}
                 >
                   {link.label}
-                  <div className={`absolute -bottom-1.5 left-0 h-0.5 transition-all duration-300 ${
+                  <div className={`absolute -bottom-1.5 left-0 h-0.5 transition-all duration-100 ${
                     active 
                       ? `w-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}` 
                       : `w-0 group-hover/link:w-full ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
@@ -324,7 +326,7 @@ const Navigation: React.FC = () => {
                 e.preventDefault();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className={`relative w-10 h-10 flex items-center justify-center transition-all duration-300 active:scale-95 ${
+              className={`relative w-10 h-10 flex items-center justify-center transition-transform duration-100 active:scale-95 ${
                 isMobileMenuOpen 
                   ? '' 
                   : ''
@@ -333,17 +335,17 @@ const Navigation: React.FC = () => {
               aria-label="Toggle menu"
             >
               <div className="relative w-5 h-3 flex flex-col justify-between">
-                <span className={`block h-[2px] rounded-full transition-all duration-500 origin-center ${
+                <span className={`block h-[2px] rounded-full transition-all duration-150 origin-center ${
                   isMobileMenuOpen 
                     ? 'bg-sky-light rotate-45 translate-y-[5px]' 
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-300 ${
+                <span className={`block h-[2px] rounded-full transition-all duration-100 ${
                   isMobileMenuOpen 
                     ? 'opacity-0 scale-0' 
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-500 origin-center ${
+                <span className={`block h-[2px] rounded-full transition-all duration-150 origin-center ${
                   isMobileMenuOpen 
                     ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
@@ -356,7 +358,7 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-200 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0 opacity-100 visible' 
             : 'translate-x-full opacity-0 invisible pointer-events-none'
@@ -379,9 +381,9 @@ const Navigation: React.FC = () => {
                 to={link.path}
                 onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                 style={{
-                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(50px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
-                  transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+                  transition: `transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.03}s, opacity 0.15s ease ${index * 0.03}s`,
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
                   isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
@@ -395,9 +397,9 @@ const Navigation: React.FC = () => {
           {/* Account Panel - right after nav links */}
           <div 
             style={{
-              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(50px)',
               opacity: isMobileMenuOpen ? 1 : 0,
-              transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.06}s, opacity 0.4s ease ${navLinks.length * 0.06}s`,
+              transition: `transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.03}s, opacity 0.15s ease ${navLinks.length * 0.03}s`,
             }}
           >
             {isAuthenticated ? (
@@ -419,9 +421,9 @@ const Navigation: React.FC = () => {
           {/* Play Now button - right after account */}
           <div 
             style={{
-              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(50px)',
               opacity: isMobileMenuOpen ? 1 : 0,
-              transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.06}s, opacity 0.4s ease ${(navLinks.length + 1) * 0.06}s`,
+              transition: `transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.03}s, opacity 0.15s ease ${(navLinks.length + 1) * 0.03}s`,
             }}
             className="mt-6"
           >

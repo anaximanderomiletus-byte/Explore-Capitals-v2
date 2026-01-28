@@ -1,9 +1,35 @@
 import { TourData } from "../types";
-import { staticTours } from "../data/staticTours";
-import { STATIC_IMAGES } from "../data/images";
-import { MOCK_COUNTRIES } from "../constants";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+
+// PERFORMANCE: Lazy load heavy data only when needed
+let _staticTours: Record<string, TourData> | null = null;
+let _staticImages: Record<string, string> | null = null;
+let _mockCountries: any[] | null = null;
+
+const getStaticTours = async (): Promise<Record<string, TourData>> => {
+  if (!_staticTours) {
+    const module = await import("../data/staticTours");
+    _staticTours = module.staticTours;
+  }
+  return _staticTours;
+};
+
+const getStaticImages = async (): Promise<Record<string, string>> => {
+  if (!_staticImages) {
+    const module = await import("../data/images");
+    _staticImages = module.STATIC_IMAGES;
+  }
+  return _staticImages;
+};
+
+const getMockCountries = async () => {
+  if (!_mockCountries) {
+    const module = await import("../constants");
+    _mockCountries = module.MOCK_COUNTRIES;
+  }
+  return _mockCountries;
+};
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -54,8 +80,9 @@ const getFirestoreImage = async (keyword: string): Promise<string | null> => {
  */
 export const getGeneratedImage = async (keyword: string, type: 'landscape' | 'landmark' = 'landscape'): Promise<string | null> => {
   try {
-    // A. Static Image
-    const staticUrl = STATIC_IMAGES[keyword];
+    // A. Static Image (lazy loaded)
+    const staticImages = await getStaticImages();
+    const staticUrl = staticImages[keyword];
     if (staticUrl) {
       return staticUrl;
     }
@@ -81,15 +108,17 @@ export const getGeneratedImage = async (keyword: string, type: 'landscape' | 'la
 };
 
 export const getCountryTour = async (countryName: string): Promise<TourData | null> => {
-  // 1. Check for Static Handcrafted Data
-  if (staticTours[countryName]) {
+  // 1. Check for Static Handcrafted Data (lazy loaded)
+  const tours = await getStaticTours();
+  if (tours[countryName]) {
     await delay(600); // Simulate "loading" a rich experience
-    return staticTours[countryName];
+    return tours[countryName];
   }
 
   // 2. Procedural Fallback Generator
   // This ensures EVERY country works immediately without manual writing for 195 nations.
-  const country = MOCK_COUNTRIES.find(c => c.name === countryName);
+  const countries = await getMockCountries();
+  const country = countries.find(c => c.name === countryName);
   if (!country) return null;
 
   await delay(800); // Simulate processing
