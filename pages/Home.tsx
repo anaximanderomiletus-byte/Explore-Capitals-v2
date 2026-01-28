@@ -97,30 +97,32 @@ const Home: React.FC = () => {
 
           {/* Globe */}
           <FadeInView delay={100} className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0">
+            {/* Static glow using radial gradient */}
             <div 
               className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[680px] lg:h-[680px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.05) 0%, transparent 70%)' }} 
+              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.05) 0%, rgba(0,194,255,0.02) 40%, transparent 70%)' }} 
             />
             
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] flex-shrink-0">
-              <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden cursor-pointer shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] flex-shrink-0 pointer-events-none">
+              <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden cursor-pointer pointer-events-auto shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
                 <img 
                   src={`${import.meta.env.BASE_URL}logo.png`} 
                   alt="Globe - Click to explore the map" 
                   className="w-full h-full object-contain scale-[1.35]"
                   loading="eager"
+                  fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
               </Link>
               
               {/* Decorative bubbles - static on Safari, animated on Chrome */}
               <div className={`absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none ${!needsSimpleMode ? 'animate-float1' : ''}`}>
-                <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 bg-sky/15 ${blurClass2xl} border border-sky/30 rounded-full flex items-center justify-center shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]`}>
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 ${blurClass2xl} border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]`}>
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
                 </div>
               </div>
               <div className={`absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none ${!needsSimpleMode ? 'animate-float2' : ''}`}>
-                <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 bg-sky/15 ${blurClass2xl} border border-sky/30 rounded-full flex items-center justify-center shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]`}>
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 ${blurClass2xl} border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]`}>
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
                 </div>
               </div>
