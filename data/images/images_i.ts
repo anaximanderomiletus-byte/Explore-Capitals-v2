@@ -31,13 +31,13 @@ export const imagesI: Record<string, string> = {
   "Yazd Windcatchers": "/png/IRAN/yazd-the-city-of-windcatchers.png",
   "The Lut Desert": "/png/IRAN/lut-desert-kaluts.png",
 
-  // --- Iraq --- (placeholder until images added)
-  "Iraq": "/logo.png",
-  "The Ziggurat of Ur": "/logo.png",
-  "Babylon Ishtar Gate": "/logo.png",
-  "Erbil Citadel": "/logo.png",
-  "Mesopotamian Marshes": "/logo.png",
-  "Great Mosque of Samarra": "/logo.png",
+  // --- Iraq ---
+  "Iraq": "/png/IRAQ/baghdad-iraq.png",
+  "The Ziggurat of Ur": "/png/IRAQ/ziggurat-of-ur.png",
+  "Babylon Ishtar Gate": "/png/IRAQ/babylon-ishtar-gate.png",
+  "Erbil Citadel": "/png/IRAQ/erbil-citadel.png",
+  "Mesopotamian Marshes": "/png/IRAQ/mesopotamian-marshes-ahwar.png",
+  "Great Mosque of Samarra": "/png/IRAQ/great-mosque-of-samarra-malwiya-minaret.png",
 
   // --- Ireland --- (placeholder until images added)
   "Ireland": "/logo.png",
