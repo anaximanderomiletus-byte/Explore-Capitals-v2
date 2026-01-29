@@ -6,27 +6,28 @@ export default defineConfig({
   base: './', // <--- The "GPS" Fix for custom domains
   build: {
     outDir: 'docs', // GitHub Pages can serve from /docs
-    // Optimize chunk splitting for better caching and loading
+    // Performance optimizations
+    target: 'esnext',
+    minify: 'esbuild',
+    cssMinify: true,
+    // Chunk splitting for better caching and parallel loading
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks - cached separately from app code
+          // Vendor chunks - separate heavy dependencies for better caching
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
           'vendor-motion': ['framer-motion'],
           'vendor-icons': ['lucide-react'],
-          // Firebase in its own chunk (large)
-          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          // Data chunks - separate large data files
+          'staticTours': ['./data/staticTours.ts'],
+          'officialNames': ['./data/officialNames.ts'],
+          'images': ['./data/images.ts'],
         },
       },
     },
-    // Increase chunk size warning limit (default is 500kb)
-    chunkSizeWarningLimit: 800,
-    // Target modern browsers for smaller bundles
-    target: 'es2020',
-    // Use esbuild for minification (built into Vite, fast)
-    minify: 'esbuild',
-    // Generate source maps for debugging (optional, can be false for smaller deploys)
-    sourcemap: false,
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 600,
   },
   server: {
     port: 3000,
@@ -40,6 +41,7 @@ export default defineConfig({
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion', 'lucide-react'],
+    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+    exclude: ['firebase'],
   },
 });

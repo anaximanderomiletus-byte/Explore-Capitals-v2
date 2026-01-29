@@ -71,44 +71,6 @@
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
-      
-      /* Optimized spin animation for loaders */
-      .animate-spin {
-        animation: spin 0.7s linear infinite;
-      }
-      
-      /* Fast fade-in animation for content */
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      
-      .animate-fadeInUp {
-        animation: fadeInUp 0.4s ease-out forwards;
-      }
-      
-      /* Floating animations for decorative elements (Chrome only - Safari skips these) */
-      @keyframes float1 {
-        0%, 100% { transform: translateY(0) translateX(0); }
-        25% { transform: translateY(-6px) translateX(3px); }
-        50% { transform: translateY(2px) translateX(-2px); }
-        75% { transform: translateY(-4px) translateX(2px); }
-      }
-      
-      @keyframes float2 {
-        0%, 100% { transform: translateY(0) translateX(0); }
-        25% { transform: translateY(4px) translateX(-4px); }
-        50% { transform: translateY(-3px) translateX(2px); }
-        75% { transform: translateY(5px) translateX(-1px); }
-      }
-      
-      .animate-float1 {
-        animation: float1 18s ease-in-out infinite;
-      }
-      
-      .animate-float2 {
-        animation: float2 22s ease-in-out infinite;
-      }
     </style>
 
     <!-- Analytics - Load after page is interactive -->
@@ -335,44 +297,7 @@
         border: none !important;
       }
       .leaflet-popup-content { margin: 0 !important; width: auto !important; }
-      .leaflet-container { 
-        font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important;
-      }
-      
-      /* Safari/iOS Performance Mode - reduce GPU layers and animations */
-      @supports (-webkit-touch-callout: none) {
-        .leaflet-container {
-          -webkit-transform: translateZ(0);
-          transform: translateZ(0);
-        }
-        .leaflet-tile-container {
-          -webkit-transform: translate3d(0,0,0) !important;
-          transform: translate3d(0,0,0) !important;
-        }
-        .leaflet-zoom-animated {
-          -webkit-transition: none !important;
-          transition: none !important;
-        }
-        .leaflet-fade-anim .leaflet-tile {
-          -webkit-transition: none !important;
-          transition: none !important;
-        }
-        .leaflet-zoom-anim .leaflet-zoom-animated {
-          -webkit-transition: none !important;
-          transition: none !important;
-        }
-        /* Disable tile fade on Safari */
-        .leaflet-tile {
-          opacity: 1 !important;
-          -webkit-transition: none !important;
-          transition: none !important;
-        }
-        /* Simpler marker animations on Safari */
-        .marker-pin {
-          -webkit-transition: transform 0.1s ease-out !important;
-          transition: transform 0.1s ease-out !important;
-        }
-      }
+      .leaflet-container { font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important; }
       .leaflet-popup-tip-container {
         margin-top: -1px; /* Bring tip closer to content */
         z-index: 20;
@@ -412,31 +337,6 @@
         background: #0F172A !important; 
         box-shadow: none !important;
         border: none !important;
-      }
-      
-      /* Safari/iOS: Ensure popups stay visible and interactive */
-      .leaflet-popup {
-        -webkit-transform: translate3d(0,0,0);
-        transform: translate3d(0,0,0);
-        /* Prevent Safari from hiding popups */
-        -webkit-backface-visibility: visible !important;
-        backface-visibility: visible !important;
-        pointer-events: auto !important;
-      }
-      
-      .leaflet-popup-content-wrapper,
-      .leaflet-popup-content {
-        pointer-events: auto !important;
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      /* Safari: Fix popup button interactions */
-      .leaflet-popup button,
-      .leaflet-popup a,
-      .leaflet-popup [role="button"] {
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-        cursor: pointer;
       }
       
       /* Hide scrollbars globally while maintaining scroll functionality */
@@ -634,7 +534,7 @@
         touch-action: manipulation;
       }
       
-      /* Updated Marker Styles for Performance - Safari/iOS Optimized */
+      /* Updated Marker Styles for Performance */
       .custom-map-marker { 
         background: transparent; 
         border: none; 
@@ -650,29 +550,6 @@
         transform: translate3d(0,0,0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        /* iOS/Safari Touch Optimization */
-        touch-action: manipulation;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: pointer;
-        /* Increase tap target for mobile (Apple HIG recommends 44px) */
-        min-width: 44px;
-        min-height: 44px;
-        /* Safari tap highlight */
-        -webkit-tap-highlight-color: transparent;
-        /* Ensure marker is tappable */
-        pointer-events: auto !important;
-        z-index: 500;
-      }
-      
-      /* Safari-specific: ensure markers are interactive */
-      @supports (-webkit-touch-callout: none) {
-        .custom-map-marker {
-          /* Safari needs explicit sizing sometimes */
-          width: 44px;
-          height: 44px;
-        }
       }
       
       .marker-pin { 
@@ -682,16 +559,12 @@
         border: 2px solid #FFFFFF; 
         border-radius: 50%; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-        -webkit-transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         cursor: pointer; 
         will-change: transform;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
-        /* Ensure the pin is the clickable element */
-        pointer-events: auto;
-        /* Safari tap highlight */
-        -webkit-tap-highlight-color: transparent;
       }
       
       .marker-pin.territory { background: #22c55e; }
@@ -758,7 +631,7 @@
         touch-action: none;
       }
       
-      /* Fix touch delay on iOS/Safari for interactive elements - CRITICAL for click responsiveness */
+      /* Fix touch delay on iOS for interactive elements - CRITICAL for click responsiveness */
       a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), .cursor-pointer {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -766,8 +639,6 @@
         touch-action: manipulation;
         /* Ensure elements are clickable */
         -webkit-tap-highlight-color: transparent;
-        /* Safari: Prevent 300ms delay */
-        -webkit-appearance: none;
       }
       
       /* Ensure all Link components and interactive cards respond immediately */
@@ -776,44 +647,57 @@
         touch-action: manipulation;
       }
       
-      /* Safari-specific: Fix sticky hover states on touch */
-      @supports (-webkit-touch-callout: none) {
-        /* On Safari touch devices, remove hover effects immediately */
-        @media (hover: none) {
-          button:active,
-          a:active,
-          [role="button"]:active {
-            opacity: 0.7;
-            transition: opacity 0.05s ease-out !important;
-          }
-        }
+      /* ===== SAFARI/iOS-SPECIFIC OPTIMIZATIONS ===== */
+      /* These classes are added by browserDetection.ts */
+      
+      /* Reduce backdrop-blur intensity on Safari/iOS for performance */
+      html.is-safari.is-mobile .backdrop-blur-2xl,
+      html.is-safari.is-mobile .backdrop-blur-3xl,
+      html.is-ios .backdrop-blur-2xl,
+      html.is-ios .backdrop-blur-3xl,
+      html.reduce-effects .backdrop-blur-2xl,
+      html.reduce-effects .backdrop-blur-3xl {
+        -webkit-backdrop-filter: blur(8px) !important;
+        backdrop-filter: blur(8px) !important;
       }
       
-      /* ===== INSTANT TOUCH FEEDBACK FOR iOS ===== */
-      /* Make ALL clickable elements respond INSTANTLY on touch */
-      @media (pointer: coarse) {
-        a, button, [role="button"], .cursor-pointer, [onclick], [data-clickable] {
-          /* Instant active state */
-          transition: transform 0.05s ease-out, opacity 0.05s ease-out !important;
-        }
-        
-        a:active, button:active, [role="button"]:active, .cursor-pointer:active {
-          transform: scale(0.97) !important;
-          opacity: 0.8 !important;
-        }
-        
-        /* Disable ALL hover transitions on touch devices - they cause delays */
-        a, button, [role="button"], .cursor-pointer {
-          transition-duration: 0.05s !important;
-        }
+      /* Disable infinite animations on Safari mobile for performance */
+      html.reduce-effects .animate-spin-slow,
+      html.reduce-effects .animate-pulse-slow,
+      html.reduce-effects .animate-float,
+      html.reduce-effects .animate-float-delayed {
+        animation: none !important;
       }
       
-      /* GPU accelerate all interactive elements */
-      a, button, [role="button"], nav, .cursor-pointer {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
+      /* Simplify shadows on low-power devices */
+      html.reduce-effects .shadow-premium,
+      html.reduce-effects .shadow-glass-bubble {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+      }
+      
+      /* GPU acceleration for fixed elements on Safari */
+      html.is-safari .fixed,
+      html.is-ios .fixed {
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
+      }
+      
+      /* Instant :active feedback for touch responsiveness */
+      html.is-touch button:active,
+      html.is-touch a:active,
+      html.is-touch [role="button"]:active {
+        opacity: 0.7;
+        transform: scale(0.98);
+        transition: opacity 0.05s, transform 0.05s;
+      }
+      
+      /* Ensure smooth scrolling container transitions on Safari */
+      html.is-safari .overflow-y-auto,
+      html.is-ios .overflow-y-auto {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: auto; /* Disable smooth scroll on Safari for better performance */
       }
       
       /* Prevent pull-to-refresh on iOS when not wanted */
@@ -864,11 +748,11 @@
       .leading-relaxed { line-height: 1.625; }
       .leading-loose { line-height: 2; }
     </style>
-  <script type="module" crossorigin src="./assets/index-BruMvk5U.js"></script>
+  <script type="module" crossorigin src="./assets/index-1SWONvvl.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/vendor-react-CJteECPR.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-motion-CUvbj6jv.js">
   <link rel="modulepreload" crossorigin href="./assets/vendor-firebase-BmNGKg-n.js">
-  <link rel="modulepreload" crossorigin href="./assets/vendor-icons-Zx6pZiCF.js">
+  <link rel="modulepreload" crossorigin href="./assets/vendor-icons-DnoOvNGG.js">
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
     <!-- Initial Splash Screen -->
@@ -879,41 +763,18 @@
     <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full [touch-action:pan-y_pinch-zoom]"></div>
     <div id="modal-root"></div>
     <script>
-      // Remove loader once React has hydrated - optimized for speed
-      (function() {
-        var loaderRemoved = false;
-        
-        function hideLoader() {
-          if (loaderRemoved) return;
-          var loader = document.getElementById('initial-loader');
-          if (loader && document.getElementById('root').children.length > 0) {
-            loaderRemoved = true;
+      // Remove loader once React has hydrated
+      window.addEventListener('load', function() {
+        // Small delay to ensure React is actually rendering
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
             loader.style.opacity = '0';
             loader.style.visibility = 'hidden';
-            setTimeout(function() { loader.remove(); }, 300);
+            setTimeout(() => loader.remove(), 500);
           }
-        }
-        
-        // Try to hide as soon as React renders
-        var checkInterval = setInterval(function() {
-          if (document.getElementById('root').children.length > 0) {
-            clearInterval(checkInterval);
-            // Small delay to let React stabilize
-            setTimeout(hideLoader, 100);
-          }
-        }, 50);
-        
-        // Fallback: hide after load event
-        window.addEventListener('load', function() {
-          setTimeout(hideLoader, 200);
-        });
-        
-        // Safety fallback - always hide after 3 seconds
-        setTimeout(function() {
-          clearInterval(checkInterval);
-          hideLoader();
-        }, 3000);
-      })();
+        }, 300);
+      });
     </script>
   </body>
 </html>

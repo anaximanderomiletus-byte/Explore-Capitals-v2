@@ -182,40 +182,30 @@ export default function MapDash() {
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
 
-      // Safari/iOS-optimized touch handling
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      // Track if touch already handled this interaction to prevent double-firing
+      let touchHandledRef = { current: false };
       
-      let lastInteractionTime = 0;
-      let touchStartTime = 0;
-      const DEBOUNCE_MS = isSafari ? 400 : 300;
-      
-      // Unified handler for marker interactions
-      const handleMarkerInteraction = (e: any, source: 'click' | 'touch' = 'click') => {
-        const now = Date.now();
-        
-        // Debounce: skip if we just handled an interaction
-        if (now - lastInteractionTime < DEBOUNCE_MS) {
+      // Unified handler for marker interactions (click and touch)
+      const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
+        // If touch already handled this, skip the click handler
+        if (!isTouchEvent && touchHandledRef.current) {
+          touchHandledRef.current = false;
           return;
         }
-        lastInteractionTime = now;
         
-        // Stop all propagation
-        if (e) {
-          if (e.originalEvent) {
-            e.originalEvent.stopPropagation();
-            e.originalEvent.stopImmediatePropagation?.();
-            e.originalEvent.preventDefault();
-          }
-          if (typeof L.DomEvent?.stop === 'function') {
-            L.DomEvent.stop(e);
-          }
+        // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
+        if (e && e.originalEvent) {
+          e.originalEvent.stopPropagation();
+          e.originalEvent.preventDefault();
+        }
+        if (e && typeof L.DomEvent?.stopPropagation === 'function') {
+          L.DomEvent.stopPropagation(e);
         }
         
         const currentTarget = targetCountryRef.current;
         if (gameStateRef.current !== 'playing' || !currentTarget || isTransitioningRef.current) return;
 
-        // Reset previous feedback state immediately
+        // Reset previous feedback state immediately on click
         if (feedbackTimeoutRef.current) {
           clearTimeout(feedbackTimeoutRef.current);
           feedbackTimeoutRef.current = null;
@@ -263,61 +253,27 @@ export default function MapDash() {
         }
       };
       
-      // Desktop click handler
-      marker.on('click', (e: any) => handleMarkerInteraction(e, 'click'));
+      // Handle click (works for desktop and as fallback)
+      marker.on('click', (e: any) => handleMarkerInteraction(e, false));
       
-      // iOS/Safari Touch optimization
+      // Bind touch events after marker is added to map for reliable mobile handling
       marker.on('add', () => {
         const markerElement = marker.getElement?.();
-        if (markerElement && !(markerElement as any)._touchOptimized) {
-          (markerElement as any)._touchOptimized = true;
-          
-          // Safari-specific CSS
-          Object.assign(markerElement.style, {
-            touchAction: 'manipulation',
-            webkitTouchCallout: 'none',
-            webkitUserSelect: 'none',
-            userSelect: 'none',
-            cursor: 'pointer',
-            webkitTapHighlightColor: 'transparent'
-          });
-          
-          // Track touch start for tap detection
+        if (markerElement && !(markerElement as any)._touchBound) {
+          (markerElement as any)._touchBound = true;
+          // Use touchstart for immediate response on iOS
           markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-            touchStartTime = Date.now();
+            // Mark that touch handled this to prevent click from double-firing
+            touchHandledRef.current = true;
+            // Reset after a delay in case click doesn't fire
+            setTimeout(() => { touchHandledRef.current = false; }, 400);
           }, { passive: true });
           
-          // Handle touch end
           markerElement.addEventListener('touchend', (e: TouchEvent) => {
-            const touchDuration = Date.now() - touchStartTime;
-            
-            // Only handle quick taps (not scrolls/drags)
-            if (e.changedTouches.length === 1 && touchDuration < 500) {
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation();
-              
-              // Small delay for Safari to settle
-              if (isSafari) {
-                setTimeout(() => {
-                  handleMarkerInteraction({ originalEvent: e }, 'touch');
-                }, 10);
-              } else {
-                handleMarkerInteraction({ originalEvent: e }, 'touch');
-              }
-            }
-          }, { passive: false, capture: true });
-          
-          // Prevent synthetic click after touch
-          markerElement.addEventListener('click', (e: MouseEvent) => {
-            const now = Date.now();
-            if (now - lastInteractionTime < DEBOUNCE_MS) {
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation();
-              return;
-            }
-          }, { capture: true });
+            e.preventDefault();
+            e.stopPropagation();
+            handleMarkerInteraction({ originalEvent: e }, true);
+          }, { passive: false });
         }
       });
 

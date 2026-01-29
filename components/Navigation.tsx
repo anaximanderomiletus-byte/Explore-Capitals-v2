@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+
+import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
 import Button from './Button';
@@ -8,12 +9,16 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
+import { prefetchPage } from '../App';
+import { isTouchDevice } from '../utils/browserDetection';
 
-// Sliding indicator position type
-interface IndicatorPos {
-  left: number;
-  width: number;
-}
+// Map nav paths to prefetch keys
+const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
+  '/games': 'games',
+  '/database': 'database',
+  '/map': 'map',
+  '/about': 'about',
+};
 
 // Mobile Profile Link for Signed In Users
 const MobileProfileLinkSignedIn: React.FC<{
@@ -109,13 +114,14 @@ const Navigation: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
-  const [indicatorPos, setIndicatorPos] = useState<IndicatorPos>({ left: 0, width: 0 });
-  const [indicatorReady, setIndicatorReady] = useState(false);
   const lastScrollY = useRef(0);
-  const navLinksRef = useRef<HTMLDivElement>(null);
-  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Sliding indicator state
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
+  const navLinksRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
   
   // Auth context for mobile account panel
   const { user: authUser, signOut, loading: authLoading } = useAuth();
@@ -124,6 +130,29 @@ const Navigation: React.FC = () => {
   
   // Use Context for determining navbar mode and threshold
   const { navbarMode, scrollThreshold } = useLayout();
+  
+  // Update sliding indicator position
+  const updateIndicator = useCallback(() => {
+    const activePath = location.pathname;
+    const activeLink = linkRefs.current.get(activePath);
+    const container = navLinksRef.current;
+    
+    if (activeLink && container) {
+      const containerRect = container.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      setIndicatorStyle({
+        left: linkRect.left - containerRect.left + linkRect.width / 2,
+        width: linkRect.width
+      });
+    }
+  }, [location.pathname]);
+  
+  // Update indicator on path change and resize
+  useLayoutEffect(() => {
+    updateIndicator();
+    window.addEventListener('resize', updateIndicator);
+    return () => window.removeEventListener('resize', updateIndicator);
+  }, [updateIndicator]);
   
   const handleMobileSignOut = async () => {
     setShowSignOutModal(false);
@@ -137,110 +166,60 @@ const Navigation: React.FC = () => {
   const isOverMap = isMapPage || isMapDash;
 
   useEffect(() => {
-    // Throttled scroll handler for maximum performance
-    let ticking = false;
-    let lastKnownScrollY = 0;
-    
-    const updateNavbar = () => {
-      const currentScrollY = lastKnownScrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
       
-      // Batch state updates - only update if values actually changed
-      const shouldHide = currentScrollY > lastScrollY.current && currentScrollY > 50;
-      const shouldBeScrolled = currentScrollY > scrollThreshold;
-      
-      if (shouldHide !== !isVisible) {
-        setIsVisible(!shouldHide);
+      // Determine visibility based on scroll direction
+      // Hide when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
       }
-      if (shouldBeScrolled !== isScrolled) {
-        setIsScrolled(shouldBeScrolled);
-      }
+
+      // Check threshold from context
+      setIsScrolled(currentScrollY > scrollThreshold);
       
       lastScrollY.current = currentScrollY;
-      ticking = false;
-    };
-    
-    const handleScroll = () => {
-      lastKnownScrollY = window.scrollY;
-      
-      if (!ticking) {
-        // Use RAF for smooth, non-blocking updates
-        requestAnimationFrame(updateNavbar);
-        ticking = true;
-      }
     };
     
     // Check initially
-    lastKnownScrollY = window.scrollY;
-    updateNavbar();
+    handleScroll();
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [scrollThreshold, isVisible, isScrolled]);
+  }, [scrollThreshold]);
 
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  // Lock body scroll when mobile menu is open - Safari/iOS optimized
+  // Lock body scroll when mobile menu is open to prevent background scrolling
   useEffect(() => {
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    
     if (isMobileMenuOpen) {
-      // Store scroll position
+      // Improved iOS scroll lock
       const scrollY = window.scrollY;
-      
-      // iOS Safari needs special handling
-      if (isIOS || isSafari) {
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-        document.body.style.height = '100%';
-        // Prevent iOS rubber-banding
-        document.documentElement.style.overflow = 'hidden';
-        document.documentElement.style.height = '100%';
-      } else {
-        document.body.style.overflow = 'hidden';
-      }
-      
-      // Store scroll position for restoration
-      document.body.dataset.scrollY = String(scrollY);
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
     } else {
-      const scrollY = document.body.dataset.scrollY || '0';
-      
-      // Reset all styles
+      // Improved iOS scroll unlock
+      const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      document.body.style.height = '';
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
-      
-      // Restore scroll position
-      if (scrollY && scrollY !== '0') {
-        window.scrollTo(0, parseInt(scrollY, 10));
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
       }
-      
-      delete document.body.dataset.scrollY;
     }
-    
     return () => {
       document.body.style.position = '';
       document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
       document.body.style.width = '';
       document.body.style.overflow = '';
-      document.body.style.height = '';
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -253,44 +232,6 @@ const Navigation: React.FC = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  
-  // Calculate sliding indicator position
-  const updateIndicator = useCallback(() => {
-    const container = navLinksRef.current;
-    if (!container) return;
-    
-    // Find active link
-    const activePath = navLinks.find(link => isActive(link.path))?.path;
-    if (!activePath) {
-      setIndicatorReady(false);
-      return;
-    }
-    
-    const activeLink = linkRefs.current.get(activePath);
-    if (!activeLink) return;
-    
-    const containerRect = container.getBoundingClientRect();
-    const linkRect = activeLink.getBoundingClientRect();
-    
-    setIndicatorPos({
-      left: linkRect.left - containerRect.left,
-      width: linkRect.width,
-    });
-    setIndicatorReady(true);
-  }, [location.pathname]);
-  
-  // Update indicator on route change and initial mount
-  useEffect(() => {
-    // Small delay to ensure refs are populated
-    const timer = setTimeout(updateIndicator, 10);
-    return () => clearTimeout(timer);
-  }, [location.pathname, updateIndicator]);
-  
-  // Update indicator on resize
-  useEffect(() => {
-    window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
-  }, [updateIndicator]);
 
   // Navigation Logic:
   // 1. Hero Mode:
@@ -364,38 +305,49 @@ const Navigation: React.FC = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-8">
-            <div ref={navLinksRef} className="relative flex items-center gap-8">
-              {/* Sliding indicator */}
+            <div ref={navLinksRef} className="flex items-center gap-8 relative">
+              {/* Sliding indicator - moves to active link */}
               <div 
-                className={`absolute -bottom-1.5 h-0.5 rounded-full ${isOverMap ? 'bg-primary' : 'bg-sky-light'}`}
-                style={{ 
-                  left: indicatorPos.left,
-                  width: indicatorPos.width,
-                  opacity: indicatorReady ? 1 : 0,
-                  transition: 'left 250ms cubic-bezier(0.4, 0, 0.2, 1), width 250ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms ease-out',
-                  pointerEvents: 'none',
+                className="absolute -bottom-1.5 h-0.5 rounded-full transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none"
+                style={{
+                  left: indicatorStyle.left,
+                  width: indicatorStyle.width,
+                  transform: 'translateX(-50%)',
+                  backgroundColor: isOverMap ? '#007AFF' : '#BFE6FF',
+                  opacity: indicatorStyle.width > 0 ? 1 : 0
                 }}
               />
-              
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
+                const prefetchKey = prefetchMap[link.path];
                 
                 return (
                   <Link 
                     key={link.path} 
-                    to={link.path}
                     ref={(el) => {
                       if (el) linkRefs.current.set(link.path, el);
                     }}
-                    className={`font-black text-[10px] uppercase tracking-[0.2em] relative whitespace-nowrap ${
+                    to={link.path}
+                    onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
+                    onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
+                    className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
                       active 
-                        ? activeColor 
+                        ? activeColor
                         : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
                     }`}
-                    style={{ transition: 'color 100ms ease-out, opacity 100ms ease-out' }}
+                    style={{ transform: 'translateZ(0)' }}
                   >
                     {link.label}
+                    {/* Hover underline - expands from center using scaleX */}
+                    <div 
+                      className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-0.5 w-full rounded-full origin-center transition-transform duration-100 ease-out ${
+                        active 
+                          ? 'scale-x-0' // Hide hover underline when sliding indicator is showing
+                          : `scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
+                      }`} 
+                      style={{ willChange: 'transform' }} 
+                    />
                   </Link>
                 );
               })}
@@ -410,47 +362,40 @@ const Navigation: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile Toggle - hamburger menu */}
+          {/* Mobile Toggle - hamburger menu - optimized for instant touch response */}
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
               onPointerDown={(e) => {
-                // Immediate response on pointer down (works for touch and mouse)
+                // Immediate response on pointer down - no waiting for click/touchend
                 e.preventDefault();
-                setIsMobileMenuOpen(prev => !prev);
+                setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="relative w-12 h-12 flex items-center justify-center select-none cursor-pointer"
+              onClick={(e) => {
+                // Fallback for accessibility (keyboard Enter) - prevent double-firing
+                if (e.detail === 0) { // detail === 0 means keyboard activation
+                  setIsMobileMenuOpen(!isMobileMenuOpen);
+                }
+              }}
+              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-75 select-none"
               aria-label="Toggle menu"
-              aria-expanded={isMobileMenuOpen}
-              style={{ 
-                touchAction: 'manipulation', 
-                WebkitTapHighlightColor: 'transparent',
-              }}
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', userSelect: 'none' }}
             >
               <div className="relative w-5 h-3 flex flex-col justify-between pointer-events-none">
-                <span 
-                  className={`block h-[2px] rounded-full origin-center ${
-                    isMobileMenuOpen 
-                      ? 'bg-sky-light rotate-45 translate-y-[5px]' 
-                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                  }`}
-                  style={{ transition: 'transform 0.15s ease-out, background-color 0.15s ease-out' }}
-                />
-                <span 
-                  className={`block h-[2px] rounded-full ${
-                    isMobileMenuOpen 
-                      ? 'opacity-0 scale-0' 
-                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                  }`}
-                  style={{ transition: 'opacity 0.1s ease-out, transform 0.1s ease-out' }}
-                />
-                <span 
-                  className={`block h-[2px] rounded-full origin-center ${
-                    isMobileMenuOpen 
-                      ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
-                      : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                  }`}
-                  style={{ transition: 'transform 0.15s ease-out, background-color 0.15s ease-out' }}
-                />
+                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
+                  isMobileMenuOpen 
+                    ? 'bg-sky-light rotate-45 translate-y-[5px]' 
+                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                }`} />
+                <span className={`block h-[2px] rounded-full transition-all duration-150 ${
+                  isMobileMenuOpen 
+                    ? 'opacity-0 scale-0' 
+                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                }`} />
+                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
+                  isMobileMenuOpen 
+                    ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
+                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
+                }`} />
               </div>
             </button>
           </div>
@@ -459,15 +404,14 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0 opacity-100 visible' 
             : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
         style={{ 
           WebkitOverflowScrolling: 'touch',
-          touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
-          transition: 'transform 200ms cubic-bezier(0.32, 0.72, 0, 1), opacity 150ms ease-out, visibility 200ms'
+          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
         }}
         aria-hidden={!isMobileMenuOpen}
       >
@@ -475,22 +419,29 @@ const Navigation: React.FC = () => {
         <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
         
         <div className="flex flex-col relative z-10">
-          {navLinks.map((link, index) => (
-            <Link 
-              key={link.path} 
-              to={link.path}
-              style={{
-                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
-                opacity: isMobileMenuOpen ? 1 : 0,
-                transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
-              }}
-              className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
-                isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link, index) => {
+            const prefetchKey = prefetchMap[link.path];
+            return (
+              <Link 
+                key={link.path} 
+                to={link.path}
+                onPointerDown={() => {
+                  // Prefetch on pointer down for instant feel
+                  if (prefetchKey) prefetchPage(prefetchKey);
+                }}
+                style={{
+                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+                  opacity: isMobileMenuOpen ? 1 : 0,
+                  transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+                }}
+                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 select-none active:opacity-70 transition-opacity ${
+                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white active:text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           
           {/* Account Panel - right after nav links */}
           <div 
