@@ -27,16 +27,13 @@ const AccountMenu: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // While checking auth status, show a subtle loading state that is still interactive
+  // While checking auth status, show a static placeholder (no animation to avoid flash)
   if (loading && !isAuthenticated) {
     return (
-      <Link
-        to="/auth"
-        className="w-9 h-9 rounded-full bg-white/5 border-2 border-white/60 flex items-center justify-center animate-pulse overflow-hidden relative group"
-      >
+      <div className="w-9 h-9 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center overflow-hidden relative">
         <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-        <div className="w-4 h-4 bg-white/20 rounded-full group-hover:bg-white/40 transition-colors" />
-      </Link>
+        <UserIcon size={18} strokeWidth={2.5} className="text-white/30" />
+      </div>
     );
   }
 
