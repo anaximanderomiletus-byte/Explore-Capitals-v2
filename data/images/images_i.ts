@@ -48,7 +48,7 @@ export const imagesI: Record<string, string> = {
   "Killarney National Park": "/png/IRELAND/killarney-national-park.png",
 
   // --- Israel ---
-  "Israel": "/png/ISRAEL/bah\303\241'\303\255-gardens-haifa.png",
+  "Israel": "/png/ISRAEL/bahai-gardens-haifa.png",
   "The Dome of the Rock": "/png/ISRAEL/dome-of-the-rock.png",
   "The Dead Sea": "/png/ISRAEL/jerusalem-israel.png",
   "Masada": "/png/ISRAEL/masada.png",

@@ -34,7 +34,7 @@ export const imagesA: Record<string, string> = {
 
   // --- Angola ---
   "Angola": "/png/ANGOLA/luanda-angola.png",
-  "Fortaleza de São Miguel": "/png/ANGOLA/fortaleza-de-são-miguel.png",
+  "Fortaleza de São Miguel": "/png/ANGOLA/fortaleza-de-sao-miguel.png",
   "Kalandula Falls": "/png/ANGOLA/kalandula-falls.png",
   "Miradouro da Lua": "/png/ANGOLA/miradouro-da-lua.png",
   "Tundavala Gap": "/png/ANGOLA/tundavala-gap.png",
