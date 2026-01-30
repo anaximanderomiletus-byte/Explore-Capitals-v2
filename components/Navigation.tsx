@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
 import Button from './Button';
@@ -9,8 +9,55 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
-import { prefetchPage, startNavigation } from '../App';
-import { isTouchDevice } from '../utils/browserDetection';
+import { prefetchPage } from '../App';
+
+// Sliding active indicator for nav links
+const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]; isOverMap: boolean }> = ({ navLinks, isOverMap }) => {
+  const location = useLocation();
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  
+  const updateIndicator = useCallback(() => {
+    const activeLink = document.querySelector(`[data-nav-link="${location.pathname}"]`) as HTMLElement;
+    if (activeLink) {
+      const parent = activeLink.parentElement;
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const linkRect = activeLink.getBoundingClientRect();
+        setIndicatorStyle({
+          left: linkRect.left - parentRect.left,
+          width: linkRect.width,
+          opacity: 1,
+        });
+      }
+    } else {
+      setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+    }
+  }, [location.pathname]);
+  
+  // Update on mount and when pathname changes
+  useLayoutEffect(() => {
+    // Small delay to ensure DOM is ready
+    requestAnimationFrame(updateIndicator);
+  }, [updateIndicator]);
+  
+  // Update on resize
+  useEffect(() => {
+    window.addEventListener('resize', updateIndicator);
+    return () => window.removeEventListener('resize', updateIndicator);
+  }, [updateIndicator]);
+  
+  return (
+    <div 
+      className={`absolute -bottom-1.5 h-0.5 rounded-full transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOverMap ? 'bg-primary' : 'bg-sky-light'}`}
+      style={{
+        left: indicatorStyle.left,
+        width: indicatorStyle.width,
+        opacity: indicatorStyle.opacity,
+        transform: 'translateZ(0)',
+      }}
+    />
+  );
+};
 
 // Map nav paths to prefetch keys
 const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
@@ -118,11 +165,6 @@ const Navigation: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Sliding indicator state
-  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
-  const navLinksRef = useRef<HTMLDivElement>(null);
-  const linkRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
-  
   // Auth context for mobile account panel
   const { user: authUser, signOut, loading: authLoading } = useAuth();
   const { user, isAuthenticated, isLoading: userLoading } = useUser();
@@ -130,29 +172,6 @@ const Navigation: React.FC = () => {
   
   // Use Context for determining navbar mode and threshold
   const { navbarMode, scrollThreshold } = useLayout();
-  
-  // Update sliding indicator position
-  const updateIndicator = useCallback(() => {
-    const activePath = location.pathname;
-    const activeLink = linkRefs.current.get(activePath);
-    const container = navLinksRef.current;
-    
-    if (activeLink && container) {
-      const containerRect = container.getBoundingClientRect();
-      const linkRect = activeLink.getBoundingClientRect();
-      setIndicatorStyle({
-        left: linkRect.left - containerRect.left + linkRect.width / 2,
-        width: linkRect.width
-      });
-    }
-  }, [location.pathname]);
-  
-  // Update indicator on path change and resize
-  useLayoutEffect(() => {
-    updateIndicator();
-    window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
-  }, [updateIndicator]);
   
   const handleMobileSignOut = async () => {
     setShowSignOutModal(false);
@@ -197,29 +216,29 @@ const Navigation: React.FC = () => {
 
   // Lock body scroll when mobile menu is open to prevent background scrolling
   useEffect(() => {
+    const scrollY = window.scrollY;
+    
     if (isMobileMenuOpen) {
-      // Improved iOS scroll lock
-      const scrollY = window.scrollY;
+      // Store scroll position and lock body
+      document.documentElement.style.setProperty('--scroll-y', `${scrollY}px`);
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
-    } else {
-      // Improved iOS scroll unlock
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
     }
+    
     return () => {
+      // Restore scroll position when menu closes or component unmounts
+      const storedScrollY = document.documentElement.style.getPropertyValue('--scroll-y');
       document.body.style.position = '';
       document.body.style.top = '';
-      document.body.style.width = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.overflow = '';
+      if (storedScrollY) {
+        window.scrollTo(0, parseInt(storedScrollY));
+      }
     };
   }, [isMobileMenuOpen]);
 
@@ -305,56 +324,40 @@ const Navigation: React.FC = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-8">
-            <div ref={navLinksRef} className="flex items-center gap-8 relative">
-              {/* Sliding indicator - moves to active link */}
-              <div 
-                className="absolute -bottom-1.5 h-0.5 rounded-full transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none"
-                style={{
-                  left: indicatorStyle.left,
-                  width: indicatorStyle.width,
-                  transform: 'translateX(-50%)',
-                  backgroundColor: isOverMap ? '#007AFF' : '#BFE6FF',
-                  opacity: indicatorStyle.width > 0 ? 1 : 0
-                }}
-              />
-              {navLinks.map((link) => {
-                const active = isActive(link.path);
-                const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-                const prefetchKey = prefetchMap[link.path];
-                
-                return (
-                  <Link 
-                    key={link.path} 
-                    ref={(el) => {
-                      if (el) linkRefs.current.set(link.path, el);
-                    }}
-                    to={link.path}
-                    onClick={() => {
-                      // Only trigger loading if navigating to a different page
-                      if (!active) startNavigation();
-                    }}
-                    onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
-                    onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
-                    className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
+            <div className="flex items-center gap-8 relative">
+            {navLinks.map((link) => {
+              const active = isActive(link.path);
+              const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
+              const prefetchKey = prefetchMap[link.path];
+              
+                  return (
+                <Link 
+                  key={link.path} 
+                  to={link.path}
+                  data-nav-link={link.path}
+                  onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
+                  onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
+                  className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
+                    active 
+                      ? activeColor
+                      : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
+                  }`}
+                  style={{ transform: 'translateZ(0)' }}
+                >
+                  {link.label}
+                  {/* Hover underline - expands from center */}
+                  <div 
+                    className={`absolute -bottom-1.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out ${
                       active 
-                        ? activeColor
-                        : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
-                    }`}
-                    style={{ transform: 'translateZ(0)' }}
-                  >
-                    {link.label}
-                    {/* Hover underline - expands from center using scaleX */}
-                    <div 
-                      className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-0.5 w-full rounded-full origin-center transition-transform duration-100 ease-out ${
-                        active 
-                          ? 'scale-x-0' // Hide hover underline when sliding indicator is showing
-                          : `scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
-                      }`} 
-                      style={{ willChange: 'transform' }} 
-                    />
-                  </Link>
-                );
-              })}
+                        ? 'scale-x-0' // Hide hover underline when active (sliding indicator shows instead)
+                        : `scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
+                    }`} 
+                  />
+                </Link>
+              );
+            })}
+            {/* Sliding active indicator */}
+            <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
             <div className="flex items-center gap-3 border-l border-white/10 pl-8 shrink-0">
               <Link to="/games" className="shrink-0">
@@ -370,19 +373,13 @@ const Navigation: React.FC = () => {
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
             <button 
               onPointerDown={(e) => {
-                // Immediate response on pointer down - no waiting for click/touchend
+                // Use pointerdown for instant response on both touch and mouse
                 e.preventDefault();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              onClick={(e) => {
-                // Fallback for accessibility (keyboard Enter) - prevent double-firing
-                if (e.detail === 0) { // detail === 0 means keyboard activation
-                  setIsMobileMenuOpen(!isMobileMenuOpen);
-                }
-              }}
-              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-75 select-none"
+              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:opacity-80 transition-opacity duration-75"
               aria-label="Toggle menu"
-              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', userSelect: 'none' }}
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
               <div className="relative w-5 h-3 flex flex-col justify-between pointer-events-none">
                 <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
@@ -425,26 +422,18 @@ const Navigation: React.FC = () => {
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
             const prefetchKey = prefetchMap[link.path];
-            const active = isActive(link.path);
             return (
               <Link 
                 key={link.path} 
                 to={link.path}
-                onClick={() => {
-                  // Trigger loading indicator for navigation
-                  if (!active) startNavigation();
-                }}
-                onPointerDown={() => {
-                  // Prefetch on pointer down for instant feel
-                  if (prefetchKey) prefetchPage(prefetchKey);
-                }}
+                onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                 style={{
                   transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
                   transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
                 }}
-                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 select-none active:opacity-70 transition-opacity ${
-                  active ? 'text-primary' : 'text-white/60 hover:text-white active:text-white'
+                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
+                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
                 }`}
               >
                 {link.label}

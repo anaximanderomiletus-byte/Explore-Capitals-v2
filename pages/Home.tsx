@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap } from 'lucide-react';
@@ -7,7 +7,6 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
-import { shouldDisableHeavyEffects } from '../utils/browserDetection';
 
 const ParallaxSection: React.FC<{
   children: React.ReactNode;
@@ -36,16 +35,12 @@ const ParallaxSection: React.FC<{
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { isAuthenticated, isLoading: loading } = useUser();
-  const [reduceEffects, setReduceEffects] = useState(false);
-  
   useEffect(() => {
     setPageLoading(false);
-    // Check for heavy effects on client side only
-    setReduceEffects(shouldDisableHeavyEffects());
   }, [setPageLoading]);
 
   return (
-    <main className="relative flex-grow bg-[#0F172A] overflow-x-hidden max-w-[100vw] w-full">
+    <main className="relative flex-grow bg-[#0F172A] w-full">
       <SEO
         title="ExploreCapitals | The World, Gamified"
         description="Master world geography through high-fidelity games. Earn rewards, build streaks, and explore the atlas in an immersive glass interface."
@@ -105,23 +100,23 @@ const Home: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduceEffects ? 0.3 : 0.8 }}
+            transition={{ duration: 0.8 }}
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
-            {/* Static glow using radial gradient - fixed circular glow with smooth intermediate stops */}
+            {/* Static glow using radial gradient instead of blur filter to prevent flickering */}
             <div 
-              className="absolute aspect-square w-[280px] sm:w-[380px] md:w-[480px] lg:w-[720px] rounded-full pointer-events-none"
+              className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[680px] lg:h-[680px] rounded-full pointer-events-none"
               style={{ 
-                background: 'radial-gradient(circle at center, rgba(0,194,255,0.08) 0%, rgba(0,194,255,0.05) 25%, rgba(0,194,255,0.02) 50%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(0,194,255,0.05) 0%, rgba(0,194,255,0.02) 40%, transparent 70%)',
               }} 
             />
             
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] aspect-square flex-shrink-0 pointer-events-none">
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] flex-shrink-0 pointer-events-none">
               <motion.div
-                className="w-full h-full aspect-square"
+                className="w-full h-full"
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
-                <Link to="/map" className="w-full h-full aspect-square bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img 
                     src={`${import.meta.env.BASE_URL}logo.png`} 
                     alt="Globe - Click to explore the map" 
@@ -133,52 +128,33 @@ const Home: React.FC = () => {
                 </Link>
               </motion.div>
               
-              {/* Decorative floating bubbles - static on Safari/iOS for performance, animated elsewhere */}
-              {reduceEffects ? (
-                <>
-                  {/* Static bubbles for Safari/iOS - no animations to prevent lag */}
-                  <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
-                      <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
-                      <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Animated bubbles for Chrome/Firefox/desktop */}
-                  <motion.div
-                    animate={{ 
-                      y: [0, -6, 2, -4, 1, -7, 0], 
-                      x: [0, 3, -2, 5, -1, 2, 0],
-                      rotate: [0, 2, -1, 3, -2, 1, 0]
-                    }}
-                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
-                  >
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
-                      <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
-                    </div>
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      y: [0, 4, -3, 6, -2, 5, -4, 0], 
-                      x: [0, -4, 2, -3, 4, -1, 3, 0],
-                      rotate: [0, -2, 3, -1, 2, -3, 1, 0]
-                    }}
-                    transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
-                  >
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
-                      <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
-                    </div>
-                  </motion.div>
-                </>
-              )}
+              {/* Decorative floating bubbles - purely decorative, no click blocking */}
+              <motion.div
+                animate={{ 
+                  y: [0, -6, 2, -4, 1, -7, 0], 
+                  x: [0, 3, -2, 5, -1, 2, 0],
+                  rotate: [0, 2, -1, 3, -2, 1, 0]
+                }}
+                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
+              >
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                  <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
+                </div>
+              </motion.div>
+              <motion.div
+                animate={{ 
+                  y: [0, 4, -3, 6, -2, 5, -4, 0], 
+                  x: [0, -4, 2, -3, 4, -1, 3, 0],
+                  rotate: [0, -2, 3, -1, 2, -3, 1, 0]
+                }}
+                transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
+              >
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                  <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
+                </div>
+              </motion.div>
             </div>
           </motion.div>
 

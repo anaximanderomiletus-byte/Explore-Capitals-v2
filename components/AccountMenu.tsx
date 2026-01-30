@@ -30,13 +30,12 @@ const AccountMenu: React.FC = () => {
   // While checking auth status, show a static placeholder (no animation to prevent flash)
   if (loading && !isAuthenticated) {
     return (
-      <Link
-        to="/auth"
-        className="w-9 h-9 rounded-full bg-white/10 border-2 border-white/60 flex items-center justify-center overflow-hidden relative group"
+      <div
+        className="w-9 h-9 rounded-full bg-white/5 border-2 border-white/40 flex items-center justify-center overflow-hidden relative"
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
         <UserIcon size={16} className="text-white/30" />
-      </Link>
+      </div>
     );
   }
 

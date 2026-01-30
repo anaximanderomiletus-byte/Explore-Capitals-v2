@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { initBrowserDetection } from './utils/browserDetection';
+import { applyBrowserClasses } from './utils/browserDetection';
 
-// Initialize browser detection before React renders
-initBrowserDetection();
+// Apply browser-specific classes for targeted optimizations
+applyBrowserClasses();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

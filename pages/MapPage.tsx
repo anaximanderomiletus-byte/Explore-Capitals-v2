@@ -6,7 +6,6 @@ import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
-import { isIOS, isSafari, isTouchDevice } from '../utils/browserDetection';
 
 // Define regions for filtering
 const REGIONS = ['All', 'Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'];
@@ -279,21 +278,8 @@ const MapPage: React.FC = () => {
                             // Add to map immediately for first load performance
                             marker.addTo(markersLayerRef.current);
 
-                            // Track if touch already handled this interaction to prevent double-firing
-                            let touchHandledRef = { current: false };
-                            let popupOpenedByTouch = { current: false };
-                            
-                            // iOS/Safari-specific: Use longer timeout for marker clicked flag
-                            const markerClickTimeout = isIOS() ? 800 : 500;
-                            
-                            // Unified handler for both click and touch
-                            const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
-                                // If touch already handled this, skip the click handler
-                                if (!isTouchEvent && touchHandledRef.current) {
-                                  touchHandledRef.current = false;
-                                  return;
-                                }
-                                
+                            // Unified handler for marker interaction
+                            const handleMarkerInteraction = (e: any) => {
                                 // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
                                 if (e && e.originalEvent) {
                                   e.originalEvent.stopPropagation();
@@ -305,55 +291,19 @@ const MapPage: React.FC = () => {
                                 
                                 // Set flag to prevent map click handler from clearing the selection
                                 markerClickedRef.current = true;
-                                setTimeout(() => { markerClickedRef.current = false; }, markerClickTimeout);
+                                setTimeout(() => { markerClickedRef.current = false; }, 500);
                                 
                                 setActiveCountryId(country.id);
                                 
-                                // On mobile/touch, open popup immediately without animation for instant feedback
-                                const isMobileOrTouch = isTouchEvent || isTouchDevice() || window.innerWidth < 768;
+                                const isMobile = window.innerWidth < 768 || 'ontouchstart' in window;
                                 
-                                if (isMobileOrTouch) {
-                                  // Mark that we're opening popup via touch
-                                  popupOpenedByTouch.current = true;
-                                  
-                                  // CRITICAL iOS FIX: Disable map click temporarily to prevent popup close
-                                  const mapClickDisabled = { current: true };
-                                  setTimeout(() => { mapClickDisabled.current = false; }, 600);
-                                  
-                                  // Open popup immediately with multiple safety mechanisms
-                                  const openPopupSafely = () => {
-                                    if (!marker || !mapInstanceRef.current) return;
-                                    
-                                    // Force close any other popups first
-                                    mapInstanceRef.current.closePopup();
-                                    
-                                    // Small delay then open this popup
-                                    setTimeout(() => {
-                                      marker.openPopup();
-                                      const popup = marker.getPopup();
-                                      if (popup) {
-                                        popup.update();
-                                      }
-                                      
-                                      // Safety: ensure popup stays open on iOS
-                                      if (isIOS() || isSafari()) {
-                                        setTimeout(() => {
-                                          if (!marker.isPopupOpen()) {
-                                            marker.openPopup();
-                                          }
-                                        }, 100);
-                                        setTimeout(() => {
-                                          if (!marker.isPopupOpen()) {
-                                            marker.openPopup();
-                                          }
-                                        }, 200);
-                                      }
-                                    }, 16); // One frame delay
-                                  };
-                                  
-                                  // Use rAF for better timing on iOS
-                                  requestAnimationFrame(openPopupSafely);
-                                  
+                                if (isMobile) {
+                                  // Mobile: Open popup immediately for instant feedback
+                                  marker.openPopup();
+                                  const popup = marker.getPopup();
+                                  if (popup) {
+                                    popup.update();
+                                  }
                                   // Then animate to center
                                   centerMapOnMarker(marker);
                                 } else {
@@ -366,43 +316,9 @@ const MapPage: React.FC = () => {
                                 }
                             };
                             
-                            // Handle click (works for both desktop and as fallback)
-                            marker.on('click', (e: any) => handleMarkerInteraction(e, false));
-                            
-                            // Bind touch events after marker is added to map (element available then)
-                            marker.on('add', () => {
-                              const markerElement = marker.getElement?.();
-                              if (markerElement && !markerElement._touchBound) {
-                                markerElement._touchBound = true;
-                                
-                                // Use pointerdown for unified touch/mouse handling
-                                markerElement.addEventListener('pointerdown', (e: PointerEvent) => {
-                                  if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-                                    // Mark that touch will handle this
-                                    touchHandledRef.current = true;
-                                    // Prevent map from receiving this event
-                                    e.stopPropagation();
-                                    // Set marker clicked flag immediately
-                                    markerClickedRef.current = true;
-                                  }
-                                }, { passive: false });
-                                
-                                markerElement.addEventListener('pointerup', (e: PointerEvent) => {
-                                  if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    handleMarkerInteraction({ originalEvent: e }, true);
-                                  }
-                                  // Reset touch handled after a delay
-                                  setTimeout(() => { touchHandledRef.current = false; }, 400);
-                                }, { passive: false });
-                                
-                                // Prevent context menu on long press
-                                markerElement.addEventListener('contextmenu', (e: Event) => {
-                                  e.preventDefault();
-                                }, { passive: false });
-                              }
-                            });
+                            // Use click event which works reliably on both desktop and mobile
+                            // Leaflet handles the touch-to-click conversion internally
+                            marker.on('click', handleMarkerInteraction);
 
                             allMarkersRef.current.push({
                                 id: country.id,
@@ -424,36 +340,10 @@ const MapPage: React.FC = () => {
 
         // Only clear active country if a marker wasn't just clicked
         // This prevents the map click from firing immediately after marker click on mobile
-        map.on('click', (e: any) => {
-          // Extended protection for iOS - check if any popup is currently open
-          if (markerClickedRef.current) {
-            return;
+        map.on('click', () => {
+          if (!markerClickedRef.current) {
+            setActiveCountryId(null);
           }
-          
-          // On iOS/Safari, add extra delay check
-          if (isIOS() || isSafari()) {
-            // Check if a popup is open - if so, don't close it on map click
-            const currentPopup = map.getPane('popupPane');
-            if (currentPopup && currentPopup.children.length > 0) {
-              // A popup is open - check if click was inside popup
-              const popupEl = currentPopup.querySelector('.leaflet-popup');
-              if (popupEl && e.originalEvent && e.originalEvent.target) {
-                const clickTarget = e.originalEvent.target as HTMLElement;
-                if (popupEl.contains(clickTarget)) {
-                  return; // Click was inside popup, don't close
-                }
-              }
-              // Give a small delay for iOS before closing
-              setTimeout(() => {
-                if (!markerClickedRef.current) {
-                  setActiveCountryId(null);
-                }
-              }, 100);
-              return;
-            }
-          }
-          
-          setActiveCountryId(null);
         });
       } catch (err) {
         console.error("Critical error initializing map:", err);
