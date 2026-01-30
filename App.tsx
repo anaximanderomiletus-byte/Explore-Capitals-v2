@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, Suspense, lazy, useMemo } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy, useMemo, useCallback } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -9,6 +9,17 @@ import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 import { shouldDisableHeavyEffects } from './utils/browserDetection';
+
+// Global navigation loading state - allows Navigation component to trigger loading
+let globalSetNavigating: ((loading: boolean) => void) | null = null;
+
+export const startNavigation = () => {
+  if (globalSetNavigating) globalSetNavigating(true);
+};
+
+export const endNavigation = () => {
+  if (globalSetNavigating) globalSetNavigating(false);
+};
 
 // Lazy load all pages except Home for instant initial load
 // Store import functions for prefetching on hover
@@ -50,14 +61,22 @@ export const prefetchPage = (page: keyof typeof pageImports) => {
 };
 
 // Loading fallback - visible indicator that page is loading
-const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
-    <div className="relative">
-      <div className="w-10 h-10 rounded-full border-3 border-sky/10 border-t-sky animate-spin" 
-           style={{ borderWidth: '3px' }} />
+// This component signals to parent when it mounts (loading started) and unmounts (loading finished)
+const PageLoader = ({ onLoadingChange }: { onLoadingChange?: (loading: boolean) => void }) => {
+  useEffect(() => {
+    onLoadingChange?.(true);
+    return () => onLoadingChange?.(false);
+  }, [onLoadingChange]);
+  
+  return (
+    <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
+      <div className="relative">
+        <div className="w-10 h-10 rounded-full border-3 border-sky/10 border-t-sky animate-spin" 
+             style={{ borderWidth: '3px' }} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Navigation loading overlay - shows during route transitions
 // Uses simpler styling on Safari/iOS for performance
@@ -130,31 +149,62 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const AppContent: React.FC = () => {
   const location = useLocation();
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isSuspenseLoading, setIsSuspenseLoading] = useState(false);
   const prevPathRef = useRef(location.pathname);
+  const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Track navigation loading state
+  // Register global navigation control
   useEffect(() => {
-    // Only show loader for actual navigation, not initial load
+    globalSetNavigating = setIsNavigating;
+    return () => { globalSetNavigating = null; };
+  }, []);
+  
+  // Track navigation loading state - show loader after 150ms delay to avoid flash for fast loads
+  useEffect(() => {
     if (prevPathRef.current !== location.pathname) {
-      setIsNavigating(true);
-      // Hide after a short delay to allow Suspense to kick in
-      const timer = setTimeout(() => setIsNavigating(false), 100);
+      // Clear any existing timer
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+      }
+      
+      // Start a delayed loader - only show if navigation takes > 150ms
+      loadingTimerRef.current = setTimeout(() => {
+        setIsNavigating(true);
+      }, 150);
+      
       prevPathRef.current = location.pathname;
-      return () => clearTimeout(timer);
     }
+    
+    return () => {
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+      }
+    };
   }, [location.pathname]);
   
-  // REMOVED: Automatic preloading after initial render
-  // Preloading is now done only on hover/touch via prefetchPage()
-  // This prevents competing for resources and improves initial load performance
+  // Hide navigation loader when Suspense finishes loading
+  const handleSuspenseLoadingChange = useCallback((loading: boolean) => {
+    setIsSuspenseLoading(loading);
+    if (!loading) {
+      // Suspense finished - hide loader
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+        loadingTimerRef.current = null;
+      }
+      setIsNavigating(false);
+    }
+  }, []);
+  
+  // Show loader if either navigation started (after delay) and suspense is loading
+  const showLoader = isNavigating || isSuspenseLoading;
   
   return (
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] relative">
       <ScrollToTop />
       <Navigation />
-      <NavigationLoader isVisible={isNavigating} />
+      <NavigationLoader isVisible={showLoader} />
       <div className="flex-grow flex flex-col relative w-full">
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<PageLoader onLoadingChange={handleSuspenseLoadingChange} />}>
           <AnimatePresence mode="popLayout" initial={false}>
             <div key={location.pathname}>
             <Routes location={location}>

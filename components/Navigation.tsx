@@ -9,7 +9,7 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
-import { prefetchPage } from '../App';
+import { prefetchPage, startNavigation } from '../App';
 import { isTouchDevice } from '../utils/browserDetection';
 
 // Map nav paths to prefetch keys
@@ -329,6 +329,10 @@ const Navigation: React.FC = () => {
                       if (el) linkRefs.current.set(link.path, el);
                     }}
                     to={link.path}
+                    onClick={() => {
+                      // Only trigger loading if navigating to a different page
+                      if (!active) startNavigation();
+                    }}
                     onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
                     onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                     className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
@@ -421,10 +425,15 @@ const Navigation: React.FC = () => {
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
             const prefetchKey = prefetchMap[link.path];
+            const active = isActive(link.path);
             return (
               <Link 
                 key={link.path} 
                 to={link.path}
+                onClick={() => {
+                  // Trigger loading indicator for navigation
+                  if (!active) startNavigation();
+                }}
                 onPointerDown={() => {
                   // Prefetch on pointer down for instant feel
                   if (prefetchKey) prefetchPage(prefetchKey);
@@ -435,7 +444,7 @@ const Navigation: React.FC = () => {
                   transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 select-none active:opacity-70 transition-opacity ${
-                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white active:text-white'
+                  active ? 'text-primary' : 'text-white/60 hover:text-white active:text-white'
                 }`}
               >
                 {link.label}
