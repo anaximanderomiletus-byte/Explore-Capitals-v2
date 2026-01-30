@@ -120,7 +120,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex-grow flex flex-col w-full overflow-x-hidden"
+      className="flex-grow flex flex-col w-full"
     >
       {children}
     </motion.div>
@@ -149,7 +149,7 @@ const AppContent: React.FC = () => {
   // This prevents competing for resources and improves initial load performance
   
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] overflow-x-hidden relative">
+    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] relative">
       <ScrollToTop />
       <Navigation />
       <NavigationLoader isVisible={isNavigating} />

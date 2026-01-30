@@ -231,8 +231,6 @@
         margin: 0;
         padding: 0;
         font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-        /* Remove overflow-x: hidden from html for better Safari compatibility */
-        overflow-x: clip; 
         max-width: 100vw;
         width: 100%;
       }
@@ -249,7 +247,6 @@
         -moz-osx-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
-        overflow-x: hidden;
         font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
         background-color: #0F172A;
         min-height: 100vh;
@@ -263,9 +260,8 @@
         padding-bottom: env(safe-area-inset-bottom);
       }
       
-      /* Root container overflow fix */
+      /* Root container */
       #root {
-        overflow-x: hidden;
         max-width: 100vw;
         width: 100%;
       }
@@ -501,7 +497,6 @@
       
       #root {
         position: relative;
-        overflow-x: hidden;
         width: 100%;
         min-height: 100vh;
         min-height: -webkit-fill-available;
@@ -738,13 +733,13 @@
       .leading-loose { line-height: 2; }
     </style>
 </head>
-  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white overscroll-y-none">
+  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
     <!-- Initial Splash Screen -->
     <div id="initial-loader">
       <div class="loader-circle"></div>
     </div>
 
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col overflow-x-hidden max-w-[100vw] w-full"></div>
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col max-w-[100vw] w-full"></div>
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
