@@ -706,43 +706,39 @@
       .reduce-effects .backdrop-blur-xl,
       .reduce-effects .backdrop-blur-2xl,
       .reduce-effects .backdrop-blur-3xl {
-        /* Reduce or disable backdrop blur on Safari/iOS for performance */
-        -webkit-backdrop-filter: blur(4px) !important;
-        backdrop-filter: blur(4px) !important;
-      }
-      
-      .reduce-effects .animate-pulse,
-      .reduce-effects .animate-spin-slow,
-      .reduce-effects .animate-float,
-      .reduce-effects .animate-float-delayed {
-        /* Disable infinite animations on Safari/iOS */
-        animation: none !important;
-      }
-      
-      /* Keep essential animations like page transitions and loading spinners */
-      .reduce-effects .animate-spin {
-        animation: spin 1s linear infinite !important;
-      }
-      
-      /* Reduce shadow complexity on Safari/iOS */
-      .reduce-effects .shadow-premium,
-      .reduce-effects .shadow-premium-hover,
-      .reduce-effects .shadow-glass,
-      .reduce-effects .shadow-glass-bubble {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        /* Completely disable backdrop blur on Safari/iOS - use solid bg instead */
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        background-color: rgba(15, 23, 42, 0.95) !important;
       }
       
       /* Instant touch feedback for Safari/iOS */
       .is-touch button:active,
       .is-touch a:active,
       .is-touch [role="button"]:active {
-        opacity: 0.8 !important;
-        transform: none !important;
+        opacity: 0.8;
       }
     </style>
-  <script type="module" crossorigin src="./assets/index-jp5HoJ_W.js"></script>
+  <script type="module" crossorigin src="./assets/index-C1pdPT7G.js"></script>
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
+    <!-- Browser detection - runs immediately before React -->
+    <script>
+      (function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isIOS = /ipad|iphone|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var isSafari = ua.includes('safari') && !ua.includes('chrome') && !ua.includes('android');
+        var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isSafari) document.documentElement.classList.add('is-safari');
+        if (isIOS) document.documentElement.classList.add('is-ios');
+        if (isTouch) document.documentElement.classList.add('is-touch');
+        if ((isSafari && isIOS) || (isSafari && isTouch)) {
+          document.documentElement.classList.add('reduce-effects');
+        }
+      })();
+    </script>
+    
     <!-- Initial Splash Screen -->
     <div id="initial-loader">
       <div class="loader-circle"></div>
