@@ -39,21 +39,21 @@ export const imagesI: Record<string, string> = {
   "Mesopotamian Marshes": "/png/IRAQ/mesopotamian-marshes-ahwar.png",
   "Great Mosque of Samarra": "/png/IRAQ/great-mosque-of-samarra-malwiya-minaret.png",
 
-  // --- Ireland --- (placeholder until images added)
-  "Ireland": "/logo.png",
-  "Cliffs of Moher": "/logo.png",
-  "Book of Kells": "/logo.png",
-  "Newgrange": "/logo.png",
-  "The Rock of Cashel": "/logo.png",
-  "Killarney National Park": "/logo.png",
+  // --- Ireland ---
+  "Ireland": "/png/IRELAND/dublin-ireland.png",
+  "Cliffs of Moher": "/png/IRELAND/cliffs-of-moher.png",
+  "Book of Kells": "/png/IRELAND/book-of-kells-trinity-college.png",
+  "Newgrange": "/png/IRELAND/newgrange.png",
+  "The Rock of Cashel": "/png/IRELAND/rock-of-cashel.png",
+  "Killarney National Park": "/png/IRELAND/killarney-national-park.png",
 
-  // --- Israel --- (placeholder until images added)
-  "Israel": "/logo.png",
-  "The Dome of the Rock": "/logo.png",
-  "The Dead Sea": "/logo.png",
-  "Masada": "/logo.png",
-  "Bahai Gardens Haifa": "/logo.png",
-  "Yad Vashem Hall of Names": "/logo.png",
+  // --- Israel ---
+  "Israel": "/png/ISRAEL/bah\303\241'\303\255-gardens-haifa.png",
+  "The Dome of the Rock": "/png/ISRAEL/dome-of-the-rock.png",
+  "The Dead Sea": "/png/ISRAEL/jerusalem-israel.png",
+  "Masada": "/png/ISRAEL/masada.png",
+  "Bahai Gardens Haifa": "/png/ISRAEL/the-dead-sea.png",
+  "Yad Vashem Hall of Names": "/png/ISRAEL/yad-vashem-hall-of-names.png",
 
   // --- Italy --- (placeholder until images added)
   "Italy": "/logo.png",
