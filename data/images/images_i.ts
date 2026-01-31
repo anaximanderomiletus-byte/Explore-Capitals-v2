@@ -55,11 +55,11 @@ export const imagesI: Record<string, string> = {
   "Bahai Gardens Haifa": "/png/ISRAEL/the-dead-sea.png",
   "Yad Vashem Hall of Names": "/png/ISRAEL/yad-vashem-hall-of-names.png",
 
-  // --- Italy --- (placeholder until images added)
-  "Italy": "/logo.png",
-  "The Colosseum": "/logo.png",
-  "Venice Canals": "/logo.png",
-  "Florence Cathedral": "/logo.png",
-  "Pompeii Ruins": "/logo.png",
-  "Cinque Terre Manarola": "/logo.png"
+  // --- Italy ---
+  "Italy": "/png/ITALY/rome-italy.png",
+  "The Colosseum": "/png/ITALY/the-colosseum.png",
+  "Venice Canals": "/png/ITALY/venice-canals-grand-canal.png",
+  "Florence Cathedral": "/png/ITALY/florence-cathedral-the-duomo.png",
+  "Pompeii Ruins": "/png/ITALY/pompeii-mount-vesuvius.png",
+  "Cinque Terre Manarola": "/png/ITALY/cinque-terre-manarola.png"
 };
