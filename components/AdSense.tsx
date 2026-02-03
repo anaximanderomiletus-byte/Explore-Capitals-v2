@@ -176,4 +176,23 @@ export const ResponsiveAd: React.FC<{ slot: string; className?: string }> = ({
   </div>
 );
 
+/**
+ * Vertical Sidebar Ad Component
+ * Fixed position vertical ads for page sidebars on large screens (1536px+)
+ * Hidden on smaller screens to avoid layout issues
+ */
+export const VerticalSidebarAd: React.FC<{ slot: string; position: 'left' | 'right' }> = ({ 
+  slot, 
+  position 
+}) => (
+  <div className={`fixed top-32 ${position === 'left' ? 'left-4' : 'right-4'} hidden 2xl:block z-40`}>
+    <AdSense 
+      slot={slot} 
+      format="vertical"
+      responsive={false}
+      variant="subtle"
+    />
+  </div>
+);
+
 export default AdSense;

@@ -3,6 +3,7 @@ import { Scale, ArrowLeft, Lock } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { VerticalSidebarAd } from '../components/AdSense';
 
 const Terms: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -19,6 +20,10 @@ const Terms: React.FC = () => {
         title="Terms of Service"
         description="Review the terms of service for ExploreCapitals. Understand the usage guidelines and policies for our geography education platform."
       />
+
+      {/* Vertical Sidebar Ads - Large screens only */}
+      <VerticalSidebarAd slot="9489406693" position="left" />
+      <VerticalSidebarAd slot="9489406693" position="right" />
 
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">

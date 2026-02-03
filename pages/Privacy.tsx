@@ -3,6 +3,7 @@ import { Shield, ArrowLeft, FileText, ExternalLink } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { VerticalSidebarAd } from '../components/AdSense';
 
 const Privacy: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -19,6 +20,10 @@ const Privacy: React.FC = () => {
         title="Privacy Policy"
         description="Read the ExploreCapitals privacy policy. Learn how we collect, use, and protect your personal information when using our geography platform."
       />
+
+      {/* Vertical Sidebar Ads - Large screens only */}
+      <VerticalSidebarAd slot="9489406693" position="left" />
+      <VerticalSidebarAd slot="9489406693" position="right" />
 
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">

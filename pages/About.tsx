@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { VerticalSidebarAd } from '../components/AdSense';
 
 const About: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -39,6 +40,10 @@ const About: React.FC = () => {
         description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."
         structuredData={structuredData}
       />
+
+      {/* Vertical Sidebar Ads - Large screens only */}
+      <VerticalSidebarAd slot="9489406693" position="left" />
+      <VerticalSidebarAd slot="9489406693" position="right" />
 
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
