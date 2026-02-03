@@ -8,19 +8,27 @@ interface SEOProps {
   imageAlt?: string;
   type?: string;
   structuredData?: object;
+  /** If true, uses title exactly as provided without appending site name */
+  isHomePage?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
   title,
   description,
-  keywords = "geography, world capitals, world map, quiz, education, learning, countries, flags, population, interactive atlas",
-  image = "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1200&auto=format&fit=crop",
-  imageAlt = "ExploreCapitals.com Interactive World Map",
+  keywords = "geography games, world capitals quiz, interactive world map, country flags, learn geography, educational games, atlas, country database",
+  image = "https://explorecapitals.com/logo.png",
+  imageAlt = "ExploreCapitals - Interactive Geography Learning Platform",
   type = "website",
-  structuredData
+  structuredData,
+  isHomePage = false
 }) => {
-  const siteName = "ExploreCapitals.com";
-  const fullTitle = `${title} | ${siteName}`;
+  const siteName = "ExploreCapitals";
+  // For home page, use title as-is. For other pages, append site name if not already included
+  const fullTitle = isHomePage 
+    ? title 
+    : title.includes(siteName) 
+      ? title 
+      : `${title} | ${siteName}`;
 
   useEffect(() => {
     // 1. Update Title
@@ -51,6 +59,7 @@ const SEO: React.FC<SEOProps> = ({
     setMeta('description', description);
     setMeta('keywords', keywords);
     setMeta('robots', 'index, follow');
+    setMeta('author', 'ExploreCapitals');
 
     // 4. Open Graph / Social Media
     setProperty('og:title', fullTitle);

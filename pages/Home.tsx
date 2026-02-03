@@ -43,8 +43,9 @@ const Home: React.FC = () => {
   return (
     <main className="relative flex-grow bg-[#0F172A] w-full">
       <SEO
-        title="ExploreCapitals | The World, Gamified"
-        description="Master world geography through high-fidelity games. Earn rewards, build streaks, and explore the atlas in an immersive glass interface."
+        title="ExploreCapitals - Learn World Geography Through Interactive Games"
+        description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database."
+        isHomePage={true}
       />
 
       {/* Persistent Background */}

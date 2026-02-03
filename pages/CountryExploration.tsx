@@ -589,7 +589,7 @@ const CountryExploration: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <Container className="flex items-center justify-center px-4 md:px-6 pt-20 pb-12 overflow-hidden bg-surface-dark relative">
-              <SEO title={`Loading...`} description={`Preparing your expedition.`} />
+              <SEO title="Loading Expedition" description="Preparing your geography expedition. Explore countries through guided tours and interactive quizzes." />
               
               {/* Dynamic Tech Grid Background */}
               <div className="absolute inset-0 z-0 opacity-20" 
@@ -757,8 +757,8 @@ const CountryExploration: React.FC = () => {
       return (
         <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-20 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
-            title={`Expedition - ${country.name}`} 
-            description={`Explore ${country.name} with a virtual expedition.`}
+            title={`Explore ${country.name} - Virtual Tour`} 
+            description={`Take a virtual tour of ${country.name}. Discover landmarks, culture, and geography through an interactive expedition with quizzes.`}
             image={introImage || undefined}
             imageAlt={`Scenery of ${country.name}`}
           />
@@ -1006,7 +1006,7 @@ const CountryExploration: React.FC = () => {
 
       return (
         <Container className={`w-full min-h-screen bg-surface-dark flex flex-col items-center pt-20 md:pt-24 px-3 sm:px-4 md:px-6 relative overflow-x-hidden transition-all duration-700 ${selectedOption ? 'pb-[35vh] md:pb-[30vh]' : 'pb-12 md:pb-16'}`}>
-           <SEO title={`Knowledge Check - ${country.name}`} description={`Select the correct answer about ${currentQuestion.stopName}.`} />
+           <SEO title={`${country.name} Quiz - Expedition`} description={`Test your knowledge about ${country.name}. Answer questions about landmarks, culture, and geography.`} />
            
            {/* Immersive Aurora Background */}
            <div className="fixed inset-0 z-0 pointer-events-none">

@@ -137,7 +137,7 @@ export default function GlobalDetective() {
 
   return (
     <div className="h-[100dvh] min-h-screen w-full relative overflow-hidden font-sans bg-surface-dark">
-      <SEO title="Global Detective" description="Deduce the mystery country from clues." />
+      <SEO title="Global Detective - Games" description="Can you guess the mystery country from clues? Use deduction skills to identify nations based on hints about their geography and culture." />
       
       <div className="absolute inset-0 -z-10">
         <img src={gameImage} alt="" className="w-full h-full object-cover scale-105" />

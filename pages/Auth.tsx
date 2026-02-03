@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useLayout } from '../context/LayoutContext';
+import SEO from '../components/SEO';
 
 type Mode = 'signin' | 'signup' | 'forgotpassword';
 
@@ -483,6 +484,10 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-surface-dark flex flex-col relative overflow-hidden">
+      <SEO 
+        title={mode === 'signup' ? 'Sign Up' : mode === 'forgotpassword' ? 'Reset Password' : 'Sign In'}
+        description="Create a free ExploreCapitals account to track your progress, earn achievements, and compete on leaderboards. Sign in to continue your geography journey."
+      />
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[150px] animate-pulse-slow opacity-80" />

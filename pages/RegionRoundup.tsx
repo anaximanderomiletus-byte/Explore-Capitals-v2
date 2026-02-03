@@ -131,7 +131,7 @@ export default function RegionRoundup() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <SEO title="Region Roundup" description="Sort the countries into continents." />
+            <SEO title="Region Roundup - Games" description="Sort countries by continent. Test if you know which countries belong to Africa, Asia, Europe, and other regions of the world." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -168,7 +168,7 @@ export default function RegionRoundup() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-            <SEO title="Playing Region Roundup" description="Categorize the country into its continent." />
+            <SEO title="Region Roundup - Games" description="Sort countries by continent. Test if you know which countries belong to Africa, Asia, Europe, and other regions of the world." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">

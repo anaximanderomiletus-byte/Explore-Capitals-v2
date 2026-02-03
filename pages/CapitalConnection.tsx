@@ -226,7 +226,7 @@ export default function CapitalConnection() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-        <SEO title="Capital Connection" description="Connect countries to their capitals." />
+        <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
@@ -258,7 +258,7 @@ export default function CapitalConnection() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-      <SEO title="Playing Capital Connection" description="Match the country to its capital." />
+      <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-[100px]" />
         <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />

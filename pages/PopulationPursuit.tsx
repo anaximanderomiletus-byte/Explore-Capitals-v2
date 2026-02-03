@@ -152,7 +152,7 @@ export default function PopulationPursuit() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-        <SEO title="Population Pursuit" description="Which country has more people?" />
+        <SEO title="Population Pursuit - Games" description="Which country has more people? Compare populations and test your knowledge of world demographics in this geography game." />
         
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -189,7 +189,7 @@ export default function PopulationPursuit() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-      <SEO title="Playing Population Pursuit" description="Choose the larger population." />
+      <SEO title="Population Pursuit - Games" description="Which country has more people? Compare populations and test your knowledge of world demographics in this geography game." />
       
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">

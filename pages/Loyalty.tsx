@@ -6,6 +6,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { useLayout } from '../context/LayoutContext';
+import SEO from '../components/SEO';
 
 const Loyalty: React.FC = () => {
   const { user, loyaltyProgress, isLoading } = useUser();
@@ -39,6 +40,10 @@ const Loyalty: React.FC = () => {
 
   return (
     <div className="pt-24 pb-20 px-6 bg-surface-dark min-h-screen relative overflow-hidden text-white">
+      <SEO 
+        title="Loyalty Ranks" 
+        description="Explore ExploreCapitals loyalty tiers and rewards. Earn points by playing games and unlock exclusive badges, avatars, and features."
+      />
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
         <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />

@@ -22,8 +22,8 @@ const Contact: React.FC = () => {
   return (
     <main className="pt-32 pb-20 px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
       <SEO
-        title="Contact Us"
-        description="Have questions or feedback? Connect with the ExploreCapitals team. We welcome institutional inquiries and collaboration from the global geography community."
+        title="Contact"
+        description="Get in touch with ExploreCapitals. Questions, feedback, or partnership inquiries welcome. We love hearing from geography enthusiasts."
         structuredData={structuredData}
       />
 

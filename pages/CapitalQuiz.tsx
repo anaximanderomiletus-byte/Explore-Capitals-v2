@@ -138,7 +138,7 @@ export default function CapitalQuiz() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-        <SEO title="Capital Quiz" description="Identify the world capitals in 60 seconds." />
+        <SEO title="Capital Quiz - Games" description="Test your knowledge of world capitals in this fast-paced 60-second quiz. How many capital cities can you name?" />
         
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -177,7 +177,7 @@ export default function CapitalQuiz() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-      <SEO title="Playing Capital Quiz" description="Select the correct capital city." />
+      <SEO title="Capital Quiz - Games" description="Test your knowledge of world capitals in this fast-paced 60-second quiz. How many capital cities can you name?" />
       
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">

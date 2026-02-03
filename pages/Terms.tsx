@@ -16,8 +16,8 @@ const Terms: React.FC = () => {
   return (
     <main className="pt-28 pb-16 px-4 md:px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
       <SEO
-        title="Terms of Service | ExploreCapitals"
-        description="Review the terms of service and usage guidelines for the ExploreCapitals geography platform."
+        title="Terms of Service"
+        description="Review the terms of service for ExploreCapitals. Understand the usage guidelines and policies for our geography education platform."
       />
 
       {/* Background Decor */}

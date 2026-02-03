@@ -304,7 +304,7 @@ export default function MapDash() {
 
   return (
     <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans">
-      <SEO title="Map Dash" description="Locate the nation on the map." />
+      <SEO title="Map Dash - Games" description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out." />
       
       <style>{`
         .marker-pin { transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease !important; }

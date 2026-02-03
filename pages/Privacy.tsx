@@ -16,8 +16,8 @@ const Privacy: React.FC = () => {
   return (
     <main className="pt-28 pb-16 px-4 md:px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
       <SEO
-        title="Privacy Policy | ExploreCapitals"
-        description="Learn how ExploreCapitals collects, uses, and protects your personal information."
+        title="Privacy Policy"
+        description="Read the ExploreCapitals privacy policy. Learn how we collect, use, and protect your personal information when using our geography platform."
       />
 
       {/* Background Decor */}

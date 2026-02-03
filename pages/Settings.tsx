@@ -16,6 +16,7 @@ import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AVATAR_PRESETS, getAvatarById } from '../constants/avatars';
 import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../components/SEO';
 
 // Section component for consistent styling
 const SettingsSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
@@ -664,6 +665,10 @@ const Settings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-surface-dark font-sans relative">
+      <SEO 
+        title="Account Settings" 
+        description="Manage your ExploreCapitals account settings. Update your profile, security options, and preferences."
+      />
       {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-sky/5 rounded-full blur-[150px]" />

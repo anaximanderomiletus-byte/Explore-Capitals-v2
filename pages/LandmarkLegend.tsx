@@ -177,7 +177,7 @@ export default function LandmarkLegend() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <SEO title="Landmark Legend" description="Identify countries by their landmarks." />
+            <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -227,7 +227,7 @@ export default function LandmarkLegend() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-            <SEO title="Playing Landmark Legend" description="Identify countries by their landmarks." />
+            <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">

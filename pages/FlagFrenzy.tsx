@@ -144,7 +144,7 @@ export default function FlagFrenzy() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <SEO title="Flag Frenzy" description="Match the flag to the correct nation in 60 seconds." />
+            <SEO title="Flag Frenzy - Games" description="Identify country flags in 60 seconds. Test how many world flags you can recognize in this fast-paced quiz game." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -181,7 +181,7 @@ export default function FlagFrenzy() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-            <SEO title="Playing Flag Frenzy" description="Match the flag to the correct nation." />
+            <SEO title="Flag Frenzy - Games" description="Identify country flags in 60 seconds. Test how many world flags you can recognize in this fast-paced quiz game." />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">

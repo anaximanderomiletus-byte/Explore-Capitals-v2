@@ -63,8 +63,8 @@ const Games: React.FC = () => {
       </div>
 
       <SEO 
-        title="Geography Games Arcade"
-        description="Challenge your knowledge with our interactive geography games."
+        title="Geography Games"
+        description="Play free geography games online. Test your knowledge of world capitals, flags, maps, borders, and populations with fun interactive quizzes."
       />
 
       <div className="max-w-7xl mx-auto relative z-10">

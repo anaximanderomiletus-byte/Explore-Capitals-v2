@@ -270,7 +270,7 @@ const CountryDetail: React.FC = () => {
     <main className="min-h-screen bg-surface-dark pt-24 pb-20 px-4 md:px-8 relative overflow-hidden text-white">
       <SEO 
         title={`${country.name} - ${isTerritory ? 'Territory' : isDeFacto ? 'State' : 'Country'} Profile`} 
-        description={`Explore detailed data for ${country.name}.`} 
+        description={`${country.name} country profile: capital ${country.capital}, population, area, region, and key facts. Explore detailed geography data.`} 
       />
 
       {/* Background Decor */}

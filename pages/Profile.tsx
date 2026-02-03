@@ -15,6 +15,7 @@ import { useAuth } from '../context/AuthContext';
 import { getAvatarById } from '../constants/avatars';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
+import SEO from '../components/SEO';
 
 // All possible achievements in the game
 const ALL_ACHIEVEMENTS = [
@@ -437,6 +438,10 @@ const Profile: React.FC = () => {
 
   return (
     <div className="pt-28 pb-16 px-6 bg-surface-dark min-h-screen relative overflow-hidden">
+      <SEO 
+        title="My Profile" 
+        description="View your ExploreCapitals profile, achievements, game statistics, and progress. Track your geography learning journey."
+      />
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
         <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />

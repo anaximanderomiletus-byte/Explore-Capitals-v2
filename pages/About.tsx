@@ -35,8 +35,8 @@ const About: React.FC = () => {
   return (
     <main className="pt-28 pb-16 px-4 md:px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
       <SEO
-        title="About Our World Geography Platform"
-        description="Learn about the mission of ExploreCapitals and connect with our team. We bridge the gap between institutional data and modern interactive education."
+        title="About"
+        description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."
         structuredData={structuredData}
       />
 

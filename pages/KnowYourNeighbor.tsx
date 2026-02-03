@@ -140,7 +140,7 @@ export default function KnowYourNeighbor() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-        <SEO title="Know Your Neighbor" description="Identify all the bordering countries." />
+        <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
         
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -177,7 +177,7 @@ export default function KnowYourNeighbor() {
             exit={{ opacity: 0, y: -20 }}
             className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-hidden"
           >
-      <SEO title="Playing Know Your Neighbor" description="Select all the bordering countries." />
+      <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
       
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">

@@ -592,8 +592,8 @@ const DatabasePage: React.FC = () => {
       </div>
 
       <SEO 
-        title="Global Country Database"
-        description="Search and sort data for over 190 nations. High-fidelity database of world geography."
+        title="Country Database"
+        description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
