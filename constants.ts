@@ -360,5 +360,21 @@ export const GAMES: Game[] = [
     status: 'active',
     description: 'Identify countries by their official languages.',
     premium: true
+  },
+  {
+    id: '14',
+    title: 'Time Zone Trekker',
+    image: './png/0-GAMES/time-zone-trekker.png',
+    status: 'active',
+    description: 'Match countries to their time zones.',
+    premium: true
+  },
+  {
+    id: '15',
+    title: 'Border Blitz',
+    image: './png/0-GAMES/border-blitz.png',
+    status: 'active',
+    description: 'Race to name all bordering countries.',
+    premium: true
   }
 ];

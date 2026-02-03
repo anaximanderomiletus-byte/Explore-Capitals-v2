@@ -37,6 +37,8 @@ const TerritoryTitans = lazy(() => import('./pages/TerritoryTitans'));
 const AreaAce = lazy(() => import('./pages/AreaAce'));
 const CurrencyCraze = lazy(() => import('./pages/CurrencyCraze'));
 const LanguageLegend = lazy(() => import('./pages/LanguageLegend'));
+const TimeZoneTrekker = lazy(() => import('./pages/TimeZoneTrekker'));
+const BorderBlitz = lazy(() => import('./pages/BorderBlitz'));
 const CountryExploration = lazy(() => import('./pages/CountryExploration'));
 const CountryDetail = lazy(() => import('./pages/CountryDetail'));
 const Settings = lazy(() => import('./pages/Settings'));
@@ -153,6 +155,8 @@ const AppContent: React.FC = () => {
               <Route path="/games/area-ace" element={<PageWrapper><AreaAce /></PageWrapper>} />
               <Route path="/games/currency-craze" element={<PageWrapper><CurrencyCraze /></PageWrapper>} />
               <Route path="/games/language-legend" element={<PageWrapper><LanguageLegend /></PageWrapper>} />
+              <Route path="/games/time-zone-trekker" element={<PageWrapper><TimeZoneTrekker /></PageWrapper>} />
+              <Route path="/games/border-blitz" element={<PageWrapper><BorderBlitz /></PageWrapper>} />
               <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
               <Route path="/directory" element={<DirectoryRedirect />} />
               <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />

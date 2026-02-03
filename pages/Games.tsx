@@ -34,6 +34,8 @@ const Games: React.FC = () => {
       case '11': return 'area-ace';
       case '12': return 'currency-craze';
       case '13': return 'language-legend';
+      case '14': return 'time-zone-trekker';
+      case '15': return 'border-blitz';
       default: return '';
     }
   };
@@ -129,10 +131,10 @@ const Games: React.FC = () => {
               isLocked ? (
                 <Button 
                   variant="secondary" 
-                  className="w-full h-12 sm:h-14 text-[11px] sm:text-xs border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap tracking-tight"
+                  className="w-full h-12 sm:h-14 text-[10px] sm:text-[11px] md:text-xs border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
-                  <Lock size={12} className="mr-1 shrink-0" /> Unlock with Premium
+                  <Lock size={14} className="mr-1.5 shrink-0" /> UNLOCK WITH PREMIUM
                 </Button>
               ) : (
                 <Link to={`/games/${getGamePath(game.id)}`}>
