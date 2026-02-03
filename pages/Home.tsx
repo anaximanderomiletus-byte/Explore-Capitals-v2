@@ -307,7 +307,7 @@ const Home: React.FC = () => {
       {/* Strategic Ad Placement - Between Loyalty and Explore sections */}
       <ParallaxSection className="py-4 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <ResponsiveAd slot="HOME_SECTION_1" className="rounded-2xl overflow-hidden" />
+          <ResponsiveAd slot="2512934803" className="rounded-2xl overflow-hidden" />
         </div>
       </ParallaxSection>
 

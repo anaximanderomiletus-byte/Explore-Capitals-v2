@@ -147,7 +147,7 @@ const Games: React.FC = () => {
 
         {/* Strategic Ad Placement - After game grid */}
         <div className="mt-12 md:mt-16">
-          <BannerAd slot="GAMES_BOTTOM" />
+          <BannerAd slot="9489406693" />
         </div>
       </div>
     </div>

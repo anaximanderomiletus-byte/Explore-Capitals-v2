@@ -733,7 +733,7 @@ const DatabasePage: React.FC = () => {
         {/* Strategic Ad Placement - After content */}
         {hasResults && (
           <div className="mt-12 md:mt-16">
-            <BannerAd slot="DATABASE_BOTTOM" />
+            <BannerAd slot="1514422173" />
           </div>
         )}
 
