@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, Clock, Lock, Shuffle } from 'lucide-react';
+import { Play, Clock, Lock, Shuffle, Crown, Sparkles, X } from 'lucide-react';
 import Button from '../components/Button';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { BannerAd } from '../components/AdSense';
+import { useGameLimit } from '../hooks/useGameLimit';
 
 const Games: React.FC = () => {
   const { setPageLoading } = useLayout();
   const navigate = useNavigate();
+  const { canPlay, gamesRemaining, dailyLimit, isPremium } = useGameLimit();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const getGamePath = (id: string) => {
     switch (id) {
@@ -89,6 +92,76 @@ const Games: React.FC = () => {
           </button>
         </div>
 
+        {/* Daily Limit Counter (Free users only) */}
+        {!isPremium && (
+          <div className="mb-8 p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="relative w-14 h-14">
+                {/* Circular progress indicator */}
+                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+                  <circle
+                    cx="28"
+                    cy="28"
+                    r="24"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                    className="text-white/10"
+                  />
+                  <circle
+                    cx="28"
+                    cy="28"
+                    r="24"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeDasharray={`${(gamesRemaining / dailyLimit) * 150.8} 150.8`}
+                    className={gamesRemaining <= 1 ? 'text-amber-400' : 'text-sky'}
+                  />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-lg font-black text-white">
+                  {gamesRemaining}
+                </span>
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">
+                  {gamesRemaining === 0 
+                    ? 'Daily limit reached!' 
+                    : `${gamesRemaining} game${gamesRemaining === 1 ? '' : 's'} remaining today`
+                  }
+                </p>
+                <p className="text-white/50 text-xs">
+                  {gamesRemaining === 0 
+                    ? 'Upgrade to Premium for unlimited games'
+                    : 'Free users get 5 games per day'
+                  }
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/premium')}
+              className="px-5 py-2.5 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/30 rounded-xl text-[10px] font-black text-amber-400 uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap"
+            >
+              <Crown size={14} />
+              GO PREMIUM
+            </button>
+          </div>
+        )}
+
+        {/* Premium Badge (Premium users only) */}
+        {isPremium && (
+          <div className="mb-8 p-4 bg-gradient-to-r from-amber-500/10 to-amber-600/10 backdrop-blur-xl border border-amber-500/20 rounded-2xl flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+              <Crown size={20} className="text-amber-400" />
+            </div>
+            <div>
+              <p className="text-amber-400 font-bold text-sm">Premium Member</p>
+              <p className="text-white/50 text-xs">Unlimited games, no ads</p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {GAMES.map((game) => (
             <div 
@@ -125,11 +198,21 @@ const Games: React.FC = () => {
                 
                     <div className="mt-auto">
                       {game.status === 'active' ? (
-                        <Link to={`/games/${getGamePath(game.id)}`}>
-                          <Button variant="primary" className="w-full h-12 sm:h-14 text-base sm:text-lg border border-white/30">
-                            PLAY <Play size={18} fill="currentColor" />
+                        canPlay ? (
+                          <Link to={`/games/${getGamePath(game.id)}`}>
+                            <Button variant="primary" className="w-full h-12 sm:h-14 text-base sm:text-lg border border-white/30">
+                              PLAY <Play size={18} fill="currentColor" />
+                            </Button>
+                          </Link>
+                        ) : (
+                          <Button 
+                            variant="secondary" 
+                            className="w-full h-12 sm:h-14 text-base sm:text-lg border border-amber-500/30 text-amber-400"
+                            onClick={() => setShowUpgradeModal(true)}
+                          >
+                            <Crown size={18} /> UPGRADE
                           </Button>
-                        </Link>
+                        )
                       ) : (
                         <Button 
                           variant="secondary" 
@@ -150,6 +233,56 @@ const Games: React.FC = () => {
           <BannerAd slot="9489406693" />
         </div>
       </div>
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowUpgradeModal(false)}
+          />
+          <div className="relative bg-surface-dark border-2 border-white/20 rounded-3xl p-6 w-full max-w-md shadow-2xl">
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <X size={20} className="text-white/60" />
+            </button>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Crown size={40} className="text-amber-400" />
+              </div>
+              
+              <h3 className="text-2xl font-display font-bold text-white mb-2">
+                Daily Limit Reached
+              </h3>
+              <p className="text-white/60 mb-6">
+                You've played all 5 free games today. Upgrade to Premium for unlimited access!
+              </p>
+
+              <div className="space-y-3">
+                <Button 
+                  variant="accent" 
+                  className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0"
+                  onClick={() => {
+                    setShowUpgradeModal(false);
+                    navigate('/premium');
+                  }}
+                >
+                  <Sparkles size={18} /> GO PREMIUM
+                </Button>
+                <button
+                  onClick={() => setShowUpgradeModal(false)}
+                  className="w-full py-3 text-white/50 text-sm hover:text-white transition-colors"
+                >
+                  Maybe later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

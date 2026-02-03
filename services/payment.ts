@@ -1,0 +1,26 @@
+import { httpsCallable } from 'firebase/functions';
+import { functions } from '../firebase';
+
+export interface CheckoutSessionResponse {
+  sessionId: string;
+  url: string;
+}
+
+export const createCheckoutSession = async (amountInCents: number) => {
+  if (!functions) {
+    throw new Error('Firebase Functions not initialized');
+  }
+
+  const createSession = httpsCallable<
+    { amount: number; successUrl: string; cancelUrl: string },
+    CheckoutSessionResponse
+  >(functions, 'createStripeCheckoutSession');
+
+  const { data } = await createSession({
+    amount: amountInCents,
+    successUrl: `${window.location.origin}/settings?success=true`,
+    cancelUrl: `${window.location.origin}/settings?canceled=true`,
+  });
+
+  return data;
+};

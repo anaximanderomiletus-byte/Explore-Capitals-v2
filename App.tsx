@@ -41,6 +41,7 @@ const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
+const Premium = lazy(() => import('./pages/Premium'));
 
 // Prefetch helper - call on hover to preload page chunks
 export const prefetchPage = (page: keyof typeof pageImports) => {
@@ -155,6 +156,7 @@ const AppContent: React.FC = () => {
               <Route path="/auth-action" element={<PageWrapper><AuthAction /></PageWrapper>} />
               <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
               <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
+              <Route path="/premium" element={<PageWrapper><Premium /></PageWrapper>} />
               <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
               <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
             </Routes>

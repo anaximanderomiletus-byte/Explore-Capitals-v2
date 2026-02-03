@@ -3,8 +3,17 @@ import {
   CheckCircle2, Mail, ShieldCheck,
   AlertCircle, ShieldAlert,
   Eye, EyeOff, LogOut, ArrowLeft,
-  Smartphone, Monitor, Lock, Camera, Upload, X, Pencil
+  Smartphone, Monitor, Lock, Camera, Upload, X, Pencil, Heart,
+  Crown, Sparkles, Loader2
 } from 'lucide-react';
+import { createCheckoutSession } from '../services/payment';
+import { 
+  getCustomerPortalUrl, 
+  cancelSubscription, 
+  isPremiumUser, 
+  getSubscriptionInfo 
+} from '../services/subscription';
+import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 import PhoneInput from '../components/PhoneInput';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -53,6 +62,30 @@ const Settings: React.FC = () => {
     mfaResolver, solveMfaPhone, sendMfaSms, setMfaResolver
   } = useAuth();
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
+  // Payment state
+  const [donationBusy, setDonationBusy] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      setStatus('Thank you for your support! You are now a supporter.');
+    }
+  }, [searchParams]);
+
+  const handleDonation = async (amount: number) => {
+    setDonationBusy(true);
+    clearMessages();
+    try {
+      const { url } = await createCheckoutSession(amount * 100); // Convert to cents
+      window.location.href = url;
+    } catch (err: any) {
+      console.error('Donation failed:', err);
+      setError(err?.message ?? 'Failed to start donation');
+      setDonationBusy(false);
+    }
+  };
 
   const currentDeviceInfo = useMemo(() => {
     const ua = navigator.userAgent;
@@ -911,6 +944,112 @@ const Settings: React.FC = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+          </SettingsSection>
+
+          {/* Subscription Section */}
+          <SettingsSection title="SUBSCRIPTION">
+            <SettingsRow>
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 rounded-xl ${isPremiumUser(userProfile?.subscriptionStatus, userProfile?.subscriptionPlan) ? 'bg-amber-500/20' : 'bg-white/5'} flex items-center justify-center shrink-0`}>
+                  <Crown size={24} className={isPremiumUser(userProfile?.subscriptionStatus, userProfile?.subscriptionPlan) ? 'text-amber-400' : 'text-white/40'} />
+                </div>
+                <div className="flex-1">
+                  {isPremiumUser(userProfile?.subscriptionStatus, userProfile?.subscriptionPlan) ? (
+                    <>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-white">PREMIUM MEMBER</h3>
+                        <span className="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider">
+                          {userProfile?.subscriptionPlan}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white/60 mb-4 leading-relaxed">
+                        {userProfile?.subscriptionPlan === 'lifetime' 
+                          ? 'You have lifetime access to all premium features.'
+                          : `Your subscription ${userProfile?.subscriptionStatus === 'canceled' ? 'ends' : 'renews'} on ${
+                              userProfile?.currentPeriodEnd 
+                                ? new Date(userProfile.currentPeriodEnd?.seconds ? userProfile.currentPeriodEnd.seconds * 1000 : userProfile.currentPeriodEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                                : 'N/A'
+                            }`
+                        }
+                      </p>
+                      <div className="flex gap-3">
+                        {userProfile?.subscriptionPlan !== 'lifetime' && (
+                          <button
+                            onClick={async () => {
+                              setBusy(true);
+                              try {
+                                const url = await getCustomerPortalUrl();
+                                window.location.href = url;
+                              } catch (err: any) {
+                                setError(err?.message || 'Failed to open portal');
+                              } finally {
+                                setBusy(false);
+                              }
+                            }}
+                            disabled={busy}
+                            className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-widest transition-all disabled:opacity-50"
+                          >
+                            MANAGE
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-sm font-bold text-white mb-1">UPGRADE TO PREMIUM</h3>
+                      <p className="text-xs text-white/60 mb-4 leading-relaxed">
+                        Get unlimited games, remove ads, and unlock advanced analytics.
+                      </p>
+                      <div className="grid grid-cols-3 gap-3">
+                        <button
+                          onClick={() => navigate('/premium')}
+                          className="col-span-3 py-3 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/30 rounded-xl text-[11px] font-black text-amber-400 uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                        >
+                          <Sparkles size={14} />
+                          VIEW PLANS
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </SettingsRow>
+          </SettingsSection>
+
+          {/* Support Section */}
+          <SettingsSection title="SUPPORT US">
+            <SettingsRow>
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 shrink-0">
+                  <Heart size={24} className={user.isSupporter ? "fill-current" : ""} />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold text-white mb-1">
+                    {user.isSupporter ? "THANK YOU FOR YOUR SUPPORT!" : "BECOME A SUPPORTER"}
+                  </h3>
+                  <p className="text-xs text-white/60 mb-4 leading-relaxed">
+                    ExploreCapitals is a passion project. Your support helps cover server costs and keeps the game free for everyone.
+                    {user.isSupporter && " You have a special badge on your profile!"}
+                  </p>
+                  
+                  <div className="grid grid-cols-3 gap-3">
+                    {[5, 10, 20].map((amount) => (
+                      <button
+                        key={amount}
+                        onClick={() => handleDonation(amount)}
+                        disabled={donationBusy || busy}
+                        className="py-2.5 px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-widest transition-all disabled:opacity-50"
+                      >
+                        ${amount}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-white/20 mt-3 text-center uppercase tracking-widest">
+                    SECURE PAYMENT VIA STRIPE
+                  </p>
+                </div>
+              </div>
+            </SettingsRow>
           </SettingsSection>
 
           {/* Session Section */}

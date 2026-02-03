@@ -15,11 +15,13 @@ const GUEST_KEY = 'explorecapitals:user:guest';
 
 type UserContextType = {
   user: UserProfile; // Guaranteed to be a UserProfile (Guest or Auth)
+  userProfile: UserProfile; // Alias for user (for hooks compatibility)
   isAuthenticated: boolean;
   isLoading: boolean;
   isSyncing: boolean;
   recordGameResult: (payload: GameResultPayload) => void;
   updateUserStats: (stats: UserStats) => Promise<void>;
+  updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
   strengths: { countryId: string; score: number }[];
   weaknesses: { countryId: string; score: number }[];
   regionStrengths: { region: string; accuracy: number; attempts: number }[];
@@ -68,6 +70,7 @@ const makeUser = (id: string, name: string, email?: string, photoURL?: string): 
   achievements: [],
   streakDays: 1,
   lastSessionAt: nowIso(),
+  isSupporter: false,
 });
 
 const calculateTier = (points: number): LoyaltyTier => {
@@ -465,6 +468,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [authUser]);
 
+  const updateUserProfile = useCallback(async (updates: Partial<UserProfile>) => {
+    setProfile(prev => ({ ...prev, ...updates }));
+    if (authUser && db) {
+      try {
+        await updateDoc(doc(db, 'users', authUser.uid), {
+          ...updates,
+          lastSessionAt: nowIso()
+        });
+      } catch (err) {
+        console.error('[UserContext] Failed to update profile:', err);
+      }
+    }
+  }, [authUser]);
+
   const strengthWeakness = useMemo(() => {
     const entries = Object.entries(profile.stats.byCountry).map(([countryId, stat]) => {
       const attempts = (stat as any).correct + (stat as any).wrong;
@@ -505,11 +522,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const value: UserContextType = {
     user: profile,
+    userProfile: profile, // Alias for hooks compatibility
     isAuthenticated: !!authUser,
     isLoading: loading,
     isSyncing: syncing,
     recordGameResult,
     updateUserStats,
+    updateUserProfile,
     strengths: strengthWeakness.strengths.map(({ countryId, score }) => ({ countryId, score })),
     weaknesses: strengthWeakness.weaknesses.map(({ countryId, score }) => ({ countryId, score })),
     regionStrengths: regionBreakdown.strengths,

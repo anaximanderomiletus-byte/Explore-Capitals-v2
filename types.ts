@@ -93,6 +93,17 @@ export interface UserStats {
   byCountry: Record<string, CountryStat>;
 }
 
+// Subscription types
+export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'trialing' | 'none';
+export type SubscriptionPlan = 'monthly' | 'annual' | 'lifetime';
+
+export interface PaymentAttempt {
+  timestamp: string;
+  amount: number;
+  status: 'initiated' | 'completed' | 'failed' | 'blocked';
+  reason?: string;
+}
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -105,6 +116,37 @@ export interface UserProfile {
   achievements: Achievement[];
   streakDays: number;
   lastSessionAt?: string;
+  
+  // Supporter (one-time donation) fields
+  isSupporter?: boolean;
+  supporterSince?: any; // Firestore Timestamp or ISO string
+  
+  // Subscription fields
+  subscriptionStatus?: SubscriptionStatus;
+  subscriptionPlan?: SubscriptionPlan;
+  subscriptionId?: string;
+  stripeCustomerId?: string;
+  currentPeriodEnd?: any; // Firestore Timestamp or ISO string
+  
+  // Usage tracking (for free tier limits)
+  dailyGamesPlayed?: number;
+  lastGameDate?: string;
+  
+  // Payment security fields
+  termsAcceptedAt?: any; // Firestore Timestamp or ISO string
+  termsVersion?: string;
+  privacyAcceptedAt?: any;
+  paymentAttempts?: PaymentAttempt[];
+  emailVerified?: boolean;
+}
+
+// Payment eligibility check result
+export interface PaymentEligibility {
+  allowed: boolean;
+  reason?: string;
+  requiresEmailVerification?: boolean;
+  requiresTermsAcceptance?: boolean;
+  remainingAttempts?: number;
 }
 
 export interface GameResultPayload {
