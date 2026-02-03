@@ -129,10 +129,10 @@ const Games: React.FC = () => {
               isLocked ? (
                 <Button 
                   variant="secondary" 
-                  className="w-full h-12 sm:h-14 text-xs sm:text-sm border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
+                  className="w-full h-12 sm:h-14 text-[11px] sm:text-xs border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap tracking-tight"
                   onClick={() => setShowUpgradeModal(true)}
                 >
-                  <Lock size={14} className="mr-1.5 shrink-0" /> UNLOCK PREMIUM
+                  <Lock size={12} className="mr-1 shrink-0" /> Unlock with Premium
                 </Button>
               ) : (
                 <Link to={`/games/${getGamePath(game.id)}`}>
