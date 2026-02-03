@@ -286,7 +286,7 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
   return (
     <div 
       ref={containerRef}
-      className="overflow-auto rounded-3xl border border-white/20 bg-white/10"
+      className="overflow-auto rounded-3xl border border-white/20 bg-white/10 scrollbar-visible"
       style={{ maxHeight: containerHeight }}
     >
       <table className="w-full text-left border-collapse table-fixed">
