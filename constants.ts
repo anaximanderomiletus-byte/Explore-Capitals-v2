@@ -264,6 +264,7 @@ export const MOCK_COUNTRIES: Country[] = RAW_COUNTRIES.map(country => ({
 }));
 
 export const GAMES: Game[] = [
+  // === FREE GAMES ===
   { 
     id: '1', 
     title: 'Capital Quiz', 
@@ -326,5 +327,38 @@ export const GAMES: Game[] = [
     image: './png/0-GAMES/landmark-legend.png',
     status: 'active', 
     description: 'Identify the country from a famous landmark image.'
+  },
+  // === PREMIUM GAMES ===
+  {
+    id: '10',
+    title: 'Territory Titans',
+    image: './png/0-GAMES/territory-titans.png',
+    status: 'active',
+    description: 'Master autonomous regions and dependencies worldwide.',
+    premium: true
+  },
+  {
+    id: '11',
+    title: 'Area Ace',
+    image: './png/0-GAMES/area-ace.png',
+    status: 'active',
+    description: 'Which country is larger? Test your size knowledge.',
+    premium: true
+  },
+  {
+    id: '12',
+    title: 'Currency Craze',
+    image: './png/0-GAMES/currency-craze.png',
+    status: 'active',
+    description: 'Match countries to their official currencies.',
+    premium: true
+  },
+  {
+    id: '13',
+    title: 'Language Legend',
+    image: './png/0-GAMES/language-legend.png',
+    status: 'active',
+    description: 'Identify countries by their official languages.',
+    premium: true
   }
 ];

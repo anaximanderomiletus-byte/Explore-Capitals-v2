@@ -32,6 +32,11 @@ const GlobalDetective = lazy(() => import('./pages/GlobalDetective'));
 const CapitalConnection = lazy(() => import('./pages/CapitalConnection'));
 const RegionRoundup = lazy(() => import('./pages/RegionRoundup'));
 const LandmarkLegend = lazy(() => import('./pages/LandmarkLegend'));
+// Premium Games
+const TerritoryTitans = lazy(() => import('./pages/TerritoryTitans'));
+const AreaAce = lazy(() => import('./pages/AreaAce'));
+const CurrencyCraze = lazy(() => import('./pages/CurrencyCraze'));
+const LanguageLegend = lazy(() => import('./pages/LanguageLegend'));
 const CountryExploration = lazy(() => import('./pages/CountryExploration'));
 const CountryDetail = lazy(() => import('./pages/CountryDetail'));
 const Settings = lazy(() => import('./pages/Settings'));
@@ -143,6 +148,11 @@ const AppContent: React.FC = () => {
               <Route path="/games/capital-connection" element={<PageWrapper><CapitalConnection /></PageWrapper>} />
               <Route path="/games/region-roundup" element={<PageWrapper><RegionRoundup /></PageWrapper>} />
               <Route path="/games/landmark-legend" element={<PageWrapper><LandmarkLegend /></PageWrapper>} />
+              {/* Premium Games */}
+              <Route path="/games/territory-titans" element={<PageWrapper><TerritoryTitans /></PageWrapper>} />
+              <Route path="/games/area-ace" element={<PageWrapper><AreaAce /></PageWrapper>} />
+              <Route path="/games/currency-craze" element={<PageWrapper><CurrencyCraze /></PageWrapper>} />
+              <Route path="/games/language-legend" element={<PageWrapper><LanguageLegend /></PageWrapper>} />
               <Route path="/database" element={<PageWrapper><DatabasePage /></PageWrapper>} />
               <Route path="/directory" element={<DirectoryRedirect />} />
               <Route path="/country/:id" element={<PageWrapper><CountryDetail /></PageWrapper>} />

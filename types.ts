@@ -30,6 +30,7 @@ export interface Game {
   image: string;
   status: 'active' | 'coming_soon';
   description: string;
+  premium?: boolean; // Premium-only games require subscription
 }
 
 export enum LoadingState {
