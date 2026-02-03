@@ -35,7 +35,7 @@ const Games: React.FC = () => {
       case '12': return 'currency-craze';
       case '13': return 'language-legend';
       case '14': return 'time-zone-trekker';
-      case '15': return 'border-blitz';
+      case '15': return 'driving-direction';
       default: return '';
     }
   };

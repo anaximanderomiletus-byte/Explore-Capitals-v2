@@ -371,10 +371,10 @@ export const GAMES: Game[] = [
   },
   {
     id: '15',
-    title: 'Border Blitz',
-    image: './png/0-GAMES/border-blitz.png',
+    title: 'Driving Direction',
+    image: './png/0-GAMES/driving-direction.png',
     status: 'active',
-    description: 'Race to name all bordering countries.',
+    description: '3D game: Drive on the correct side or crash!',
     premium: true
   }
 ];

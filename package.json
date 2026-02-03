@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@types/three": "^0.182.0",
     "firebase": "^10.12.4",
     "firebase-admin": "^13.6.0",
     "framer-motion": "^12.23.26",
@@ -18,7 +21,8 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "three": "^0.182.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
