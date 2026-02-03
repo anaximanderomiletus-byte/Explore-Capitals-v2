@@ -223,11 +223,6 @@ const Games: React.FC = () => {
           <h2 className="text-lg font-bold text-amber-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
             <Crown size={16} className="text-amber-400" />
             Premium Games
-            {!isPremium && (
-              <span className="text-[10px] text-white/40 font-normal tracking-normal normal-case ml-2">
-                — Unlock with Premium subscription
-              </span>
-            )}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {premiumGames.map((game) => renderGameCard(game, true))}
