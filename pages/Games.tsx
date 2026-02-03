@@ -129,10 +129,10 @@ const Games: React.FC = () => {
               isLocked ? (
                 <Button 
                   variant="secondary" 
-                  className="w-full h-12 sm:h-14 text-base sm:text-lg border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20"
+                  className="w-full h-12 sm:h-14 text-xs sm:text-sm border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
-                  <Lock size={16} className="mr-2" /> UNLOCK WITH PREMIUM
+                  <Lock size={14} className="mr-1.5 shrink-0" /> UNLOCK PREMIUM
                 </Button>
               ) : (
                 <Link to={`/games/${getGamePath(game.id)}`}>
@@ -204,27 +204,6 @@ const Games: React.FC = () => {
           </div>
         )}
 
-        {/* Free to play Banner (Non-premium users) */}
-        {!isPremium && (
-          <div className="mb-8 p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-sky/20 flex items-center justify-center">
-                <Play size={24} className="text-sky-light" fill="currentColor" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Free Games Available</p>
-                <p className="text-white/50 text-xs">Upgrade to Premium to unlock {premiumGames.length} exclusive games</p>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate('/premium')}
-              className="px-5 py-2.5 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/30 rounded-xl text-[10px] font-black text-amber-400 uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap"
-            >
-              <Crown size={14} />
-              GO PREMIUM
-            </button>
-          </div>
-        )}
 
         {/* Free Games Section */}
         <div className="mb-12">
