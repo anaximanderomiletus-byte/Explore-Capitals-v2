@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { 
   Award, Compass, Sparkles, Target, Trophy, LogOut, Settings, 
   Timer, Zap, HelpCircle, XCircle, CheckCircle2,
-  TrendingUp, Activity, BarChart, ChevronDown, ChevronUp,
-  Globe, MapPin, Gamepad2, Brain, Flame, Medal
+  TrendingUp, Activity, BarChart,   ChevronDown, ChevronUp,
+  Globe, MapPin, Gamepad2, Brain, Flame, Medal, Heart
 } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import { useUser } from '../context/UserContext';
@@ -482,6 +482,12 @@ const Profile: React.FC = () => {
                   <h1 className="text-3xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
                     Welcome, {authUser?.displayName || user?.name || 'Explorer'}
                   </h1>
+                  {user?.isSupporter && (
+                    <div className="flex items-center gap-1.5 mt-2 px-3 py-1 bg-pink-500/20 border border-pink-500/30 rounded-full w-fit">
+                      <Heart size={12} className="text-pink-500 fill-current" />
+                      <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest">Supporter</span>
+                    </div>
+                  )}
                 <div className="flex items-center gap-4 mt-3">
                   <Link to="/settings" className="text-[9px] font-black uppercase tracking-widest text-white/60 hover:text-sky transition-colors flex items-center gap-1.5">
                     <Settings size={12} /> Settings
