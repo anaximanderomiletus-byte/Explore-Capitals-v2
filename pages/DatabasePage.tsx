@@ -7,6 +7,7 @@ import { Country, Territory } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
+import { BannerAd } from '../components/AdSense';
 
 type SortKey = 'name' | 'capital' | 'region' | 'population' | 'area';
 type SortDirection = 'asc' | 'desc';
@@ -729,9 +730,16 @@ const DatabasePage: React.FC = () => {
           </div>
         )}
 
+        {/* Strategic Ad Placement - After content */}
+        {hasResults && (
+          <div className="mt-12 md:mt-16">
+            <BannerAd slot="DATABASE_BOTTOM" />
+          </div>
+        )}
+
         {/* Scroll to Top Button */}
         {hasResults && (
-          <div className="mt-20 flex justify-center">
+          <div className="mt-12 flex justify-center">
             <Button 
               variant="secondary" 
               size="md" 

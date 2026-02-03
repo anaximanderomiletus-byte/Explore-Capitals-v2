@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { BannerAd } from '../components/AdSense';
 
 const Games: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -142,6 +143,11 @@ const Games: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Strategic Ad Placement - After game grid */}
+        <div className="mt-12 md:mt-16">
+          <BannerAd slot="GAMES_BOTTOM" />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Footer from './components/Footer';
+import CookieConsent from './components/CookieConsent';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
@@ -39,6 +40,7 @@ const Auth = lazy(() => import('./pages/Auth'));
 const AuthAction = lazy(() => import('./pages/AuthAction'));
 const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
 
 // Prefetch helper - call on hover to preload page chunks
 export const prefetchPage = (page: keyof typeof pageImports) => {
@@ -123,6 +125,7 @@ const AppContent: React.FC = () => {
     <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] relative">
       <ScrollToTop />
       <Navigation />
+      <CookieConsent />
       <div className="flex-grow flex flex-col relative w-full">
         <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="popLayout" initial={false}>
@@ -153,6 +156,7 @@ const AppContent: React.FC = () => {
               <Route path="/reset-password" element={<PageWrapper><AuthAction /></PageWrapper>} />
               <Route path="/loyalty" element={<PageWrapper><Loyalty /></PageWrapper>} />
               <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
+              <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
             </Routes>
             </div>
           </AnimatePresence>

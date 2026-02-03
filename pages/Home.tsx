@@ -7,6 +7,7 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
+import { ResponsiveAd } from '../components/AdSense';
 
 const ParallaxSection: React.FC<{
   children: React.ReactNode;
@@ -300,6 +301,13 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      </ParallaxSection>
+
+      {/* Strategic Ad Placement - Between Loyalty and Explore sections */}
+      <ParallaxSection className="py-4 md:py-8">
+        <div className="max-w-4xl mx-auto">
+          <ResponsiveAd slot="HOME_SECTION_1" className="rounded-2xl overflow-hidden" />
         </div>
       </ParallaxSection>
 
