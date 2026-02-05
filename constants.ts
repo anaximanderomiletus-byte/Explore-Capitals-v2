@@ -332,7 +332,7 @@ export const GAMES: Game[] = [
   {
     id: '10',
     title: 'Territory Titans',
-    image: './png/0-GAMES/territory-titans.png',
+    image: './logo.png',
     status: 'active',
     description: 'Master autonomous regions and dependencies worldwide.',
     premium: true
@@ -340,7 +340,7 @@ export const GAMES: Game[] = [
   {
     id: '11',
     title: 'Area Ace',
-    image: './png/0-GAMES/area-ace.png',
+    image: './logo.png',
     status: 'active',
     description: 'Which country is larger? Test your size knowledge.',
     premium: true
@@ -348,7 +348,7 @@ export const GAMES: Game[] = [
   {
     id: '12',
     title: 'Currency Craze',
-    image: './png/0-GAMES/currency-craze.png',
+    image: './logo.png',
     status: 'active',
     description: 'Match countries to their official currencies.',
     premium: true
@@ -356,7 +356,7 @@ export const GAMES: Game[] = [
   {
     id: '13',
     title: 'Language Legend',
-    image: './png/0-GAMES/language-legend.png',
+    image: './logo.png',
     status: 'active',
     description: 'Identify countries by their official languages.',
     premium: true
@@ -364,7 +364,7 @@ export const GAMES: Game[] = [
   {
     id: '14',
     title: 'Time Zone Trekker',
-    image: './png/0-GAMES/time-zone-trekker.png',
+    image: './logo.png',
     status: 'active',
     description: 'Match countries to their time zones.',
     premium: true
@@ -372,9 +372,9 @@ export const GAMES: Game[] = [
   {
     id: '15',
     title: 'Driving Direction',
-    image: './png/0-GAMES/driving-direction.png',
+    image: './logo.png',
     status: 'active',
-    description: '3D game: Drive on the correct side or crash!',
+    description: 'Left or right? Know which side countries drive on.',
     premium: true
   }
 ];

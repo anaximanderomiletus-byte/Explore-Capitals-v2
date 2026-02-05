@@ -42,7 +42,7 @@ const PhotoPrint: React.FC<{
   };
 
   return (
-    <div className={`relative group rounded-3xl max-w-full overflow-hidden ${className}`}>
+    <div className={`relative group max-w-full ${className}`}>
       {/* Liquid Glass Container - TV Style */}
       <div className={`p-1.5 sm:p-2 bg-black/80 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
         {/* Bezel Gloss */}
@@ -825,7 +825,7 @@ const CountryExploration: React.FC = () => {
                         <div key={idx} className="flex flex-row items-center gap-4 group/stop w-full">
                           {/* Icon Container */}
                           <div className="w-11 h-11 shrink-0 rounded-xl bg-black/60 border border-white/10 overflow-hidden relative shadow-lg group-hover/stop:border-sky/50 transition-all duration-300">
-                            <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500 scale-110 group-hover/stop:scale-100" />
+                            <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
                             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
                             <div className="absolute top-0 left-0 bg-sky/80 text-white text-[6px] font-black px-1.5 py-0.5 rounded-br-lg">
                               {idx + 1}

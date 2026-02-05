@@ -63,13 +63,13 @@ export const imagesN: Record<string, string> = {
   "Olumo Rock": "/logo.png",
   "Benin Bronzes": "/logo.png",
 
-  // --- North Korea --- (no images yet)
-  "North Korea": "/logo.png",
-  "Mansu Hill Grand Monument": "/logo.png",
-  "Rungrado 1st of May Stadium": "/logo.png",
-  "The Pyongyang Metro": "/logo.png",
-  "Tower of the Juche Idea": "/logo.png",
-  "Kijong-dong": "/logo.png",
+  // --- North Korea ---
+  "North Korea": "/png/NORTH KOREA/pyongyang-north-korea.png",
+  "Mansu Hill Grand Monument": "/png/NORTH KOREA/mansu-hill-grand-monument.png",
+  "Rungrado 1st of May Stadium": "/png/NORTH KOREA/rungrado-1st-of-may-stadium.png",
+  "The Pyongyang Metro": "/png/NORTH KOREA/pyongyang-metro.png",
+  "Tower of the Juche Idea": "/png/NORTH KOREA/tower-of-the-juche-idea.png",
+  "Kijong-dong": "/png/NORTH KOREA/kijong-dong-peace-village.png",
 
   // --- North Macedonia --- (no images yet)
   "North Macedonia": "/logo.png",

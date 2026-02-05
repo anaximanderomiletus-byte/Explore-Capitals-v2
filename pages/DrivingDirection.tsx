@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Timer, Trophy, ArrowLeft, Car, Play, Lock, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
-import * as THREE from 'three';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -11,6 +9,7 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { useGameLimit } from '../hooks/useGameLimit';
+import { FeedbackOverlay } from '../components/FeedbackOverlay';
 
 const getCountryCode = (emoji: string) => {
   return Array.from(emoji)
@@ -18,250 +17,21 @@ const getCountryCode = (emoji: string) => {
     .join('');
 };
 
-// Simple car mesh component
-function CarMesh({ position, rotation, color, isPlayer = false }: { position: [number, number, number]; rotation?: [number, number, number]; color: string; isPlayer?: boolean }) {
-  const meshRef = useRef<THREE.Group>(null);
-  
-  return (
-    <group ref={meshRef} position={position} rotation={rotation || [0, 0, 0]}>
-      {/* Car body */}
-      <mesh position={[0, 0.3, 0]} castShadow>
-        <boxGeometry args={[1.2, 0.4, 2.4]} />
-        <meshStandardMaterial color={color} metalness={0.6} roughness={0.4} />
-      </mesh>
-      {/* Car top */}
-      <mesh position={[0, 0.65, -0.1]} castShadow>
-        <boxGeometry args={[1, 0.35, 1.4]} />
-        <meshStandardMaterial color={color} metalness={0.6} roughness={0.4} />
-      </mesh>
-      {/* Wheels */}
-      {[[-0.5, 0.15, 0.7], [0.5, 0.15, 0.7], [-0.5, 0.15, -0.7], [0.5, 0.15, -0.7]].map((pos, i) => (
-        <mesh key={i} position={pos as [number, number, number]} rotation={[0, 0, Math.PI / 2]} castShadow>
-          <cylinderGeometry args={[0.2, 0.2, 0.15, 16]} />
-          <meshStandardMaterial color="#1a1a1a" metalness={0.3} roughness={0.7} />
-        </mesh>
-      ))}
-      {/* Headlights */}
-      {isPlayer && (
-        <>
-          <mesh position={[-0.4, 0.3, 1.21]}>
-            <boxGeometry args={[0.2, 0.15, 0.02]} />
-            <meshStandardMaterial color="#ffff88" emissive="#ffff44" emissiveIntensity={0.5} />
-          </mesh>
-          <mesh position={[0.4, 0.3, 1.21]}>
-            <boxGeometry args={[0.2, 0.15, 0.02]} />
-            <meshStandardMaterial color="#ffff88" emissive="#ffff44" emissiveIntensity={0.5} />
-          </mesh>
-        </>
-      )}
-      {/* Taillights for oncoming car */}
-      {!isPlayer && (
-        <>
-          <mesh position={[-0.4, 0.3, 1.21]}>
-            <boxGeometry args={[0.2, 0.15, 0.02]} />
-            <meshStandardMaterial color="#ff4444" emissive="#ff2222" emissiveIntensity={0.8} />
-          </mesh>
-          <mesh position={[0.4, 0.3, 1.21]}>
-            <boxGeometry args={[0.2, 0.15, 0.02]} />
-            <meshStandardMaterial color="#ff4444" emissive="#ff2222" emissiveIntensity={0.8} />
-          </mesh>
-        </>
-      )}
-    </group>
-  );
-}
-
-// Road component with lane markings
-function Road({ driveSide }: { driveSide: 'Left' | 'Right' }) {
-  const roadRef = useRef<THREE.Group>(null);
-  
-  return (
-    <group ref={roadRef}>
-      {/* Main road surface */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
-        <planeGeometry args={[10, 200]} />
-        <meshStandardMaterial color="#2a2a2a" roughness={0.9} />
-      </mesh>
-      {/* Road edges - white lines */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-4.8, 0.02, 0]}>
-        <planeGeometry args={[0.15, 200]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[4.8, 0.02, 0]}>
-        <planeGeometry args={[0.15, 200]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      {/* Center line - dashed yellow */}
-      {Array.from({ length: 40 }).map((_, i) => (
-        <mesh key={i} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -100 + i * 5]}>
-          <planeGeometry args={[0.15, 3]} />
-          <meshStandardMaterial color="#ffcc00" />
-        </mesh>
-      ))}
-      {/* Grass on sides */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-10, 0, 0]}>
-        <planeGeometry args={[10, 200]} />
-        <meshStandardMaterial color="#2d5a27" />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[10, 0, 0]}>
-        <planeGeometry args={[10, 200]} />
-        <meshStandardMaterial color="#2d5a27" />
-      </mesh>
-    </group>
-  );
-}
-
-// Tree component for roadside
-function Tree({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Trunk */}
-      <mesh position={[0, 1, 0]} castShadow>
-        <cylinderGeometry args={[0.2, 0.3, 2, 8]} />
-        <meshStandardMaterial color="#4a3728" />
-      </mesh>
-      {/* Foliage */}
-      <mesh position={[0, 2.5, 0]} castShadow>
-        <coneGeometry args={[1.2, 2.5, 8]} />
-        <meshStandardMaterial color="#1a472a" />
-      </mesh>
-      <mesh position={[0, 3.5, 0]} castShadow>
-        <coneGeometry args={[0.9, 2, 8]} />
-        <meshStandardMaterial color="#1a472a" />
-      </mesh>
-    </group>
-  );
-}
-
-// Main 3D scene
-function GameScene({ 
-  playerLane, 
-  onCollision, 
-  gamePhase,
-  driveSide 
-}: { 
-  playerLane: 'left' | 'right'; 
-  onCollision: () => void; 
-  gamePhase: 'driving' | 'collision' | 'correct';
-  driveSide: 'Left' | 'Right';
-}) {
-  const playerRef = useRef<THREE.Group>(null);
-  const oncomingRef = useRef({ z: -80 });
-  const [oncomingZ, setOncomingZ] = useState(-80);
-  const { camera } = useThree();
-  const hasCollided = useRef(false);
-  
-  // Player X position based on lane choice
-  const playerX = playerLane === 'left' ? -2.5 : 2.5;
-  
-  // Oncoming car lane based on correct driving side
-  // If drive on left, oncoming traffic is on the right lane
-  // If drive on right, oncoming traffic is on the left lane
-  const oncomingX = driveSide === 'Left' ? 2.5 : -2.5;
-  
-  // Check for collision
-  const willCollide = playerX === oncomingX;
-  
-  useEffect(() => {
-    // Position camera behind and above the player car
-    camera.position.set(0, 4, 12);
-    camera.lookAt(0, 0, -10);
-  }, [camera]);
-  
-  useFrame((state, delta) => {
-    if (gamePhase === 'driving') {
-      // Move oncoming car toward player
-      oncomingRef.current.z += delta * 35; // Speed of oncoming car
-      setOncomingZ(oncomingRef.current.z);
-      
-      // Check collision - when cars meet
-      if (oncomingRef.current.z > 0 && !hasCollided.current) {
-        if (willCollide) {
-          hasCollided.current = true;
-          onCollision();
-        }
-      }
-    }
-  });
-
-  // Reset for new round
-  useEffect(() => {
-    if (gamePhase === 'driving') {
-      oncomingRef.current.z = -80;
-      setOncomingZ(-80);
-      hasCollided.current = false;
-    }
-  }, [gamePhase, driveSide]);
-
-  return (
-    <>
-      {/* Lighting */}
-      <ambientLight intensity={0.4} />
-      <directionalLight 
-        position={[10, 20, 10]} 
-        intensity={1} 
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-      />
-      <hemisphereLight args={['#87ceeb', '#2d5a27', 0.3]} />
-      
-      {/* Sky */}
-      <mesh>
-        <sphereGeometry args={[100, 32, 32]} />
-        <meshBasicMaterial color="#1a1a3a" side={THREE.BackSide} />
-      </mesh>
-      
-      {/* Road */}
-      <Road driveSide={driveSide} />
-      
-      {/* Trees along roadside */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <React.Fragment key={i}>
-          <Tree position={[-7 + Math.random() * 2, 0, -90 + i * 10]} />
-          <Tree position={[7 - Math.random() * 2, 0, -85 + i * 10]} />
-        </React.Fragment>
-      ))}
-      
-      {/* Player car */}
-      <CarMesh 
-        position={[playerX, 0, 5]} 
-        color={gamePhase === 'collision' ? '#ff3333' : '#3b82f6'} 
-        isPlayer={true}
-      />
-      
-      {/* Oncoming car */}
-      <CarMesh 
-        position={[oncomingX, 0, oncomingZ]} 
-        rotation={[0, Math.PI, 0]} 
-        color="#ef4444" 
-      />
-      
-      {/* Collision effect */}
-      {gamePhase === 'collision' && (
-        <mesh position={[playerX, 1.5, 3]}>
-          <sphereGeometry args={[2, 16, 16]} />
-          <meshBasicMaterial color="#ff6600" transparent opacity={0.6} />
-        </mesh>
-      )}
-    </>
-  );
-}
-
 export default function DrivingDirection() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  const [playerLane, setPlayerLane] = useState<'left' | 'right'>('right');
-  const [gamePhase, setGamePhase] = useState<'choosing' | 'driving' | 'collision' | 'correct'>('choosing');
-  const [questionTimer, setQuestionTimer] = useState(5);
+  const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [feedbackKey, setFeedbackKey] = useState(0);
+  const [selectedSide, setSelectedSide] = useState<'Left' | 'Right' | null>(null);
+  const [imgError, setImgError] = useState(false);
   const [hasReported, setHasReported] = useState(false);
-  const [streak, setStreak] = useState(0);
   const { recordGameResult } = useUser();
   const { isPremium } = useGameLimit();
   const navigate = useNavigate();
   const { setPageLoading } = useLayout();
-  
+
   // Filter countries that have driveSide data
   const countriesWithDriveSide = useMemo(() => {
     return MOCK_COUNTRIES.filter(c => c.driveSide === 'Left' || c.driveSide === 'Right');
@@ -271,10 +41,9 @@ export default function DrivingDirection() {
     setPageLoading(false);
   }, [setPageLoading]);
 
-  // Main game timer
   useEffect(() => {
     let timer: any;
-    if (gameState === 'playing' && timeLeft > 0 && gamePhase !== 'collision') {
+    if (gameState === 'playing' && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
@@ -282,22 +51,13 @@ export default function DrivingDirection() {
       setGameState('finished');
     }
     return () => clearInterval(timer);
-  }, [gameState, timeLeft, gamePhase]);
+  }, [gameState, timeLeft]);
 
-  // Question timer - auto-drive if no answer
-  useEffect(() => {
-    let timer: any;
-    if (gamePhase === 'choosing' && questionTimer > 0) {
-      timer = setInterval(() => {
-        setQuestionTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (gamePhase === 'choosing' && questionTimer === 0) {
-      // Time ran out - drive on the wrong side
-      const wrongSide = currentCountry?.driveSide === 'Left' ? 'right' : 'left';
-      handleLaneChoice(wrongSide);
-    }
-    return () => clearInterval(timer);
-  }, [gamePhase, questionTimer, currentCountry]);
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     if (gameState === 'finished' && !hasReported) {
@@ -310,18 +70,18 @@ export default function DrivingDirection() {
     }
   }, [gameState, hasReported, recordGameResult, score, timeLeft]);
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${String(s).padStart(2, '0')}`;
-  };
-
-  const generateQuestion = useCallback(() => {
+  const generateRound = useCallback(() => {
+    setResult(null);
+    setSelectedSide(null);
+    setImgError(false);
+    
     const country = countriesWithDriveSide[Math.floor(Math.random() * countriesWithDriveSide.length)];
     setCurrentCountry(country);
-    setGamePhase('choosing');
-    setQuestionTimer(5);
-    setPlayerLane('right'); // Default position
+
+    // Preload next potential flag
+    const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
+    const img = new Image();
+    img.src = `https://flagcdn.com/w320/${getCountryCode(countriesWithDriveSide[nextIdx].flag)}.png`;
   }, [countriesWithDriveSide]);
 
   const startGame = () => {
@@ -332,58 +92,30 @@ export default function DrivingDirection() {
     setScore(0);
     setTimeLeft(60);
     setHasReported(false);
-    setStreak(0);
-    generateQuestion();
+    setResult(null);
+    setFeedbackKey(0);
+    generateRound();
     setGameState('playing');
   };
 
-  const handleLaneChoice = (lane: 'left' | 'right') => {
-    if (gamePhase !== 'choosing') return;
-    setPlayerLane(lane);
-    setGamePhase('driving');
+  const handleChoice = (side: 'Left' | 'Right') => {
+    if (result || !currentCountry) return;
+    
+    setSelectedSide(side);
+    const isCorrect = side === currentCountry.driveSide;
+    
+    setResult(isCorrect ? 'correct' : 'incorrect');
+    setFeedbackKey(prev => prev + 1);
+    if (isCorrect) setScore(s => s + 10);
+    
+    setTimeout(generateRound, 700);
   };
-
-  const handleCollision = () => {
-    setGamePhase('collision');
-    setStreak(0);
-    // After showing collision, move to next question
-    setTimeout(() => {
-      if (timeLeft > 0) {
-        generateQuestion();
-      } else {
-        setGameState('finished');
-      }
-    }, 1500);
-  };
-
-  // Check if player made correct choice after driving phase
-  useEffect(() => {
-    if (gamePhase === 'driving' && currentCountry) {
-      const correctLane = currentCountry.driveSide === 'Left' ? 'left' : 'right';
-      if (playerLane === correctLane) {
-        // Correct! Car passes safely
-        setTimeout(() => {
-          setGamePhase('correct');
-          const bonus = streak >= 2 ? 5 : 0; // Streak bonus
-          setScore(s => s + 10 + bonus);
-          setStreak(s => s + 1);
-          setTimeout(() => {
-            if (timeLeft > 0) {
-              generateQuestion();
-            } else {
-              setGameState('finished');
-            }
-          }, 800);
-        }, 2500); // Time for car to pass
-      }
-    }
-  }, [gamePhase, playerLane, currentCountry, timeLeft, streak, generateQuestion]);
 
   // Premium check screen
   if (!isPremium && gameState === 'start') {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
-        <SEO title="Driving Direction - Premium Game" description="Guess which side of the road to drive on before you crash! A 3D premium geography game." />
+        <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
         
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
@@ -396,7 +128,7 @@ export default function DrivingDirection() {
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
           <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
-          <p className="text-white/60 text-sm mb-8">Unlock this 3D driving game with Premium membership.</p>
+          <p className="text-white/60 text-sm mb-8">Unlock this game with Premium membership.</p>
           <div className="flex flex-col gap-4">
             <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
               <Crown size={18} /> UNLOCK WITH PREMIUM
@@ -425,7 +157,7 @@ export default function DrivingDirection() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <SEO title="Driving Direction - Premium 3D Game" description="Drive on the correct side of the road before you crash! A 3D premium geography game." />
+            <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
             
             <div className="fixed inset-0 z-0 pointer-events-none">
               <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60" />
@@ -440,7 +172,7 @@ export default function DrivingDirection() {
                 <Car size={36} />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
-              <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em]">Drive on the correct side or crash!</p>
+              <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">
                   PLAY <Play size={20} fill="currentColor" />
@@ -463,110 +195,131 @@ export default function DrivingDirection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
           >
-            <SEO title="Driving Direction - Playing" description="Drive on the correct side of the road!" />
+            <SEO title="Driving Direction - Playing" description="Which side of the road do they drive on?" />
             
-            {/* HUD Overlay */}
-            <div className="absolute top-0 left-0 right-0 z-20 p-3 md:p-4">
-              <div className="max-w-3xl mx-auto flex items-center gap-2 bg-black/50 backdrop-blur-xl p-2.5 md:p-3 rounded-2xl border border-white/20">
-                <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all border border-white/10 shrink-0">
-                  <ArrowLeft size={18} />
-                </Link>
-                <div className="flex-1 flex items-center justify-center gap-4">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-warning/20 border border-warning/40">
-                    <Trophy size={16} className="text-warning" />
-                    <span className="font-display font-black text-lg text-white tabular-nums">{score}</span>
-                  </div>
-                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 border border-white/30'}`}>
-                    <Timer size={16} className={timeLeft < 10 ? 'text-error' : 'text-sky-light'} />
-                    <span className={`font-display font-black text-lg tabular-nums ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-                  </div>
-                </div>
-                <div className="w-[42px] shrink-0" />
-              </div>
+            {/* Background Decor */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-[100px]" />
+              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
             </div>
 
-            {/* Country info overlay */}
-            <div className="absolute top-20 md:top-24 left-0 right-0 z-20 px-4">
-              <div className="max-w-md mx-auto text-center">
-                <div className="bg-black/60 backdrop-blur-xl rounded-2xl p-4 border border-white/20">
-                  <div className="flex items-center justify-center gap-3 mb-2">
-                    <img 
-                      src={`https://flagcdn.com/w80/${getCountryCode(currentCountry.flag)}.png`}
-                      alt={`${currentCountry.name} flag`}
-                      className="h-8 w-auto rounded shadow-lg"
-                    />
-                    <h2 className="text-2xl font-display font-black text-white uppercase tracking-tight">
-                      {currentCountry.name}
-                    </h2>
-                  </div>
-                  <p className="text-white/60 text-sm mb-3">Which side of the road do they drive on?</p>
-                  
-                  {gamePhase === 'choosing' && (
-                    <div className="flex items-center justify-center gap-2 mb-3">
-                      <div className={`text-2xl font-black tabular-nums ${questionTimer <= 2 ? 'text-error animate-pulse' : 'text-warning'}`}>
-                        {questionTimer}s
-                      </div>
-                    </div>
-                  )}
-                  
-                  {gamePhase === 'collision' && (
-                    <div className="text-error font-black text-xl animate-pulse">
-                      💥 CRASH! They drive on the {currentCountry.driveSide}!
-                    </div>
-                  )}
-                  
-                  {gamePhase === 'correct' && (
-                    <div className="text-accent font-black text-xl">
-                      ✓ Correct! +{10 + (streak >= 3 ? 5 : 0)} points
-                    </div>
-                  )}
-                  
-                  {streak >= 2 && gamePhase === 'choosing' && (
-                    <div className="text-amber-400 text-xs font-bold">
-                      🔥 {streak} streak! Bonus points active
-                    </div>
-                  )}
+            {/* Top Bar */}
+            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 z-10">
+              <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+                <ArrowLeft size={18} className="transition-transform" />
+              </Link>
+
+              <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+                <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Driving Direction</h1>
+                <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
+              </div>
+
+              <div className="w-[42px] shrink-0" />
+            </div>
+
+            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-hidden relative z-10 p-3 md:p-6">
+              
+              {/* Points and Timer */}
+              <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
+                  <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
+                  <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+                </div>
+                <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                  <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" /></div>
+                  <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums min-w-[28px] sm:min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                 </div>
               </div>
-            </div>
 
-            {/* 3D Canvas */}
-            <div className="flex-1 relative">
-              <Canvas shadows camera={{ fov: 60 }}>
-                <Suspense fallback={null}>
-                  <GameScene 
-                    playerLane={playerLane}
-                    onCollision={handleCollision}
-                    gamePhase={gamePhase === 'choosing' ? 'driving' : gamePhase}
-                    driveSide={currentCountry.driveSide as 'Left' | 'Right'}
-                  />
-                </Suspense>
-              </Canvas>
-            </div>
+              <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
+                {/* Question Text */}
+                <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
+                  <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.3em]">Which side of the road does</p>
+                  <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">{currentCountry.name}</h2>
+                  <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.3em]">drive on?</p>
+                </div>
 
-            {/* Lane choice buttons */}
-            {gamePhase === 'choosing' && (
-              <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
-                <div className="max-w-lg mx-auto grid grid-cols-2 gap-4">
-                  <button
-                    onClick={() => handleLaneChoice('left')}
-                    className="h-20 bg-white/10 hover:bg-sky/30 backdrop-blur-xl rounded-2xl border-2 border-white/20 hover:border-sky transition-all flex flex-col items-center justify-center gap-1 group"
+                {/* Country Flag */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentCountry.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex items-center justify-center mb-4 md:mb-6"
                   >
-                    <ChevronLeft size={32} className="text-white group-hover:text-sky-light transition-colors" />
-                    <span className="font-black text-white uppercase tracking-wider text-sm">Left</span>
-                  </button>
-                  <button
-                    onClick={() => handleLaneChoice('right')}
-                    className="h-20 bg-white/10 hover:bg-sky/30 backdrop-blur-xl rounded-2xl border-2 border-white/20 hover:border-sky transition-all flex flex-col items-center justify-center gap-1 group"
-                  >
-                    <ChevronRight size={32} className="text-white group-hover:text-sky-light transition-colors" />
-                    <span className="font-black text-white uppercase tracking-wider text-sm">Right</span>
-                  </button>
+                    <div className={`w-full max-w-[140px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
+                      {!imgError ? (
+                        <img 
+                          src={`https://flagcdn.com/w320/${getCountryCode(currentCountry.flag)}.png`}
+                          alt={`${currentCountry.name} flag`}
+                          className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
+                          onError={() => setImgError(true)}
+                        />
+                      ) : (
+                        <img 
+                          src={`https://flagcdn.com/w160/${getCountryCode(currentCountry.flag)}.png`}
+                          alt={`${currentCountry.name} flag fallback`}
+                          className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
+                        />
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Choice Buttons */}
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="w-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-2xl mx-auto">
+                    {(['Left', 'Right'] as const).map((side) => {
+                      const isCorrect = currentCountry.driveSide === side;
+                      const isSelected = selectedSide === side;
+                      const isWrong = isSelected && !isCorrect;
+                      
+                      let cardStyle = "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/30 active:bg-white/15 active:border-sky/50";
+                      let iconColor = "text-white/60";
+                      let textColor = "text-white/80";
+                      
+                      if (result) {
+                        if (isCorrect) {
+                          cardStyle = "bg-accent/60 border-2 border-accent";
+                          iconColor = "text-white";
+                          textColor = "text-white";
+                        } else if (isSelected) {
+                          cardStyle = "bg-red-500/60 border-2 border-red-500";
+                          iconColor = "text-white";
+                          textColor = "text-white";
+                        } else {
+                          cardStyle = "bg-black/20 border-white/5 opacity-30";
+                          iconColor = "text-white/20";
+                          textColor = "text-white/20";
+                        }
+                      }
+
+                      return (
+                        <button
+                          key={side}
+                          onClick={() => handleChoice(side)}
+                          disabled={!!result}
+                          className={`min-h-[120px] md:min-h-[180px] relative rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
+                        >
+                          <div className={`mb-2 md:mb-4 transition-colors duration-300 ${iconColor}`}>
+                            {side === 'Left' ? <ChevronLeft size={48} className="md:w-16 md:h-16" /> : <ChevronRight size={48} className="md:w-16 md:h-16" />}
+                          </div>
+                          <h3 className={`text-lg md:text-2xl font-display font-black uppercase tracking-tighter transition-colors duration-300 ${textColor}`}>
+                            {side}
+                          </h3>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
+            <FeedbackOverlay type={result} triggerKey={feedbackKey} />
           </motion.div>
         )}
 
@@ -578,18 +331,18 @@ export default function DrivingDirection() {
             exit={{ opacity: 0, scale: 0.9 }}
             className="h-full flex items-center justify-center px-4"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10">
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30">
-                <Trophy size={36} />
+            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
+                <Trophy size={36} className="relative z-10" />
               </div>
-              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter">Finished</h1>
-              <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em]">Final Score</p>
+              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
+              <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
               <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
                 <button 
                   onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group"
+                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
                 >
                   <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
                   Back to Games

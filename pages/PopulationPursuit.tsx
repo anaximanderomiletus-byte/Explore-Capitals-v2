@@ -257,7 +257,7 @@ export default function PopulationPursuit() {
                 const isWrong = isSelected && !isWinner;
                 
                 // No hover styles - prevents "pre-highlighted" appearance on touch devices
-                let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
+                let cardStyle = "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/30 active:bg-white/15 active:border-sky/50";
                 let titleStyle = "text-white/80";
                   
                 if (result) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Maximize2, Play, Lock, Crown } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, Play, Lock, Crown } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -197,10 +197,7 @@ export default function AreaAce() {
               <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <Crown size={10} /> Premium
               </div>
-              <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30">
-                <Maximize2 size={36} />
-              </div>
-              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Area Ace</h1>
+              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter mt-4">Area Ace</h1>
               <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em]">Choose the larger country.</p>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">
@@ -287,7 +284,7 @@ export default function AreaAce() {
                       const isSelected = selectedId === country.id;
                       const isWrong = isSelected && !isWinner;
                       
-                      let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
+                      let cardStyle = "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/30 active:bg-white/15 active:border-sky/50";
                       let titleStyle = "text-white/80";
                         
                       if (result) {

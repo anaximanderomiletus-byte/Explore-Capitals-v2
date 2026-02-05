@@ -193,20 +193,6 @@ const Games: React.FC = () => {
           </button>
         </div>
 
-        {/* Premium Badge (Premium users only) */}
-        {isPremium && (
-          <div className="mb-8 p-4 bg-gradient-to-r from-amber-500/10 to-amber-600/10 backdrop-blur-xl border border-amber-500/20 rounded-2xl flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-              <Crown size={20} className="text-amber-400" />
-            </div>
-            <div>
-              <p className="text-amber-400 font-bold text-sm">Premium Member</p>
-              <p className="text-white/50 text-xs">All games unlocked, no ads</p>
-            </div>
-          </div>
-        )}
-
-
         {/* Free Games Section */}
         <div className="mb-12">
           <h2 className="text-lg font-bold text-white/60 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">

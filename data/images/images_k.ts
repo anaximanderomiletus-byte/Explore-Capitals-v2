@@ -1,27 +1,27 @@
 export const imagesK: Record<string, string> = {
-  // --- Kazakhstan --- (has some images)
-  "Kazakhstan": "/logo.png",
+  // --- Kazakhstan ---
+  "Kazakhstan": "/png/KAZAKHSTAN/astana-kazakhstan.png",
   "Baikonur Cosmodrome": "/png/KAZAKHSTAN/baikonur-cosmodrome.png",
   "Charyn Canyon": "/png/KAZAKHSTAN/charyn-canyon.png",
   "The Golden Man": "/png/KAZAKHSTAN/the-golden-man.png",
   "Kaindy Lake": "/png/KAZAKHSTAN/kaindy-lake.png",
-  "Khan Shatyr": "/logo.png",
+  "Khan Shatyr": "/png/KAZAKHSTAN/khan-shatyr.png",
 
-  // --- Kenya --- (no images yet)
-  "Kenya": "/logo.png",
-  "Maasai Mara Migration": "/logo.png",
-  "Amboseli Elephants": "/logo.png",
-  "Lamu Old Town": "/logo.png",
-  "Lake Turkana": "/logo.png",
-  "Mount Kenya": "/logo.png",
+  // --- Kenya ---
+  "Kenya": "/png/KENYA/nairobi-kenya.png",
+  "Maasai Mara Migration": "/png/KENYA/maasai-mara-national-reserve.png",
+  "Amboseli Elephants": "/png/KENYA/amboseli-national-park.png",
+  "Lamu Old Town": "/png/KENYA/lamu-old-town.png",
+  "Lake Turkana": "/png/KENYA/lake-turkana.png",
+  "Mount Kenya": "/png/KENYA/mount-kenya.png",
 
-  // --- Kiribati --- (no images yet)
-  "Kiribati": "/logo.png",
-  "Kiritimati Atoll": "/logo.png",
-  "Phoenix Islands Coral": "/logo.png",
-  "Millennium Island": "/logo.png",
-  "Betio WWII Relics": "/logo.png",
-  "Maneaba Meeting House": "/logo.png",
+  // --- Kiribati ---
+  "Kiribati": "/png/KIRIBATI/tarawa-kiribati.png",
+  "Kiritimati Atoll": "/png/KIRIBATI/kiritimati-christmas-island.png",
+  "Phoenix Islands Coral": "/png/KIRIBATI/phoenix-islands-protected-area-PIPA.png",
+  "Millennium Island": "/png/KIRIBATI/caroline-island-millennium-island.png",
+  "Betio WWII Relics": "/png/KIRIBATI/betio-tarawa-atoll.png",
+  "Maneaba Meeting House": "/png/KIRIBATI/the-maneaba-tabiteuea.png",
 
   // --- Kuwait --- (no images yet)
   "Kuwait": "/logo.png",

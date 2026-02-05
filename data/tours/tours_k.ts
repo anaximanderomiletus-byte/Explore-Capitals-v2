@@ -78,7 +78,7 @@ export const toursK: Record<string, TourData> = {
         explanation: "The near-freezing temperatures prevent the wood and needles from decomposing."
       },
       {
-        stopName: "Astana",
+        stopName: "Khan Shatyr",
         imageKeyword: "Khan Shatyr",
         description: [
           "The capital city, Astana (formerly Nur-Sultan), is a futuristic city built from scratch on the northern steppe. Its skyline is filled with wild, experimental architecture, including the Khan Shatyr Entertainment Center.",
