@@ -98,6 +98,49 @@ const Premium: React.FC = () => {
     { name: 'Priority Support', free: false, premium: true, icon: Star },
   ];
 
+  // Paywall: require authentication to view premium page
+  if (!user) {
+    return (
+      <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
+        {/* Background Decor */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
+        </div>
+
+        <SEO 
+          title="Premium - Unlimited Access"
+          description="Upgrade to ExploreCapitals Premium for unlimited games, ad-free experience, advanced analytics, and exclusive features."
+        />
+
+        <div className="max-w-lg mx-auto relative z-10 text-center">
+          <div className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-8 md:p-12">
+            <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Crown size={40} className="text-amber-400" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-display font-black text-white mb-4 tracking-tighter uppercase">
+              Premium Access
+            </h1>
+            <p className="text-white/70 text-lg mb-8">
+              Sign in to view our premium plans and unlock unlimited games, ad-free experience, and advanced analytics.
+            </p>
+            <Button 
+              variant="accent" 
+              size="lg"
+              className="w-full"
+              onClick={() => navigate('/auth?redirect=/premium')}
+            >
+              Sign In to Continue <ArrowRight size={20} />
+            </Button>
+            <p className="text-white/50 text-sm mt-4">
+              Don't have an account? You can create one for free.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
       {/* Background Decor */}
@@ -314,19 +357,6 @@ const Premium: React.FC = () => {
           <Shield size={16} />
           <span>Secure payments powered by Stripe. Cancel anytime.</span>
         </div>
-
-        {/* Not signed in CTA */}
-        {!user && (
-          <div className="mt-8 text-center">
-            <p className="text-white/60 mb-4">Sign in to subscribe</p>
-            <Button 
-              variant="primary" 
-              onClick={() => navigate('/auth?redirect=/premium')}
-            >
-              Sign In <ArrowRight size={18} />
-            </Button>
-          </div>
-        )}
       </div>
 
       {/* Payment Blocked Modal */}
