@@ -33,6 +33,7 @@ export default function PopulationPursuit() {
   const [timeLeft, setTimeLeft] = useState(60);
   const [countryA, setCountryA] = useState<Country | null>(null);
   const [countryB, setCountryB] = useState<Country | null>(null);
+  const [previousPairIds, setPreviousPairIds] = useState<[string, string] | null>(null);
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -91,12 +92,20 @@ export default function PopulationPursuit() {
     setImgErrorA(false);
     setImgErrorB(false);
     
-    const idxA = Math.floor(Math.random() * countriesWithNumericPop.length);
-    let idxB = Math.floor(Math.random() * countriesWithNumericPop.length);
-    while (idxB === idxA) idxB = Math.floor(Math.random() * countriesWithNumericPop.length);
+    // Filter out countries from the previous pair to avoid back-to-back duplicates
+    const availableCountries = previousPairIds 
+      ? countriesWithNumericPop.filter(c => !previousPairIds.includes(c.id))
+      : countriesWithNumericPop;
     
-    setCountryA(countriesWithNumericPop[idxA]);
-    setCountryB(countriesWithNumericPop[idxB]);
+    const idxA = Math.floor(Math.random() * availableCountries.length);
+    let idxB = Math.floor(Math.random() * availableCountries.length);
+    while (idxB === idxA) idxB = Math.floor(Math.random() * availableCountries.length);
+    
+    const newCountryA = availableCountries[idxA];
+    const newCountryB = availableCountries[idxB];
+    setPreviousPairIds([newCountryA.id, newCountryB.id]);
+    setCountryA(newCountryA);
+    setCountryB(newCountryB);
 
     // Preload next potential flags to reduce lag
     const preloadFlags = () => {
@@ -112,7 +121,7 @@ export default function PopulationPursuit() {
       });
     };
     preloadFlags();
-  }, [countriesWithNumericPop]);
+  }, [countriesWithNumericPop, previousPairIds]);
 
   const startGame = () => {
     setScore(0);
@@ -120,6 +129,7 @@ export default function PopulationPursuit() {
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
+    setPreviousPairIds(null);
     generateRound();
     setGameState('playing');
   };

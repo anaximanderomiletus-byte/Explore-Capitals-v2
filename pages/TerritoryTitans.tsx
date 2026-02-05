@@ -31,6 +31,7 @@ export default function TerritoryTitans() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [currentQuestion, setCurrentQuestion] = useState<{ territory: TerritoryExtended; options: string[]; type: 'sovereignty' | 'capital' } | null>(null);
+  const [previousTerritoryId, setPreviousTerritoryId] = useState<string | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
@@ -97,7 +98,13 @@ export default function TerritoryTitans() {
     setSelectedAnswer(null);
     setFeedback(null);
 
-    const territory = allTerritories[Math.floor(Math.random() * allTerritories.length)];
+    // Filter out the previous territory to avoid back-to-back duplicates
+    const availableTerritories = previousTerritoryId 
+      ? allTerritories.filter(t => t.id !== previousTerritoryId)
+      : allTerritories;
+    
+    const territory = availableTerritories[Math.floor(Math.random() * availableTerritories.length)];
+    setPreviousTerritoryId(territory.id);
     const questionType = Math.random() > 0.5 ? 'sovereignty' : 'capital';
     
     let options: string[];
@@ -120,7 +127,7 @@ export default function TerritoryTitans() {
     }
 
     setCurrentQuestion({ territory, options, type: questionType });
-  }, [allTerritories, uniqueSovereignties, uniqueCapitals]);
+  }, [allTerritories, uniqueSovereignties, uniqueCapitals, previousTerritoryId]);
 
   const startGame = () => {
     if (!isPremium) {
@@ -132,6 +139,7 @@ export default function TerritoryTitans() {
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
+    setPreviousTerritoryId(null);
     generateQuestion();
     setGameState('playing');
   };

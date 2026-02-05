@@ -22,6 +22,7 @@ export default function DrivingDirection() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
+  const [previousCountryId, setPreviousCountryId] = useState<string | null>(null);
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
   const [selectedSide, setSelectedSide] = useState<'Left' | 'Right' | null>(null);
@@ -75,14 +76,20 @@ export default function DrivingDirection() {
     setSelectedSide(null);
     setImgError(false);
     
-    const country = countriesWithDriveSide[Math.floor(Math.random() * countriesWithDriveSide.length)];
+    // Filter out the previous country to avoid back-to-back duplicates
+    const availableCountries = previousCountryId 
+      ? countriesWithDriveSide.filter(c => c.id !== previousCountryId)
+      : countriesWithDriveSide;
+    
+    const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+    setPreviousCountryId(country.id);
     setCurrentCountry(country);
 
     // Preload next potential flag
     const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
     const img = new Image();
     img.src = `https://flagcdn.com/w320/${getCountryCode(countriesWithDriveSide[nextIdx].flag)}.png`;
-  }, [countriesWithDriveSide]);
+  }, [countriesWithDriveSide, previousCountryId]);
 
   const startGame = () => {
     if (!isPremium) {
@@ -94,6 +101,7 @@ export default function DrivingDirection() {
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
+    setPreviousCountryId(null);
     generateRound();
     setGameState('playing');
   };

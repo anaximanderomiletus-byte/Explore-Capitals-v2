@@ -26,6 +26,7 @@ export default function TimeZoneTrekker() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [currentQuestion, setCurrentQuestion] = useState<{ country: Country; options: string[] } | null>(null);
+  const [previousCountryId, setPreviousCountryId] = useState<string | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
@@ -83,7 +84,13 @@ export default function TimeZoneTrekker() {
     setSelectedAnswer(null);
     setFeedback(null);
 
-    const country = countriesWithTimeZone[Math.floor(Math.random() * countriesWithTimeZone.length)];
+    // Filter out the previous country to avoid back-to-back duplicates
+    const availableCountries = previousCountryId 
+      ? countriesWithTimeZone.filter(c => c.id !== previousCountryId)
+      : countriesWithTimeZone;
+    
+    const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+    setPreviousCountryId(country.id);
     const correctAnswer = country.timeZone!;
     
     const distractors = uniqueTimeZones
@@ -93,7 +100,7 @@ export default function TimeZoneTrekker() {
     
     const options = shuffle([correctAnswer, ...distractors]);
     setCurrentQuestion({ country, options });
-  }, [countriesWithTimeZone, uniqueTimeZones]);
+  }, [countriesWithTimeZone, uniqueTimeZones, previousCountryId]);
 
   const startGame = () => {
     if (!isPremium) {
@@ -105,6 +112,7 @@ export default function TimeZoneTrekker() {
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
+    setPreviousCountryId(null);
     generateQuestion();
     setGameState('playing');
   };

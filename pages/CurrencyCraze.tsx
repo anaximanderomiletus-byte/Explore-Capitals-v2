@@ -26,6 +26,7 @@ export default function CurrencyCraze() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [currentQuestion, setCurrentQuestion] = useState<{ country: Country; options: string[] } | null>(null);
+  const [previousCountryId, setPreviousCountryId] = useState<string | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
@@ -78,7 +79,13 @@ export default function CurrencyCraze() {
     setSelectedAnswer(null);
     setFeedback(null);
 
-    const country = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+    // Filter out the previous country to avoid back-to-back duplicates
+    const availableCountries = previousCountryId 
+      ? MOCK_COUNTRIES.filter(c => c.id !== previousCountryId)
+      : MOCK_COUNTRIES;
+    
+    const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+    setPreviousCountryId(country.id);
     const correctAnswer = country.currency;
     
     // Get 3 random different currencies as distractors
@@ -89,7 +96,7 @@ export default function CurrencyCraze() {
     
     const options = shuffle([correctAnswer, ...distractors]);
     setCurrentQuestion({ country, options });
-  }, [uniqueCurrencies]);
+  }, [uniqueCurrencies, previousCountryId]);
 
   const startGame = () => {
     if (!isPremium) {
@@ -101,6 +108,7 @@ export default function CurrencyCraze() {
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
+    setPreviousCountryId(null);
     generateQuestion();
     setGameState('playing');
   };

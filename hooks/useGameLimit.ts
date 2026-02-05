@@ -21,11 +21,10 @@ export function useGameLimit(): GameLimitResult {
   const { userProfile, updateUserProfile } = useUser();
 
   const isPremium = useMemo(() => {
-    return true; // TESTING: bypass premium check - REVERT BEFORE PUSHING
-    // return isPremiumUser(
-    //   userProfile?.subscriptionStatus,
-    //   userProfile?.subscriptionPlan
-    // );
+    return isPremiumUser(
+      userProfile?.subscriptionStatus,
+      userProfile?.subscriptionPlan
+    );
   }, [userProfile?.subscriptionStatus, userProfile?.subscriptionPlan]);
 
   const gamesPlayed = useMemo(() => {

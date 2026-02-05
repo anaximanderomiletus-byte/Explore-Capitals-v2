@@ -31,6 +31,7 @@ export default function AreaAce() {
   const [timeLeft, setTimeLeft] = useState(60);
   const [countryA, setCountryA] = useState<Country | null>(null);
   const [countryB, setCountryB] = useState<Country | null>(null);
+  const [previousPairIds, setPreviousPairIds] = useState<[string, string] | null>(null);
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -88,12 +89,20 @@ export default function AreaAce() {
     setImgErrorA(false);
     setImgErrorB(false);
     
-    const idxA = Math.floor(Math.random() * countriesWithNumericArea.length);
-    let idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
-    while (idxB === idxA) idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
+    // Filter out countries from the previous pair to avoid back-to-back duplicates
+    const availableCountries = previousPairIds 
+      ? countriesWithNumericArea.filter(c => !previousPairIds.includes(c.id))
+      : countriesWithNumericArea;
     
-    setCountryA(countriesWithNumericArea[idxA]);
-    setCountryB(countriesWithNumericArea[idxB]);
+    const idxA = Math.floor(Math.random() * availableCountries.length);
+    let idxB = Math.floor(Math.random() * availableCountries.length);
+    while (idxB === idxA) idxB = Math.floor(Math.random() * availableCountries.length);
+    
+    const newCountryA = availableCountries[idxA];
+    const newCountryB = availableCountries[idxB];
+    setPreviousPairIds([newCountryA.id, newCountryB.id]);
+    setCountryA(newCountryA);
+    setCountryB(newCountryB);
 
     const preloadFlags = () => {
       const nextIdx1 = Math.floor(Math.random() * countriesWithNumericArea.length);
@@ -108,7 +117,7 @@ export default function AreaAce() {
       });
     };
     preloadFlags();
-  }, [countriesWithNumericArea]);
+  }, [countriesWithNumericArea, previousPairIds]);
 
   const startGame = () => {
     if (!isPremium) {
@@ -120,6 +129,7 @@ export default function AreaAce() {
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
+    setPreviousPairIds(null);
     generateRound();
     setGameState('playing');
   };
