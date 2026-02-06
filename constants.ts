@@ -314,65 +314,51 @@ export const GAMES: Game[] = [
     status: 'active', 
     description: 'Match countries to their capitals in a race against time.'
   },
-  {
-    id: '8',
-    title: 'Region Roundup',
-    image: './png/0-GAMES/region-roundup.png',
-    status: 'active', 
-    description: 'Sort countries into their correct continents.'
-  },
-  {
-    id: '9',
-    title: 'Landmark Legend',
-    image: './png/0-GAMES/landmark-legend.png',
-    status: 'active', 
-    description: 'Identify the country from a famous landmark image.'
-  },
   // === PREMIUM GAMES ===
   {
-    id: '10',
+    id: '8',
     title: 'Territory Titans',
-    image: './logo.png',
+    image: './png/0-GAMES/territory-titan.png',
     status: 'active',
     description: 'Master autonomous regions and dependencies worldwide.',
     premium: true
   },
   {
-    id: '11',
+    id: '9',
     title: 'Area Ace',
-    image: './logo.png',
+    image: './png/0-GAMES/area-ace.png',
     status: 'active',
     description: 'Which country is larger? Test your size knowledge.',
     premium: true
   },
   {
-    id: '12',
+    id: '10',
     title: 'Currency Craze',
-    image: './logo.png',
+    image: './png/0-GAMES/currency-craze.png',
     status: 'active',
     description: 'Match countries to their official currencies.',
     premium: true
   },
   {
-    id: '13',
+    id: '11',
     title: 'Language Legend',
-    image: './logo.png',
+    image: './png/0-GAMES/language-legend.png',
     status: 'active',
     description: 'Identify countries by their official languages.',
     premium: true
   },
   {
-    id: '14',
+    id: '12',
     title: 'Time Zone Trekker',
-    image: './logo.png',
+    image: './png/0-GAMES/time-zone-trekker.png',
     status: 'active',
     description: 'Match countries to their time zones.',
     premium: true
   },
   {
-    id: '15',
+    id: '13',
     title: 'Driving Direction',
-    image: './logo.png',
+    image: './png/0-GAMES/driving-direction.png',
     status: 'active',
     description: 'Left or right? Know which side countries drive on.',
     premium: true

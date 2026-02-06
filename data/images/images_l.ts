@@ -1,43 +1,43 @@
 export const imagesL: Record<string, string> = {
-  // --- Laos --- (no images yet)
-  "Laos": "/logo.png",
-  "Luang Prabang Monks": "/logo.png",
-  "Kuang Si Falls": "/logo.png",
-  "The Plain of Jars": "/logo.png",
-  "Pha That Luang": "/logo.png",
-  "Vat Phou": "/logo.png",
+  // --- Laos ---
+  "Laos": "/png/LAOS/vientiane-laos.png",
+  "Luang Prabang Monks": "/png/LAOS/luang-prabang-tak-bat-alms-giving.png",
+  "Kuang Si Falls": "/png/LAOS/kuang-si-falls.png",
+  "The Plain of Jars": "/png/LAOS/plain-of-jars-xiangkhoang.png",
+  "Pha That Luang": "/png/LAOS/pha-that-luang-vientiane.png",
+  "Vat Phou": "/png/LAOS/vat-phou-champasak.png",
 
-  // --- Latvia --- (no images yet)
-  "Latvia": "/logo.png",
-  "Riga Art Nouveau": "/logo.png",
-  "Rundāle Palace": "/logo.png",
-  "Gutman's Cave": "/logo.png",
-  "Ventas Rumba": "/logo.png",
-  "Jurmala Wooden House": "/logo.png",
+  // --- Latvia ---
+  "Latvia": "/png/LATVIA/riga-latvia.png",
+  "Riga Art Nouveau": "/png/LATVIA/riga-art-nouveau-district-alberta-iela-facades.png",
+  "Rundāle Palace": "/png/LATVIA/rundāle-palace.png",
+  "Gutman's Cave": "/png/LATVIA/gauja-national-park.png",
+  "Ventas Rumba": "/png/LATVIA/ventas-rumba.png",
+  "Jurmala Wooden House": "/png/LATVIA/jūrmala.png",
 
-  // --- Lebanon --- (no images yet)
-  "Lebanon": "/logo.png",
-  "Baalbek Ruins": "/logo.png",
-  "Cedars of God": "/logo.png",
-  "Jeita Grotto Cave": "/logo.png",
-  "Byblos Ruins": "/logo.png",
-  "Raouche Rocks": "/logo.png",
+  // --- Lebanon ---
+  "Lebanon": "/png/LEBANON/beirut-lebanon.png",
+  "Baalbek Ruins": "/png/LEBANON/baalbek-temple-complex.png",
+  "Cedars of God": "/png/LEBANON/the-cedars-of-god-al-arz.png",
+  "Jeita Grotto Cave": "/png/LEBANON/jeita-grotto.png",
+  "Byblos Ruins": "/png/LEBANON/byblos-jbeil.png",
+  "Raouche Rocks": "/png/LEBANON/raouche-rocks-pigeon-rocks.png",
 
-  // --- Lesotho --- (no images yet)
-  "Lesotho": "/logo.png",
-  "Sani Pass": "/logo.png",
-  "Maletsunyane Falls": "/logo.png",
-  "Thaba Bosiu": "/logo.png",
-  "Katse Dam": "/logo.png",
-  "Kome Caves": "/logo.png",
+  // --- Lesotho ---
+  "Lesotho": "/png/LESOTHO/maseru-lesotho.png",
+  "Sani Pass": "/png/LESOTHO/sani-pass.png",
+  "Maletsunyane Falls": "/png/LESOTHO/maletsunyane-falls-semonkong.png",
+  "Thaba Bosiu": "/png/LESOTHO/thaba-bosiu.png",
+  "Katse Dam": "/png/LESOTHO/katse-dam.png",
+  "Kome Caves": "/png/LESOTHO/kome-caves.png",
 
-  // --- Liberia --- (no images yet)
-  "Liberia": "/logo.png",
-  "Providence Island": "/logo.png",
-  "Sapo National Park": "/logo.png",
-  "Robertsport Surfing": "/logo.png",
-  "Firestone Rubber Plantation": "/logo.png",
-  "Kpatawee Waterfall": "/logo.png",
+  // --- Liberia ---
+  "Liberia": "/png/LIBERIA/monrovia-liberia.png",
+  "Providence Island": "/png/LIBERIA/providence-island-monrovia.png",
+  "Sapo National Park": "/png/LIBERIA/sapo-national-park.png",
+  "Robertsport Surfing": "/png/LIBERIA/robertsport-cape-mount-coast-and-lake-piso.png",
+  "Firestone Rubber Plantation": "/png/LIBERIA/firestone-rubber-plantation-harbel.png",
+  "Kpatawee Waterfall": "/png/LIBERIA/kpatawee-waterfall-bong-county.png",
 
   // --- Libya --- (no images yet)
   "Libya": "/logo.png",

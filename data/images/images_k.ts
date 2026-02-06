@@ -23,19 +23,19 @@ export const imagesK: Record<string, string> = {
   "Betio WWII Relics": "/png/KIRIBATI/betio-tarawa-atoll.png",
   "Maneaba Meeting House": "/png/KIRIBATI/the-maneaba-tabiteuea.png",
 
-  // --- Kuwait --- (no images yet)
-  "Kuwait": "/logo.png",
-  "Kuwait Towers": "/logo.png",
-  "Souq Al-Mubarakiya": "/logo.png",
-  "The Grand Mosque Kuwait": "/logo.png",
-  "Failaka Island": "/logo.png",
-  "The Mirror House": "/logo.png",
+  // --- Kuwait ---
+  "Kuwait": "/png/KUWAIT/kuwait-city.png",
+  "Kuwait Towers": "/png/KUWAIT/kuwait-towers.png",
+  "Souq Al-Mubarakiya": "/png/KUWAIT/souq-al-mubarakiya.png",
+  "The Grand Mosque Kuwait": "/png/KUWAIT/the-grand-mosque-of-kuwait.png",
+  "Failaka Island": "/png/KUWAIT/failaka-island.png",
+  "The Mirror House": "/png/KUWAIT/the-mirror-house.png",
 
-  // --- Kyrgyzstan --- (no images yet)
-  "Kyrgyzstan": "/logo.png",
-  "Issyk-Kul Lake": "/logo.png",
-  "Burana Tower": "/logo.png",
-  "Song-Kul Yurts": "/logo.png",
-  "Tash Rabat Caravanserai": "/logo.png",
-  "Jeti-Oguz Rocks": "/logo.png"
+  // --- Kyrgyzstan ---
+  "Kyrgyzstan": "/png/KYRGYZSTAN/bishkek-kyrgyzstan.png",
+  "Issyk-Kul Lake": "/png/KYRGYZSTAN/issyk-kul-lake.png",
+  "Burana Tower": "/png/KYRGYZSTAN/burana-tower.png",
+  "Song-Kul Yurts": "/png/KYRGYZSTAN/song-kul-lake-yurt-camps.png",
+  "Tash Rabat Caravanserai": "/png/KYRGYZSTAN/tash-rabat.png",
+  "Jeti-Oguz Rocks": "/png/KYRGYZSTAN/jeti-oguz-seven-bulls.png"
 };

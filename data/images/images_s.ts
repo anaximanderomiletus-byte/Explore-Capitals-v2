@@ -135,13 +135,13 @@ export const imagesS: Record<string, string> = {
   "Blyde River Canyon": "/logo.png",
   "Boulders Beach": "/logo.png",
 
-  // --- South Korea --- (no images yet)
-  "South Korea": "/logo.png",
-  "Gyeongbokgung Palace": "/logo.png",
-  "Lotte World Tower": "/logo.png",
-  "Gwangjang Market": "/logo.png",
-  "Jeju Island Haenyeo": "/logo.png",
-  "The DMZ Joint Security Area": "/logo.png",
+  // --- South Korea ---
+  "South Korea": "/png/SOUTH KOREA/seoul-south-korea.png",
+  "Gyeongbokgung Palace": "/png/SOUTH KOREA/gyeongbokgung-palace.png",
+  "Lotte World Tower": "/png/SOUTH KOREA/lotte-world-tower.png",
+  "Gwangjang Market": "/png/SOUTH KOREA/gwangjang-market.png",
+  "Jeju Island Haenyeo": "/png/SOUTH KOREA/jeju-island-haenyeo-divers.png",
+  "The DMZ Joint Security Area": "/png/SOUTH KOREA/dmz-joint-security-area.png",
 
   // --- South Sudan --- (no images yet)
   "South Sudan": "/logo.png",
