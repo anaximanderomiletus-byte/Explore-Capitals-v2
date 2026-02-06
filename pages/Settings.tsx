@@ -3,17 +3,15 @@ import {
   CheckCircle2, Mail, ShieldCheck,
   AlertCircle, ShieldAlert,
   Eye, EyeOff, LogOut, ArrowLeft,
-  Smartphone, Monitor, Lock, Camera, Upload, X, Pencil, Heart,
+  Smartphone, Monitor, Lock, Camera, Upload, X, Pencil,
   Crown, Sparkles, Loader2
 } from 'lucide-react';
-import { createCheckoutSession } from '../services/payment';
 import { 
   getCustomerPortalUrl, 
   cancelSubscription, 
   isPremiumUser, 
   getSubscriptionInfo 
 } from '../services/subscription';
-import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 import PhoneInput from '../components/PhoneInput';
 import ConfirmationModal from '../components/ConfirmationModal';
@@ -23,6 +21,8 @@ import { useUser } from '../context/UserContext';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 import { AVATAR_PRESETS, getAvatarById } from '../constants/avatars';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
@@ -63,30 +63,6 @@ const Settings: React.FC = () => {
   } = useAuth();
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
-
-  // Payment state
-  const [donationBusy, setDonationBusy] = useState(false);
-
-  useEffect(() => {
-    if (searchParams.get('success') === 'true') {
-      setStatus('Thank you for your support! You are now a supporter.');
-    }
-  }, [searchParams]);
-
-  const handleDonation = async (amount: number) => {
-    setDonationBusy(true);
-    clearMessages();
-    try {
-      const { url } = await createCheckoutSession(amount * 100); // Convert to cents
-      window.location.href = url;
-    } catch (err: any) {
-      console.error('Donation failed:', err);
-      setError(err?.message ?? 'Failed to start donation');
-      setDonationBusy(false);
-    }
-  };
-
   const currentDeviceInfo = useMemo(() => {
     const ua = navigator.userAgent;
     let browser = "Unknown Browser";
@@ -126,6 +102,7 @@ const Settings: React.FC = () => {
 
   // Profile photo state
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [pendingAvatar, setPendingAvatar] = useState<{ type: 'preset' | 'upload'; value: string; file?: File } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Password section state
@@ -287,58 +264,90 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleAvatarSelect = async (avatarId: string) => {
-    setBusy(true);
-    clearMessages();
-    try {
-      await updateProfileInfo({ photoURL: avatarId }); 
-      setStatus('Profile picture updated');
-      setShowAvatarPicker(false);
-    } catch (err: any) {
-      setError('Failed to update profile picture');
-    } finally {
-      setBusy(false);
-    }
+  const handleAvatarSelect = (avatarId: string) => {
+    setPendingAvatar({ type: 'preset', value: avatarId });
   };
 
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setError('Image must be less than 5MB');
+      e.target.value = ''; // Reset input
       return;
     }
     
     // Check file type
     if (!file.type.startsWith('image/')) {
       setError('Please select an image file');
+      e.target.value = ''; // Reset input
       return;
     }
-    
+
+    // Clean up previous preview URL if there was one
+    if (pendingAvatar?.type === 'upload') {
+      URL.revokeObjectURL(pendingAvatar.value);
+    }
+
+    // Create a preview URL for the selected file
+    const previewUrl = URL.createObjectURL(file);
+    setPendingAvatar({ type: 'upload', value: previewUrl, file });
+    e.target.value = ''; // Reset input to allow selecting the same file again
+  };
+
+  const handleSaveAvatar = async () => {
+    if (!pendingAvatar) return;
+
     setBusy(true);
     clearMessages();
     try {
-      // Convert to base64 for now (in production, upload to storage)
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const base64 = event.target?.result as string;
-        // Store custom photo URL
-        await updateProfileInfo({ photoURL: base64 });
+      if (pendingAvatar.type === 'preset') {
+        // Save preset avatar
+        await updateProfileInfo({ photoURL: pendingAvatar.value });
+        setStatus('Profile picture updated');
+      } else if (pendingAvatar.type === 'upload' && pendingAvatar.file) {
+        // Upload to Firebase Storage
+        if (!storage || !user) {
+          setError('Storage not available');
+          setBusy(false);
+          return;
+        }
+
+        const fileExtension = pendingAvatar.file.name.split('.').pop() || 'jpg';
+        const storageRef = ref(storage, `profile-photos/${user.uid}.${fileExtension}`);
+        
+        await uploadBytes(storageRef, pendingAvatar.file);
+        const downloadURL = await getDownloadURL(storageRef);
+        
+        // Store the download URL in the user's profile
+        await updateProfileInfo({ photoURL: downloadURL });
         setStatus('Profile photo uploaded');
-        setShowAvatarPicker(false);
-        setBusy(false);
-      };
-      reader.onerror = () => {
-        setError('Failed to read image');
-        setBusy(false);
-      };
-      reader.readAsDataURL(file);
+      }
+      
+      // Clean up preview URL if it was an upload
+      if (pendingAvatar.type === 'upload') {
+        URL.revokeObjectURL(pendingAvatar.value);
+      }
+      
+      setPendingAvatar(null);
+      setShowAvatarPicker(false);
     } catch (err: any) {
-      setError('Failed to upload photo');
+      console.error('Avatar save error:', err);
+      setError(err?.message || 'Failed to save profile picture');
+    } finally {
       setBusy(false);
     }
+  };
+
+  const handleCancelAvatar = () => {
+    // Clean up preview URL if it was an upload
+    if (pendingAvatar?.type === 'upload') {
+      URL.revokeObjectURL(pendingAvatar.value);
+    }
+    setPendingAvatar(null);
+    setShowAvatarPicker(false);
   };
 
   const handlePasswordChange = async () => {
@@ -1016,42 +1025,6 @@ const Settings: React.FC = () => {
             </SettingsRow>
           </SettingsSection>
 
-          {/* Support Section */}
-          <SettingsSection title="SUPPORT US">
-            <SettingsRow>
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 shrink-0">
-                  <Heart size={24} className={user.isSupporter ? "fill-current" : ""} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-sm font-bold text-white mb-1">
-                    {user.isSupporter ? "THANK YOU FOR YOUR SUPPORT!" : "BECOME A SUPPORTER"}
-                  </h3>
-                  <p className="text-xs text-white/60 mb-4 leading-relaxed">
-                    ExploreCapitals is a passion project. Your support helps cover server costs and keeps the game free for everyone.
-                    {user.isSupporter && " You have a special badge on your profile!"}
-                  </p>
-                  
-                  <div className="grid grid-cols-3 gap-3">
-                    {[5, 10, 20].map((amount) => (
-                      <button
-                        key={amount}
-                        onClick={() => handleDonation(amount)}
-                        disabled={donationBusy || busy}
-                        className="py-2.5 px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-widest transition-all disabled:opacity-50"
-                      >
-                        ${amount}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-[10px] text-white/20 mt-3 text-center uppercase tracking-widest">
-                    SECURE PAYMENT VIA STRIPE
-                  </p>
-                </div>
-              </div>
-            </SettingsRow>
-          </SettingsSection>
-
           {/* Session Section */}
           <SettingsSection title="SESSION">
             <SettingsRow>
@@ -1126,7 +1099,7 @@ const Settings: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => !busy && setShowAvatarPicker(false)}
+              onClick={() => !busy && handleCancelAvatar()}
               className="absolute inset-0 bg-surface-dark/80 backdrop-blur-md"
             />
             <motion.div 
@@ -1141,16 +1114,27 @@ const Settings: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-black text-white uppercase tracking-tight">CHOOSE PHOTO</h2>
                   <button 
-                    onClick={() => setShowAvatarPicker(false)}
+                    onClick={handleCancelAvatar}
+                    disabled={busy}
                     className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
                   >
                     <X size={16} className="text-white/60" />
                   </button>
                 </div>
 
-                {/* Current Avatar Preview */}
+                {/* Avatar Preview - shows pending selection or current */}
                 <div className="flex justify-center mb-6">
-                  {renderAvatarContent(user.photoURL, initials, 'xl')}
+                  {pendingAvatar ? (
+                    pendingAvatar.type === 'upload' ? (
+                      <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-white/10">
+                        <img src={pendingAvatar.value} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      renderAvatarContent(pendingAvatar.value, initials, 'xl')
+                    )
+                  ) : (
+                    renderAvatarContent(user.photoURL, initials, 'xl')
+                  )}
                 </div>
 
                 {/* Upload Button */}
@@ -1172,18 +1156,39 @@ const Settings: React.FC = () => {
 
                 {/* Preset Avatars */}
                 <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.15em] mb-3">OR CHOOSE AN AVATAR</p>
-                <div className="grid grid-cols-5 gap-3">
-                  {AVATAR_PRESETS.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => handleAvatarSelect(p.id)}
-                      disabled={busy}
-                      className={`aspect-square rounded-xl ${p.color} flex items-center justify-center transition-all ${user.photoURL === p.id ? 'ring-2 ring-white ring-offset-2 ring-offset-surface-dark scale-105' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
-                    >
-                      {React.cloneElement(p.icon as React.ReactElement, { size: 20 })}
-                    </button>
-                  ))}
+                <div className="grid grid-cols-5 gap-3 mb-6">
+                  {AVATAR_PRESETS.map((p) => {
+                    const isSelected = pendingAvatar 
+                      ? (pendingAvatar.type === 'preset' && pendingAvatar.value === p.id)
+                      : user.photoURL === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => handleAvatarSelect(p.id)}
+                        disabled={busy}
+                        className={`aspect-square rounded-xl ${p.color} flex items-center justify-center transition-all ${isSelected ? 'ring-2 ring-white ring-offset-2 ring-offset-surface-dark scale-105' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
+                      >
+                        {React.cloneElement(p.icon as React.ReactElement, { size: 20 })}
+                      </button>
+                    );
+                  })}
                 </div>
+
+                {/* Save Button */}
+                <button 
+                  onClick={handleSaveAvatar}
+                  disabled={busy || !pendingAvatar}
+                  className="w-full py-3.5 bg-sky hover:bg-sky-light disabled:opacity-30 disabled:cursor-not-allowed rounded-xl text-[11px] font-black text-white uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2"
+                >
+                  {busy ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      SAVING...
+                    </>
+                  ) : (
+                    'SAVE CHANGES'
+                  )}
+                </button>
               </div>
             </motion.div>
           </div>

@@ -1,17 +1,33 @@
-import React, { useEffect } from 'react';
-import { Target, Award, Compass, ShieldCheck, Microscope, Clock } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2 } from 'lucide-react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { useAuth } from '../context/AuthContext';
 import { VerticalSidebarAd } from '../components/AdSense';
+import { createCheckoutSession } from '../services/payment';
 
 const About: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { hash } = useLocation();
+  const [searchParams] = useSearchParams();
+  const { user } = useAuth();
+  
+  // Donation state
+  const [donationBusy, setDonationBusy] = useState(false);
+  const [donationStatus, setDonationStatus] = useState<string | null>(null);
+  const [donationError, setDonationError] = useState<string | null>(null);
 
   useEffect(() => {
     setPageLoading(false);
+    
+    // Handle payment success/cancel redirects
+    if (searchParams.get('success') === 'true') {
+      setDonationStatus('Thank you for your support! You are now a supporter.');
+    } else if (searchParams.get('canceled') === 'true') {
+      setDonationError('Payment was canceled.');
+    }
     
     if (hash === '#contact') {
       const element = document.getElementById('contact');
@@ -20,8 +36,29 @@ const About: React.FC = () => {
           element.scrollIntoView({ behavior: 'smooth' });
         }, 150);
       }
+    } else if (hash === '#support') {
+      const element = document.getElementById('support');
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
     }
-  }, [setPageLoading, hash]);
+  }, [setPageLoading, hash, searchParams]);
+
+  const handleDonation = async (amount: number) => {
+    setDonationBusy(true);
+    setDonationStatus(null);
+    setDonationError(null);
+    try {
+      const { url } = await createCheckoutSession(amount * 100); // Convert to cents
+      window.location.href = url;
+    } catch (err: any) {
+      console.error('Donation failed:', err);
+      setDonationError(err?.message ?? 'Failed to start donation. Please try again.');
+      setDonationBusy(false);
+    }
+  };
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -105,6 +142,69 @@ const About: React.FC = () => {
             {/* Section Divider */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14"></div>
 
+            {/* Support Section */}
+            <div id="support" className="scroll-mt-32 relative z-10 mb-10 md:mb-14">
+              <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Support Us</h2>
+              <p className="text-white/50 text-sm md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
+                ExploreCapitals is a passion project. Your support helps cover server costs and keeps the game free for everyone.
+              </p>
+
+              {/* Status Messages */}
+              {donationStatus && (
+                <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-400 text-sm font-bold">
+                  {donationStatus}
+                </div>
+              )}
+              {donationError && (
+                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-bold">
+                  {donationError}
+                </div>
+              )}
+
+              <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-pink-500/30 transition-all duration-500 relative overflow-hidden">
+                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-500 border-2 border-white/30 shrink-0">
+                    <Heart size={32} strokeWidth={2} className={user?.isSupporter ? "fill-current" : ""} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg md:text-xl font-black text-white mb-2 uppercase tracking-tight">
+                      {user?.isSupporter ? "Thank You for Your Support!" : "Become a Supporter"}
+                    </h3>
+                    <p className="text-white/50 text-sm leading-relaxed font-bold mb-6">
+                      {user?.isSupporter 
+                        ? "Your contribution helps keep ExploreCapitals running. You have a special supporter badge on your profile!"
+                        : "Choose an amount below to support the project. All supporters receive a special badge on their profile."
+                      }
+                    </p>
+                    
+                    <div className="grid grid-cols-3 gap-4 max-w-md">
+                      {[5, 10, 20].map((amount) => (
+                        <button
+                          key={amount}
+                          onClick={() => handleDonation(amount)}
+                          disabled={donationBusy}
+                          className="py-4 px-4 bg-white/5 hover:bg-pink-500/20 border-2 border-white/20 hover:border-pink-500/40 rounded-2xl text-base font-black text-white uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          {donationBusy ? (
+                            <Loader2 size={18} className="animate-spin" />
+                          ) : (
+                            `$${amount}`
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-white/30 mt-4 uppercase tracking-[0.2em] font-bold">
+                      Secure payment via Stripe
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section Divider */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14"></div>
+
             {/* Contact Section */}
             <div id="contact" className="scroll-mt-32 relative z-10">
               <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact</h2>
@@ -158,11 +258,11 @@ const About: React.FC = () => {
                     </Link>
                     <Link to="/games" className="w-full sm:w-auto">
                       <Button 
-                        variant="outline" 
+                        variant="primary" 
                         size="lg" 
-                        className="h-16 px-12 text-xl w-full uppercase tracking-[0.2em] flex items-center justify-center font-black text-white"
+                        className="h-16 px-12 text-xl w-full uppercase tracking-[0.2em] flex items-center justify-center font-black"
                       >
-                        Play Now <Compass size={24} className="ml-4 shrink-0 text-white drop-shadow-md" />
+                        Play Now <Compass size={24} className="ml-4 shrink-0 drop-shadow-md" />
                       </Button>
                     </Link>
                 </div>

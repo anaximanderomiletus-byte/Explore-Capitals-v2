@@ -1,6 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getFunctions, Functions } from 'firebase/functions';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
@@ -18,6 +19,7 @@ const firebaseConfig = {
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 let functions: Functions | null = null;
 let analytics: Promise<Analytics | null> = Promise.resolve(null);
 
@@ -27,6 +29,7 @@ try {
     app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
+    storage = getStorage(app);
     functions = getFunctions(app);
     analytics = isSupported().then(yes => yes ? getAnalytics(app!) : null).catch(() => null);
 
@@ -58,4 +61,4 @@ try {
   console.error("Firebase initialization failed:", error);
 }
 
-export { app, auth, db, functions, analytics };
+export { app, auth, db, storage, functions, analytics };

@@ -19,9 +19,9 @@ export const PAYMENT_LIMITS = {
 
 // Rate limiting
 export const RATE_LIMITS = {
-  MAX_ATTEMPTS_PER_HOUR: 2,
-  MAX_ATTEMPTS_PER_DAY: 5,
-  ACCOUNT_MIN_AGE_HOURS: 24,
+  MAX_ATTEMPTS_PER_HOUR: 10,
+  MAX_ATTEMPTS_PER_DAY: 25,
+  ACCOUNT_MIN_AGE_HOURS: 1, // Reduced from 24 hours for better UX
 };
 
 // OFAC-sanctioned countries + high fraud risk
