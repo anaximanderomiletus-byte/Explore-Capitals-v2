@@ -130,7 +130,7 @@ const AppContent: React.FC = () => {
   }, []);
   
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-[#0F172A] relative">
+    <div className="min-h-screen flex flex-col bg-[#0F172A] relative">
       <ScrollToTop />
       <Navigation />
       <CookieConsent />

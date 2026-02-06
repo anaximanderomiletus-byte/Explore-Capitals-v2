@@ -159,7 +159,7 @@ const Games: React.FC = () => {
   };
 
   return (
-    <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
+    <div className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />

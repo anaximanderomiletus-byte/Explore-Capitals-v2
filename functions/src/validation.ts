@@ -36,6 +36,20 @@ function getAccountAgeHours(joinedAt: admin.firestore.Timestamp | string): numbe
 /**
  * Get payment attempts within a time window
  */
+/**
+ * Safely parse a Firestore timestamp to milliseconds.
+ * Handles: Firestore Timestamp objects, serialized {_seconds}, {seconds}, strings, numbers
+ */
+function toMs(ts: any): number {
+  if (!ts) return 0;
+  if (typeof ts === 'string') return new Date(ts).getTime();
+  if (typeof ts === 'number') return ts;
+  if (typeof ts.toDate === 'function') return ts.toDate().getTime();
+  if (ts._seconds != null) return ts._seconds * 1000;
+  if (ts.seconds != null) return ts.seconds * 1000;
+  return 0;
+}
+
 function getAttemptsInWindow(
   attempts: UserPaymentData['paymentAttempts'],
   windowMs: number
@@ -44,10 +58,8 @@ function getAttemptsInWindow(
   
   const now = Date.now();
   return attempts.filter(a => {
-    const timestamp = typeof a.timestamp === 'string'
-      ? new Date(a.timestamp).getTime()
-      : a.timestamp.toDate().getTime();
-    return now - timestamp < windowMs;
+    const timestamp = toMs(a.timestamp);
+    return timestamp > 0 && now - timestamp < windowMs;
   }).length;
 }
 
@@ -63,10 +75,8 @@ function getCompletedAmountInWindow(
   const now = Date.now();
   return attempts
     .filter(a => {
-      const timestamp = typeof a.timestamp === 'string'
-        ? new Date(a.timestamp).getTime()
-        : a.timestamp.toDate().getTime();
-      return a.status === 'completed' && now - timestamp < windowMs;
+      const timestamp = toMs(a.timestamp);
+      return a.status === 'completed' && timestamp > 0 && now - timestamp < windowMs;
     })
     .reduce((sum, a) => sum + a.amount, 0);
 }

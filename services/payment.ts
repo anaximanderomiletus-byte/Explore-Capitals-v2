@@ -8,7 +8,7 @@ export interface CheckoutSessionResponse {
 
 export const createCheckoutSession = async (amountInCents: number) => {
   if (!functions) {
-    throw new Error('Firebase Functions not initialized');
+    throw new Error('Unable to connect to payment service. Please refresh the page and try again.');
   }
 
   const createSession = httpsCallable<
@@ -18,8 +18,8 @@ export const createCheckoutSession = async (amountInCents: number) => {
 
   const { data } = await createSession({
     amount: amountInCents,
-    successUrl: `${window.location.origin}/about?success=true#support`,
-    cancelUrl: `${window.location.origin}/about?canceled=true#support`,
+    successUrl: `${window.location.origin}/#/about?success=true`,
+    cancelUrl: `${window.location.origin}/#/about?canceled=true`,
   });
 
   return data;

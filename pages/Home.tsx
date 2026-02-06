@@ -25,7 +25,8 @@ const ParallaxSection: React.FC<{
         </div>
       )}
       <div 
-        className={`relative z-10 w-full max-w-7xl mx-auto ${noPadding ? 'px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12' : 'px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12'}`}
+        className={`relative z-10 w-full max-w-7xl mx-auto ${noPadding ? 'px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12' : 'px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12'}`}
+        style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
       >
         {children}
       </div>
@@ -58,7 +59,7 @@ const Home: React.FC = () => {
       </div>
 
       <ParallaxSection
-        className="min-h-[100svh] flex items-center justify-center"
+        className="min-h-screen flex items-center justify-center"
         background={
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {/* CSS-only gradient background - no external image loading */}

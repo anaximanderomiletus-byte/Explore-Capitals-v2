@@ -307,7 +307,7 @@ const Navigation: React.FC = () => {
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
         } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
       >
-        <div className="w-full px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap">
+        <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
@@ -377,7 +377,7 @@ const Navigation: React.FC = () => {
                 e.preventDefault();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="relative w-10 h-10 flex items-center justify-center touch-manipulation active:opacity-80 transition-opacity duration-75"
+              className="relative w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation active:opacity-80 transition-opacity duration-75"
               aria-label="Toggle menu"
               style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
@@ -405,14 +405,18 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
       <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen 
             ? 'translate-x-0 opacity-100 visible' 
             : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
         style={{ 
           WebkitOverflowScrolling: 'touch',
-          touchAction: isMobileMenuOpen ? 'pan-y' : 'none'
+          touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
+          // Use accurate viewport height on iOS
+          height: 'var(--viewport-height, 100vh)',
+          minHeight: 'var(--viewport-height, 100vh)',
+          paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)'
         }}
         aria-hidden={!isMobileMenuOpen}
       >

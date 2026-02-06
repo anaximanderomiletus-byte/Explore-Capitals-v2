@@ -217,6 +217,15 @@
     <style>
       /* ===== CROSS-BROWSER NORMALIZATION ===== */
       
+      /* Define viewport height CSS variable for iOS consistency */
+      :root {
+        --vh: 1vh;
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-left: env(safe-area-inset-left, 0px);
+        --safe-right: env(safe-area-inset-right, 0px);
+      }
+      
       /* Inter (Variable) Enhancements */
       @supports (font-variation-settings: normal) {
         html { font-family: 'Inter', sans-serif; }
@@ -227,13 +236,17 @@
         -moz-text-size-adjust: 100%;
         text-size-adjust: 100%;
         background-color: #0F172A;
+        /* Unified height handling for iOS */
+        height: 100%;
+        height: 100dvh;
         height: -webkit-fill-available;
         margin: 0;
         padding: 0;
         font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-        /* Allow natural scrolling - no overflow restrictions on html */
-        max-width: 100vw;
+        /* Prevent horizontal overflow */
+        max-width: 100%;
         width: 100%;
+        overflow-x: hidden;
       }
       
       /* Consistent box-sizing */
@@ -245,28 +258,36 @@
       /* Font smoothing for all browsers */
       body { 
         -webkit-font-smoothing: antialiased; 
-        -moz-osx-smoothing: grayscale;
+        -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
         -webkit-tap-highlight-color: transparent;
-        /* No overflow restrictions - allow natural scrolling */
         font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
         background-color: #0F172A;
-        min-height: 100vh;
+        /* Unified min-height for iOS - use dvh with fallbacks */
+        min-height: 100%;
+        min-height: 100dvh;
         min-height: -webkit-fill-available;
         margin: 0;
         padding: 0;
-        max-width: 100vw;
+        max-width: 100%;
         width: 100%;
         position: relative;
-        /* Safe area support for notched iPhones */
-        padding-bottom: env(safe-area-inset-bottom);
+        overflow-x: hidden;
+        /* Safe area support for notched iPhones - all sides */
+        padding-top: var(--safe-top);
+        padding-bottom: var(--safe-bottom);
+        padding-left: var(--safe-left);
+        padding-right: var(--safe-right);
       }
       
       /* Root container - allow natural scrolling */
       #root {
-        max-width: 100vw;
         width: 100%;
-        /* No overflow-x: hidden here to prevent scroll blocking */
+        min-height: 100%;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+        /* Prevent horizontal overflow but allow vertical scroll */
+        overflow-x: hidden;
       }
       
       /* Frutiger Aero Glossy Highlights */
@@ -419,14 +440,31 @@
       }
       
       /* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */
-      /* Use dvh (dynamic viewport height) with fallback */
-      .h-screen, .min-h-screen {
-        min-height: 100vh;
-        min-height: 100dvh;
-      }
-      .h-\[100dvh\] {
+      /* Unified viewport height with proper fallbacks for all iOS versions */
+      .h-screen {
         height: 100vh;
         height: 100dvh;
+        height: -webkit-fill-available;
+      }
+      .min-h-screen {
+        min-height: 100vh;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+      }
+      .h-\[100dvh\], .h-\[100svh\] {
+        height: 100vh;
+        height: 100dvh;
+        height: -webkit-fill-available;
+      }
+      .min-h-\[100dvh\], .min-h-\[100svh\] {
+        min-height: 100vh;
+        min-height: 100dvh;
+        min-height: -webkit-fill-available;
+      }
+      /* Safe area aware full height */
+      .h-screen-safe {
+        height: calc(100vh - var(--safe-top) - var(--safe-bottom));
+        height: calc(100dvh - var(--safe-top) - var(--safe-bottom));
       }
       
       /* ===== TRANSFORM/ANIMATION CROSS-BROWSER ===== */
@@ -454,6 +492,27 @@
       .bg-clip-text {
         -webkit-background-clip: text;
         background-clip: text;
+      }
+      
+      /* Fix Safari gradient text rendering */
+      .bg-clip-text,
+      [class*="[-webkit-text-fill-color:transparent]"] {
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        /* Force GPU rendering for smooth gradients on iOS */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+      
+      /* Fallback for very old Safari versions */
+      @supports not (-webkit-background-clip: text) {
+        .bg-clip-text {
+          background-clip: unset;
+          -webkit-background-clip: unset;
+          color: #00C2FF;
+        }
       }
       
       /* ===== SELECTION COLOR ===== */
@@ -749,10 +808,91 @@
       .is-touch [role="button"]:active {
         opacity: 0.8;
       }
+      
+      /* ===== MINIMUM TOUCH TARGET SIZES (Apple HIG: 44x44px) ===== */
+      @media (hover: none) and (pointer: coarse) {
+        /* Ensure interactive elements meet minimum touch target size */
+        button, 
+        a, 
+        [role="button"],
+        input[type="button"],
+        input[type="submit"],
+        .cursor-pointer {
+          min-height: 44px;
+          min-width: 44px;
+        }
+        
+        /* For inline links in text, use padding instead */
+        p a, li a, span a {
+          min-height: auto;
+          min-width: auto;
+          padding: 8px 4px;
+          margin: -8px -4px;
+        }
+        
+        /* Ensure nav links have adequate spacing */
+        nav a {
+          padding-top: 12px;
+          padding-bottom: 12px;
+        }
+      }
+      
+      /* ===== MOBILE-FIRST RESPONSIVE IMPROVEMENTS ===== */
+      @media (max-width: 640px) {
+        /* Reduce excessive padding on very small screens */
+        .px-6 { padding-left: 1rem; padding-right: 1rem; }
+        .px-8 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        
+        /* Ensure text doesn't get too small */
+        .text-\[8px\] { font-size: 9px; }
+        .text-\[9px\] { font-size: 10px; }
+        .text-\[10px\] { font-size: 11px; }
+        
+        /* Better letter-spacing for small screens */
+        .tracking-\[0\.3em\] { letter-spacing: 0.2em; }
+        .tracking-\[0\.4em\] { letter-spacing: 0.25em; }
+        
+        /* Reduce blur intensity for performance */
+        .backdrop-blur-xl,
+        .backdrop-blur-2xl,
+        .backdrop-blur-3xl {
+          -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+        }
+      }
+      
+      /* ===== iOS NOTCH/DYNAMIC ISLAND SAFE AREAS ===== */
+      @supports (padding: max(0px)) {
+        .safe-area-top {
+          padding-top: max(env(safe-area-inset-top), 20px);
+        }
+        .safe-area-bottom {
+          padding-bottom: max(env(safe-area-inset-bottom), 20px);
+        }
+        .safe-area-x {
+          padding-left: max(env(safe-area-inset-left), 16px);
+          padding-right: max(env(safe-area-inset-right), 16px);
+        }
+      }
+      
+      /* ===== FIX iOS MOMENTUM SCROLLING ===== */
+      .overflow-y-auto,
+      .overflow-auto,
+      .overflow-scroll {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+      }
+      
+      /* ===== PREVENT CONTENT SHIFT ON iOS ===== */
+      /* Ensure fixed elements don't cause layout shift */
+      .fixed {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
     </style>
 </head>
   <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
-    <!-- Browser detection - runs immediately before React -->
+    <!-- Browser detection and viewport height fix - runs immediately before React -->
     <script>
       (function() {
         var ua = navigator.userAgent.toLowerCase();
@@ -766,6 +906,27 @@
         if ((isSafari && isIOS) || (isSafari && isTouch)) {
           document.documentElement.classList.add('reduce-effects');
         }
+        
+        // Calculate and set accurate viewport height for iOS
+        // This fixes the 100vh issue on iOS where it includes the URL bar
+        function setViewportHeight() {
+          var vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', vh + 'px');
+          document.documentElement.style.setProperty('--viewport-height', window.innerHeight + 'px');
+        }
+        
+        setViewportHeight();
+        
+        // Update on resize and orientation change
+        var resizeTimeout;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(setViewportHeight, 100);
+        }, { passive: true });
+        
+        window.addEventListener('orientationchange', function() {
+          setTimeout(setViewportHeight, 200);
+        }, { passive: true });
       })();
     </script>
     
@@ -774,7 +935,7 @@
       <div class="loader-circle"></div>
     </div>
 
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col max-w-[100vw] w-full"></div>
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col w-full"></div>
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>

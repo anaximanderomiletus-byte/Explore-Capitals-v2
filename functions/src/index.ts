@@ -77,19 +77,16 @@ export const acceptTerms = functions.https.onCall(async (data, context) => {
  * Create a Stripe Checkout Session for a donation.
  * Expected data: { amount: number, successUrl: string, cancelUrl: string }
  * amount is in cents (e.g., 500 for $5.00)
+ * 
+ * NOTE: This function allows unauthenticated donations to lower the barrier for support.
+ * Authenticated users will get their supporter status updated via webhook.
  */
 export const createStripeCheckoutSession = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      "The function must be called while authenticated."
-    );
-  }
-
   const { amount, successUrl, cancelUrl } = data;
-  const userId = context.auth.uid;
-  const userEmail = context.auth.token.email;
-  const emailVerified = context.auth.token.email_verified || false;
+  
+  // User info (optional - donations don't require authentication)
+  const userId = context.auth?.uid;
+  const userEmail = context.auth?.token.email;
 
   // Validate amount
   if (!amount || isNaN(amount) || amount < PAYMENT_LIMITS.MIN_AMOUNT) {
@@ -106,30 +103,30 @@ export const createStripeCheckoutSession = functions.https.onCall(async (data, c
     );
   }
 
-  // Get user data for validation
-  const userDoc = await admin.firestore().collection("users").doc(userId).get();
-  const userData = userDoc.data();
+  // Only validate eligibility for authenticated users
+  if (userId) {
+    const userDoc = await admin.firestore().collection("users").doc(userId).get();
+    const userData = userDoc.data();
 
-  if (!userData) {
-    throw new functions.https.HttpsError("not-found", "User profile not found.");
+    if (userData) {
+      const emailVerified = context.auth?.token.email_verified || false;
+      const eligibility = validatePaymentEligibility({
+        emailVerified,
+        joinedAt: userData.joinedAt,
+        termsAcceptedAt: userData.termsAcceptedAt,
+        termsVersion: userData.termsVersion,
+        paymentAttempts: userData.paymentAttempts,
+      }, amount);
+
+      if (!eligibility.allowed) {
+        await logPaymentAttempt(userId, amount, 'blocked', eligibility.reason);
+        throw new functions.https.HttpsError("failed-precondition", eligibility.reason || "Payment not allowed.");
+      }
+    }
+
+    // Log payment attempt for authenticated users
+    await logPaymentAttempt(userId, amount, 'initiated');
   }
-
-  // Validate payment eligibility
-  const eligibility = validatePaymentEligibility({
-    emailVerified,
-    joinedAt: userData.joinedAt,
-    termsAcceptedAt: userData.termsAcceptedAt,
-    termsVersion: userData.termsVersion,
-    paymentAttempts: userData.paymentAttempts,
-  }, amount);
-
-  if (!eligibility.allowed) {
-    await logPaymentAttempt(userId, amount, 'blocked', eligibility.reason);
-    throw new functions.https.HttpsError("failed-precondition", eligibility.reason || "Payment not allowed.");
-  }
-
-  // Log payment attempt
-  await logPaymentAttempt(userId, amount, 'initiated');
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -150,9 +147,11 @@ export const createStripeCheckoutSession = functions.https.onCall(async (data, c
       mode: "payment",
       success_url: successUrl,
       cancel_url: cancelUrl,
-      customer_email: userEmail,
+      // Only set customer_email if user is authenticated
+      ...(userEmail && { customer_email: userEmail }),
       metadata: {
-        userId: userId,
+        // Include userId if authenticated (for supporter badge)
+        ...(userId && { userId }),
         type: "donation",
       },
       // Enable 3D Secure for fraud protection
@@ -164,7 +163,9 @@ export const createStripeCheckoutSession = functions.https.onCall(async (data, c
     return { sessionId: session.id, url: session.url };
   } catch (error: any) {
     console.error("Stripe error:", error);
-    await logPaymentAttempt(userId, amount, 'failed', error.message);
+    if (userId) {
+      await logPaymentAttempt(userId, amount, 'failed', error.message);
+    }
     throw new functions.https.HttpsError("internal", error.message);
   }
 });

@@ -85,10 +85,11 @@ const Button: React.FC<ButtonProps> = ({
     outline: `bg-white/20 backdrop-blur-3xl border-4 border-white hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-glossy-gradient before:opacity-40 before:z-0 ${hasTextColor ? '' : 'text-white'} after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
   };
 
+  // Sizes with minimum touch targets (44px) for mobile
   const sizes = {
-    sm: "px-5 py-2 text-sm",
-    md: "px-8 py-3 text-base",
-    lg: "px-10 py-4 text-lg",
+    sm: "px-5 py-2 text-sm min-h-[44px]",
+    md: "px-6 sm:px-8 py-3 text-sm sm:text-base min-h-[44px]",
+    lg: "px-8 sm:px-10 py-3.5 sm:py-4 text-base sm:text-lg min-h-[48px]",
   };
 
   const showShing = variant === 'primary' && !isFlat;
