@@ -163,8 +163,9 @@ export async function logPaymentAttempt(
   status: 'initiated' | 'completed' | 'failed' | 'blocked',
   reason?: string
 ): Promise<void> {
+  // Note: Can't use serverTimestamp() inside arrayUnion, so use Timestamp.now()
   const attempt = {
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    timestamp: admin.firestore.Timestamp.now(),
     amount,
     status,
     ...(reason && { reason }),

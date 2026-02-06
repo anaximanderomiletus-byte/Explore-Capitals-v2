@@ -249,12 +249,14 @@ const Games: React.FC = () => {
               </p>
 
               <div className="bg-white/5 rounded-xl p-4 mb-6">
-                <div className="text-left space-y-2">
+                <div className="text-left space-y-3">
                   {premiumGames.map(game => (
-                    <div key={game.id} className="flex items-center gap-3 text-sm">
-                      <Crown size={12} className="text-amber-400" />
-                      <span className="text-white/80">{game.title}</span>
-                      <span className="text-white/40 text-xs ml-auto">{game.description}</span>
+                    <div key={game.id} className="flex items-start gap-3 text-sm">
+                      <Crown size={12} className="text-amber-400 mt-1 shrink-0" />
+                      <div className="flex-1">
+                        <span className="text-white/80 font-medium">{game.title}</span>
+                        <p className="text-white/40 text-xs mt-0.5">{game.description}</p>
+                      </div>
                     </div>
                   ))}
                 </div>

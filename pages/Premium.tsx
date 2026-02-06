@@ -52,17 +52,19 @@ const Premium: React.FC = () => {
       return;
     }
 
-    // Check eligibility first
-    const result = await checkEligibility();
-    if (!result.allowed) {
-      setShowBlockedModal(true);
-      return;
-    }
-
+    // Show loading immediately
     setIsCheckingOut(true);
     setCheckoutError(null);
 
     try {
+      // Check eligibility first
+      const result = await checkEligibility();
+      if (!result.allowed) {
+        setIsCheckingOut(false);
+        setShowBlockedModal(true);
+        return;
+      }
+
       const { url } = await createSubscriptionCheckout(plan);
       if (url) {
         window.location.href = url;
@@ -189,25 +191,27 @@ const Premium: React.FC = () => {
 
         {/* Pricing Cards */}
         {!isAlreadyPremium && (
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
             {/* Monthly */}
             <div 
-              className={`relative bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
+              className={`relative flex flex-col bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
                 selectedPlan === 'monthly' 
                   ? 'border-sky shadow-[0_0_30px_rgba(56,189,248,0.3)]' 
                   : 'border-white/20 hover:border-white/40'
               }`}
               onClick={() => setSelectedPlan('monthly')}
             >
+              <div className="h-3" /> {/* Spacer to align with badges */}
               <h3 className="text-lg font-bold text-white mb-1">{plans.monthly.name}</h3>
-              <div className="flex items-baseline gap-1 mb-2">
+              <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-black text-white">$5.99</span>
                 <span className="text-white/50 text-sm">/month</span>
               </div>
-              <p className="text-white/60 text-sm mb-4">{plans.monthly.description}</p>
+              <div className="h-5" /> {/* Spacer to align with savings */}
+              <p className="text-white/60 text-sm flex-1">{plans.monthly.description}</p>
               <Button 
                 variant={selectedPlan === 'monthly' ? 'primary' : 'secondary'}
-                className="w-full"
+                className="w-full mt-4 h-12"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSubscribe('monthly');
@@ -224,7 +228,7 @@ const Premium: React.FC = () => {
 
             {/* Annual - Highlighted */}
             <div 
-              className={`relative bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
+              className={`relative flex flex-col bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
                 selectedPlan === 'annual' 
                   ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]' 
                   : 'border-white/20 hover:border-white/40'
@@ -235,16 +239,17 @@ const Premium: React.FC = () => {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-amber-500 rounded-full text-[10px] font-black uppercase tracking-wider text-black">
                 Most Popular
               </div>
-              <h3 className="text-lg font-bold text-white mb-1 mt-2">{plans.annual.name}</h3>
+              <div className="h-3" /> {/* Spacer for badge */}
+              <h3 className="text-lg font-bold text-white mb-1">{plans.annual.name}</h3>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-black text-white">$49.99</span>
                 <span className="text-white/50 text-sm">/year</span>
               </div>
-              <p className="text-amber-400 text-xs font-bold mb-2">{plans.annual.savings}</p>
-              <p className="text-white/60 text-sm mb-4">{plans.annual.description}</p>
+              <p className="text-amber-400 text-xs font-bold h-5">{plans.annual.savings}</p>
+              <p className="text-white/60 text-sm flex-1">{plans.annual.description}</p>
               <Button 
                 variant={selectedPlan === 'annual' ? 'accent' : 'secondary'}
-                className="w-full"
+                className="w-full mt-4 h-12"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSubscribe('annual');
@@ -261,7 +266,7 @@ const Premium: React.FC = () => {
 
             {/* Lifetime */}
             <div 
-              className={`relative bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
+              className={`relative flex flex-col bg-white/10 backdrop-blur-xl border-2 rounded-2xl p-6 transition-all cursor-pointer ${
                 selectedPlan === 'lifetime' 
                   ? 'border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.3)]' 
                   : 'border-white/20 hover:border-white/40'
@@ -272,15 +277,17 @@ const Premium: React.FC = () => {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-purple-500 rounded-full text-[10px] font-black uppercase tracking-wider text-white">
                 Best Value
               </div>
-              <h3 className="text-lg font-bold text-white mb-1 mt-2">{plans.lifetime.name}</h3>
-              <div className="flex items-baseline gap-1 mb-2">
+              <div className="h-3" /> {/* Spacer for badge */}
+              <h3 className="text-lg font-bold text-white mb-1">{plans.lifetime.name}</h3>
+              <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-black text-white">$99.99</span>
                 <span className="text-white/50 text-sm">once</span>
               </div>
-              <p className="text-white/60 text-sm mb-4">{plans.lifetime.description}</p>
+              <div className="h-5" /> {/* Spacer to align with savings */}
+              <p className="text-white/60 text-sm flex-1">{plans.lifetime.description}</p>
               <Button 
                 variant={selectedPlan === 'lifetime' ? 'primary' : 'secondary'}
-                className="w-full"
+                className="w-full mt-4 h-12"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSubscribe('lifetime');
@@ -300,7 +307,11 @@ const Premium: React.FC = () => {
         {/* Error Message */}
         {checkoutError && (
           <div className="mb-8 p-4 bg-red-500/20 border border-red-500/40 rounded-xl text-center">
-            <p className="text-red-400 text-sm">{checkoutError}</p>
+            <p className="text-red-400 text-sm">
+              {checkoutError.toLowerCase().includes('internal') || checkoutError.toLowerCase().includes('error')
+                ? 'We\'re experiencing a temporary issue. Please try again in a few moments.'
+                : checkoutError}
+            </p>
           </div>
         )}
 

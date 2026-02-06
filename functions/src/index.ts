@@ -3,8 +3,7 @@ import * as admin from "firebase-admin";
 import Stripe from "stripe";
 import { 
   validatePaymentEligibility, 
-  logPaymentAttempt, 
-  isCountryBlocked,
+  logPaymentAttempt,
   cleanupOldAttempts 
 } from "./validation";
 import { 
@@ -574,7 +573,6 @@ export const cleanupPaymentAttempts = functions.pubsub
       .where("paymentAttempts", "!=", null)
       .get();
 
-    const batch = admin.firestore().batch();
     let cleanupCount = 0;
 
     for (const doc of usersSnapshot.docs) {

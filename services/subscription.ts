@@ -65,7 +65,7 @@ export const createSubscriptionCheckout = async (
   const { data } = await createSession({
     plan,
     successUrl: `${window.location.origin}/#/settings?subscription=success`,
-    cancelUrl: `${window.location.origin}/#/settings?subscription=canceled`,
+    cancelUrl: window.location.href,
   });
 
   return data;

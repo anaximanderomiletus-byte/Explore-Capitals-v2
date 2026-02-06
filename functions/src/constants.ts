@@ -2,11 +2,11 @@
  * Payment and subscription constants for ExploreCapitals
  */
 
-// Stripe Price IDs - UPDATE THESE after creating products in Stripe Dashboard
+// Stripe Price IDs
 export const STRIPE_PRICES = {
-  MONTHLY: 'price_monthly_placeholder', // Replace with actual price ID
-  ANNUAL: 'price_annual_placeholder',   // Replace with actual price ID
-  LIFETIME: 'price_lifetime_placeholder', // Replace with actual price ID
+  MONTHLY: 'price_1SxeQfACs3ZjmVWFCgYdPRRx',
+  ANNUAL: 'price_1SxeR7ACs3ZjmVWFXDnw2dqr',
+  LIFETIME: 'price_1SxeRkACs3ZjmVWFf4MaigxI',
 };
 
 // Payment limits
