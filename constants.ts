@@ -314,9 +314,23 @@ export const GAMES: Game[] = [
     status: 'active', 
     description: 'Match countries to their capitals in a race against time.'
   },
-  // === PREMIUM GAMES ===
   {
     id: '8',
+    title: 'Region Roundup',
+    image: './png/0-GAMES/region-roundup.png',
+    status: 'active', 
+    description: 'Sort countries into their correct continents.'
+  },
+  {
+    id: '9',
+    title: 'Landmark Legend',
+    image: './png/0-GAMES/landmark-legend.png',
+    status: 'active', 
+    description: 'Identify the country from a famous landmark image.'
+  },
+  // === PREMIUM GAMES ===
+  {
+    id: '10',
     title: 'Territory Titans',
     image: './png/0-GAMES/territory-titan.png',
     status: 'active',
@@ -324,7 +338,7 @@ export const GAMES: Game[] = [
     premium: true
   },
   {
-    id: '9',
+    id: '11',
     title: 'Area Ace',
     image: './png/0-GAMES/area-ace.png',
     status: 'active',
@@ -332,7 +346,7 @@ export const GAMES: Game[] = [
     premium: true
   },
   {
-    id: '10',
+    id: '12',
     title: 'Currency Craze',
     image: './png/0-GAMES/currency-craze.png',
     status: 'active',
@@ -340,7 +354,7 @@ export const GAMES: Game[] = [
     premium: true
   },
   {
-    id: '11',
+    id: '13',
     title: 'Language Legend',
     image: './png/0-GAMES/language-legend.png',
     status: 'active',
@@ -348,7 +362,7 @@ export const GAMES: Game[] = [
     premium: true
   },
   {
-    id: '12',
+    id: '14',
     title: 'Time Zone Trekker',
     image: './png/0-GAMES/time-zone-trekker.png',
     status: 'active',
@@ -356,7 +370,7 @@ export const GAMES: Game[] = [
     premium: true
   },
   {
-    id: '13',
+    id: '15',
     title: 'Driving Direction',
     image: './png/0-GAMES/driving-direction.png',
     status: 'active',
