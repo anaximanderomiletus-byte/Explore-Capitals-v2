@@ -1,27 +1,27 @@
 export const imagesN: Record<string, string> = {
-  // --- Namibia --- (no images yet)
-  "Namibia": "/logo.png",
-  "Sossusvlei Deadvlei": "/logo.png",
-  "Skeleton Coast Shipwreck": "/logo.png",
-  "Etosha National Park": "/logo.png",
-  "Fish River Canyon": "/logo.png",
-  "Kolmanskop": "/logo.png",
+  // --- Namibia ---
+  "Namibia": "/png/NAMIBIA/windhoek-namibia.png",
+  "Sossusvlei Deadvlei": "/png/NAMIBIA/sossusvlei.png",
+  "Skeleton Coast Shipwreck": "/png/NAMIBIA/skeleton-coast.png",
+  "Etosha National Park": "/png/NAMIBIA/etosha-national-park.png",
+  "Fish River Canyon": "/png/NAMIBIA/fish-river-canyon.png",
+  "Kolmanskop": "/png/NAMIBIA/kolmanskop.png",
 
-  // --- Nauru --- (no images yet)
-  "Nauru": "/logo.png",
-  "Nauru Topside": "/logo.png",
-  "Anibare Bay": "/logo.png",
-  "Buada Lagoon": "/logo.png",
-  "Command Ridge": "/logo.png",
-  "Yaren Parliament": "/logo.png",
+  // --- Nauru ---
+  "Nauru": "/png/NAURU/yaren-nauru.png",
+  "Nauru Topside": "/png/NAURU/the-central-plateau.png",
+  "Anibare Bay": "/png/NAURU/anibare-bay.png",
+  "Buada Lagoon": "/png/NAURU/buada-lagoon.png",
+  "Command Ridge": "/png/NAURU/command-ridge.png",
+  "Yaren Parliament": "/png/NAURU/yaren-district.png",
 
-  // --- Nepal --- (no images yet)
-  "Nepal": "/logo.png",
-  "Mount Everest": "/logo.png",
-  "Kathmandu Durbar Square": "/logo.png",
-  "Annapurna Circuit": "/logo.png",
-  "Chitwan National Park": "/logo.png",
-  "Lumbini": "/logo.png",
+  // --- Nepal ---
+  "Nepal": "/png/NEPAL/kathmandu-nepal.png",
+  "Mount Everest": "/png/NEPAL/mount-everest.png",
+  "Kathmandu Durbar Square": "/png/NEPAL/kathmandu-durbar-square.png",
+  "Annapurna Circuit": "/png/NEPAL/annapurna-circuit.png",
+  "Chitwan National Park": "/png/NEPAL/chitwan-national-park.png",
+  "Lumbini": "/png/NEPAL/lumbini.png",
 
   // --- Netherlands --- (no images yet)
   "Netherlands": "/logo.png",
@@ -64,12 +64,12 @@ export const imagesN: Record<string, string> = {
   "Benin Bronzes": "/logo.png",
 
   // --- North Korea ---
-  "North Korea": "/png/NORTH KOREA/pyongyang-north-korea.png",
-  "Mansu Hill Grand Monument": "/png/NORTH KOREA/mansu-hill-grand-monument.png",
-  "Rungrado 1st of May Stadium": "/png/NORTH KOREA/rungrado-1st-of-may-stadium.png",
-  "The Pyongyang Metro": "/png/NORTH KOREA/pyongyang-metro.png",
-  "Tower of the Juche Idea": "/png/NORTH KOREA/tower-of-the-juche-idea.png",
-  "Kijong-dong": "/png/NORTH KOREA/kijong-dong-peace-village.png",
+  "North Korea": "/png/NORTH-KOREA/pyongyang-north-korea.png",
+  "Mansu Hill Grand Monument": "/png/NORTH-KOREA/mansu-hill-grand-monument.png",
+  "Rungrado 1st of May Stadium": "/png/NORTH-KOREA/rungrado-1st-of-may-stadium.png",
+  "The Pyongyang Metro": "/png/NORTH-KOREA/pyongyang-metro.png",
+  "Tower of the Juche Idea": "/png/NORTH-KOREA/tower-of-the-juche-idea.png",
+  "Kijong-dong": "/png/NORTH-KOREA/kijong-dong-peace-village.png",
 
   // --- North Macedonia --- (no images yet)
   "North Macedonia": "/logo.png",

@@ -4,7 +4,7 @@ export const imagesH: Record<string, string> = {
   "Citadelle Laferrière": "/png/HAITI/citadelle-laferriere.png",
   "Sans-Souci Palace": "/png/HAITI/sans-souci-palace.png",
   "Bassin Bleu": "/png/HAITI/bassin-bleu.png",
-  "Jacmel": "/png/HAITI/jacmel-colonial-architecture.png",
+  "Jacmel": "/png/HAITI/jacmel.png",
   "Iron Market": "/png/HAITI/iron-market-port-au-prince.png",
 
   // --- Honduras ---

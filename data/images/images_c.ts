@@ -40,7 +40,7 @@ export const imagesC: Record<string, string> = {
 
   // --- Central African Republic ---
   "Central African Republic": "/png/CENTRAL-AFRICAN-REPUBLIC/bangui-central-african-republic.png",
-  "Dzanga-Sangha Special Reserve": "/png/CENTRAL-AFRICAN-REPUBLIC/dzanga-sangha-reserve.png",
+  "Dzanga-Sangha Special Reserve": "/png/CENTRAL-AFRICAN-REPUBLIC/dzanga-sangha-special-reserve.png",
   "Boali Waterfalls": "/png/CENTRAL-AFRICAN-REPUBLIC/boali-waterfalls.png",
   "Notre-Dame of Bangui": "/png/CENTRAL-AFRICAN-REPUBLIC/notre-dame-of-bangui.png",
   "The Oubangui River": "/png/CENTRAL-AFRICAN-REPUBLIC/the-oubangui-river.png",

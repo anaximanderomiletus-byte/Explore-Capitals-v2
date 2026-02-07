@@ -924,12 +924,12 @@ export const toursM: Record<string, TourData> = {
         explanation: "They were considered sacred gateways to the realm of the spirits and gods."
       },
       {
-        stopName: "Mexico City",
+        stopName: "Xochimilco",
         imageKeyword: "Xochimilco",
         description: [
-          "Built on the ruins of the Aztec capital Tenochtitlan, Mexico City is sinking. Because the Aztecs built their city on a lake using artificial islands, the modern metropolis sinks about 50cm per year as the aquifer is drained.",
-          "Xochimilco is the last remnant of this ancient water system. Visitors can ride colorful flat-bottomed boats called trajineras through the canals, which are lined with chinampas (floating gardens) that still produce flowers and vegetables.",
-          "The canals are home to the Axolotl. This \"walking fish\" (actually a salamander) is native only to this lake system and is famous for its ability to regenerate lost limbs, hearts, and even parts of its brain."
+          "Xochimilco is the last surviving remnant of the vast lake system that once defined the Aztec capital of Tenochtitlan. Its name means \"Place Where Flowers Grow\" in Nahuatl, and visitors can ride colorful flat-bottomed boats called trajineras through a network of ancient canals.",
+          "The canals are lined with chinampas—artificial floating gardens engineered by the Aztecs. Built by layering mud, vegetation, and lake sediment onto wooden frames, these islands still produce flowers and vegetables today, making them one of the oldest continuously farmed agricultural systems in the world.",
+          "The waterways are also the last natural habitat of the Axolotl. This critically endangered salamander, often called a \"walking fish,\" is native only to this lake system and is famous for its extraordinary ability to regenerate lost limbs, hearts, and even parts of its brain."
         ],
         question: "What are the artificial agricultural islands in Xochimilco called?",
         options: [
@@ -1422,8 +1422,8 @@ export const toursM: Record<string, TourData> = {
         explanation: "It is an artificial island built stone by stone by the locals."
       },
       {
-        stopName: "Lovćen Mausoleum",
-        imageKeyword: "Lovcen Mausoleum",
+        stopName: "Mausoleum of Njegoš",
+        imageKeyword: "Mausoleum of Njegoš",
         description: [
           "Sitting at the top of the Jezerski peak (1,657 meters), this is the final resting place of Petar II Petrović-Njegoš, Montenegro's greatest ruler, bishop, and poet.",
           "To reach the tomb, visitors must drive up a winding road and then climb 461 steps inside a tunnel carved through the mountain.",

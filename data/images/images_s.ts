@@ -136,12 +136,12 @@ export const imagesS: Record<string, string> = {
   "Boulders Beach": "/logo.png",
 
   // --- South Korea ---
-  "South Korea": "/png/SOUTH KOREA/seoul-south-korea.png",
-  "Gyeongbokgung Palace": "/png/SOUTH KOREA/gyeongbokgung-palace.png",
-  "Lotte World Tower": "/png/SOUTH KOREA/lotte-world-tower.png",
-  "Gwangjang Market": "/png/SOUTH KOREA/gwangjang-market.png",
-  "Jeju Island Haenyeo": "/png/SOUTH KOREA/jeju-island-haenyeo-divers.png",
-  "The DMZ Joint Security Area": "/png/SOUTH KOREA/dmz-joint-security-area.png",
+  "South Korea": "/png/SOUTH-KOREA/seoul-south-korea.png",
+  "Gyeongbokgung Palace": "/png/SOUTH-KOREA/gyeongbokgung-palace.png",
+  "Lotte World Tower": "/png/SOUTH-KOREA/lotte-world-tower.png",
+  "Gwangjang Market": "/png/SOUTH-KOREA/gwangjang-market.png",
+  "Jeju Island Haenyeo": "/png/SOUTH-KOREA/jeju-island-haenyeo-divers.png",
+  "The DMZ Joint Security Area": "/png/SOUTH-KOREA/dmz-joint-security-area.png",
 
   // --- South Sudan --- (no images yet)
   "South Sudan": "/logo.png",

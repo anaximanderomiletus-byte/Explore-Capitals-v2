@@ -74,16 +74,16 @@ export const imagesG: Record<string, string> = {
   // --- Guinea-Bissau ---
   "Guinea-Bissau": "/png/GUINEA-BISSAU/bissau-guinea-bissau.png",
   "Bijagós Archipelago": "/png/GUINEA-BISSAU/bijagos-archipelago.png",
-  "Bolama": "/png/GUINEA-BISSAU/bolama-ghost-town.png",
-  "Bissau Carnival": "/png/GUINEA-BISSAU/bissau-carnival-masks.png",
-  "Cantanhez Forest National Park": "/png/GUINEA-BISSAU/cantanhez-chimpanzee.png",
+  "Bolama": "/png/GUINEA-BISSAU/bolama.png",
+  "Bissau Carnival": "/png/GUINEA-BISSAU/bissau-carnival.png",
+  "Cantanhez Forest National Park": "/png/GUINEA-BISSAU/cantanhez-national-park.png",
   "Varela Beach": "/png/GUINEA-BISSAU/varela-beach.png",
 
   // --- Guyana ---
   "Guyana": "/png/GUYANA/georgetown-guyana.png",
   "Kaieteur Falls": "/png/GUYANA/kaieteur-falls.png",
   "St. George's Cathedral": "/png/GUYANA/st-georges-cathedral.png",
-  "Shell Beach": "/png/GUYANA/shell-beach-turtle.png",
+  "Shell Beach": "/png/GUYANA/shell-beach.png",
   "Iwokrama Forest": "/png/GUYANA/iwokrama-canopy-walkway.png",
-  "Rupununi Savannah": "/png/GUYANA/rupununi-savannah-harpy-eagle.png"
+  "Rupununi Savannah": "/png/GUYANA/rupununi-savannah.png"
 };
