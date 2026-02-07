@@ -381,10 +381,10 @@ const Navigation: React.FC = () => {
               aria-label="Toggle menu"
               style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
             >
-              <div className="relative w-5 h-3 flex flex-col justify-between pointer-events-none">
+              <div className="relative w-5 h-4 flex flex-col justify-between pointer-events-none">
                 <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
                   isMobileMenuOpen 
-                    ? 'bg-sky-light rotate-45 translate-y-[5px]' 
+                    ? 'bg-sky-light rotate-45 translate-y-[7px]' 
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
                 <span className={`block h-[2px] rounded-full transition-all duration-150 ${
@@ -394,7 +394,7 @@ const Navigation: React.FC = () => {
                 }`} />
                 <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
                   isMobileMenuOpen 
-                    ? 'bg-sky-light -rotate-45 -translate-y-[5px]' 
+                    ? 'bg-sky-light -rotate-45 -translate-y-[7px]' 
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
               </div>

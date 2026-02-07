@@ -1,5 +1,5 @@
 
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -108,9 +108,22 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const [appReady, setAppReady] = useState(false);
   
-  // Preload key pages after initial render for faster subsequent navigation
+  // Mark app as ready after first paint, then preload other pages
   useEffect(() => {
+    // Use double-rAF to ensure we're past first meaningful paint
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setAppReady(true);
+      });
+    });
+  }, []);
+
+  // Preload key pages after app is interactive
+  useEffect(() => {
+    if (!appReady) return;
+    
     const preload = () => {
       pageImports.games();
       pageImports.about();
@@ -118,16 +131,16 @@ const AppContent: React.FC = () => {
       setTimeout(() => {
         pageImports.database();
         pageImports.map();
-      }, 1000);
+      }, 2000);
     };
 
     // Use requestIdleCallback for non-blocking preload
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(preload, { timeout: 3000 });
+      (window as any).requestIdleCallback(preload, { timeout: 5000 });
     } else {
-      setTimeout(preload, 2500);
+      setTimeout(preload, 3000);
     }
-  }, []);
+  }, [appReady]);
   
   return (
     <div className="min-h-screen flex flex-col bg-[#0F172A] relative">

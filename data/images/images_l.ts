@@ -39,35 +39,35 @@ export const imagesL: Record<string, string> = {
   "Firestone Rubber Plantation": "/png/LIBERIA/firestone-rubber-plantation-harbel.png",
   "Kpatawee Waterfall": "/png/LIBERIA/kpatawee-waterfall-bong-county.png",
 
-  // --- Libya --- (no images yet)
-  "Libya": "/logo.png",
-  "Leptis Magna": "/logo.png",
-  "Ghadames": "/logo.png",
-  "The Acacus Mountains": "/logo.png",
-  "Sabratha": "/logo.png",
-  "Cyrene": "/logo.png",
+  // --- Libya ---
+  "Libya": "/png/LIBYA/tripoli-libya.png",
+  "Leptis Magna": "/png/LIBYA/leptis-magna-severan-basilica-columns-of-the-old-forum.png",
+  "Ghadames": "/png/LIBYA/ghadames-old-town.png",
+  "The Acacus Mountains": "/png/LIBYA/tadrart-acacus-acacus-mountains.png",
+  "Sabratha": "/png/LIBYA/sabratha-roman-theatre.png",
+  "Cyrene": "/png/LIBYA/cyrene-sanctuary-of-apollo-temple-ruins-and-terrace.png",
 
-  // --- Liechtenstein --- (no images yet)
-  "Liechtenstein": "/logo.png",
-  "Vaduz Castle": "/logo.png",
-  "The Liechtenstein Trail": "/logo.png",
-  "Kunstmuseum Liechtenstein": "/logo.png",
-  "Malbun": "/logo.png",
-  "The Old Rhine Bridge": "/logo.png",
+  // --- Liechtenstein ---
+  "Liechtenstein": "/png/LIECHTENSTEIN/vaduz-liechtenstein.png",
+  "Vaduz Castle": "/png/LIECHTENSTEIN/vaduz-castle.png",
+  "The Liechtenstein Trail": "/png/LIECHTENSTEIN/the-liechtenstein-trail-fürstensteig-alps-ridge-section.png",
+  "Kunstmuseum Liechtenstein": "/png/LIECHTENSTEIN/kunstmuseum-liechtenstein.png",
+  "Malbun": "/png/LIECHTENSTEIN/malbun.png",
+  "The Old Rhine Bridge": "/png/LIECHTENSTEIN/old-rhine-bridge-alte-rheinbrücke.png",
 
-  // --- Lithuania --- (no images yet)
-  "Lithuania": "/logo.png",
-  "Hill of Crosses": "/logo.png",
-  "Trakai Island Castle": "/logo.png",
-  "Curonian Spit": "/logo.png",
-  "Republic of Užupis": "/logo.png",
-  "Amber Museum Palanga": "/logo.png",
+  // --- Lithuania ---
+  "Lithuania": "/png/LITHUANIA/vilnius-lithuania.png",
+  "Hill of Crosses": "/png/LITHUANIA/hill-of-crosses-kryziu-kalnas.png",
+  "Trakai Island Castle": "/png/LITHUANIA/trakai-island-castle-lake-galvė.png",
+  "Curonian Spit": "/png/LITHUANIA/curonian-spit-dead-dunes.png",
+  "Republic of Užupis": "/png/LITHUANIA/vilnius-old-town-republic-of-uzupis.png",
+  "Amber Museum Palanga": "/png/LITHUANIA/palanga-amber-museum.png",
 
-  // --- Luxembourg --- (no images yet)
-  "Luxembourg": "/logo.png",
-  "The Bock Casemates": "/logo.png",
-  "Le Chemin de la Corniche": "/logo.png",
-  "Vianden Castle": "/logo.png",
-  "Mullerthal": "/logo.png",
-  "Grand Ducal Palace": "/logo.png"
+  // --- Luxembourg ---
+  "Luxembourg": "/png/LUXEMBOURG/luxembourg-city-luxembourg.png",
+  "The Bock Casemates": "/png/LUXEMBOURG/the-bock-casemates.png",
+  "Le Chemin de la Corniche": "/png/LUXEMBOURG/le-chemin-de-la-corniche.png",
+  "Vianden Castle": "/png/LUXEMBOURG/vianden-castle.png",
+  "Mullerthal": "/png/LUXEMBOURG/mullerthal.png",
+  "Grand Ducal Palace": "/png/LUXEMBOURG/grand-ducal-palace.png"
 };

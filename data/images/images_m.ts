@@ -1,35 +1,35 @@
 export const imagesM: Record<string, string> = {
-  // --- Madagascar --- (no images yet)
-  "Madagascar": "/logo.png",
-  "Avenue of the Baobabs": "/logo.png",
-  "Tsingy de Bemaraha": "/logo.png",
-  "Andasibe-Mantadia National Park": "/logo.png",
-  "Isalo National Park": "/logo.png",
-  "Royal Hill of Ambohimanga": "/logo.png",
+  // --- Madagascar ---
+  "Madagascar": "/png/MADAGASCAR/antananarivo-madagascar.png",
+  "Avenue of the Baobabs": "/png/MADAGASCAR/avenue-of-the-baobabs.png",
+  "Tsingy de Bemaraha": "/png/MADAGASCAR/tsingy-de-bemaraha.png",
+  "Andasibe-Mantadia National Park": "/png/MADAGASCAR/andasibe-mantadia-national-park.png",
+  "Isalo National Park": "/png/MADAGASCAR/isalo-national-park.png",
+  "Royal Hill of Ambohimanga": "/png/MADAGASCAR/royal-hill-of-ambohimanga.png",
 
-  // --- Malawi --- (no images yet)
-  "Malawi": "/logo.png",
-  "Lake Malawi National Park": "/logo.png",
-  "Mount Mulanje": "/logo.png",
-  "Liwonde National Park": "/logo.png",
-  "Chongoni Rock Art Area": "/logo.png",
-  "Likoma Island": "/logo.png",
+  // --- Malawi ---
+  "Malawi": "/png/MALAWI/lilongwe-malawi.png",
+  "Lake Malawi National Park": "/png/MALAWI/lake-malawi-national-park.png",
+  "Mount Mulanje": "/png/MALAWI/mount-mulanje.png",
+  "Liwonde National Park": "/png/MALAWI/liwonde-national-park.png",
+  "Chongoni Rock Art Area": "/png/MALAWI/chongoni-rock-art-area.png",
+  "Likoma Island": "/png/MALAWI/likoma-island.png",
 
-  // --- Malaysia --- (no images yet)
-  "Malaysia": "/logo.png",
-  "Petronas Twin Towers": "/logo.png",
-  "Batu Caves": "/logo.png",
-  "George Town Penang": "/logo.png",
-  "Mount Kinabalu": "/logo.png",
-  "Taman Negara": "/logo.png",
+  // --- Malaysia ---
+  "Malaysia": "/png/MALAYSIA/kuala-lumpur-malaysia.png",
+  "Petronas Twin Towers": "/png/MALAYSIA/petronas-twin-towers.png",
+  "Batu Caves": "/png/MALAYSIA/batu-caves.png",
+  "George Town Penang": "/png/MALAYSIA/george-town-penang.png",
+  "Mount Kinabalu": "/png/MALAYSIA/mount-kinabalu.png",
+  "Taman Negara": "/png/MALAYSIA/taman-negara.png",
 
-  // --- Maldives --- (no images yet)
-  "Maldives": "/logo.png",
-  "Male City": "/logo.png",
-  "Ithaa Undersea Restaurant": "/logo.png",
-  "Hanifaru Bay": "/logo.png",
-  "Vaadhoo Island": "/logo.png",
-  "Overwater Bungalows": "/logo.png",
+  // --- Maldives ---
+  "Maldives": "/png/MALDIVES/male-maldives.png",
+  "Male Friday Mosque": "/png/MALDIVES/male-friday-mosque-hukuru-miskiy.png",
+  "Ithaa Undersea Restaurant": "/png/MALDIVES/ithaa-undersea-restaurant.png",
+  "Hanifaru Bay": "/png/MALDIVES/hanifaru-bay-baa-atoll.png",
+  "Vaadhoo Island": "/png/MALDIVES/vaadhoo-island-sea-of-stars.png",
+  "The Overwater Bungalows": "/png/MALDIVES/the-overwater-bungalows.png",
 
   // --- Mali --- (no images yet)
   "Mali": "/logo.png",

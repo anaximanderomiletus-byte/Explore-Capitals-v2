@@ -54,6 +54,7 @@ const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
         <Link 
           to="/terms" 
           target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group"
         >
           <FileText size={16} className="text-white/60" />
@@ -64,6 +65,7 @@ const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
         <Link 
           to="/privacy" 
           target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group"
         >
           <FileText size={16} className="text-white/60" />

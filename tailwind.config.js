@@ -13,6 +13,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
         display: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+        cursive: ['Caveat', 'cursive'],
       },
       colors: {
         primary: '#007AFF', // iOS Blue
@@ -77,6 +78,10 @@ module.exports = {
         'correct-pop': 'correct-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'timer-panic': 'timer-panic 0.5s ease-in-out infinite',
         'shing': 'shing 0.5s ease-out forwards',
+        'aero-wipe-full-forward': 'aero-wipe-full-forward 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'aero-wipe-full-backward': 'aero-wipe-full-backward 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'float-delayed': 'float 6s ease-in-out 3s infinite',
+        'bounce-slow': 'bounce 3s infinite',
       },
       keyframes: {
         'globe-pulse': {
@@ -166,7 +171,17 @@ module.exports = {
           '35%': { transform: 'translateX(0)' },
           '65%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-100%)' },
-        }
+        },
+        'aero-wipe-full-forward': {
+          '0%': { transform: 'translateX(100%)', opacity: '1' },
+          '35%, 65%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(-100%)', opacity: '1' },
+        },
+        'aero-wipe-full-backward': {
+          '0%': { transform: 'translateX(-100%)', opacity: '1' },
+          '35%, 65%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(100%)', opacity: '1' },
+        },
       }
     },
   },

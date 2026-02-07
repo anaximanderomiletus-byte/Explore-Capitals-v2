@@ -4,7 +4,8 @@ import Stripe from "stripe";
 import { 
   validatePaymentEligibility, 
   logPaymentAttempt,
-  cleanupOldAttempts 
+  cleanupOldAttempts,
+  isCountryBlocked
 } from "./validation";
 import { 
   STRIPE_PRICES, 
@@ -18,6 +19,30 @@ admin.initializeApp();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2023-10-16",
 });
+
+// ============================================
+// SECURITY HELPERS
+// ============================================
+
+/**
+ * Allowed origins for redirect URLs (Stripe success/cancel URLs).
+ * Prevents open redirect attacks where a malicious client could redirect 
+ * users to a phishing site after payment.
+ */
+const ALLOWED_ORIGINS = [
+  'https://explorecapitals.com',
+  'https://www.explorecapitals.com',
+  ...(process.env.FUNCTIONS_EMULATOR ? ['http://localhost:3000', 'http://localhost:5173'] : []),
+];
+
+function validateRedirectUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ALLOWED_ORIGINS.some(origin => parsed.origin === origin);
+  } catch {
+    return false;
+  }
+}
 
 // ============================================
 // PAYMENT ELIGIBILITY CHECK
@@ -84,6 +109,11 @@ export const acceptTerms = functions.https.onCall(async (data, context) => {
 export const createStripeCheckoutSession = functions.https.onCall(async (data, context) => {
   const { amount, successUrl, cancelUrl } = data;
   
+  // Validate redirect URLs to prevent open redirect attacks
+  if (!validateRedirectUrl(successUrl) || !validateRedirectUrl(cancelUrl)) {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid redirect URL.");
+  }
+
   // User info (optional - donations don't require authentication)
   const userId = context.auth?.uid;
   const userEmail = context.auth?.token.email;
@@ -166,7 +196,7 @@ export const createStripeCheckoutSession = functions.https.onCall(async (data, c
     if (userId) {
       await logPaymentAttempt(userId, amount, 'failed', error.message);
     }
-    throw new functions.https.HttpsError("internal", error.message);
+    throw new functions.https.HttpsError("internal", "Payment processing failed. Please try again.");
   }
 });
 
@@ -187,6 +217,12 @@ export const createSubscriptionSession = functions.https.onCall(async (data, con
   }
 
   const { plan, successUrl, cancelUrl } = data;
+
+  // Validate redirect URLs to prevent open redirect attacks
+  if (!validateRedirectUrl(successUrl) || !validateRedirectUrl(cancelUrl)) {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid redirect URL.");
+  }
+
   const userId = context.auth.uid;
   const userEmail = context.auth.token.email;
   const emailVerified = context.auth.token.email_verified || false;
@@ -277,7 +313,7 @@ export const createSubscriptionSession = functions.https.onCall(async (data, con
   } catch (error: any) {
     console.error("Stripe error:", error);
     await logPaymentAttempt(userId, 0, 'failed', error.message);
-    throw new functions.https.HttpsError("internal", error.message);
+    throw new functions.https.HttpsError("internal", "Subscription setup failed. Please try again.");
   }
 });
 
@@ -303,9 +339,19 @@ export const createCustomerPortalSession = functions.https.onCall(async (data, c
 
   const { returnUrl } = data;
 
+  // Validate return URL to prevent open redirect attacks
+  if (returnUrl && !validateRedirectUrl(returnUrl)) {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid return URL.");
+  }
+
+  // Use a safe default if no valid returnUrl provided
+  const safeReturnUrl = returnUrl && validateRedirectUrl(returnUrl) 
+    ? returnUrl 
+    : 'https://explorecapitals.com/#/settings';
+
   const session = await stripe.billingPortal.sessions.create({
     customer: userData.stripeCustomerId,
-    return_url: returnUrl || `${data.origin}/settings`,
+    return_url: safeReturnUrl,
   });
 
   return { url: session.url };
@@ -340,7 +386,7 @@ export const cancelSubscription = functions.https.onCall(async (data, context) =
     return { success: true, message: "Subscription will cancel at the end of the billing period." };
   } catch (error: any) {
     console.error("Cancel error:", error);
-    throw new functions.https.HttpsError("internal", error.message);
+    throw new functions.https.HttpsError("internal", "Failed to cancel subscription. Please try again.");
   }
 });
 
@@ -408,7 +454,7 @@ export const requestRefund = functions.https.onCall(async (data, context) => {
   } catch (error: any) {
     if (error instanceof functions.https.HttpsError) throw error;
     console.error("Refund error:", error);
-    throw new functions.https.HttpsError("internal", error.message);
+    throw new functions.https.HttpsError("internal", "Refund processing failed. Please try again or contact support.");
   }
 });
 
@@ -449,6 +495,22 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
         
         if (!userId) {
           console.error("No userId in session metadata");
+          break;
+        }
+
+        // Check if billing country is blocked (OFAC sanctions)
+        const billingCountry = session.customer_details?.address?.country;
+        if (billingCountry && isCountryBlocked(billingCountry)) {
+          console.error(`Blocked payment from sanctioned country: ${billingCountry} (user: ${userId})`);
+          await logPaymentAttempt(userId, session.amount_total || 0, 'blocked', `Sanctioned country: ${billingCountry}`);
+          // Refund the payment automatically
+          if (session.payment_intent) {
+            try {
+              await stripe.refunds.create({ payment_intent: session.payment_intent as string });
+            } catch (refundErr) {
+              console.error("Failed to auto-refund sanctioned payment:", refundErr);
+            }
+          }
           break;
         }
 

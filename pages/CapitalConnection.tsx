@@ -4,10 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Building2, Network, Play } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
+import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 // Better shuffle algorithm
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -17,12 +20,6 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
   }
   return newArr;
-};
-
-const getCountryCode = (emoji: string) => {
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
 };
 
 interface GameCard {
@@ -41,6 +38,7 @@ export default function CapitalConnection() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   
   const [cards, setCards] = useState<GameCard[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -81,11 +79,11 @@ export default function CapitalConnection() {
       recordGameResult({
         gameId: 'capital-connection',
         score,
-        durationSeconds: 60 - timeLeft,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, timeLeft]);
+  }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const generateBoard = useCallback(() => {
     const roundCountries = shuffleArray(MOCK_COUNTRIES).slice(0, 6);
@@ -125,13 +123,13 @@ export default function CapitalConnection() {
 
   const startGame = useCallback(() => {
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
     generateBoard();
     setGameState('playing');
-  }, [generateBoard]);
+  }, [gameDuration, generateBoard]);
 
   const handleCardClick = useCallback((cardId: string) => {
     if (isProcessing || gameState !== 'playing') return;
@@ -224,7 +222,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -232,12 +230,15 @@ export default function CapitalConnection() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
         </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
             <Network size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Connection</h1>
-          <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
+          <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
+            <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
             <div className="flex flex-col gap-6">
             <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
@@ -246,6 +247,7 @@ export default function CapitalConnection() {
             </button>
           </div>
         </div>
+            </div>
           </motion.div>
         )}
 
@@ -310,25 +312,36 @@ export default function CapitalConnection() {
         {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="h-full flex items-center justify-center px-4"
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
-                <Trophy size={36} className="relative z-10" />
-              </div>
-              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
+                <TimeSelector value={gameDuration} onChange={setGameDuration} />
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
                   <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
                   Back to Games
                 </button>
               </div>
+            </div>
             </div>
           </motion.div>
         )}
@@ -365,7 +378,7 @@ const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => voi
       <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>
         {card.type === 'country' ? (
           <img 
-            src={`https://flagcdn.com/w80/${card.flagCode}.png`}
+            src={`/flags/${card.flagCode}.png`}
             alt="Flag"
             className="w-10 h-auto md:w-12 select-none object-contain"
             loading="lazy"

@@ -10,6 +10,8 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -24,6 +26,7 @@ export default function GlobalDetective() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   const [targetCountry, setTargetCountry] = useState<Country | null>(null);
   const [options, setOptions] = useState<Country[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -65,11 +68,11 @@ export default function GlobalDetective() {
       recordGameResult({
         gameId: 'global-detective',
         score,
-        durationSeconds: 60 - timeLeft,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, timeLeft]);
+  }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const getClueValue = (country: Country, type: string): Clue => {
     switch (type) {
@@ -110,7 +113,7 @@ export default function GlobalDetective() {
 
   const startGame = () => {
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setHasReported(false);
     setRoundResult(null);
     setFeedbackKey(0);
@@ -151,14 +154,17 @@ export default function GlobalDetective() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
           <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden transition-transform duration-700">
             <Search size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Global Detective</h1>
-          <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>
+          <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>
+          <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
           <div className="flex flex-col gap-6">
             <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
             <button 
@@ -170,6 +176,7 @@ export default function GlobalDetective() {
             </button>
           </div>
         </div>
+            </div>
           </motion.div>
       )}
 
@@ -177,20 +184,31 @@ export default function GlobalDetective() {
       {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="h-full flex items-center justify-center px-4"
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden group">
-          <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden transition-transform duration-700">
-            <Trophy size={36} className="relative z-10" />
-          </div>
-          <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+          <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+                <Trophy size={36} className="relative z-10 drop-shadow-lg" />
+              </div>
+          <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
           <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-          <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
+          <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
           <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
             <button 
               onClick={() => navigate('/games')}
               className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -200,6 +218,7 @@ export default function GlobalDetective() {
             </button>
           </div>
         </div>
+            </div>
           </motion.div>
       )}
 
@@ -228,7 +247,7 @@ export default function GlobalDetective() {
              <div className="w-[42px] shrink-0" />
           </div>
 
-          <div className="flex-1 flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-3 sm:p-4 md:p-8 overflow-hidden relative z-10">
+          <div className="flex-1 flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
                 
                 {/* Points and Timer - Responsive layout for all screen sizes */}
                 <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -288,7 +307,7 @@ export default function GlobalDetective() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4">
+                    <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4">
                         {options.map((option) => {
                              const isSelected = selectedAnswer === option.name;
                              const isCorrect = option.name === targetCountry.name;
@@ -307,10 +326,10 @@ export default function GlobalDetective() {
                                  key={option.id} 
                                  onClick={() => handleAnswer(option.name)} 
                                  disabled={!!selectedAnswer} 
-                               className={`game-option relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                               className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[42px] sm:min-h-[52px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                                style={{ WebkitTapHighlightColor: 'transparent' }}
                              >
-                               <span className="px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
+                               <span className="px-1 sm:px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
                              </button>
                              );
                         })}

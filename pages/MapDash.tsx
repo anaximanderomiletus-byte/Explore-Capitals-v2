@@ -10,18 +10,15 @@ import SEO from '../components/SEO';
 import { useUser } from '../context/UserContext';
 import { useLayout } from '../context/LayoutContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
-
-const getCountryCode = (emoji: string) => {
-  if (!emoji) return '';
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
-};
+import { getCountryCode, getFlagUrl } from '../utils/flags';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 export default function MapDash() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   const [targetCountry, setTargetCountry] = useState<Country | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lastResult, setLastResult] = useState<'correct' | 'incorrect' | null>(null);
@@ -117,7 +114,7 @@ export default function MapDash() {
 
   const startGame = () => {
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setCorrectCountries([]);
     setIncorrectCountries([]);
     setHasReported(false);
@@ -296,11 +293,11 @@ export default function MapDash() {
         score,
         correctCountries,
         incorrectCountries,
-        durationSeconds: 60,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries]);
+  }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft, gameDuration]);
 
   return (
     <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans">
@@ -415,11 +412,11 @@ export default function MapDash() {
                     </p>
                     
                     <div className="flex flex-col items-center justify-center gap-2.5 sm:gap-3 md:gap-3">
-                      <h2 className="text-2xl sm:text-3xl md:text-2xl font-display font-black text-white leading-tight tracking-tighter uppercase drop-shadow-2xl line-clamp-1">{targetCountry.name}</h2>
+                      <h2 className="text-2xl sm:text-3xl md:text-2xl font-display font-black text-white leading-tight tracking-tighter uppercase drop-shadow-2xl whitespace-nowrap pr-0.5">{targetCountry.name}</h2>
                       <div className="w-14 h-10 sm:w-16 sm:h-11 md:w-12 md:h-8 flex items-center justify-center relative">
                         <div className="absolute inset-0 bg-white/20 blur-xl rounded-full scale-150 opacity-50" />
                         <img 
-                          src={`https://flagcdn.com/w80/${getCountryCode(targetCountry.flag)}.png`} 
+                          src={getFlagUrl(targetCountry.flag)} 
                           alt={`${targetCountry.name} Flag`} 
                           className="w-full h-full object-contain filter drop-shadow-2xl relative z-10 brightness-[1.05]" 
                         />
@@ -440,21 +437,25 @@ export default function MapDash() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/40 backdrop-blur-xl p-3 sm:p-4"
           >
-            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-sky/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-sky border border-white/30">
-                <MapIcon size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
-              </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-1.5 sm:mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
-              <p className="text-white/60 text-[9px] sm:text-[10px] mb-6 sm:mb-8 md:mb-10 font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
-              <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
-                >
-                  <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" /> 
-                  Back to Games
-                </button>
+            <GameSideAds />
+            <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md">
+              <div className="w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-sky/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-sky border border-white/30">
+                  <MapIcon size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
+                </div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-1.5 sm:mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
+                <p className="text-white/60 text-[9px] sm:text-[10px] mb-4 sm:mb-5 md:mb-6 font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
+                <div className="mb-4 sm:mb-5 md:mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
+                <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
+                  <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
+                  <button 
+                    onClick={() => navigate('/games')}
+                    className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
+                  >
+                    <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" /> 
+                    Back to Games
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -464,27 +465,40 @@ export default function MapDash() {
         {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
             className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/60 backdrop-blur-2xl p-3 sm:p-4"
           >
-            <div className="max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-10 text-center border-2 border-white/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-warning border border-white/30">
-                <Trophy size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
-              </div>
-              <h1 className="text-2xl sm:text-[1.75rem] md:text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
-              <p className="text-white/60 mb-4 sm:mb-5 md:mb-6 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-5xl sm:text-6xl md:text-7xl font-display font-black text-white mb-6 sm:mb-8 md:mb-10 tabular-nums">{score}</div>
-              <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">Play Again</Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
-                >
-                  <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" /> 
-                  Back to Games
-                </button>
+            <GameSideAds />
+            <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md">
+              <div className="w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
+                <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+                  <Trophy size={28} className="relative z-10 drop-shadow-lg" />
+                </div>
+                <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+                <p className="text-white/60 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+                <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
+                <div className="flex flex-col gap-6">
+                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
+                  <button 
+                    onClick={() => navigate('/games')}
+                    className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto py-2"
+                  >
+                    <ArrowLeft size={14} className="transition-transform" /> 
+                    Back to Games
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

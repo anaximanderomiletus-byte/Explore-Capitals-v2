@@ -294,14 +294,14 @@ export const toursM: Record<string, TourData> = {
     introText: "Luxury bungalows sit on stilts directly over the shallow turquoise water. Swim with manta rays in the warm and calm Indian Ocean.",
     stops: [
       {
-        stopName: "Male'",
-        imageKeyword: "Male City",
+        stopName: "Male Friday Mosque",
+        imageKeyword: "Male Friday Mosque",
         description: [
-          "Male' is one of the smallest and most densely populated capital cities in the world. The entire city is squeezed onto an island that is only about 8 square kilometers, packed with high-rise buildings and colorful narrow streets.",
-          "The Fish Market is the heartbeat of the city. Every afternoon, dhoni fishing boats unload massive Yellowfin Tuna and Wahoo directly onto the tiled floor, where master fishmongers fillet them with incredible speed.",
-          "The city houses the Old Friday Mosque (Hukuru Miskiy). Built in 1656, it is constructed entirely from interlocking coral stone blocks without any mortar; the intricate carvings on the coral walls are still perfectly preserved."
+          "The Hukuru Miskiy, or Old Friday Mosque, is the oldest mosque in the Maldives. Built in 1656 during the reign of Sultan Ibrahim Iskandhar I, it is constructed entirely from interlocking coral stone blocks fitted together without any mortar or cement.",
+          "The walls and interior are covered in extraordinarily detailed lacquer work and intricate carvings of Arabic calligraphy and geometric patterns. The coral stone was cut from the surrounding reefs and hand-carved with such precision that the blocks interlock perfectly, a technique unique to the Maldives.",
+          "The mosque sits within a compound of ornately carved coral tombstones, some dating back to the 13th century. Nearby stands the Munnaaru, a striking circular minaret also built from coral stone, from which the call to prayer has echoed across Male' for centuries."
         ],
-        question: "What material was used to build the Old Friday Mosque in Male'?",
+        question: "What unique building material was used to construct the Hukuru Miskiy mosque?",
         options: [
           "Coral stone.",
           "Granite.",
@@ -309,7 +309,7 @@ export const toursM: Record<string, TourData> = {
           "Red brick."
         ],
         answer: "Coral stone.",
-        explanation: "Builders used blocks cut from the coral reefs, carved intricately and fitted together without cement."
+        explanation: "The entire mosque was built from blocks cut from coral reefs, intricately carved and interlocked without any mortar."
       },
       {
         stopName: "Ithaa Undersea Restaurant",
@@ -367,7 +367,7 @@ export const toursM: Record<string, TourData> = {
       },
       {
         stopName: "The Overwater Bungalows",
-        imageKeyword: "Overwater Bungalows",
+        imageKeyword: "The Overwater Bungalows",
         description: [
           "The quintessential image of the Maldives is the overwater bungalow. These villas are built on sturdy concrete or wooden piles driven into the lagoon floor, allowing guests to sleep directly above the ocean.",
           "Many feature glass floor panels. This allows guests to watch the fish swimming below their living room, and some even have slides that go from the bedroom deck straight into the sea.",

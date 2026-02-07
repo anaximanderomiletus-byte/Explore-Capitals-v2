@@ -3,6 +3,7 @@ import { MapPin, Map } from 'lucide-react';
 import { Country } from '../types';
 import Button from './Button';
 import { Link } from 'react-router-dom';
+import { getCountryCode } from '../utils/flags';
 
 interface CountryModalProps {
   country: Country;
@@ -21,11 +22,7 @@ const CountryModal: React.FC<CountryModalProps> = ({ country, onClose }) => {
   }, []);
 
   // Calculate ISO code from emoji flag
-  const countryCode = useMemo(() => {
-    return Array.from(country.flag)
-        .map((char: any) => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-        .join('');
-  }, [country.flag]);
+  const countryCode = useMemo(() => getCountryCode(country.flag), [country.flag]);
 
   return (
     <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4">
@@ -72,7 +69,7 @@ const CountryModal: React.FC<CountryModalProps> = ({ country, onClose }) => {
             ">
               {!imgError ? (
                 <img 
-                    src={`https://flagcdn.com/w640/${countryCode}.png`}
+                    src={`/flags/${countryCode}.png`}
                     alt={`${country.name} Flag`}
                     className="w-full h-full object-contain cursor-pointer select-none"
                     onError={() => setImgError(true)}
@@ -80,7 +77,7 @@ const CountryModal: React.FC<CountryModalProps> = ({ country, onClose }) => {
               ) : (
                 <div className="w-full h-full flex items-center justify-center cursor-pointer select-none">
                     <img 
-                        src={`https://flagcdn.com/w320/${countryCode}.png`}
+                        src={`/flags/${countryCode}.png`}
                         alt={`${country.name} Flag Fallback`}
                         className="max-w-[80%] max-h-[80%] object-contain drop-shadow-lg"
                     />

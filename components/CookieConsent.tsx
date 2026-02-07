@@ -32,14 +32,22 @@ const CookieConsent: React.FC = () => {
     // Check if user has already consented
     const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
     if (!consent) {
-      // Delay showing the banner for better UX (don't interrupt immediately)
-      const timer = setTimeout(() => setShowBanner(true), 2000);
+      // Show quickly - just enough delay for initial paint to settle
+      const timer = setTimeout(() => setShowBanner(true), 500);
       return () => clearTimeout(timer);
     } else {
       // Load saved preferences
       const savedPrefs = localStorage.getItem(COOKIE_PREFERENCES_KEY);
       if (savedPrefs) {
-        setPreferences(JSON.parse(savedPrefs));
+        try {
+          const parsed = JSON.parse(savedPrefs);
+          if (parsed && typeof parsed === 'object' && typeof parsed.essential === 'boolean') {
+            setPreferences(parsed);
+          }
+        } catch {
+          // Corrupted data - remove and use defaults
+          localStorage.removeItem(COOKIE_PREFERENCES_KEY);
+        }
       }
     }
   }, []);

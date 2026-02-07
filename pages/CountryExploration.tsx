@@ -11,12 +11,7 @@ import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { getCountryTour, getGeneratedImage } from '../services/geminiService';
 import { TourData } from '../types';
-
-const getCountryCode = (emoji: string) => {
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
-};
+import { getFlagUrl } from '../utils/flags';
 
 // High-Fidelity Aero Display for Tour/Expedition
 const PhotoPrint: React.FC<{ 
@@ -632,7 +627,7 @@ const CountryExploration: React.FC = () => {
                     <div className="relative z-10 w-44 h-auto mx-auto mb-6 transform-gpu perspective-1000">
                       <div className="relative animate-float-slow">
                         <img 
-                          src={`https://flagcdn.com/w320/${getCountryCode(country.flag)}.png`}
+                          src={getFlagUrl(country.flag)}
                           alt={`${country.name} Flag`}
                           className="w-full h-auto object-contain relative z-10"
                         />

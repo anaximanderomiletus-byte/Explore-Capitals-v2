@@ -6,16 +6,10 @@ import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { getFlagUrl } from '../utils/flags';
 
 // Define regions for filtering
 const REGIONS = ['All', 'Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'];
-
-// Helper to get ISO code for flags
-const getCountryCode = (emoji: string) => {
-    return Array.from(emoji)
-        .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-        .join('');
-};
 
 interface StoredMarker {
   id: string;
@@ -64,8 +58,7 @@ const MapPage: React.FC = () => {
 
   // Memoize Popup Content Creator
   const createPopupContent = useCallback((country: Country, type: 'sovereign' | 'territory' | 'defacto') => {
-    const flagCode = getCountryCode(country.flag);
-    const flagUrl = `https://flagcdn.com/w80/${flagCode}.png`;
+    const flagUrl = getFlagUrl(country.flag);
     
     let subheader = '';
     let linkClass = 'text-sky';
@@ -858,7 +851,6 @@ const MapPage: React.FC = () => {
                       {filteredSearchResults.length > 0 ? (
                           <ul className="py-1 relative z-10">
                               {filteredSearchResults.map((country, index) => {
-                                  const flagCode = getCountryCode(country.flag);
                                   const isTerritory = TERRITORIES.some(t => t.id === country.id);
                                   const isDeFacto = DE_FACTO_COUNTRIES.some(d => d.id === country.id);
                                   let nameClass = 'text-white';
@@ -880,7 +872,7 @@ const MapPage: React.FC = () => {
                                             className={`w-full text-left px-3.5 py-2.5 flex items-center gap-3 transition-all border-b border-white/5 last:border-none uppercase tracking-tighter ${index === selectedIndex ? 'bg-white/10 scale-[1.02] translate-x-1' : 'hover:bg-white/5'}`}
                                         >
                                             <div className="w-8 h-5 shrink-0 flex items-center justify-center">
-                                              <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
+                                              <img src={getFlagUrl(country.flag)} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
                                             </div>
                                             <div>
                                                 <p className={`text-[10px] font-black ${nameClass} ${glowClass}`}>{country.name}</p>
@@ -1099,7 +1091,6 @@ const MapPage: React.FC = () => {
                           {filteredSearchResults.length > 0 ? (
                               <ul className="py-2 relative z-10">
                                   {filteredSearchResults.map((country) => {
-                                      const flagCode = getCountryCode(country.flag);
                                       const isTerritory = TERRITORIES.some(t => t.id === country.id);
                                       const isDeFacto = DE_FACTO_COUNTRIES.some(d => d.id === country.id);
                                       let nameClass = 'text-[#1A1C1E]';
@@ -1120,7 +1111,7 @@ const MapPage: React.FC = () => {
                                                 className="w-full text-left px-6 py-4 flex items-center gap-4 transition-all border-b border-black/5 last:border-none active:bg-black/5 uppercase tracking-tighter"
                                             >
                                                 <div className="w-10 h-7 shrink-0 flex items-center justify-center">
-                                                  <img src={`https://flagcdn.com/w80/${flagCode}.png`} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
+                                                  <img src={getFlagUrl(country.flag)} alt="" className="w-full h-full object-contain filter drop-shadow-md" />
                                                 </div>
                                                 <div>
                                                     <p className={`text-xs font-black ${nameClass} ${glowClass}`}>{country.name}</p>

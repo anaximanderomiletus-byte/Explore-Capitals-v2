@@ -1,5 +1,6 @@
 
 import React, { useEffect, useMemo } from 'react';
+import { getCountryCode } from '../utils/flags';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Map, Compass, Navigation, Scroll, MapPin, 
@@ -148,9 +149,7 @@ const CountryDetail: React.FC = () => {
   };
 
   // Calculate ISO code for the flag image
-  const countryCode = Array.from(country.flag)
-    .map((char: any) => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
+  const countryCode = getCountryCode(country.flag);
 
   // Reusable Stat Component for the card
   const StatItem = ({ label, value, icon: Icon }: { label: string, value: string | React.ReactNode, icon: any }) => (
@@ -304,7 +303,7 @@ const CountryDetail: React.FC = () => {
                             </div>
                             
                             <img 
-                                src={`https://flagcdn.com/w640/${countryCode}.png`}
+                                src={`/flags/${countryCode}.png`}
                                 alt={`${country.name} Flag`}
                                 className="w-full h-full object-contain p-8 brightness-[1.02] contrast-[1.02] drop-shadow-xl relative z-10 opacity-90"
                             />
@@ -426,7 +425,7 @@ const CountryDetail: React.FC = () => {
                      <div className="lg:hidden mb-8 relative z-10">
                         <CompactPhoto 
                           type="flag"
-                          src={`https://flagcdn.com/w320/${countryCode}.png`}
+                          src={`/flags/${countryCode}.png`}
                           alt={`${country.name} Flag`}
                           caption={country.name}
                           region={country.region}

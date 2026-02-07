@@ -40,7 +40,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center pb-[10vh] sm:pb-[15vh] pointer-events-none overflow-hidden px-4 select-none"
+          className="fixed inset-0 z-[9999] flex items-center justify-center pb-[3vh] sm:pb-[5vh] pointer-events-none overflow-hidden px-4 select-none"
         >
           {/* Full screen background flash */}
           <motion.div
@@ -93,7 +93,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   transition={{ delay: 0.1 }}
                   className="text-center mt-4 sm:mt-6 bg-accent px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 border-white shadow-xl"
                 >
-                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter">
+                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter pr-1">
                     Excellent!
                   </h2>
                 </motion.div>
@@ -121,7 +121,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   transition={{ delay: 0.1 }}
                   className="text-center mt-4 sm:mt-6 bg-error px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 border-white shadow-xl"
                 >
-                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter">
+                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter pr-1">
                     Not Quite
                   </h2>
                 </motion.div>
@@ -131,7 +131,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                     initial={{ scale: 0.8, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     transition={{ delay: 0.15, type: "spring", stiffness: 260, damping: 20 }}
-                    className="mt-5 sm:mt-8 flex flex-col items-center w-full max-w-[90vw] sm:max-w-none"
+                    className="mt-2 sm:mt-3 flex flex-col items-center w-full max-w-[90vw] sm:max-w-none"
                   >
                     <div className="bg-[#1A1A1A] rounded-2xl sm:rounded-[2.5rem] border-2 border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] sm:shadow-[0_30px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col items-center w-full">
                       <div className="w-full bg-white/10 py-1.5 sm:py-2 border-b border-white/10 text-center">
@@ -145,13 +145,13 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                           <div className="relative flex-shrink-0">
                             <div className="absolute inset-0 bg-white/20 blur-md rounded-full scale-150 opacity-50" />
                             <img 
-                              src={`https://flagcdn.com/w160/${incorrectFlagCode}.png`} 
+                              src={`/flags/${incorrectFlagCode}.png`} 
                               className="w-8 h-5 sm:w-10 sm:h-7 md:w-12 md:h-8 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] relative z-10 rounded-sm" 
                               alt=""
                             />
                           </div>
                         )}
-                        <span className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter italic drop-shadow-lg truncate">
+                        <span className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter italic drop-shadow-lg pr-1">
                           {subText}
                         </span>
                       </div>

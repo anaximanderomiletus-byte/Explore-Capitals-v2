@@ -86,10 +86,12 @@ const AdSense: React.FC<AdSenseProps> = ({
       role="complementary"
       aria-label="Advertisement"
     >
-      {/* Small label for transparency */}
-      <div className="text-[8px] font-black uppercase tracking-[0.3em] text-white/20 mb-2 text-center">
-        Advertisement
-      </div>
+      {/* Small label for transparency - hidden on subtle variant since no visible container */}
+      {variant !== 'subtle' && (
+        <div className="text-[8px] font-black uppercase tracking-[0.3em] text-white/20 mb-2 text-center">
+          Advertisement
+        </div>
+      )}
       
       <ins
         ref={adRef}

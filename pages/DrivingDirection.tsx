@@ -10,17 +10,15 @@ import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { useGameLimit } from '../hooks/useGameLimit';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
-
-const getCountryCode = (emoji: string) => {
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
-};
+import { getFlagUrl } from '../utils/flags';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 export default function DrivingDirection() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
   const [previousCountryId, setPreviousCountryId] = useState<string | null>(null);
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
@@ -65,11 +63,11 @@ export default function DrivingDirection() {
       recordGameResult({
         gameId: 'driving-direction',
         score,
-        durationSeconds: 60 - timeLeft,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, timeLeft]);
+  }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const generateRound = useCallback(() => {
     setResult(null);
@@ -88,7 +86,7 @@ export default function DrivingDirection() {
     // Preload next potential flag
     const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
     const img = new Image();
-    img.src = `https://flagcdn.com/w320/${getCountryCode(countriesWithDriveSide[nextIdx].flag)}.png`;
+    img.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
   }, [countriesWithDriveSide, previousCountryId]);
 
   const startGame = () => {
@@ -97,7 +95,7 @@ export default function DrivingDirection() {
       return;
     }
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
@@ -163,7 +161,7 @@ export default function DrivingDirection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
             
@@ -172,7 +170,9 @@ export default function DrivingDirection() {
               <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-500/10 rounded-full blur-[120px] opacity-40" />
             </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10">
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20">
               <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <Crown size={10} /> Premium
               </div>
@@ -180,7 +180,8 @@ export default function DrivingDirection() {
                 <Car size={36} />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
-              <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
+              <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
+              <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">
                   PLAY <Play size={20} fill="currentColor" />
@@ -193,6 +194,7 @@ export default function DrivingDirection() {
                   Back to Games
                 </button>
               </div>
+            </div>
             </div>
           </motion.div>
         )}
@@ -262,14 +264,14 @@ export default function DrivingDirection() {
                     <div className={`w-full max-w-[140px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
                       {!imgError ? (
                         <img 
-                          src={`https://flagcdn.com/w320/${getCountryCode(currentCountry.flag)}.png`}
+                          src={getFlagUrl(currentCountry.flag)}
                           alt={`${currentCountry.name} flag`}
                           className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
                           onError={() => setImgError(true)}
                         />
                       ) : (
                         <img 
-                          src={`https://flagcdn.com/w160/${getCountryCode(currentCountry.flag)}.png`}
+                          src={getFlagUrl(currentCountry.flag)}
                           alt={`${currentCountry.name} flag fallback`}
                           className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
                         />
@@ -334,20 +336,32 @@ export default function DrivingDirection() {
         {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="h-full flex items-center justify-center px-4"
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
-                <Trophy size={36} className="relative z-10" />
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+                <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
+              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -356,6 +370,7 @@ export default function DrivingDirection() {
                   Back to Games
                 </button>
               </div>
+            </div>
             </div>
           </motion.div>
         )}

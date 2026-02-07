@@ -12,6 +12,8 @@ import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -28,6 +30,7 @@ export default function LandmarkLegend() {
   const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -70,11 +73,11 @@ export default function LandmarkLegend() {
         score,
         correctCountries,
         incorrectCountries,
-        durationSeconds: 60 - timeLeft,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft]);
+  }, [gameState, gameDuration, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft]);
 
   // Generate a finite list of questions for this session (Limit to 15 for faster loading)
   const getQuestionsList = useCallback((): Question[] => {
@@ -123,7 +126,7 @@ export default function LandmarkLegend() {
 
     setQuestions(newQuestions);
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setQuestionIndex(0);
     setCorrectCountries([]);
     setIncorrectCountries([]);
@@ -175,7 +178,7 @@ export default function LandmarkLegend() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
@@ -185,21 +188,25 @@ export default function LandmarkLegend() {
               <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
             </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
-                <Camera size={36} className="relative z-10" />
-              </div>
-              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Landmark Legend</h1>
-              <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify nations through their landmarks.</p>
-              <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
-                >
-                  <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
-                  Back to Games
-                </button>
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+                <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
+                  <Camera size={36} className="relative z-10" />
+                </div>
+                <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Landmark Legend</h1>
+                <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify nations through their landmarks.</p>
+                <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
+                <div className="flex flex-col gap-6">
+                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
+                  <button 
+                    onClick={() => navigate('/games')}
+                    className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
+                  >
+                    <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
+                    Back to Games
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -211,7 +218,7 @@ export default function LandmarkLegend() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <div className="text-white font-display font-black text-2xl uppercase tracking-[0.5em] animate-pulse">
               Loading
@@ -251,7 +258,7 @@ export default function LandmarkLegend() {
                <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-3 sm:p-4 md:p-6 overflow-hidden relative z-10">
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-6 overflow-y-auto overflow-x-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -275,10 +282,10 @@ export default function LandmarkLegend() {
                    className="flex-1 flex flex-col min-h-0"
                  >
                    {/* Centered image area */}
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 overflow-hidden relative z-10">
-                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80">IDENTIFY MISSION TARGET</p>
+                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 relative z-10">
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY MISSION TARGET</p>
                       <div 
-                       className="relative w-full max-w-sm md:max-w-md h-60 md:h-96 rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
+                       className="relative w-full max-w-sm md:max-w-md h-auto max-h-60 md:max-h-96 min-h-0 shrink rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
                        style={{ 
                          transform: 'perspective(1000px) rotateX(2deg)',
                        }}
@@ -301,7 +308,7 @@ export default function LandmarkLegend() {
                    </div>
 
                    {/* Grid of options at bottom */}
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                   <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {currentQuestion.options.map((option) => {
                         const isSelected = selectedAnswerId === option.id;
                         const isCorrect = option.id === currentQuestion.country.id;
@@ -322,7 +329,7 @@ export default function LandmarkLegend() {
                             key={option.id}
                             onClick={() => handleAnswer(option.id)}
                             disabled={!!selectedAnswerId}
-                            className={`game-option relative p-2.5 md:p-3 rounded-2xl font-display font-black text-sm md:text-lg flex items-center justify-center min-h-[44px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                            className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[42px] sm:min-h-[52px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                             style={{ WebkitTapHighlightColor: 'transparent' }}
                           >
                             <span className="text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>
@@ -340,27 +347,40 @@ export default function LandmarkLegend() {
         {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="h-full flex items-center justify-center px-4"
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/20 relative z-10 overflow-hidden">
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
-                <Trophy size={36} className="relative z-10" />
-              </div>
-              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
-              <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
-              <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
-                >
-                  <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
-                  Back to Games
-                </button>
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+                <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+                  <Trophy size={36} className="relative z-10 drop-shadow-lg" />
+                </div>
+                <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+                <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+                <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
+                <div className="flex flex-col gap-6">
+                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
+                  <button 
+                    onClick={() => navigate('/games')}
+                    className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
+                  >
+                    <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
+                    Back to Games
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>

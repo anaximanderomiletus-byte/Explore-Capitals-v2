@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =============================================
+    // USER DOCUMENTS
+    // =============================================
+    match /users/{userId} {
+
+      // Anyone authenticated can read their own document
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Allow creation only if the user is creating their own document
+      allow create: if request.auth != null && request.auth.uid == userId
+        && !request.resource.data.keys().hasAny([
+          'subscriptionStatus', 'subscriptionPlan', 'subscriptionId',
+          'currentPeriodEnd', 'stripeCustomerId', 'isSupporter',
+          'supporterSince', 'paymentAttempts'
+        ]);
+
+      // Allow updates but protect server-managed fields
+      // These fields can ONLY be written by Cloud Functions (admin SDK bypasses rules)
+      allow update: if request.auth != null && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'subscriptionStatus',
+          'subscriptionPlan',
+          'subscriptionId',
+          'currentPeriodEnd',
+          'stripeCustomerId',
+          'isSupporter',
+          'supporterSince',
+          'paymentAttempts',
+          'termsAcceptedAt',
+          'termsVersion',
+          'privacyAcceptedAt'
+        ]);
+
+      // Allow users to delete their own document (account deletion)
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // =============================================
+    // DENY ALL OTHER COLLECTIONS BY DEFAULT
+    // =============================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

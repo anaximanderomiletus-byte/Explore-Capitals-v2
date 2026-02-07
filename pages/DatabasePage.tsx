@@ -4,6 +4,7 @@ import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Langu
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
+import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
@@ -64,19 +65,6 @@ const SortHeader: React.FC<SortHeaderProps> = memo(({ label, field, align = 'lef
 
 SortHeader.displayName = 'SortHeader';
 
-// Helper to get ISO code for flags - memoized
-const countryCodeCache = new Map<string, string>();
-const getCountryCode = (emoji: string): string => {
-  if (countryCodeCache.has(emoji)) {
-    return countryCodeCache.get(emoji)!;
-  }
-  const code = Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
-  countryCodeCache.set(emoji, code);
-  return code;
-};
-
 // Simple flag component - no lazy loading overhead for visible items
 const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
   const code = getCountryCode(country.flag);
@@ -86,7 +74,7 @@ const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({
   return (
     <div className={`${width} ${height} flex items-center justify-center bg-white/5 rounded overflow-hidden`}>
       <img 
-        src={`https://flagcdn.com/w80/${code}.png`} 
+        src={`/flags/${code}.png`} 
         alt={`${country.name} Flag`}
         className="w-full h-full object-contain"
         loading="lazy"

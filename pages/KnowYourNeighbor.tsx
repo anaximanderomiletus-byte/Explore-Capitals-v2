@@ -6,25 +6,23 @@ import { Timer, Trophy, ArrowLeft, RefreshCw, Network, AlertCircle, Play } from 
 import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
+import { getFlagUrl } from '../utils/flags';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
+import TimeSelector from '../components/TimeSelector';
+import GameSideAds from '../components/GameSideAds';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
-};
-
-const getCountryCode = (emoji: string) => {
-  return Array.from(emoji)
-    .map(char => String.fromCharCode(char.codePointAt(0)! - 127397).toLowerCase())
-    .join('');
 };
 
 export default function KnowYourNeighbor() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [gameDuration, setGameDuration] = useState(60);
   const [validCountries, setValidCountries] = useState<Country[]>([]);
   const [targetCountry, setTargetCountry] = useState<Country | null>(null);
   const [options, setOptions] = useState<string[]>([]);
@@ -63,11 +61,11 @@ export default function KnowYourNeighbor() {
       recordGameResult({
         gameId: 'know-your-neighbor',
         score,
-        durationSeconds: 60 - timeLeft,
+        durationSeconds: gameDuration - timeLeft,
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, timeLeft]);
+  }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -95,7 +93,7 @@ export default function KnowYourNeighbor() {
 
   const startGame = () => {
     setScore(0);
-    setTimeLeft(60);
+    setTimeLeft(gameDuration);
     setHasReported(false);
     setRoundResult(null);
     setFeedbackKey(0);
@@ -138,7 +136,7 @@ export default function KnowYourNeighbor() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex items-center justify-center px-4"
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
         
@@ -148,12 +146,15 @@ export default function KnowYourNeighbor() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
         </div>
 
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/20 relative z-10 overflow-hidden">
+            <GameSideAds />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
             <Network size={36} className="relative z-10" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
-          <p className="text-white/40 text-[10px] mb-10 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
+          <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
+          <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
             <div className="flex flex-col gap-6">
             <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
             <button 
@@ -165,6 +166,7 @@ export default function KnowYourNeighbor() {
             </button>
           </div>
         </div>
+            </div>
           </motion.div>
         )}
 
@@ -201,7 +203,7 @@ export default function KnowYourNeighbor() {
          <div className="w-[42px] shrink-0" />
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-2 md:p-4 overflow-hidden relative z-10">
+      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
          
          {/* Points and Timer - Responsive layout for all screen sizes */}
          <div className="flex items-center justify-between gap-2 mb-1 sm:mb-2 md:mb-2 relative z-20 shrink-0">
@@ -229,9 +231,9 @@ export default function KnowYourNeighbor() {
               <div className="text-center">
                  <p className="text-sky font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] mb-3 md:mb-4 font-sans">SELECT ALL LAND NEIGHBORS FOR</p>
                  <img 
-                   src={`https://flagcdn.com/w160/${getCountryCode(targetCountry.flag)}.png`}
+                   src={getFlagUrl(targetCountry.flag)}
                    alt={`${targetCountry.name} Flag`}
-                   className="h-10 md:h-14 w-auto mx-auto mb-2 md:mb-3 drop-shadow-lg object-contain"
+                   className="max-h-10 md:max-h-14 w-auto mx-auto mb-2 md:mb-3 min-h-0 shrink drop-shadow-lg object-contain"
                  />
                  <h3 className="text-2xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg">{targetCountry.name}</h3>
               </div>
@@ -300,20 +302,31 @@ export default function KnowYourNeighbor() {
         {gameState === 'finished' && (
           <motion.div
             key="finished"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="h-full flex items-center justify-center px-4"
+            initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
+            animate={{ 
+              opacity: [0, 1, 1, 1, 1],
+              scale: [0.3, 1.15, 0.95, 1.05, 1],
+              y: [-300, 20, -15, 5, 0],
+              rotate: [-8, 4, -3, 1, 0]
+            }}
+            transition={{ 
+              duration: 0.7,
+              times: [0, 0.45, 0.65, 0.85, 1],
+              ease: "easeOut"
+            }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-10 text-center border-2 border-white/40 relative z-10 overflow-hidden">
-              <div className="w-20 h-20 bg-warning/20 rounded-full flex items-center justify-center mx-auto mb-8 text-warning border border-white/30 relative overflow-hidden">
-                <Trophy size={36} className="relative z-10" />
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/40 overflow-hidden">
+              <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+                <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h1 className="text-3xl font-display font-black text-white mb-1 uppercase tracking-tighter drop-shadow-md">Finished</h1>
+              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
               <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-10 tabular-nums">{score}</div>
+              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again</Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
@@ -323,6 +336,7 @@ export default function KnowYourNeighbor() {
                 </button>
           </div>
       </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
