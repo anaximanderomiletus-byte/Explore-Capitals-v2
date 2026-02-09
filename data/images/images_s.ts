@@ -80,38 +80,38 @@ export const imagesS: Record<string, string> = {
   "Sainte Anne Marine Park": "/png/SEYCHELLES/sainte-anne-marine-national-park.png",
 
   // --- Sierra Leone ---
-  "Sierra Leone": "/logo.png",
-  "Tacugama Chimpanzee Sanctuary": "/logo.png",
-  "River No. 2 Beach": "/logo.png",
-  "Bunce Island": "/logo.png",
-  "The Cotton Tree Freetown": "/logo.png",
-  "Tiwai Island": "/logo.png",
+  "Sierra Leone": "/png/SIERRA-LEONE/freetown-sierra-leone.png",
+  "Tacugama Chimpanzee Sanctuary": "/png/SIERRA-LEONE/tacugama-chimpanzee-sanctuary.png",
+  "River No. 2 Beach": "/png/SIERRA-LEONE/river-no-2-beach.png",
+  "Bunce Island": "/png/SIERRA-LEONE/bunce-island.png",
+  "The Cotton Tree Freetown": "/png/SIERRA-LEONE/the-cotton-tree.png",
+  "Tiwai Island": "/png/SIERRA-LEONE/tiwai-island.png",
 
-  // --- Singapore --- (no images yet)
-  "Singapore": "/logo.png",
-  "Supertree Grove": "/logo.png",
-  "Infinity Pool": "/logo.png",
-  "Maxwell Food Centre": "/logo.png",
-  "Rain Vortex": "/logo.png",
-  "Merlion Park": "/logo.png",
+  // --- Singapore ---
+  "Singapore": "/png/SINGAPORE/singapore-singapore.png",
+  "Supertree Grove": "/png/SINGAPORE/supertree-grove.png",
+  "Infinity Pool": "/png/SINGAPORE/infinity-pool.png",
+  "Maxwell Food Centre": "/png/SINGAPORE/maxwell-food-centre.png",
+  "Rain Vortex": "/png/SINGAPORE/rain-vortex.png",
+  "Merlion Park": "/png/SINGAPORE/merlion-park.png",
 
-  // --- Slovakia --- (no images yet)
-  "Slovakia": "/logo.png",
-  "Spiš Castle": "/logo.png",
-  "Štrbské Pleso": "/logo.png",
-  "Bratislava Castle": "/logo.png",
-  "Čičmany": "/logo.png",
-  "Slovak Paradise": "/logo.png",
+  // --- Slovakia ---
+  "Slovakia": "/png/SLOVAKIA/bratislava-slovakia.png",
+  "Spiš Castle": "/png/SLOVAKIA/spis-castle.png",
+  "Štrbské Pleso": "/png/SLOVAKIA/high-tatras.png",
+  "Bratislava Castle": "/png/SLOVAKIA/bratislava-castle.png",
+  "Čičmany": "/png/SLOVAKIA/cicmany.png",
+  "Slovak Paradise": "/png/SLOVAKIA/slovak-paradise-national-park.png",
 
-  // --- Slovenia --- (no images yet)
-  "Slovenia": "/logo.png",
-  "Lake Bled": "/logo.png",
-  "Postojna Cave": "/logo.png",
-  "Predjama Castle": "/logo.png",
-  "Dragon Bridge Ljubljana": "/logo.png",
-  "Soča River": "/logo.png",
+  // --- Slovenia ---
+  "Slovenia": "/png/SLOVENIA/ljubljana-slovenia.png",
+  "Lake Bled": "/png/SLOVENIA/lake-bled.png",
+  "Postojna Cave": "/png/SLOVENIA/postojna-cave.png",
+  "Predjama Castle": "/png/SLOVENIA/predjama-castle.png",
+  "Dragon Bridge Ljubljana": "/png/SLOVENIA/dragon-bridge-ljubljana.png",
+  "Soča River": "/png/SLOVENIA/soca-river-valley.png",
 
-  // --- Solomon Islands --- (no images yet)
+  // --- Solomon Islands ---
   "Solomon Islands": "/logo.png",
   "Iron Bottom Sound": "/logo.png",
   "Marovo Lagoon": "/logo.png",
