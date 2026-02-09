@@ -1,85 +1,85 @@
 export const imagesS: Record<string, string> = {
-  // --- Saint Kitts and Nevis --- (no images yet)
-  "Saint Kitts and Nevis": "/logo.png",
-  "Brimstone Hill Fortress": "/logo.png",
-  "St. Kitts Scenic Railway": "/logo.png",
-  "Nevis Peak": "/logo.png",
-  "Alexander Hamilton Birthplace": "/logo.png",
-  "Frigate Bay Strip": "/logo.png",
+  // --- Saint Kitts and Nevis ---
+  "Saint Kitts and Nevis": "/png/SAINT-KITTS-AND-NEVIS/basseterre-saint-kitts-and-nevis.png",
+  "Brimstone Hill Fortress": "/png/SAINT-KITTS-AND-NEVIS/brimstone-hill-fortress.png",
+  "St. Kitts Scenic Railway": "/png/SAINT-KITTS-AND-NEVIS/st-kitts-scenic-railway.png",
+  "Nevis Peak": "/png/SAINT-KITTS-AND-NEVIS/nevis-peak.png",
+  "Alexander Hamilton Birthplace": "/png/SAINT-KITTS-AND-NEVIS/alexander-hamilton-birthplace.png",
+  "Frigate Bay Strip": "/png/SAINT-KITTS-AND-NEVIS/frigate-bay-strip.png",
 
-  // --- Saint Lucia --- (no images yet)
-  "Saint Lucia": "/logo.png",
-  "The Pitons": "/logo.png",
-  "Sulphur Springs": "/logo.png",
-  "Pigeon Island National Park": "/logo.png",
-  "Marigot Bay": "/logo.png",
-  "Tet Paul Nature Trail": "/logo.png",
+  // --- Saint Lucia ---
+  "Saint Lucia": "/png/SAINT-LUCIA/castries-saint-lucia.png",
+  "The Pitons": "/png/SAINT-LUCIA/the-pitons.png",
+  "Sulphur Springs": "/png/SAINT-LUCIA/sulphur-springs.png",
+  "Pigeon Island National Park": "/png/SAINT-LUCIA/pigeon-island-national-park.png",
+  "Marigot Bay": "/png/SAINT-LUCIA/marigot-bay.png",
+  "Tet Paul Nature Trail": "/png/SAINT-LUCIA/tet-paul-nature-trail.png",
 
-  // --- Saint Vincent and the Grenadines --- (no images yet)
-  "Saint Vincent and the Grenadines": "/logo.png",
-  "Wallilabou Bay": "/logo.png",
-  "Tobago Cays Marine Park": "/logo.png",
-  "La Soufrière Volcano": "/logo.png",
-  "Bequia Model Boats": "/logo.png",
-  "Mustique": "/logo.png",
+  // --- Saint Vincent and the Grenadines ---
+  "Saint Vincent and the Grenadines": "/png/SAINT-VINCENT-AND-THE-GRENADINES/kingstown-saint-vincent-and-the-grenadines.png",
+  "Wallilabou Bay": "/png/SAINT-VINCENT-AND-THE-GRENADINES/wallilabou-bay.png",
+  "Tobago Cays Marine Park": "/png/SAINT-VINCENT-AND-THE-GRENADINES/tobago-cays-marine-park.png",
+  "La Soufrière Volcano": "/png/SAINT-VINCENT-AND-THE-GRENADINES/la-soufriere-volcano.png",
+  "Bequia Model Boats": "/png/SAINT-VINCENT-AND-THE-GRENADINES/bequia-model-boats.png",
+  "Mustique": "/png/SAINT-VINCENT-AND-THE-GRENADINES/mustique-grenadines.png",
 
-  // --- Samoa --- (no images yet)
-  "Samoa": "/logo.png",
-  "To Sua Ocean Trench": "/logo.png",
-  "Robert Louis Stevenson Museum": "/logo.png",
-  "Alofaaga Blowholes": "/logo.png",
-  "Saleaula Lava Fields": "/logo.png",
-  "Lalomanu Beach Fales": "/logo.png",
+  // --- Samoa ---
+  "Samoa": "/png/SAMOA/apia-samoa.png",
+  "To Sua Ocean Trench": "/png/SAMOA/to-sua-ocean-trench.png",
+  "Robert Louis Stevenson Museum": "/png/SAMOA/robert-louis-stevenson-museum.png",
+  "Alofaaga Blowholes": "/png/SAMOA/alofaaga-blowholes.png",
+  "Saleaula Lava Fields": "/png/SAMOA/saleaula-lava-fields.png",
+  "Lalomanu Beach Fales": "/png/SAMOA/lalomanu-beach-fales.png",
 
-  // --- San Marino --- (no images yet)
-  "San Marino": "/logo.png",
-  "The Three Towers San Marino": "/logo.png",
-  "Palazzo Pubblico San Marino": "/logo.png",
-  "Mount Titano": "/logo.png",
-  "Museum of Curiosities": "/logo.png",
-  "The Crossbow Corps": "/logo.png",
+  // --- San Marino ---
+  "San Marino": "/png/SAN-MARINO/san-marino.png",
+  "The Three Towers San Marino": "/png/SAN-MARINO/the-three-towers-san-marino.png",
+  "Palazzo Pubblico San Marino": "/png/SAN-MARINO/palazzo-pubblico-san-marino.png",
+  "Mount Titano": "/png/SAN-MARINO/mount-titano.png",
+  "Museum of Curiosities": "/png/SAN-MARINO/museum-of-curiosities.png",
+  "The Crossbow Corps": "/png/SAN-MARINO/the-crossbow-corps.png",
 
-  // --- São Tomé and Príncipe --- (no images yet)
-  "São Tomé and Príncipe": "/logo.png",
-  "Pico Cão Grande": "/logo.png",
-  "Roça Sundy": "/logo.png",
-  "Equator Mark Sao Tome": "/logo.png",
-  "Boca de Inferno Sao Tome": "/logo.png",
-  "Obo National Park Begonia": "/logo.png",
+  // --- São Tomé and Príncipe ---
+  "São Tomé and Príncipe": "/png/SAO-TOME-AND-PRINCIPE/sao-tome-sao-tome-principe.png",
+  "Pico Cão Grande": "/png/SAO-TOME-AND-PRINCIPE/pico-cao-grande.png",
+  "Roça Sundy": "/png/SAO-TOME-AND-PRINCIPE/roca-sundy.png",
+  "Equator Mark Sao Tome": "/png/SAO-TOME-AND-PRINCIPE/equator-mark-sao-tome.png",
+  "Boca de Inferno Sao Tome": "/png/SAO-TOME-AND-PRINCIPE/boca-de-inferno.png",
+  "Obo National Park Begonia": "/png/SAO-TOME-AND-PRINCIPE/obo-national-park-begonia.png",
 
-  // --- Saudi Arabia --- (no images yet)
-  "Saudi Arabia": "/logo.png",
-  "Hegra": "/logo.png",
-  "Elephant Rock": "/logo.png",
-  "Kingdom Centre": "/logo.png",
-  "Edge of the World": "/logo.png",
-  "Jeddah Al-Balad": "/logo.png",
+  // --- Saudi Arabia ---
+  "Saudi Arabia": "/png/SAUDI-ARABIA/riyadh-saudi-arabia.png",
+  "Hegra": "/png/SAUDI-ARABIA/hegra.png",
+  "Elephant Rock": "/png/SAUDI-ARABIA/elephant-rock.png",
+  "Kingdom Centre": "/png/SAUDI-ARABIA/kingdom-centre.png",
+  "Edge of the World": "/png/SAUDI-ARABIA/edge-of-the-world.png",
+  "Jeddah Al-Balad": "/png/SAUDI-ARABIA/jeddah-al-balad.png",
 
-  // --- Senegal --- (no images yet)
-  "Senegal": "/logo.png",
-  "Lake Retba": "/logo.png",
-  "Goree Island": "/logo.png",
-  "African Renaissance Monument": "/logo.png",
-  "Djoudj National Bird Sanctuary": "/logo.png",
-  "Fadiouth Shell Island": "/logo.png",
+  // --- Senegal ---
+  "Senegal": "/png/SENEGAL/dakar-senegal.png",
+  "Lake Retba": "/png/SENEGAL/lake-retba.png",
+  "Goree Island": "/png/SENEGAL/goree-island.png",
+  "African Renaissance Monument": "/png/SENEGAL/african-renaissance-monument.png",
+  "Djoudj National Bird Sanctuary": "/png/SENEGAL/djoudj-national-bird-sanctuary.png",
+  "Fadiouth Shell Island": "/png/SENEGAL/fadiouth-shell-island.png",
 
-  // --- Serbia --- (no images yet)
-  "Serbia": "/logo.png",
-  "Kalemegdan Fortress": "/logo.png",
-  "Skull Tower": "/logo.png",
-  "Uvac Canyon": "/logo.png",
-  "Church of Saint Sava": "/logo.png",
-  "Devil's Town": "/logo.png",
+  // --- Serbia ---
+  "Serbia": "/png/SERBIA/belgrade-serbia.png",
+  "Kalemegdan Fortress": "/png/SERBIA/kalemegdan-fortress.png",
+  "Skull Tower": "/png/SERBIA/skull-tower.png",
+  "Uvac Canyon": "/png/SERBIA/uvac-canyon.png",
+  "Church of Saint Sava": "/png/SERBIA/church-of-saint-sava.png",
+  "Devil's Town": "/png/SERBIA/devils-town.png",
 
-  // --- Seychelles --- (no images yet)
-  "Seychelles": "/logo.png",
-  "Anse Source d'Argent": "/logo.png",
-  "Aldabra Atoll": "/logo.png",
-  "Vallée de Mai": "/logo.png",
-  "Victoria Clock Tower": "/logo.png",
-  "Sainte Anne Marine Park": "/logo.png",
+  // --- Seychelles ---
+  "Seychelles": "/png/SEYCHELLES/victoria-seychelles.png",
+  "Anse Source d'Argent": "/png/SEYCHELLES/anse-source-d-argent.png",
+  "Aldabra Atoll": "/png/SEYCHELLES/aldabra-atoll.png",
+  "Vallée de Mai": "/png/SEYCHELLES/vallee-de-mai.png",
+  "Victoria Clock Tower": "/png/SEYCHELLES/victoria-clock-tower.png",
+  "Sainte Anne Marine Park": "/png/SEYCHELLES/sainte-anne-marine-national-park.png",
 
-  // --- Sierra Leone --- (no images yet)
+  // --- Sierra Leone ---
   "Sierra Leone": "/logo.png",
   "Tacugama Chimpanzee Sanctuary": "/logo.png",
   "River No. 2 Beach": "/logo.png",

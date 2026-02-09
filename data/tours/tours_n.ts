@@ -751,7 +751,7 @@ export const toursN: Record<string, TourData> = {
       },
       {
         stopName: "Benin City",
-        imageKeyword: "Benin Bronzes",
+        imageKeyword: "Royal Palace of the Oba of Benin",
         description: [
           "Benin City was the capital of the Kingdom of Benin, one of the most advanced states in pre-colonial Africa. The city was famous for its massive earthworks (walls) which were once four times longer than the Great Wall of China.",
           "The kingdom is renowned for the \"Benin Bronzes.\" These intricate metal plaques adorned the pillars of the Royal Palace, recording the history of the Obas (kings) and their conquests in vivid detail.",

@@ -175,7 +175,7 @@ export const toursP: Record<string, TourData> = {
       },
       {
         stopName: "Peleliu",
-        imageKeyword: "Peleliu WWII Tank",
+        imageKeyword: "Peleliu",
         description: [
           "This island was the site of one of the fiercest battles of World War II. In 1944, US Marines fought to take the island from the Japanese; the battle was expected to take 4 days but lasted over 2 months.",
           "The island is a living museum. It has been left largely untouched since 1944, meaning visitors can walk past rusted tanks, crashed Zero fighter planes, and hidden caves that still contain the canteens and boots of soldiers.",

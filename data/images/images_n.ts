@@ -23,45 +23,45 @@ export const imagesN: Record<string, string> = {
   "Chitwan National Park": "/png/NEPAL/chitwan-national-park.png",
   "Lumbini": "/png/NEPAL/lumbini.png",
 
-  // --- Netherlands --- (no images yet)
-  "Netherlands": "/logo.png",
-  "Keukenhof Gardens": "/logo.png",
-  "Amsterdam Canals": "/logo.png",
-  "Kinderdijk": "/logo.png",
-  "Giethoorn": "/logo.png",
-  "The Delta Works": "/logo.png",
+  // --- Netherlands ---
+  "Netherlands": "/png/NETHERLANDS/amsterdam-netherlands.png",
+  "Keukenhof Gardens": "/png/NETHERLANDS/keukenhof-gardens.png",
+  "Amsterdam Canals": "/png/NETHERLANDS/amsterdam-canals.png",
+  "Kinderdijk": "/png/NETHERLANDS/kinderdijk-windmills.png",
+  "Giethoorn": "/png/NETHERLANDS/giethoorn.png",
+  "The Delta Works": "/png/NETHERLANDS/delta-works.png",
 
-  // --- New Zealand --- (no images yet)
-  "New Zealand": "/logo.png",
-  "Waitomo Glowworm Caves": "/logo.png",
-  "Hobbiton Movie Set": "/logo.png",
-  "Milford Sound": "/logo.png",
-  "Rotorua Te Puia": "/logo.png",
-  "Aoraki Mount Cook": "/logo.png",
+  // --- New Zealand ---
+  "New Zealand": "/png/NEW-ZEALAND/wellington-new-zealand.png",
+  "Waitomo Glowworm Caves": "/png/NEW-ZEALAND/waitomo-glowworm-caves.png",
+  "Hobbiton Movie Set": "/png/NEW-ZEALAND/hobbiton-movie-set.png",
+  "Milford Sound": "/png/NEW-ZEALAND/milford-sound.png",
+  "Rotorua Te Puia": "/png/NEW-ZEALAND/te-puia.png",
+  "Aoraki Mount Cook": "/png/NEW-ZEALAND/aoraki-mount-cook.png",
 
-  // --- Nicaragua --- (no images yet)
-  "Nicaragua": "/logo.png",
-  "Lake Nicaragua": "/logo.png",
-  "Cerro Negro": "/logo.png",
-  "Ometepe Island": "/logo.png",
-  "Granada Nicaragua": "/logo.png",
-  "The Corn Islands": "/logo.png",
+  // --- Nicaragua ---
+  "Nicaragua": "/png/NICARAGUA/managua-nicaragua.png",
+  "Lake Nicaragua": "/png/NICARAGUA/lake-nicaragua.png",
+  "Cerro Negro": "/png/NICARAGUA/cerro-negro.png",
+  "Ometepe Island": "/png/NICARAGUA/ometepe-island.png",
+  "Granada Nicaragua": "/png/NICARAGUA/granada-colonial-city.png",
+  "The Corn Islands": "/png/NICARAGUA/corn-islands.png",
 
-  // --- Niger --- (no images yet)
-  "Niger": "/logo.png",
-  "Kouré Giraffe Reserve": "/logo.png",
-  "Agadez Historic Centre": "/logo.png",
-  "Tree of Ténéré": "/logo.png",
-  "Aïr Mountains": "/logo.png",
-  "W National Park Niger": "/logo.png",
+  // --- Niger ---
+  "Niger": "/png/NIGER/niamey-niger.png",
+  "Kouré Giraffe Reserve": "/png/NIGER/koure-giraffe-reserve.png",
+  "Agadez Historic Centre": "/png/NIGER/agadez.png",
+  "Tree of Ténéré": "/png/NIGER/tree-of-tenere.png",
+  "Aïr Mountains": "/png/NIGER/air-mountains.png",
+  "W National Park Niger": "/png/NIGER/w-national-park.png",
 
-  // --- Nigeria --- (no images yet)
-  "Nigeria": "/logo.png",
-  "Zuma Rock": "/logo.png",
-  "Lekki Conservation Centre": "/logo.png",
-  "Osun-Osogbo Sacred Grove": "/logo.png",
-  "Olumo Rock": "/logo.png",
-  "Benin Bronzes": "/logo.png",
+  // --- Nigeria ---
+  "Nigeria": "/png/NIGERIA/abuja-nigeria.png",
+  "Zuma Rock": "/png/NIGERIA/zuma-rock.png",
+  "Lekki Conservation Centre": "/png/NIGERIA/lekki-conservation-centre.png",
+  "Osun-Osogbo Sacred Grove": "/png/NIGERIA/osun-osogbo-sacred-grove.png",
+  "Olumo Rock": "/png/NIGERIA/olumo-rock.png",
+  "Royal Palace of the Oba of Benin": "/png/NIGERIA/royal-palace-of-the-oba-of-benin.png",
 
   // --- North Korea ---
   "North Korea": "/png/NORTH-KOREA/pyongyang-north-korea.png",
@@ -71,19 +71,19 @@ export const imagesN: Record<string, string> = {
   "Tower of the Juche Idea": "/png/NORTH-KOREA/tower-of-the-juche-idea.png",
   "Kijong-dong": "/png/NORTH-KOREA/kijong-dong-peace-village.png",
 
-  // --- North Macedonia --- (no images yet)
-  "North Macedonia": "/logo.png",
-  "Lake Ohrid": "/logo.png",
-  "Old Bazaar Skopje": "/logo.png",
-  "Matka Canyon": "/logo.png",
-  "Heraclea Lyncestis": "/logo.png",
-  "The Painted Mosque Tetovo": "/logo.png",
+  // --- North Macedonia ---
+  "North Macedonia": "/png/NORTH-MACEDONIA/skopje-north-macedonia.png",
+  "Lake Ohrid": "/png/NORTH-MACEDONIA/lake-ohrid.png",
+  "Old Bazaar Skopje": "/png/NORTH-MACEDONIA/old-bazaar-skopje.png",
+  "Matka Canyon": "/png/NORTH-MACEDONIA/matka-canyon.png",
+  "Heraclea Lyncestis": "/png/NORTH-MACEDONIA/heraclea-lyncestis.png",
+  "The Painted Mosque Tetovo": "/png/NORTH-MACEDONIA/painted-mosque-tetovo.png",
 
   // --- Norway --- (no images yet)
-  "Norway": "/logo.png",
-  "Geirangerfjord": "/logo.png",
-  "Trolltunga": "/logo.png",
-  "Lofoten Islands": "/logo.png",
-  "Vigeland Sculpture Park": "/logo.png",
-  "Svalbard Global Seed Vault": "/logo.png"
+  "Norway": "/png/NORWAY/oslo-norway.png",
+  "Geirangerfjord": "/png/NORWAY/geirangerfjord.png",
+  "Trolltunga": "/png/NORWAY/trolltunga.png",
+  "Lofoten Islands": "/png/NORWAY/lofoten-islands.png",
+  "Vigeland Sculpture Park": "/png/NORWAY/vigeland-sculpture-park.png",
+  "Svalbard Global Seed Vault": "/png/NORWAY/svalbard-global-seed-vault.png"
 };
