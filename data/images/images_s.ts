@@ -112,28 +112,28 @@ export const imagesS: Record<string, string> = {
   "Soča River": "/png/SLOVENIA/soca-river-valley.png",
 
   // --- Solomon Islands ---
-  "Solomon Islands": "/logo.png",
-  "Iron Bottom Sound": "/logo.png",
-  "Marovo Lagoon": "/logo.png",
-  "Kennedy Island": "/logo.png",
-  "Skull Island": "/logo.png",
-  "Mataniko Falls": "/logo.png",
+  "Solomon Islands": "/png/SOLOMON-ISLANDS/honiara-solomon-islands.png",
+  "Iron Bottom Sound": "/png/SOLOMON-ISLANDS/iron-bottom-sound.png",
+  "Marovo Lagoon": "/png/SOLOMON-ISLANDS/marovo-lagoon.png",
+  "Kennedy Island": "/png/SOLOMON-ISLANDS/kennedy-island.png",
+  "Skull Island": "/png/SOLOMON-ISLANDS/skull-island.png",
+  "Mataniko Falls": "/png/SOLOMON-ISLANDS/mataniko-falls.png",
 
-  // --- Somalia --- (no images yet)
-  "Somalia": "/logo.png",
-  "Laas Geel Cave Paintings": "/logo.png",
-  "Lido Beach Mogadishu": "/logo.png",
-  "Daljirka Dahsoon Monument": "/logo.png",
-  "Ras Hafun": "/logo.png",
-  "Frankincense Tree": "/logo.png",
+  // --- Somalia ---
+  "Somalia": "/png/SOMALIA/mogadishu-somalia.png",
+  "Laas Geel Cave Paintings": "/png/SOMALIA/laas-geel.png",
+  "Lido Beach Mogadishu": "/png/SOMALIA/lido-beach.png",
+  "Daljirka Dahsoon Monument": "/png/SOMALIA/daljirka-dahsoon-monument.png",
+  "Ras Hafun": "/png/SOMALIA/ras-hafun.png",
+  "Frankincense Tree": "/png/SOMALIA/frankincense-forests.png",
 
-  // --- South Africa --- (no images yet)
-  "South Africa": "/logo.png",
-  "Table Mountain": "/logo.png",
-  "Kruger National Park": "/logo.png",
-  "Robben Island": "/logo.png",
-  "Blyde River Canyon": "/logo.png",
-  "Boulders Beach": "/logo.png",
+  // --- South Africa ---
+  "South Africa": "/png/SOUTH-AFRICA/pretoria-south-africa.png",
+  "Table Mountain": "/png/SOUTH-AFRICA/table-mountain.png",
+  "Kruger National Park": "/png/SOUTH-AFRICA/kruger-national-park.png",
+  "Robben Island": "/png/SOUTH-AFRICA/robben-island.png",
+  "Blyde River Canyon": "/png/SOUTH-AFRICA/blyde-river-canyon.png",
+  "Boulders Beach": "/png/SOUTH-AFRICA/boulders-beach.png",
 
   // --- South Korea ---
   "South Korea": "/png/SOUTH-KOREA/seoul-south-korea.png",
@@ -143,37 +143,37 @@ export const imagesS: Record<string, string> = {
   "Jeju Island Haenyeo": "/png/SOUTH-KOREA/jeju-island-haenyeo-divers.png",
   "The DMZ Joint Security Area": "/png/SOUTH-KOREA/dmz-joint-security-area.png",
 
-  // --- South Sudan --- (no images yet)
-  "South Sudan": "/logo.png",
-  "The Sudd": "/logo.png",
-  "Boma National Park": "/logo.png",
-  "Juba Bridge": "/logo.png",
-  "Mundari Cattle Camp": "/logo.png",
-  "Nimule National Park": "/logo.png",
+  // --- South Sudan ---
+  "South Sudan": "/png/SOUTH-SUDAN/juba-south-sudan.png",
+  "The Sudd": "/png/SOUTH-SUDAN/the-sudd.png",
+  "Boma National Park": "/png/SOUTH-SUDAN/boma-national-park.png",
+  "Juba Bridge": "/png/SOUTH-SUDAN/juba-the-nile.png",
+  "Mundari Cattle Camp": "/png/SOUTH-SUDAN/mundari-cattle-camp.png",
+  "Nimule National Park": "/png/SOUTH-SUDAN/nimule-national-park.png",
 
-  // --- Spain --- (no images yet)
-  "Spain": "/logo.png",
-  "The Sagrada Família": "/logo.png",
-  "The Alhambra": "/logo.png",
-  "Plaza de España Seville": "/logo.png",
-  "Running of the Bulls": "/logo.png",
-  "The Prado Museum": "/logo.png",
+  // --- Spain ---
+  "Spain": "/png/SPAIN/madrid-spain.png",
+  "The Sagrada Família": "/png/SPAIN/the-sagrada-familia-barcelona.png",
+  "The Alhambra": "/png/SPAIN/the-alhambra-granada.png",
+  "Plaza de España Seville": "/png/SPAIN/plaza-de-espana-seville.png",
+  "Running of the Bulls": "/png/SPAIN/running-of-the-bulls-pamplona.png",
+  "The Prado Museum": "/png/SPAIN/the-prado-museum-madrid.png",
 
-  // --- Sri Lanka --- (no images yet)
-  "Sri Lanka": "/logo.png",
-  "Sigiriya Lion Rock": "/logo.png",
-  "Nine Arch Bridge": "/logo.png",
-  "Yala National Park Leopard": "/logo.png",
-  "Galle Fort": "/logo.png",
-  "Temple of the Tooth": "/logo.png",
+  // --- Sri Lanka ---
+  "Sri Lanka": "/png/SRI-LANKA/sri-jayawardenepura-kotte-sri-lanka.png",
+  "Sigiriya Lion Rock": "/png/SRI-LANKA/sigiriya-lion-rock.png",
+  "Nine Arch Bridge": "/png/SRI-LANKA/nine-arch-bridge.png",
+  "Yala National Park Leopard": "/png/SRI-LANKA/yala-national-park.png",
+  "Galle Fort": "/png/SRI-LANKA/galle-fort.png",
+  "Temple of the Tooth": "/png/SRI-LANKA/temple-of-the-tooth.png",
 
-  // --- Sudan --- (no images yet)
-  "Sudan": "/logo.png",
-  "Meroe Pyramids": "/logo.png",
-  "Jebel Barkal": "/logo.png",
-  "Nile Confluence Khartoum": "/logo.png",
-  "Sanganeb Marine Park": "/logo.png",
-  "Old Dongola": "/logo.png",
+  // --- Sudan ---
+  "Sudan": "/png/SUDAN/khartoum-sudan.png",
+  "Meroe Pyramids": "/png/SUDAN/meroe-pyramids.png",
+  "Jebel Barkal": "/png/SUDAN/jebel-barkal.png",
+  "Nile Confluence Khartoum": "/png/SUDAN/the-confluence-of-the-nile.png",
+  "Sanganeb Marine Park": "/png/SUDAN/sanganeb-marine-national-park.png",
+  "Old Dongola": "/png/SUDAN/old-dongola.png",
 
   // --- Suriname --- (no images yet)
   "Suriname": "/logo.png",
