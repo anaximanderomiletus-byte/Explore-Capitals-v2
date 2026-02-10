@@ -1,35 +1,35 @@
 export const imagesU: Record<string, string> = {
-  // --- Uganda --- (no images yet)
-  "Uganda": "/logo.png",
-  "Bwindi Gorillas": "/logo.png",
-  "Murchison Falls": "/logo.png",
-  "Ishasha Tree Lions": "/logo.png",
-  "Source of the Nile Jinja": "/logo.png",
-  "Rwenzori Mountains": "/logo.png",
+  // --- Uganda ---
+  "Uganda": "/png/UGANDA/kampala-uganda.png",
+  "Bwindi Gorillas": "/png/UGANDA/bwindi-impenetrable-national-park.png",
+  "Murchison Falls": "/png/UGANDA/murchison-falls.png",
+  "Ishasha Tree Lions": "/png/UGANDA/queen-elizabeth-national-park.png",
+  "Source of the Nile Jinja": "/png/UGANDA/lake-victoria.png",
+  "Rwenzori Mountains": "/png/UGANDA/rwenzori-mountains.png",
 
-  // --- Ukraine --- (no images yet)
-  "Ukraine": "/logo.png",
-  "Kyiv Pechersk Lavra": "/logo.png",
-  "Pripyat Ferris Wheel": "/logo.png",
-  "Lviv Old Town": "/logo.png",
-  "Tunnel of Love": "/logo.png",
-  "Potemkin Stairs": "/logo.png",
+  // --- Ukraine ---
+  "Ukraine": "/png/UKRAINE/kyiv-ukraine.png",
+  "Kyiv Pechersk Lavra": "/png/UKRAINE/kyiv-pechersk-lavra.png",
+  "Pripyat Ferris Wheel": "/png/UKRAINE/chernobyl-exclusion-zone.png",
+  "Lviv Old Town": "/png/UKRAINE/lviv-old-town.png",
+  "Tunnel of Love": "/png/UKRAINE/tunnel-of-love.png",
+  "Potemkin Stairs": "/png/UKRAINE/odessa-potemkin-steps.png",
 
-  // --- United Arab Emirates --- (no images yet)
-  "United Arab Emirates": "/logo.png",
-  "Burj Khalifa": "/logo.png",
-  "Sheikh Zayed Grand Mosque": "/logo.png",
-  "The Palm Jumeirah": "/logo.png",
-  "Louvre Abu Dhabi": "/logo.png",
-  "Dubai Desert Conservation Reserve": "/logo.png",
+  // --- United Arab Emirates ---
+  "United Arab Emirates": "/png/UNITED-ARAB-EMIRATES/abu-dhabi-united-arab-emirates.png",
+  "Burj Khalifa": "/png/UNITED-ARAB-EMIRATES/burj-khalifa.png",
+  "Sheikh Zayed Grand Mosque": "/png/UNITED-ARAB-EMIRATES/sheikh-zayed-grand-mosque.png",
+  "The Palm Jumeirah": "/png/UNITED-ARAB-EMIRATES/the-palm-jumeirah.png",
+  "Louvre Abu Dhabi": "/png/UNITED-ARAB-EMIRATES/louvre-abu-dhabi.png",
+  "Dubai Desert Conservation Reserve": "/png/UNITED-ARAB-EMIRATES/dubai-desert-conservation-reserve.png",
 
-  // --- United Kingdom --- (no images yet)
-  "United Kingdom": "/logo.png",
-  "Big Ben": "/logo.png",
-  "Stonehenge": "/logo.png",
-  "Edinburgh Castle": "/logo.png",
-  "Giant's Causeway": "/logo.png",
-  "The Lake District": "/logo.png",
+  // --- United Kingdom ---
+  "United Kingdom": "/png/UNITED-KINGDOM/london-united-kingdom.png",
+  "Big Ben": "/png/UNITED-KINGDOM/big-ben-elizabeth-tower.png",
+  "Stonehenge": "/png/UNITED-KINGDOM/stonehenge.png",
+  "Edinburgh Castle": "/png/UNITED-KINGDOM/edinburgh-castle.png",
+  "Giant's Causeway": "/png/UNITED-KINGDOM/giants-causeway.png",
+  "The Lake District": "/png/UNITED-KINGDOM/lake-district.png",
 
   // --- United States --- (no images yet)
   "United States": "/logo.png",
@@ -39,13 +39,13 @@ export const imagesU: Record<string, string> = {
   "Golden Gate Bridge": "/logo.png",
   "Kennedy Space Center": "/logo.png",
 
-  // --- Uruguay --- (no images yet)
-  "Uruguay": "/logo.png",
-  "The Hand Punta del Este": "/logo.png",
-  "Colonia del Sacramento": "/logo.png",
-  "Casapueblo": "/logo.png",
-  "Cabo Polonio": "/logo.png",
-  "Estadio Centenario": "/logo.png",
+  // --- Uruguay ---
+  "Uruguay": "/png/URUGUAY/montevideo-uruguay.png",
+  "The Hand Punta del Este": "/png/URUGUAY/la-mano-punta-del-este.png",
+  "Colonia del Sacramento": "/png/URUGUAY/colonia-del-sacramento.png",
+  "Casapueblo": "/png/URUGUAY/casapueblo.png",
+  "Cabo Polonio": "/png/URUGUAY/cabo-polonio.png",
+  "Estadio Centenario": "/png/URUGUAY/estadio-centenario.png",
 
   // --- Uzbekistan --- (no images yet)
   "Uzbekistan": "/logo.png",

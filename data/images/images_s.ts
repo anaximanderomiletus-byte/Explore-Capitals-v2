@@ -175,35 +175,35 @@ export const imagesS: Record<string, string> = {
   "Sanganeb Marine Park": "/png/SUDAN/sanganeb-marine-national-park.png",
   "Old Dongola": "/png/SUDAN/old-dongola.png",
 
-  // --- Suriname --- (no images yet)
-  "Suriname": "/logo.png",
-  "Paramaribo Historic Inner City": "/logo.png",
-  "Central Suriname Nature Reserve": "/logo.png",
-  "Galibi Nature Reserve": "/logo.png",
-  "Jodensavanne": "/logo.png",
-  "Upper Suriname River": "/logo.png",
+  // --- Suriname ---
+  "Suriname": "/png/SURINAME/paramaribo-suriname.png",
+  "Paramaribo Historic Inner City": "/png/SURINAME/paramaribo-historic-inner-city.png",
+  "Central Suriname Nature Reserve": "/png/SURINAME/central-suriname-nature-reserve.png",
+  "Galibi Nature Reserve": "/png/SURINAME/galibi-nature-reserve.png",
+  "Jodensavanne": "/png/SURINAME/jodensavanne-nature-reserve.png",
+  "Upper Suriname River": "/png/SURINAME/upper-suriname-river.png",
 
-  // --- Sweden --- (no images yet)
-  "Sweden": "/logo.png",
-  "The Icehotel": "/logo.png",
-  "The Vasa Museum": "/logo.png",
-  "Gamla Stan": "/logo.png",
-  "Visby": "/logo.png",
-  "Abisko National Park": "/logo.png",
+  // --- Sweden ---
+  "Sweden": "/png/SWEDEN/stockholm-sweden.png",
+  "The Icehotel": "/png/SWEDEN/the-icehotel.png",
+  "The Vasa Museum": "/png/SWEDEN/the-vasa-museum.png",
+  "Gamla Stan": "/png/SWEDEN/gamla-stan.png",
+  "Visby": "/png/SWEDEN/visby-gotland.png",
+  "Abisko National Park": "/png/SWEDEN/abisko-national-park.png",
 
-  // --- Switzerland --- (no images yet)
-  "Switzerland": "/logo.png",
-  "The Matterhorn": "/logo.png",
-  "Jungfraujoch": "/logo.png",
-  "Château de Chillon": "/logo.png",
-  "Landwasser Viaduct": "/logo.png",
-  "Lauterbrunnen Valley": "/logo.png",
+  // --- Switzerland ---
+  "Switzerland": "/png/SWITZERLAND/bern-switzerland.png",
+  "The Matterhorn": "/png/SWITZERLAND/the-matterhorn.png",
+  "Jungfraujoch": "/png/SWITZERLAND/jungfraujoch.png",
+  "Château de Chillon": "/png/SWITZERLAND/chateau-de-chillon.png",
+  "Landwasser Viaduct": "/png/SWITZERLAND/the-landwasser-viaduct.png",
+  "Lauterbrunnen Valley": "/png/SWITZERLAND/lauterbrunnen-valley.png",
 
-  // --- Syria --- (no images yet)
-  "Syria": "/logo.png",
-  "Umayyad Mosque": "/logo.png",
-  "Krak des Chevaliers": "/logo.png",
-  "Palmyra": "/logo.png",
-  "The Norias of Hama": "/logo.png",
-  "Aleppo Citadel": "/logo.png"
+  // --- Syria ---
+  "Syria": "/png/SYRIA/damascus-syria.png",
+  "Umayyad Mosque": "/png/SYRIA/umayyad-mosque.png",
+  "Krak des Chevaliers": "/png/SYRIA/krak-des-chevaliers.png",
+  "Palmyra": "/png/SYRIA/palmyra.png",
+  "The Norias of Hama": "/png/SYRIA/the-norias-of-hama.png",
+  "Aleppo Citadel": "/png/SYRIA/aleppo-citadel.png"
 };
