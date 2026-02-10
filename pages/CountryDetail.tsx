@@ -228,9 +228,9 @@ const CountryDetail: React.FC = () => {
           <div className="max-w-4xl mx-auto">
             <button 
               onClick={() => navigate('/database')}
-              className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-white transition-all w-fit backdrop-blur-sm bg-black/10 rounded-full px-4 py-2"
+              className="group flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-white transition-all w-fit backdrop-blur-sm bg-black/10 rounded-full px-3 py-1.5 sm:px-4 sm:py-2"
             >
-              <ArrowLeft size={13} strokeWidth={2.5} className="transition-transform group-hover:-translate-x-0.5" />
+              <ArrowLeft size={11} strokeWidth={2.5} className="sm:w-[13px] sm:h-[13px] transition-transform group-hover:-translate-x-0.5" />
               DIRECTORY
             </button>
           </div>
@@ -238,50 +238,31 @@ const CountryDetail: React.FC = () => {
       </section>
 
       {/* ══════════ CONTENT ══════════ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-16 sm:-mt-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-20 sm:-mt-20">
 
-        {/* Country Identity: Flag + Name + Badges */}
-        <section className="flex items-center gap-4 sm:gap-5 mb-8 sm:mb-10">
-          {/* Flag */}
-          <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] lg:w-[104px] lg:h-[104px] rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden shrink-0 bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
+        {/* Country Identity — stacked on mobile, side-by-side on desktop */}
+        {/* Desktop: Flag left + text right */}
+        <section className="hidden md:flex items-center gap-5 mb-10">
+          <div className="w-[88px] h-[88px] lg:w-[104px] lg:h-[104px] rounded-2xl lg:rounded-3xl overflow-hidden shrink-0 bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
             <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none" />
-            <img 
-              src={`/flags/${countryCode}.png`}
-              alt={`${country.name} Flag`}
-              className="w-full h-full object-contain p-2 sm:p-2.5 lg:p-3 relative z-10 drop-shadow-xl"
-            />
+            <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain p-2.5 lg:p-3 relative z-10 drop-shadow-xl" />
           </div>
-          {/* Name + meta */}
           <div className="flex-1 min-w-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+            <h1 className="text-4xl xl:text-5xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
               {country.name}
             </h1>
             {officialName !== country.name && (
-              <p className="text-xs sm:text-sm text-white/40 font-display font-bold italic mt-1 sm:mt-1.5 truncate">
-                {officialName}
-              </p>
+              <p className="text-sm text-white/40 font-display font-bold italic mt-1.5 truncate">{officialName}</p>
             )}
-            <div className="flex items-center gap-2 mt-2 sm:mt-2.5 flex-wrap">
-              <span className="text-[8px] sm:text-[9px] font-black text-white/50 uppercase tracking-[0.2em] bg-white/10 px-2.5 py-1 rounded-full border border-white/10">
-                {country.region}
-              </span>
-              {isTerritory && (
-                <span className="text-[8px] sm:text-[9px] font-black text-accent uppercase tracking-[0.2em] bg-accent/15 px-2.5 py-1 rounded-full border border-accent/20">
-                  TERRITORY
-                </span>
-              )}
-              {isDeFacto && (
-                <span className="text-[8px] sm:text-[9px] font-black text-warning uppercase tracking-[0.2em] bg-warning/15 px-2.5 py-1 rounded-full border border-warning/20">
-                  DE FACTO
-                </span>
-              )}
+            <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+              <span className="text-[9px] font-black text-white/50 uppercase tracking-[0.2em] bg-white/10 px-2.5 py-1 rounded-full border border-white/10">{country.region}</span>
+              {isTerritory && <span className="text-[9px] font-black text-accent uppercase tracking-[0.2em] bg-accent/15 px-2.5 py-1 rounded-full border border-accent/20">TERRITORY</span>}
+              {isDeFacto && <span className="text-[9px] font-black text-warning uppercase tracking-[0.2em] bg-warning/15 px-2.5 py-1 rounded-full border border-warning/20">DE FACTO</span>}
             </div>
             {isTerritory && (country as any).sovereignty && (
               <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] mt-2">
                 Territory of{' '}
-                <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">
-                  {(country as any).sovereignty}
-                </button>
+                <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">{(country as any).sovereignty}</button>
               </p>
             )}
             {isDeFacto && (
@@ -291,6 +272,39 @@ const CountryDetail: React.FC = () => {
               </p>
             )}
           </div>
+        </section>
+
+        {/* Mobile/Tablet: Flag → Name → Badges stacked */}
+        <section className="md:hidden mb-8">
+          <div className="mb-2.5">
+            <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] rounded-xl overflow-hidden bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none" />
+              <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain p-1.5 sm:p-2 relative z-10 drop-shadow-xl" />
+            </div>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+            {country.name}
+          </h1>
+          {officialName !== country.name && (
+            <p className="text-xs sm:text-sm text-white/40 font-display font-bold italic mt-1 truncate">{officialName}</p>
+          )}
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <span className="text-[8px] sm:text-[9px] font-black text-white/50 uppercase tracking-[0.2em] bg-white/10 px-2.5 py-1 rounded-full border border-white/10">{country.region}</span>
+            {isTerritory && <span className="text-[8px] sm:text-[9px] font-black text-accent uppercase tracking-[0.2em] bg-accent/15 px-2.5 py-1 rounded-full border border-accent/20">TERRITORY</span>}
+            {isDeFacto && <span className="text-[8px] sm:text-[9px] font-black text-warning uppercase tracking-[0.2em] bg-warning/15 px-2.5 py-1 rounded-full border border-warning/20">DE FACTO</span>}
+          </div>
+          {isTerritory && (country as any).sovereignty && (
+            <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] mt-2">
+              Territory of{' '}
+              <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">{(country as any).sovereignty}</button>
+            </p>
+          )}
+          {isDeFacto && (
+            <p className="text-[9px] font-bold text-warning/70 uppercase tracking-[0.15em] mt-2 flex items-center gap-1.5">
+              <AlertTriangle size={10} />
+              {(country as any).sovereignty || 'LIMITED RECOGNITION'}
+            </p>
+          )}
         </section>
 
         {/* Description */}
@@ -382,6 +396,23 @@ const CountryDetail: React.FC = () => {
 
         {/* Coordinates + Actions — flanked by polaroids on desktop */}
         <section>
+          {/* Mobile/Tablet: Tour location photograph */}
+          {expeditionPhotos[1] && (
+            <div className="md:hidden flex justify-center mb-8">
+              <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-1 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-[280px]">
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
+                  <img src={expeditionPhotos[1].image} alt={expeditionPhotos[1].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" />
+                  <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                  <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+                </div>
+                <p className="mt-6 text-lg font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
+                  <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
+                  {expeditionPhotos[1].caption}
+                </p>
+              </div>
+            </div>
+          )}
           <div className="md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6 lg:gap-8 md:items-center">
             {/* Left polaroid (desktop only) */}
             {expeditionPhotos[0] && (
@@ -459,7 +490,7 @@ const CountryDetail: React.FC = () => {
         </section>
 
         {/* Bottom back */}
-        <div className="flex justify-center pt-4 pb-4">
+        <div className="flex justify-center pt-2 pb-4">
           <button 
             onClick={() => navigate('/database')}
             className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/15 hover:text-white/40 transition-colors py-2"
@@ -468,6 +499,7 @@ const CountryDetail: React.FC = () => {
             Back to Directory
           </button>
         </div>
+
 
       </div>
     </main>
