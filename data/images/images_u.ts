@@ -47,11 +47,11 @@ export const imagesU: Record<string, string> = {
   "Cabo Polonio": "/png/URUGUAY/cabo-polonio.png",
   "Estadio Centenario": "/png/URUGUAY/estadio-centenario.png",
 
-  // --- Uzbekistan --- (no images yet)
-  "Uzbekistan": "/logo.png",
-  "The Registan": "/logo.png",
-  "Kalyan Minaret": "/logo.png",
-  "Itchan Kala": "/logo.png",
-  "Shah-i-Zinda": "/logo.png",
-  "Aral Sea Ship Graveyard": "/logo.png"
+  // --- Uzbekistan ---
+  "Uzbekistan": "/png/UZBEKISTAN/tashkent-uzbekistan.png",
+  "The Registan": "/png/UZBEKISTAN/the-registan.png",
+  "Kalyan Minaret": "/png/UZBEKISTAN/kalyan-minaret.png",
+  "Itchan Kala": "/png/UZBEKISTAN/itchan-kala.png",
+  "Shah-i-Zinda": "/png/UZBEKISTAN/shah-i-zinda.png",
+  "Aral Sea Ship Graveyard": "/png/UZBEKISTAN/aral-sea-ship-graveyard.png"
 };

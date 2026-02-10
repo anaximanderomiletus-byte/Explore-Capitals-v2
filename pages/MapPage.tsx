@@ -109,6 +109,7 @@ const MapPage: React.FC = () => {
       if (!map || !L) return;
 
       const isMobile = window.innerWidth < 768;
+      const isTablet = !isMobile && window.innerWidth < 1024;
       
       // Define UI Obstruction Dimensions
       const topNavHeight = isMobile ? 80 : 100; // Navigation bar height
@@ -117,20 +118,20 @@ const MapPage: React.FC = () => {
       // Even though there is a sidebar, centering on the screen looks more balanced for a focused view.
       const sidebarWidth = 0; 
       
-      const bottomSheetHeight = isMobile ? 240 : 0; // Mobile bottom panel height
+      // Bottom panel (search + filters + FAB row) is always visible on all screen sizes
+      const bottomSheetHeight = isMobile ? 240 : isTablet ? 200 : 180;
       
       const mapSize = map.getSize();
       
       // Calculate "Safe Zone" center relative to the map container
-      // For desktop: Center is horizontal center
-      // For mobile: Center is shifted up to avoid bottom sheet
+      // Center is shifted up to avoid bottom panel obstruction
       const targetX = sidebarWidth + ((mapSize.x - sidebarWidth) / 2);
       const targetY = topNavHeight + ((mapSize.y - topNavHeight - bottomSheetHeight) / 2);
 
       // We want the marker to be at (targetX, targetY + offset)
       // The offset pushes the marker down so the POPUP (which opens above the marker) is centered in the safe zone
-      // Reduced offset (from 150 to 75) to move the popup higher up, closer to the visual center
-      const popupOffset = 75; 
+      // The popup card is ~280px tall and opens above the marker, so offset ≈ half popup height + leaflet offset
+      const popupOffset = isMobile ? 140 : isTablet ? 120 : 100; 
       const desiredMarkerScreenY = targetY + popupOffset;
 
       // Determine target zoom level for "fair view"
