@@ -31,13 +31,13 @@ export const imagesU: Record<string, string> = {
   "Giant's Causeway": "/png/UNITED-KINGDOM/giants-causeway.png",
   "The Lake District": "/png/UNITED-KINGDOM/lake-district.png",
 
-  // --- United States --- (no images yet)
-  "United States": "/logo.png",
-  "The Grand Canyon": "/logo.png",
-  "Statue of Liberty": "/logo.png",
-  "Yellowstone National Park": "/logo.png",
-  "Golden Gate Bridge": "/logo.png",
-  "Kennedy Space Center": "/logo.png",
+  // --- United States ---
+  "United States": "/png/UNITED-STATES/washington-dc-united-states.png",
+  "The Grand Canyon": "/png/UNITED-STATES/grand-canyon.png",
+  "Statue of Liberty": "/png/UNITED-STATES/statue-of-liberty.png",
+  "Yellowstone National Park": "/png/UNITED-STATES/yellowstone-national-park.png",
+  "Golden Gate Bridge": "/png/UNITED-STATES/golden-gate-bridge.png",
+  "Kennedy Space Center": "/png/UNITED-STATES/kennedy-space-center.png",
 
   // --- Uruguay ---
   "Uruguay": "/png/URUGUAY/montevideo-uruguay.png",

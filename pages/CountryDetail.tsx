@@ -3,10 +3,10 @@ import React, { useEffect, useMemo } from 'react';
 import { getCountryCode } from '../utils/flags';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft, Map, Compass, Navigation, Scroll, MapPin, 
+  ArrowLeft, Map, Compass, Navigation, 
   Clock, Phone, Car, Users, Maximize2, Banknote, 
-  TrendingUp, Languages, Building2, Globe, AlertTriangle,
-  ImageOff
+  TrendingUp, Languages, Building2, AlertTriangle,
+  MapPin
 } from 'lucide-react';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
@@ -83,6 +83,42 @@ const CountryDetail: React.FC = () => {
       return { image: FALLBACK_SCENES[idx], caption: `${country.capital}, ${country.name}` };
   }, [country, dataLoaded, staticImages, staticTours]);
 
+  // Two photos for the expedition section
+  const expeditionPhotos = useMemo(() => {
+    if (!country || !dataLoaded) return [];
+    const photos: { image: string; caption: string }[] = [];
+    
+    // Try country main image first
+    if (staticImages[country.name]) {
+      photos.push({ image: staticImages[country.name], caption: country.capital });
+    }
+    
+    // Pull from tour stops for variety
+    const tourData = staticTours[country.name];
+    if (tourData?.stops) {
+      for (const stop of tourData.stops) {
+        if (photos.length >= 2) break;
+        const img = staticImages[stop.imageKeyword || stop.stopName];
+        if (img && !photos.some(p => p.image === img)) {
+          photos.push({ image: img, caption: stop.stopName });
+        }
+      }
+    }
+    
+    // Fallbacks if we still need images
+    while (photos.length < 2) {
+      const idx = (country.id.charCodeAt(0) + photos.length) % FALLBACK_SCENES.length;
+      const fallback = FALLBACK_SCENES[idx];
+      if (!photos.some(p => p.image === fallback)) {
+        photos.push({ image: fallback, caption: country.capital });
+      } else {
+        photos.push({ image: FALLBACK_SCENES[(idx + 1) % FALLBACK_SCENES.length], caption: country.capital });
+      }
+    }
+    
+    return photos;
+  }, [country, dataLoaded, staticImages, staticTours]);
+
   const officialName = useMemo(() => {
     if (!country) return '';
     return officialNamesData[country.name] || country.name;
@@ -151,472 +187,288 @@ const CountryDetail: React.FC = () => {
   // Calculate ISO code for the flag image
   const countryCode = getCountryCode(country.flag);
 
-  // Reusable Stat Component for the card
-  const StatItem = ({ label, value, icon: Icon }: { label: string, value: string | React.ReactNode, icon: any }) => (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <div className="p-1.5 bg-sky-light/15 rounded-lg text-sky-light border border-sky-light/30">
-          <Icon size={14} />
-        </div>
-        <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em]">{label}</span>
-      </div>
-      <p className="text-xl font-display font-black text-white tracking-tight leading-none pl-0.5">{value}</p>
-    </div>
-  );
-
-  // Compact photo component for mobile/tablet inside the card (matches desktop polaroid style)
-  const CompactPhoto = ({ 
-    type, 
-    src, 
-    alt, 
-    caption,
-    region,
-    badges
-  }: { 
-    type: 'flag' | 'location'; 
-    src: string; 
-    alt: string; 
-    caption?: string;
-    region?: string;
-    badges?: { isTerritory?: boolean; isDeFacto?: boolean; sovereignty?: string };
-  }) => (
-    <div className="flex justify-center w-full py-2">
-      <div className={`bg-[#FCFCFC] p-3 sm:p-4 pb-8 sm:pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-sm ${type === 'flag' ? '-rotate-1' : 'rotate-2'}`}>
-        {/* Subtle Paper Texture */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-        
-        <div className={`w-full aspect-square bg-[#F5F5F0] overflow-hidden relative shadow-inner`}>
-          {type === 'flag' ? (
-            <>
-              {/* Static Ink Stamp for flag */}
-              <div className="absolute top-4 right-4 z-20 transform rotate-12 opacity-[0.15] pointer-events-none flex items-center justify-center scale-50 sm:scale-75">
-                <div className="border-[2.5px] border-black rounded-full p-1 flex items-center justify-center">
-                  <div className="border border-black rounded-full p-2.5 flex flex-col items-center justify-center">
-                    <span className="text-[5px] font-black text-black uppercase tracking-[0.3em] mb-0.5 whitespace-nowrap">National Archive</span>
-                    <Globe size={12} className="text-black" />
-                    <span className="text-[4px] font-black text-black uppercase tracking-[0.2em] mt-0.5">Verified Data</span>
-                  </div>
-                </div>
-              </div>
-              <img 
-                src={src}
-                alt={alt}
-                className="w-full h-full object-contain p-6 sm:p-8 brightness-[1.02] contrast-[1.02] drop-shadow-xl relative z-10 opacity-90"
-              />
-            </>
-          ) : src ? (
-            <img 
-              src={src}
-              alt={alt}
-              className="w-full h-full object-cover brightness-[0.8] contrast-[1.1] relative z-10"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center text-gray-400 w-full h-full bg-[#1A1A1A] p-4">
-              <ImageOff size={40} strokeWidth={1} className="opacity-40" />
-            </div>
-          )}
-          {/* Paper Grain / Matte Finish */}
-          <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-          <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.1)] pointer-events-none" />
-        </div>
-        
-        {caption && (
-          <div className="mt-6 sm:mt-8 w-full px-2 text-center">
-            {type === 'flag' ? (
-              <>
-                <p className="text-lg sm:text-xl font-display font-black text-gray-800 tracking-tighter uppercase leading-tight drop-shadow-sm mb-3">
-                  {caption}
-                </p>
-                {/* Badges and Region - matching desktop polaroid style */}
-                <div className="flex flex-col items-center gap-2">
-                  <div className="flex items-center gap-2 flex-wrap justify-center">
-                    {badges?.isTerritory && (
-                      <span className="text-[7px] font-black text-accent uppercase tracking-[0.2em] border border-accent/20 bg-accent/5 px-2 py-0.5 rounded-full">
-                        TERRITORY
-                      </span>
-                    )}
-                    {badges?.isDeFacto && (
-                      <span className="text-[7px] font-black text-warning uppercase tracking-[0.2em] border border-warning/20 bg-warning/5 px-2 py-0.5 rounded-full">
-                        DE FACTO
-                      </span>
-                    )}
-                    {region && (
-                      <div className="text-[7px] font-black text-gray-400 uppercase tracking-[0.2em] border border-gray-200 bg-gray-50 px-2 py-0.5 rounded-full whitespace-nowrap">
-                        {region}
-                      </div>
-                    )}
-                  </div>
-                  {badges?.isTerritory && badges?.sovereignty && (
-                    <div className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                      TERRITORY OF {badges.sovereignty}
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <p className="text-2xl sm:text-3xl font-cursive text-gray-700 leading-none flex items-center justify-center gap-2 py-2">
-                <MapPin size={20} className="text-sky/70 shrink-0" strokeWidth={2} />
-                {caption}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  // Stats data array for cleaner rendering
+  const statsData = [
+    { label: 'Capital', value: country.capital, icon: Building2 },
+    { label: 'Population', value: country.population, icon: Users },
+    { label: 'Area', value: `${country.area} km²`, icon: Maximize2 },
+    { label: 'Currency', value: country.currency, icon: Banknote },
+    { label: 'GDP', value: country.gdp || '—', icon: TrendingUp },
+    { label: 'Time Zone', value: country.timeZone || '—', icon: Clock },
+    { label: 'Calling Code', value: country.callingCode || '—', icon: Phone },
+    { label: 'Driving Side', value: `${country.driveSide || 'Right'}-hand`, icon: Car },
+  ];
 
   return (
-    <main className="min-h-screen bg-surface-dark pt-24 pb-20 px-4 md:px-8 relative overflow-hidden text-white">
+    <main className="min-h-screen bg-surface-dark pt-24 pb-12 relative overflow-hidden text-white">
       <SEO 
         title={`${country.name} - ${isTerritory ? 'Territory' : isDeFacto ? 'State' : 'Country'} Profile`} 
         description={`${country.name} country profile: capital ${country.capital}, population, area, region, and key facts. Explore detailed geography data.`} 
       />
 
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.02)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.01)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+      {/* ══════════ HERO BANNER ══════════ */}
+      <section className="relative w-full h-[240px] sm:h-[300px] lg:h-[380px] overflow-hidden -mt-24 pt-24">
+        {/* Scenic Background */}
+        {scenicData?.image ? (
+          <img 
+            src={scenicData.image} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover scale-[1.02]" 
+            aria-hidden="true" 
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-sky/20 via-surface-dark to-surface-dark" />
+        )}
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/50 to-surface-dark/15 pointer-events-none" />
+        <div className="absolute inset-0 bg-surface-dark/15 pointer-events-none" />
         
-        {/* --- FUTURISTIC ATLAS LAYOUT --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
-            {/* 1. Flag Section - Physical Photo Print (Desktop Only) - RIGHT SIDE */}
-            <div className="hidden lg:flex lg:col-span-5 lg:col-start-8 lg:row-start-1 flex-col gap-5 mt-20">
-                <div className="relative group">
-                    <div className="bg-[#FCFCFC] p-4 pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-1 group-hover:rotate-0 transition-all duration-700 flex flex-col items-center group/flag relative overflow-hidden w-full max-w-sm mx-auto">
-                        {/* Subtle Paper Texture */}
-                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                        
-                        <div className="w-full aspect-square bg-[#F5F5F0] overflow-hidden relative group/image shadow-inner">
-                            {/* Static Ink Stamp */}
-                            <div className="absolute top-6 right-6 z-20 transform rotate-12 opacity-[0.15] pointer-events-none flex items-center justify-center scale-75 md:scale-90">
-                                <div className="border-[2.5px] border-black rounded-full p-1 flex items-center justify-center">
-                                    <div className="border border-black rounded-full p-2.5 flex flex-col items-center justify-center">
-                                        <span className="text-[5px] font-black text-black uppercase tracking-[0.3em] mb-0.5 whitespace-nowrap">National Archive</span>
-                                        <Globe size={12} className="text-black" />
-                                        <span className="text-[4px] font-black text-black uppercase tracking-[0.2em] mt-0.5">Verified Data</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <img 
-                                src={`/flags/${countryCode}.png`}
-                                alt={`${country.name} Flag`}
-                                className="w-full h-full object-contain p-8 brightness-[1.02] contrast-[1.02] drop-shadow-xl relative z-10 opacity-90"
-                            />
-                            {/* Paper Grain / Matte Finish */}
-                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                            <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.1)] pointer-events-none" />
-                        </div>
-
-                        {/* Caption Area */}
-                        <div className="mt-8 w-full px-2 text-center relative z-10">
-                            <h2 className="text-3xl md:text-4xl font-display font-black text-gray-800 tracking-tighter uppercase leading-tight mb-4 drop-shadow-sm">{country.name}</h2>
-                            <div className="flex flex-col items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    {isTerritory && (
-                                        <span className="text-[8px] font-black text-accent uppercase tracking-[0.3em] border border-accent/20 bg-accent/5 px-2.5 py-1 rounded-full">
-                                            TERRITORY
-                                        </span>
-                                    )}
-                                    {isDeFacto && (
-                                        <span className="text-[8px] font-black text-warning uppercase tracking-[0.3em] border border-warning/20 bg-warning/5 px-2.5 py-1 rounded-full">
-                                            DE FACTO
-                                        </span>
-                                    )}
-                                    <div className="text-[8px] font-black text-gray-400 uppercase tracking-[0.3em] border border-gray-200 bg-gray-50 px-2.5 py-1 rounded-full whitespace-nowrap">
-                                        {country.region}
-                                    </div>
-                                </div>
-                                
-                                {isTerritory && (
-                                    <div className="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] mt-1">
-                                        TERRITORY OF <button 
-                                            onClick={() => handleSovereigntyClick((country as any).sovereignty)}
-                                            className="text-sky hover:text-sky-dark transition-all underline underline-offset-4 decoration-sky/20 uppercase font-black"
-                                        >
-                                            {(country as any).sovereignty}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-5 flex flex-col gap-3 relative z-10">
-                    <div className="flex flex-col gap-2">
-                        {isDeFacto && (
-                            <div className="text-warning font-black tracking-[0.2em] text-[8px] uppercase flex items-center gap-2.5">
-                                <AlertTriangle size={12} className="text-warning" /> 
-                                <span className="text-white">{(country as any).sovereignty || 'LIMITED RECOGNITION'}</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {/* 2. Information Section - LEFT SIDE */}
-            <div className="lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:row-span-2 flex flex-col gap-4 lg:gap-8">
-                {/* Mobile/Tablet Back Button */}
-                <button 
-                    onClick={() => navigate('/database')}
-                    className="lg:hidden group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-sky transition-all w-fit"
-                >
-                    <ArrowLeft size={14} strokeWidth={2.5} className="transition-transform" />
-                    BACK TO DIRECTORY
-                </button>
-                
-                {/* Desktop: Back to Directory button */}
-                <button 
-                    onClick={() => navigate('/database')}
-                    className="hidden lg:flex group items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/40 hover:text-sky transition-all w-fit"
-                >
-                    <ArrowLeft size={14} strokeWidth={2.5} className="transition-transform" />
-                    BACK TO DIRECTORY
-                </button>
-                
-                <div className="bg-white/20 backdrop-blur-3xl p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl border border-white/50 relative h-full flex flex-col overflow-hidden group">
-                     <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-                     <div className="absolute top-12 right-12 transition-transform duration-1000 hidden sm:block">
-                        <Scroll className="text-sky-light opacity-[0.1] w-24 h-24" />
-                     </div>
-                     
-                     <header className="mb-6 lg:mb-8 pb-4 lg:pb-6 border-b border-white/20 shrink-0 relative z-10">
-                        <div className="flex items-center gap-4 mb-4 lg:mb-6">
-                            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-sky/30 flex items-center justify-center border border-white/40 relative overflow-hidden shrink-0">
-                                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
-                                <Compass className="text-sky-light relative z-10" size={20} />
-                            </div>
-                            <div>
-                              <h3 className="font-display font-black text-xl lg:text-2xl text-white uppercase tracking-tighter drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)]">Official Profile</h3>
-                              {/* Mobile country name */}
-                              <p className="lg:hidden text-sm font-display font-bold text-white/60 uppercase tracking-wide mt-1">{country.name}</p>
-                            </div>
-                        </div>
-                        
-                        <div className="space-y-2 pl-0.5">
-                            <div>
-                                <span className="font-display font-bold text-base lg:text-lg text-white/80 leading-tight uppercase tracking-wide italic drop-shadow-sm">{officialName}</span>
-                            </div>
-                            
-                            {/* Mobile/Tablet: Status Tags (Territory/De Facto only) */}
-                            {(isTerritory || isDeFacto) && (
-                                <div className="flex flex-wrap items-center gap-2 lg:hidden">
-                                    {isTerritory && (
-                                        <span className="text-[8px] font-black text-accent uppercase tracking-[0.3em] border border-accent/30 bg-accent/10 px-2.5 py-1 rounded-full">
-                                            TERRITORY
-                                        </span>
-                                    )}
-                                    {isDeFacto && (
-                                        <span className="text-[8px] font-black text-warning uppercase tracking-[0.3em] border border-warning/30 bg-warning/10 px-2.5 py-1 rounded-full">
-                                            DE FACTO
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                     </header>
-
-                     {/* Mobile/Tablet: Flag Photo (below header) */}
-                     <div className="lg:hidden mb-8 relative z-10">
-                        <CompactPhoto 
-                          type="flag"
-                          src={`/flags/${countryCode}.png`}
-                          alt={`${country.name} Flag`}
-                          caption={country.name}
-                          region={country.region}
-                          badges={{ 
-                            isTerritory, 
-                            isDeFacto, 
-                            sovereignty: isTerritory ? (country as any).sovereignty : undefined 
-                          }}
-                        />
-                     </div>
-
-                     <div className="mb-8 lg:mb-12 shrink-0 relative z-10">
-                        <p className="text-[9px] font-black text-sky-light uppercase tracking-[0.3em] mb-4 lg:mb-5">Description</p>
-                        <p className="text-lg lg:text-2xl font-medium leading-[1.4] text-white/90 italic font-display tracking-tight drop-shadow-lg">
-                            "{country.description}"
-                        </p>
-                     </div>
-                     
-                     {/* Stats Grid */}
-                     <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 lg:gap-x-8 gap-y-6 lg:gap-y-10 mb-8 lg:mb-12 shrink-0 relative z-10">
-                        <StatItem label="Capital" value={country.capital} icon={Building2} />
-                        <StatItem label="Population" value={country.population} icon={Users} />
-                        <StatItem label="Area" value={`${country.area} km²`} icon={Maximize2} />
-                        <StatItem label="Currency" value={country.currency} icon={Banknote} />
-                        <StatItem label="GDP" value={country.gdp || '—'} icon={TrendingUp} />
-                        <StatItem label="Time Zone" value={country.timeZone || '—'} icon={Clock} />
-                        <StatItem label="Calling Code" value={country.callingCode || '—'} icon={Phone} />
-                        <StatItem label="Driving Side" value={`${country.driveSide || 'Right'}-hand`} icon={Car} />
-                     </div>
-
-                     <div className="mb-8 lg:mb-12 p-5 lg:p-8 bg-black/20 rounded-2xl border border-white/20 shadow-inner relative overflow-hidden group/linguistic">
-                        <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-                        <p className="text-[9px] font-black text-sky-light uppercase tracking-[0.3em] mb-4 lg:mb-5 flex items-center gap-2.5 relative z-10">
-                          <Languages size={14} className="text-sky-light" /> Languages
-                        </p>
-                        <div className="flex flex-wrap gap-2 lg:gap-2.5 relative z-10">
-                            {country.languages.map(lang => (
-                                <span key={lang} className="px-3 lg:px-5 py-1.5 lg:py-2 bg-white/15 border-2 border-white/40 rounded-xl text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 hover:bg-white/25 hover:text-white hover:border-white/50 transition-all cursor-default relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
-                                    <span className="relative z-10">{lang}</span>
-                                </span>
-                            ))}
-                        </div>
-                     </div>
-
-                     {/* Borders */}
-                     {country.borders && country.borders.length > 0 && (
-                        <div className="mb-8 lg:mb-10 shrink-0 relative z-10">
-                             <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-4 lg:mb-5">Bordering Countries</p>
-                             <div className="flex flex-wrap gap-2 lg:gap-3">
-                                {country.borders.map(border => (
-                                    <button 
-                                        key={border} 
-                                        onClick={() => handleNeighborClick(border)}
-                                        className="text-[9px] font-bold uppercase tracking-[0.2em] px-3 lg:px-5 py-2 lg:py-2.5 bg-white/10 text-white/70 rounded-xl border-2 border-white/30 hover:border-sky/50 hover:bg-white/20 hover:text-sky transition-all duration-500 group/border"
-                                    >
-                                        <span className="relative z-10">{border}</span>
-                                    </button>
-                                ))}
-                             </div>
-                        </div>
-                     )}
-
-                     {/* Territories */}
-                     {controlledTerritories.length > 0 && (
-                        <div className="mb-8 lg:mb-10 shrink-0 relative z-10">
-                             <p className="text-[9px] font-black text-accent uppercase tracking-[0.3em] mb-4 lg:mb-5">Territories</p>
-                             <div className="flex flex-wrap gap-2 lg:gap-3">
-                                {controlledTerritories.map(t => (
-                                    <button 
-                                        key={t.id} 
-                                        onClick={() => handleTerritoryClick(t.id)}
-                                        className="text-[9px] font-bold uppercase tracking-[0.2em] px-3 lg:px-5 py-2 lg:py-2.5 bg-white/10 text-accent rounded-xl border-2 border-white/30 hover:border-accent hover:bg-white/20 transition-all duration-500 group/dep"
-                                    >
-                                        <span className="relative z-10">{t.name}</span>
-                                    </button>
-                                ))}
-                             </div>
-                        </div>
-                     )}
-
-                     {/* Coordinates Terminal Overlay */}
-                     <div className="mb-8 lg:mb-10 flex flex-col items-center gap-4 lg:gap-5 relative z-10">
-                        <div className="inline-flex flex-col items-center gap-3 lg:gap-4">
-                             <div className="text-[9px] font-black text-white/40 uppercase tracking-[0.4em] drop-shadow-sm">Global Coordinates</div>
-                             <div className="inline-flex items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 lg:py-4 bg-white/20 backdrop-blur-3xl text-white rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.12)] border-2 border-white/60 group transition-all duration-700 relative overflow-hidden whitespace-nowrap">
-                                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
-                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
-                                     {Math.abs(country.lat).toFixed(4)}° {country.lat >= 0 ? 'N' : 'S'}
-                                  </span>
-                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-sky-light animate-pulse relative z-10"></div>
-                                  <span className="font-display font-black text-[11px] sm:text-base tracking-[0.1em] sm:tracking-[0.2em] text-white tabular-nums uppercase drop-shadow-md relative z-10">
-                                     {Math.abs(country.lng).toFixed(4)}° {country.lng >= 0 ? 'E' : 'W'}
-                                  </span>
-                             </div>
-                        </div>
-
-                        <Link 
-                            to={`/map?country=${country.id}`}
-                            className="group flex items-center gap-3 text-[9px] font-black text-white/50 hover:text-sky transition-all uppercase tracking-[0.3em] py-1"
-                        >
-                             <Map size={16} className="transition-all text-sky opacity-80 group-hover:opacity-100" />
-                             VIEW ON MAP
-                        </Link>
-                     </div>
-
-                     {!isTerritory && !isDeFacto ? (
-                        <div className="pt-8 lg:pt-12 border-t border-white/10 flex flex-col items-center gap-6 lg:gap-10 shrink-0 text-center relative z-10">
-                            {/* Mobile/Tablet: Location Photo (above expedition text) */}
-                            <div className="lg:hidden">
-                              <CompactPhoto 
-                                type="location"
-                                src={scenicData?.image || ''}
-                                alt="Location Scenery"
-                                caption={scenicData?.caption}
-                              />
-                            </div>
-                            
-                            <div className="space-y-4 lg:space-y-6 max-w-lg flex flex-col items-center">
-                                <p className="text-base lg:text-lg text-white/50 font-bold uppercase tracking-[0.1em] leading-relaxed drop-shadow-md">
-                                    Start an expedition to explore landmarks and culture.
-                                </p>
-                                <div className="flex flex-col items-center gap-6 w-full">
-                                <Link to={`/expedition/${country.id}`} className="inline-block w-full sm:w-auto group/exp">
-                                    <Button variant="primary" size="md" className="w-full sm:w-auto h-14 lg:h-16 px-10 lg:px-16 text-base lg:text-lg text-white border border-white/20 rounded-full">
-                                        <span className="flex items-center gap-3">
-                                            START EXPEDITION <Compass size={20} className="transition-transform duration-1000" />
-                                        </span>
-                                    </Button>
-                                </Link>
-                                </div>
-                            </div>
-                        </div>
-                     ) : null}
-
-                     {/* Back to Directory */}
-                     <div className="mt-6 lg:mt-8 flex justify-center relative z-10">
-                        <button 
-                            onClick={() => navigate('/database')}
-                            className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-2"
-                        >
-                            <ArrowLeft size={14} strokeWidth={2.5} />
-                            Back to Directory
-                        </button>
-                     </div>
-
-                </div>
-            </div>
-
-            {/* 3. Scenery Section (Desktop Only) - RIGHT SIDE */}
-            <div className="hidden lg:block lg:col-span-5 lg:col-start-8 lg:row-start-2 w-full -mt-3 group">
-                 <div className="bg-[#FCFCFC] p-4 pb-10 shadow-[0_25px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 group-hover:rotate-0 transition-all duration-700 flex flex-col items-center group/scenery relative overflow-hidden w-full max-w-sm mx-auto">
-                    {/* Subtle Paper Texture */}
-                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                    
-                    <div className="w-full aspect-square bg-[#121212] overflow-hidden relative group/scenic shadow-inner">
-                        {(!isTerritory && !isDeFacto) ? (
-                          <img 
-                              src={scenicData?.image || ''} 
-                              alt="Location Scenery" 
-                              className="w-full h-full object-cover transition-transform duration-1000 brightness-[0.8] contrast-[1.1]"
-                           />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center text-gray-400 w-full h-full bg-[#1A1A1A] p-6 text-center">
-                               <ImageOff size={64} strokeWidth={1} className="mb-6 opacity-40" />
-                               <div className="text-[10px] font-black tracking-[0.3em] uppercase opacity-40 mb-8">No Visual Record</div>
-                               <a 
-                                 href={`https://www.google.com/search?q=${encodeURIComponent(country.name + ' ' + country.capital)}&tbm=isch`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-sky hover:bg-white/10 hover:text-sky-light transition-all pointer-events-auto"
-                               >
-                                 Search Google <Compass size={14} />
-                               </a>
-                          </div>
-                        )}
-                        {/* Film Surface / Matte Finish */}
-                        <div className="absolute inset-0 bg-white/[0.03] pointer-events-none" />
-                        <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.8)] pointer-events-none" />
-                    </div>
-                    
-                    <div className="mt-8 w-full px-2 text-center">
-                        <p className="text-3xl font-cursive text-gray-700 flex items-center justify-center gap-2 py-2">
-                            <MapPin size={24} className="text-sky/70 shrink-0" strokeWidth={2} />
-                            {scenicData?.caption}
-                        </p>
-                    </div>
-                 </div>
-            </div>
-            
+        {/* Back button */}
+        <div className="relative z-20 px-4 sm:px-6 md:px-8 pt-4">
+          <div className="max-w-4xl mx-auto">
+            <button 
+              onClick={() => navigate('/database')}
+              className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-white transition-all w-fit backdrop-blur-sm bg-black/10 rounded-full px-4 py-2"
+            >
+              <ArrowLeft size={13} strokeWidth={2.5} className="transition-transform group-hover:-translate-x-0.5" />
+              DIRECTORY
+            </button>
+          </div>
         </div>
+      </section>
+
+      {/* ══════════ CONTENT ══════════ */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-16 sm:-mt-20">
+
+        {/* Country Identity: Flag + Name + Badges */}
+        <section className="flex items-center gap-4 sm:gap-5 mb-8 sm:mb-10">
+          {/* Flag */}
+          <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] lg:w-[104px] lg:h-[104px] rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden shrink-0 bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
+            <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none" />
+            <img 
+              src={`/flags/${countryCode}.png`}
+              alt={`${country.name} Flag`}
+              className="w-full h-full object-contain p-2 sm:p-2.5 lg:p-3 relative z-10 drop-shadow-xl"
+            />
+          </div>
+          {/* Name + meta */}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+              {country.name}
+            </h1>
+            {officialName !== country.name && (
+              <p className="text-xs sm:text-sm text-white/40 font-display font-bold italic mt-1 sm:mt-1.5 truncate">
+                {officialName}
+              </p>
+            )}
+            <div className="flex items-center gap-2 mt-2 sm:mt-2.5 flex-wrap">
+              <span className="text-[8px] sm:text-[9px] font-black text-white/50 uppercase tracking-[0.2em] bg-white/10 px-2.5 py-1 rounded-full border border-white/10">
+                {country.region}
+              </span>
+              {isTerritory && (
+                <span className="text-[8px] sm:text-[9px] font-black text-accent uppercase tracking-[0.2em] bg-accent/15 px-2.5 py-1 rounded-full border border-accent/20">
+                  TERRITORY
+                </span>
+              )}
+              {isDeFacto && (
+                <span className="text-[8px] sm:text-[9px] font-black text-warning uppercase tracking-[0.2em] bg-warning/15 px-2.5 py-1 rounded-full border border-warning/20">
+                  DE FACTO
+                </span>
+              )}
+            </div>
+            {isTerritory && (country as any).sovereignty && (
+              <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] mt-2">
+                Territory of{' '}
+                <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">
+                  {(country as any).sovereignty}
+                </button>
+              </p>
+            )}
+            {isDeFacto && (
+              <p className="text-[9px] font-bold text-warning/70 uppercase tracking-[0.15em] mt-2 flex items-center gap-1.5">
+                <AlertTriangle size={10} />
+                {(country as any).sovereignty || 'LIMITED RECOGNITION'}
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* Description */}
+        <section>
+          <p className="text-lg sm:text-xl lg:text-2xl font-display font-medium italic leading-relaxed text-white/75 tracking-tight">
+            &ldquo;{country.description}&rdquo;
+          </p>
+        </section>
+
+        {/* Gradient divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+
+        {/* All Stats */}
+        <section className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 sm:gap-x-8 gap-y-6 sm:gap-y-8">
+          {statsData.map(({ label, value, icon: Icon }) => (
+            <div key={label}>
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Icon size={13} className="text-sky-light/40" />
+                <span className="text-[9px] font-bold text-white/30 uppercase tracking-[0.12em]">{label}</span>
+              </div>
+              <p className="text-sm sm:text-base font-display font-black text-white/80">{value}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* Territories */}
+        {controlledTerritories.length > 0 && (
+          <>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+            <section>
+              <p className="text-[9px] sm:text-[10px] font-black text-accent/60 uppercase tracking-[0.25em] mb-4">Territories</p>
+              <div className="flex flex-wrap gap-2">
+                {controlledTerritories.map(t => (
+                  <button 
+                    key={t.id} 
+                    onClick={() => handleTerritoryClick(t.id)}
+                    className="text-xs font-bold uppercase tracking-[0.08em] px-4 py-2 bg-accent/5 text-accent/65 rounded-xl border border-accent/10 hover:border-accent/30 hover:bg-accent/10 hover:text-accent transition-all duration-300"
+                  >
+                    {t.name}
+                  </button>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
+
+        {/* Gradient divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+
+        {/* Languages */}
+        <section>
+          <p className="text-[9px] sm:text-[10px] font-black text-sky-light/60 uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
+            <Languages size={14} /> Languages
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {country.languages.map(lang => (
+              <span key={lang} className="px-4 py-2 bg-white/[0.06] border border-white/10 rounded-xl text-xs font-bold uppercase tracking-[0.08em] text-white/60 hover:bg-white/10 hover:text-white/80 transition-all cursor-default">
+                {lang}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        {/* Borders */}
+        {country.borders && country.borders.length > 0 && (
+          <>
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+            <section>
+              <p className="text-[9px] sm:text-[10px] font-black text-white/25 uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
+                <Navigation size={14} className="text-white/15" /> Bordering Countries
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {country.borders.map(border => (
+                  <button 
+                    key={border} 
+                    onClick={() => handleNeighborClick(border)}
+                    className="text-xs font-bold uppercase tracking-[0.08em] px-4 py-2 bg-white/[0.06] text-white/50 rounded-xl border border-white/10 hover:border-sky/30 hover:bg-sky/10 hover:text-sky transition-all duration-300"
+                  >
+                    {border}
+                  </button>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
+
+        {/* Gradient divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+
+        {/* Coordinates + Actions — flanked by polaroids on desktop */}
+        <section>
+          <div className="md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6 lg:gap-8 md:items-center">
+            {/* Left polaroid (desktop only) */}
+            {expeditionPhotos[0] && (
+              <div className="hidden md:flex justify-center">
+                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[220px] lg:max-w-[240px]">
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                  <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
+                    <img src={expeditionPhotos[0].image} alt={expeditionPhotos[0].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" />
+                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                    <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+                  </div>
+                  <p className="mt-6 text-lg lg:text-xl font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
+                    <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
+                    {expeditionPhotos[0].caption}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Center: coordinates + CTA */}
+            <div className="flex flex-col items-center gap-6 sm:gap-7 text-center py-2 md:px-2 lg:px-4">
+              {/* Coordinates */}
+              <div className="flex flex-col items-center gap-2.5">
+                <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Coordinates</span>
+                <div className="inline-flex items-center gap-3 sm:gap-5">
+                  <span className="font-display font-black text-sm sm:text-base tracking-[0.08em] text-white/70 tabular-nums">
+                    {Math.abs(country.lat).toFixed(4)}° {country.lat >= 0 ? 'N' : 'S'}
+                  </span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-sky-light animate-pulse" />
+                  <span className="font-display font-black text-sm sm:text-base tracking-[0.08em] text-white/70 tabular-nums">
+                    {Math.abs(country.lng).toFixed(4)}° {country.lng >= 0 ? 'E' : 'W'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Expedition CTA */}
+              {!isTerritory && !isDeFacto && (
+                <Link to={`/expedition/${country.id}`} className="w-full sm:w-auto">
+                  <Button variant="primary" size="md" className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-14 text-sm sm:text-base text-white border border-white/20 rounded-full">
+                    <span className="flex items-center gap-3">
+                      START EXPEDITION <Compass size={18} />
+                    </span>
+                  </Button>
+                </Link>
+              )}
+
+              {/* Map link */}
+              <Link 
+                to={`/map?country=${country.id}`}
+                className="group flex items-center gap-2 text-[10px] font-black text-white/30 hover:text-sky transition-all uppercase tracking-[0.2em]"
+              >
+                <Map size={14} className="text-sky/50 group-hover:text-sky transition-colors" />
+                VIEW ON MAP
+              </Link>
+            </div>
+
+            {/* Right polaroid (desktop only) */}
+            {expeditionPhotos[1] && (
+              <div className="hidden md:flex justify-center">
+                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[220px] lg:max-w-[240px]">
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                  <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
+                    <img src={expeditionPhotos[1].image} alt={expeditionPhotos[1].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" />
+                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+                    <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+                  </div>
+                  <p className="mt-6 text-lg lg:text-xl font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
+                    <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
+                    {expeditionPhotos[1].caption}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Bottom back */}
+        <div className="flex justify-center pt-4 pb-4">
+          <button 
+            onClick={() => navigate('/database')}
+            className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/15 hover:text-white/40 transition-colors py-2"
+          >
+            <ArrowLeft size={12} strokeWidth={2.5} />
+            Back to Directory
+          </button>
+        </div>
+
       </div>
     </main>
   );

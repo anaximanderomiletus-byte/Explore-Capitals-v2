@@ -8,10 +8,10 @@ export const imagesZ: Record<string, string> = {
   "Mukuni Village": "/png/ZAMBIA/mukuni-village.png",
 
   // --- Zimbabwe ---
-  "Zimbabwe": "/logo.png",
+  "Zimbabwe": "/png/ZIMBABWE/harare-zimbabwe.png",
   "Great Zimbabwe Walls": "/png/ZIMBABWE/great-zimbabwe-walls.png",
-  "Hwange Elephants": "/logo.png",
-  "Mana Pools Elephant": "/logo.png",
-  "Matobo Balancing Rocks": "/logo.png",
-  "Birchenough Bridge": "/logo.png"
+  "Hwange Elephants": "/png/ZIMBABWE/hwange-national-park.png",
+  "Mana Pools Elephant": "/png/ZIMBABWE/mana-pools-national-park.png",
+  "Matobo Balancing Rocks": "/png/ZIMBABWE/matobo-national-park.png",
+  "Birchenough Bridge": "/png/ZIMBABWE/birchenough-bridge.png"
 };
