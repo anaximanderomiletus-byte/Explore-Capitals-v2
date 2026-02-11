@@ -769,6 +769,102 @@ export const toursP: Record<string, TourData> = {
       }
     ]
   },
+  "Palestine": {
+    tourTitle: "The Cradle of Civilizations",
+    introText: "The birthplace of faith and the crossroads of empires. Walk where prophets walked in Bethlehem and stand before ancient palaces in the oldest city on Earth.",
+    stops: [
+      {
+        stopName: "Church of the Nativity",
+        imageKeyword: "Church of the Nativity",
+        description: [
+          "Located in Bethlehem, the Church of the Nativity is one of the oldest continuously operating churches in the world. It was originally commissioned in 327 AD by Emperor Constantine and his mother Helena over the grotto that is traditionally considered the birthplace of Jesus Christ.",
+          "The entrance is famously known as the \"Door of Humility.\" It was reduced to a tiny 1.2-meter (4-foot) opening during the Ottoman era to prevent horsemen from riding inside and to force all who enter to bow. Beneath the main altar lies the Grotto of the Nativity, where a 14-pointed silver star marks the exact spot believed to be the birthplace.",
+          "The church has survived intact for over 1,500 years, partly through sheer luck and partly by design. When the Persians invaded in 614 AD and destroyed nearly every church in the region, they spared this one because a mosaic on the facade depicted the Three Wise Men in Persian clothing, which they recognized as their own ancestors."
+        ],
+        question: "Why did the Persians spare the Church of the Nativity during their 614 AD invasion?",
+        options: [
+          "A mosaic showed the Wise Men in Persian dress.",
+          "It was too well-fortified to attack.",
+          "They converted it into a mosque.",
+          "A peace treaty protected it."
+        ],
+        answer: "A mosaic showed the Wise Men in Persian dress.",
+        explanation: "The depiction of the Magi in Persian clothing made the invaders see it as honoring their own heritage."
+      },
+      {
+        stopName: "Old City of Hebron & Ibrahimi Mosque",
+        imageKeyword: "Ibrahimi Mosque Hebron",
+        description: [
+          "The Old City of Hebron is a UNESCO World Heritage site and one of the oldest continuously inhabited cities in the world, with a history stretching back over 6,000 years. Its narrow, winding streets and covered markets (souqs) preserve a medieval atmosphere.",
+          "At its heart stands the Ibrahimi Mosque, built over the Cave of Machpelah (Cave of the Patriarchs). According to tradition, this cave is the burial site of Abraham (Ibrahim), Isaac, Jacob, and their wives Sarah, Rebecca, and Leah, making it sacred to both Muslims and Jews.",
+          "The massive stone enclosure surrounding the cave was built by Herod the Great over 2,000 years ago. The walls are made of colossal limestone blocks, some weighing over 50 tons, and stand up to 12 meters high. It is one of the best-preserved Herodian structures in the world, predating even many of the ruins in Jerusalem."
+        ],
+        question: "What ancient figure is the Cave of Machpelah traditionally associated with as a burial site?",
+        options: [
+          "Abraham (Ibrahim) and his family.",
+          "King Solomon.",
+          "Saladin.",
+          "Alexander the Great."
+        ],
+        answer: "Abraham (Ibrahim) and his family.",
+        explanation: "The cave is revered as the resting place of the patriarch Abraham and several of his descendants."
+      },
+      {
+        stopName: "Hisham's Palace",
+        imageKeyword: "Hisham's Palace Jericho",
+        description: [
+          "Known locally as Khirbat al-Mafjar, this Umayyad desert palace is located just north of Jericho, the oldest city in the world. It was built in the 8th century during the reign of the Umayyad Caliphate, likely as a luxurious winter retreat.",
+          "The palace is famous for the \"Tree of Life\" mosaic, one of the most extraordinary floor mosaics ever discovered. It depicts a massive fruit tree with a lion attacking a gazelle on one side and two gazelles grazing peacefully on the other, symbolizing the contrast between war and peace. The mosaic covers 827 square meters, making it one of the largest in the world.",
+          "The complex included an elaborate bathhouse, a grand reception hall, fountains, and lavish stucco carvings that depicted human figures, animals, and floral patterns—unusual in Islamic art of the period. An earthquake destroyed much of the palace before it was ever completed, preserving it in ruin for over a thousand years until its excavation in the 1930s."
+        ],
+        question: "What famous mosaic is Hisham's Palace best known for?",
+        options: [
+          "The \"Tree of Life\" mosaic.",
+          "The \"Battle of Jericho\" mosaic.",
+          "The \"Garden of Eden\" mosaic.",
+          "The \"Great Flood\" mosaic."
+        ],
+        answer: "The \"Tree of Life\" mosaic.",
+        explanation: "This masterpiece depicts a fruit tree flanked by scenes of war and peace, and is one of the largest ancient mosaics ever found."
+      },
+      {
+        stopName: "Wadi Qelt & St. George's Monastery",
+        imageKeyword: "Wadi Qelt Monastery",
+        description: [
+          "Wadi Qelt is a dramatic desert canyon that cuts through the Judean Desert between Jerusalem and Jericho. The gorge plunges to depths of 200 meters, and a year-round freshwater spring feeds pools and vegetation that create a ribbon of green in an otherwise barren landscape.",
+          "Clinging impossibly to the sheer cliff face is St. George's Monastery (also known as the Monastery of St. George of Koziba). Founded in the 5th century AD, the monastery was built into natural caves in the rock wall, accessible originally only by chain-and-pulley systems. Monks have lived here, on and off, for over 1,500 years.",
+          "Tradition holds that the cave above the monastery is where the prophet Elijah was fed by ravens during his flight from Queen Jezebel, and that Joachim (the father of the Virgin Mary) wept here upon learning of his wife's barrenness. The canyon itself is believed to be the landscape described in the biblical Psalm 23: \"Though I walk through the valley of the shadow of death.\""
+        ],
+        question: "How is St. George's Monastery built into the landscape of Wadi Qelt?",
+        options: [
+          "It clings to the sheer cliff face, built into natural caves.",
+          "It sits on a mountaintop above the canyon.",
+          "It is built underground beneath the wadi.",
+          "It floats on a lake inside the gorge."
+        ],
+        answer: "It clings to the sheer cliff face, built into natural caves.",
+        explanation: "The monastery was constructed into the rock wall of the canyon, accessible originally only by ropes and pulleys."
+      },
+      {
+        stopName: "Gaza City Mediterranean Coastline",
+        imageKeyword: "Gaza City Mediterranean",
+        description: [
+          "Gaza City sits on the southeastern coast of the Mediterranean Sea and has been a vital trading hub for over 5,000 years. Its strategic location on the ancient Via Maris trade route connecting Egypt to the Levant made it one of the most contested cities in history, inhabited by Canaanites, Philistines, Romans, Arabs, Crusaders, and Ottomans.",
+          "The old city center once featured the Great Mosque of Gaza (al-Omari Mosque), originally built as a Crusader church in the 12th century and converted into a mosque after Saladin's conquest. The building reflected layers of architectural history—Roman columns, Crusader arches, and Islamic minarets standing side by side.",
+          "Gaza's coastline stretches for about 40 kilometers along the Mediterranean. Historically, its fishermen launched traditional wooden boats at dawn, and the waterfront promenade buzzed with cafés where locals gathered to drink tea and watch the sunset. The coast has been central to Gaza's identity, connecting its people to the sea and to centuries of maritime trade."
+        ],
+        question: "What ancient trade route made Gaza City a strategically important location for millennia?",
+        options: [
+          "The Via Maris.",
+          "The Silk Road.",
+          "The Incense Route.",
+          "The Amber Road."
+        ],
+        answer: "The Via Maris.",
+        explanation: "This coastal road connecting Egypt to Mesopotamia passed directly through Gaza, making it a critical trading post for thousands of years."
+      }
+    ]
+  },
   "Portugal": {
     tourTitle: "The Sailor's Home",
     introText: "The yellow trams of Lisbon climb the steep hills of the capital. Listen to the soulful fado music while tasting a custard tart.",

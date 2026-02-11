@@ -9,7 +9,6 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
-import { prefetchPage } from '../App';
 
 // Sliding active indicator for nav links
 const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]; isOverMap: boolean }> = ({ navLinks, isOverMap }) => {
@@ -59,13 +58,6 @@ const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]
   );
 };
 
-// Map nav paths to prefetch keys
-const prefetchMap: Record<string, 'games' | 'database' | 'map' | 'about'> = {
-  '/games': 'games',
-  '/database': 'database',
-  '/map': 'map',
-  '/about': 'about',
-};
 
 // Mobile Profile Link for Signed In Users
 const MobileProfileLinkSignedIn: React.FC<{
@@ -274,7 +266,7 @@ const Navigation: React.FC = () => {
     logoBgClass = "bg-primary text-white border border-black/5";
     
     if (isScrolled) {
-      navClasses = "bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
+      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
     } else {
       navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     }
@@ -328,15 +320,12 @@ const Navigation: React.FC = () => {
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-              const prefetchKey = prefetchMap[link.path];
               
                   return (
                 <Link 
                   key={link.path} 
                   to={link.path}
                   data-nav-link={link.path}
-                  onMouseEnter={() => prefetchKey && prefetchPage(prefetchKey)}
-                  onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                   className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
                     active 
                       ? activeColor
@@ -425,12 +414,10 @@ const Navigation: React.FC = () => {
         
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
-            const prefetchKey = prefetchMap[link.path];
             return (
               <Link 
                 key={link.path} 
                 to={link.path}
-                onTouchStart={() => prefetchKey && prefetchPage(prefetchKey)}
                 style={{
                   transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
                   opacity: isMobileMenuOpen ? 1 : 0,

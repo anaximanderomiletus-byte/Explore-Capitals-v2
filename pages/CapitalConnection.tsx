@@ -381,7 +381,6 @@ const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => voi
             src={`/flags/${card.flagCode}.png`}
             alt="Flag"
             className="w-10 h-auto md:w-12 select-none object-contain"
-            loading="lazy"
           />
         ) : (
           <Building2 size={20} className={`md:w-6 md:h-6 ${card.isMatched ? 'text-white/60' : 'text-sky-light'}`} />

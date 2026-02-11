@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useEffect, useCallback, useRef, memo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, memo } from 'react';
 import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
@@ -58,51 +58,25 @@ const SortHeader: React.FC<SortHeaderProps> = memo(({ label, field, align = 'lef
 
 SortHeader.displayName = 'SortHeader';
 
-// Lazy loading flag component with IntersectionObserver
-const LazyFlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const imgRef = useRef<HTMLDivElement>(null);
-  
+// Simple flag component - renders immediately
+const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({ country, size }) => {
   const code = getCountryCode(country.flag);
   const width = size === 'small' ? 'w-10' : 'w-16';
   const height = size === 'small' ? 'h-7' : 'h-11';
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '100px', threshold: 0 }
-    );
-
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
   
   return (
-    <div ref={imgRef} className={`${width} ${height} flex items-center justify-center bg-white/5 rounded`}>
-      {isVisible && (
-        <img 
-          src={`/flags/${code}.png`} 
-          alt={`${country.name} Flag`}
-          className={`w-full h-full object-contain transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setIsLoaded(true)}
-        />
-      )}
+    <div className={`${width} ${height} flex items-center justify-center bg-white/5 rounded overflow-hidden`}>
+      <img 
+        src={`/flags/${code}.png`} 
+        alt={`${country.name} Flag`}
+        className="w-full h-full object-contain"
+        decoding="async"
+      />
     </div>
   );
 });
 
-LazyFlagIcon.displayName = 'LazyFlagIcon';
+FlagIcon.displayName = 'FlagIcon';
 
 // Memoized table row component
 interface TableRowProps {
@@ -129,7 +103,7 @@ const TableRow: React.FC<TableRowProps> = memo(({
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center gap-4">
         <div className="shrink-0">
-          <LazyFlagIcon country={country} size="small" />
+          <FlagIcon country={country} size="small" />
         </div>
         <span className={`font-bold text-sm text-white/90 uppercase tracking-tighter ${titleColor} transition-colors`}>{country.name}</span>
       </div>
@@ -176,7 +150,7 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
       <div className="flex items-start justify-between mb-6 relative z-10">
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
-            <LazyFlagIcon country={country} size="card" />
+            <FlagIcon country={country} size="card" />
           </div>
           <div>
             <h3 className={`font-black text-lg uppercase tracking-tighter leading-none mb-1.5 ${titleColor}`}>{country.name}</h3>
@@ -220,8 +194,8 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
 
 MobileCountryCard.displayName = 'MobileCountryCard';
 
-// Virtualized list for mobile cards
-interface VirtualizedMobileListProps {
+// Simple mobile list - renders all items
+interface MobileListProps {
   items: Country[];
   onItemClick: (id: string) => void;
   isTerritory?: boolean;
@@ -229,57 +203,17 @@ interface VirtualizedMobileListProps {
   getSovereignty?: (item: Country) => string | undefined;
 }
 
-const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({ 
+const MobileList: React.FC<MobileListProps> = memo(({ 
   items, 
   onItemClick,
   isTerritory,
   isDeFacto,
   getSovereignty
 }) => {
-  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const containerTop = containerRef.current.offsetTop;
-      
-      // Estimate card height (roughly 200px per card including gap)
-      const cardHeight = 220;
-      const cardsPerRow = window.innerWidth >= 768 ? 2 : 1;
-      const rowHeight = cardHeight;
-      
-      const visibleRows = Math.ceil(windowHeight / rowHeight) + 2; // Buffer
-      const startRow = Math.max(0, Math.floor((scrollTop - containerTop) / rowHeight) - 1);
-      
-      const start = Math.max(0, startRow * cardsPerRow);
-      const end = Math.min(items.length, (startRow + visibleRows) * cardsPerRow + cardsPerRow);
-      
-      setVisibleRange({ start, end });
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, [items.length]);
-
-  const visibleItems = items.slice(visibleRange.start, visibleRange.end);
-  const topPadding = visibleRange.start * 110; // Half card height for 2 columns
-  const bottomPadding = (items.length - visibleRange.end) * 110;
-
   return (
-    <div ref={containerRef} className="lg:hidden">
-      <div style={{ height: topPadding }} />
+    <div className="lg:hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {visibleItems.map((item) => (
+        {items.map((item) => (
           <MobileCountryCard 
             key={item.id} 
             country={item} 
@@ -290,12 +224,11 @@ const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({
           />
         ))}
       </div>
-      <div style={{ height: bottomPadding }} />
     </div>
   );
 });
 
-VirtualizedMobileList.displayName = 'VirtualizedMobileList';
+MobileList.displayName = 'MobileList';
 
 const sortAndFilter = <T extends Country>(
   list: T[], 
@@ -440,7 +373,7 @@ const Database: React.FC = () => {
 
         {/* Sovereign Countries - Mobile Virtualized List */}
         <div className="mb-20">
-          <VirtualizedMobileList 
+          <MobileList 
             items={processedCountries}
             onItemClick={handleCountryClick}
           />
@@ -488,7 +421,7 @@ const Database: React.FC = () => {
               </div>
             </div>
 
-            <VirtualizedMobileList 
+            <MobileList 
               items={processedTerritories}
               onItemClick={handleCountryClick}
               isTerritory
@@ -539,7 +472,7 @@ const Database: React.FC = () => {
               </div>
             </div>
 
-            <VirtualizedMobileList 
+            <MobileList 
               items={processedDeFacto}
               onItemClick={handleCountryClick}
               isDeFacto

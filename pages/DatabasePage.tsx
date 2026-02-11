@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo, useEffect, useCallback, useRef, memo, startTransition } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, memo, startTransition } from 'react';
 import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle, Shuffle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
@@ -77,7 +77,6 @@ const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({
         src={`/flags/${code}.png`} 
         alt={`${country.name} Flag`}
         className="w-full h-full object-contain"
-        loading="lazy"
         decoding="async"
       />
     </div>
@@ -213,8 +212,8 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
 
 MobileCountryCard.displayName = 'MobileCountryCard';
 
-// Virtualized table for desktop - only render visible rows
-interface VirtualizedTableProps {
+// Simple table for desktop - renders all rows
+interface SimpleTableProps {
   items: Country[];
   onItemClick: (id: string) => void;
   sortConfig: { key: SortKey; direction: SortDirection } | null;
@@ -225,7 +224,7 @@ interface VirtualizedTableProps {
   headerBgClass?: string;
 }
 
-const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({ 
+const SimpleTable: React.FC<SimpleTableProps> = memo(({ 
   items, 
   onItemClick,
   sortConfig,
@@ -235,48 +234,8 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
   titleColor,
   headerBgClass = 'bg-surface-dark'
 }) => {
-  const ROW_HEIGHT = 65; // Approximate row height in pixels
-  const BUFFER = 5; // Extra rows to render above/below viewport
-  
-  const [scrollTop, setScrollTop] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(600);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    const updateHeight = () => {
-      setContainerHeight(Math.min(600, window.innerHeight - 300));
-    };
-    
-    const handleScroll = () => {
-      setScrollTop(container.scrollTop);
-    };
-    
-    updateHeight();
-    container.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', updateHeight, { passive: true });
-    
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', updateHeight);
-    };
-  }, []);
-  
-  const totalHeight = items.length * ROW_HEIGHT;
-  const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER);
-  const visibleCount = Math.ceil(containerHeight / ROW_HEIGHT) + BUFFER * 2;
-  const endIndex = Math.min(items.length, startIndex + visibleCount);
-  const visibleItems = items.slice(startIndex, endIndex);
-  const offsetY = startIndex * ROW_HEIGHT;
-
   return (
-    <div 
-      ref={containerRef}
-      className="overflow-auto rounded-3xl border border-white/20 bg-white/10 scrollbar-visible"
-      style={{ maxHeight: containerHeight }}
-    >
+    <div className="overflow-auto rounded-3xl border border-white/20 bg-white/10">
       <table className="w-full text-left border-collapse table-fixed">
         <thead className="sticky top-0 z-20">
           <tr className={`${headerBgClass} border-b border-white/15 backdrop-blur-md`}>
@@ -305,13 +264,7 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
           </tr>
         </thead>
         <tbody>
-          {/* Spacer for items above viewport */}
-          {startIndex > 0 && (
-            <tr style={{ height: offsetY }}>
-              <td colSpan={showSovereignty ? 5 : 6} />
-            </tr>
-          )}
-          {visibleItems.map((country) => (
+          {items.map((country) => (
             <TableRow 
               key={country.id}
               country={country}
@@ -322,22 +275,16 @@ const VirtualizedTable: React.FC<VirtualizedTableProps> = memo(({
               titleColor={titleColor}
             />
           ))}
-          {/* Spacer for items below viewport */}
-          {endIndex < items.length && (
-            <tr style={{ height: (items.length - endIndex) * ROW_HEIGHT }}>
-              <td colSpan={showSovereignty ? 5 : 6} />
-            </tr>
-          )}
         </tbody>
       </table>
     </div>
   );
 });
 
-VirtualizedTable.displayName = 'VirtualizedTable';
+SimpleTable.displayName = 'SimpleTable';
 
-// Virtualized list for mobile cards
-interface VirtualizedMobileListProps {
+// Simple mobile list - renders all items
+interface MobileListProps {
   items: Country[];
   onItemClick: (id: string) => void;
   isTerritory?: boolean;
@@ -345,50 +292,17 @@ interface VirtualizedMobileListProps {
   getSovereignty?: (item: Country) => string | undefined;
 }
 
-const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({ 
+const MobileList: React.FC<MobileListProps> = memo(({ 
   items, 
   onItemClick,
   isTerritory,
   isDeFacto,
   getSovereignty
 }) => {
-  const [visibleCount, setVisibleCount] = useState(12); // Start with 12 items
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const containerTop = containerRef.current.offsetTop;
-      const containerBottom = containerTop + containerRef.current.offsetHeight;
-      
-      // Load more when user scrolls near the bottom of visible items
-      if (scrollY + windowHeight > containerBottom - 500 && visibleCount < items.length) {
-        setVisibleCount(prev => Math.min(prev + 12, items.length));
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [items.length, visibleCount]);
-
-  // Reset visible count when items change (e.g., search)
-  useEffect(() => {
-    setVisibleCount(12);
-  }, [items]);
-
-  const visibleItems = items.slice(0, visibleCount);
-
   return (
-    <div ref={containerRef} className="lg:hidden">
+    <div className="lg:hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {visibleItems.map((item) => (
+        {items.map((item) => (
           <MobileCountryCard 
             key={item.id} 
             country={item} 
@@ -399,21 +313,11 @@ const VirtualizedMobileList: React.FC<VirtualizedMobileListProps> = memo(({
           />
         ))}
       </div>
-      {visibleCount < items.length && (
-        <div className="flex justify-center mt-8">
-          <button 
-            onClick={() => setVisibleCount(prev => Math.min(prev + 24, items.length))}
-            className="px-8 py-3 bg-white/10 border border-white/20 rounded-xl text-white/60 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white/15 transition-colors"
-          >
-            Load More ({items.length - visibleCount} remaining)
-          </button>
-        </div>
-      )}
     </div>
   );
 });
 
-VirtualizedMobileList.displayName = 'VirtualizedMobileList';
+MobileList.displayName = 'MobileList';
 
 const sortAndFilter = <T extends Country>(
   list: T[], 
@@ -508,16 +412,6 @@ const DatabasePage: React.FC = () => {
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: SortDirection } | null>({ key: 'name', direction: 'asc' });
   const { setPageLoading } = useLayout();
   const navigate = useNavigate();
-
-  // Prefetch CountryDetail chunk when user hovers over the database
-  useEffect(() => {
-    const prefetch = () => import('./CountryDetail');
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(prefetch);
-    } else {
-      setTimeout(prefetch, 1000);
-    }
-  }, []);
 
   // Mark page as loaded immediately
   useEffect(() => {
@@ -620,9 +514,9 @@ const DatabasePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Sovereign Countries Section - Desktop Virtualized Table */}
+        {/* Sovereign Countries Section - Desktop Table */}
         <div className="hidden lg:block mb-16">
-          <VirtualizedTable
+          <SimpleTable
             items={processedCountries}
             onItemClick={handleCountryClick}
             sortConfig={sortConfig}
@@ -630,9 +524,9 @@ const DatabasePage: React.FC = () => {
           />
         </div>
 
-        {/* Sovereign Countries - Mobile Virtualized List */}
+        {/* Sovereign Countries - Mobile List */}
         <div className="mb-20">
-          <VirtualizedMobileList 
+          <MobileList 
             items={processedCountries}
             onItemClick={handleCountryClick}
           />
@@ -652,7 +546,7 @@ const DatabasePage: React.FC = () => {
             </div>
             
             <div className="hidden lg:block">
-              <VirtualizedTable
+              <SimpleTable
                 items={processedTerritories}
                 onItemClick={handleCountryClick}
                 sortConfig={sortConfig}
@@ -664,7 +558,7 @@ const DatabasePage: React.FC = () => {
               />
             </div>
 
-            <VirtualizedMobileList 
+            <MobileList 
               items={processedTerritories}
               onItemClick={handleCountryClick}
               isTerritory
@@ -687,7 +581,7 @@ const DatabasePage: React.FC = () => {
             </div>
             
             <div className="hidden lg:block">
-              <VirtualizedTable
+              <SimpleTable
                 items={processedDeFacto}
                 onItemClick={handleCountryClick}
                 sortConfig={sortConfig}
@@ -699,7 +593,7 @@ const DatabasePage: React.FC = () => {
               />
             </div>
 
-            <VirtualizedMobileList 
+            <MobileList 
               items={processedDeFacto}
               onItemClick={handleCountryClick}
               isDeFacto

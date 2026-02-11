@@ -83,7 +83,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                 }}
                 className="relative flex flex-col items-center"
               >
-                <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-xl">
+                <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(52,199,89,0.5)]">
                   <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
                 
@@ -111,7 +111,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                 transition={{ duration: 0.4 }}
                 className="relative flex flex-col items-center w-full"
               >
-                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full backdrop-blur-xl border-[3px] sm:border-4 border-white shadow-xl">
+                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(255,59,48,0.5)]">
                   <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 

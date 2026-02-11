@@ -307,7 +307,7 @@ export default function GlobalDetective() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4">
                         {options.map((option) => {
                              const isSelected = selectedAnswer === option.name;
                              const isCorrect = option.name === targetCountry.name;

@@ -809,7 +809,7 @@ const MapPage: React.FC = () => {
       <div className={`fixed z-[2000] pointer-events-auto md:hidden transition-all duration-700 ease-out ${showUI ? 'opacity-0 pointer-events-none' : 'bottom-10 left-6 opacity-100'}`}>
         <button 
           onClick={() => setShowUI(!showUI)}
-          className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+          className="w-12 h-12 bg-white/80 backdrop-blur-3xl border border-black/10 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/90 transition-all  relative overflow-hidden group shadow-lg shadow-black/5"
           title="Show UI"
         >
           <Eye size={20} className="relative z-10 drop-shadow-sm" />
@@ -1016,7 +1016,7 @@ const MapPage: React.FC = () => {
           <div className="w-full px-4 pb-4 flex items-end justify-between pointer-events-none">
             <button 
                 onClick={() => setShowUI(false)}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden flex-shrink-0 group"
+                className="pointer-events-auto w-12 h-12 bg-white/80 backdrop-blur-3xl border border-black/10 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/90 transition-all  relative overflow-hidden flex-shrink-0 group shadow-lg shadow-black/5"
             >
                 <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
             </button>
@@ -1026,7 +1026,7 @@ const MapPage: React.FC = () => {
               <button 
                   onClick={flyToRandom}
                   disabled={isLoadingRandom || !mapReady}
-                  className="pointer-events-auto  bg-white/40 backdrop-blur-3xl text-[#1A1C1E] border border-black/20 px-8 py-3.5 rounded-full flex items-center gap-3 transition-all group relative overflow-hidden disabled:opacity-40 disabled:saturate-50 hover:bg-white/60"
+                  className="pointer-events-auto bg-white/80 backdrop-blur-3xl text-[#1A1C1E] border border-black/10 px-8 py-3.5 rounded-full flex items-center gap-3 transition-all group relative overflow-hidden disabled:opacity-40 disabled:saturate-50 hover:bg-white/90 shadow-lg shadow-black/5"
               >
                   <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
                     <Compass size={20} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
@@ -1039,14 +1039,14 @@ const MapPage: React.FC = () => {
             <div className="flex flex-col gap-2 flex-shrink-0">
               <button 
                 onClick={handleZoomIn}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/80 backdrop-blur-3xl border border-black/10 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/90 transition-all  relative overflow-hidden group shadow-lg shadow-black/5"
               >
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
                 <Plus size={20} className="relative z-10 drop-shadow-sm" />
               </button>
               <button 
                 onClick={handleZoomOut}
-                className="pointer-events-auto w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
+                className="pointer-events-auto w-12 h-12 bg-white/80 backdrop-blur-3xl border border-black/10 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/90 transition-all  relative overflow-hidden group shadow-lg shadow-black/5"
               >
                 <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
                 <Minus size={20} className="relative z-10 drop-shadow-sm" />
@@ -1056,7 +1056,7 @@ const MapPage: React.FC = () => {
 
 
           {/* Combined Bottom Panel */}
-          <div className="w-full pointer-events-auto bg-white/40 backdrop-blur-3xl border-t border-x border-black/20 shadow-xl rounded-t-3xl p-4 pb-4 flex flex-col gap-3 relative overflow-hidden">
+          <div className="w-full pointer-events-auto bg-white/80 backdrop-blur-3xl border-t border-x border-black/10 shadow-xl rounded-t-3xl p-4 pb-4 flex flex-col gap-3 relative overflow-hidden">
 
               
               {/* Search Section */}

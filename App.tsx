@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, Suspense, lazy } from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navigation from './components/Navigation';
@@ -9,64 +9,36 @@ import CookieConsent from './components/CookieConsent';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
-
-// Lazy load all pages except Home for instant initial load
-// Store import functions for prefetching on hover
-const pageImports = {
-  games: () => import('./pages/Games'),
-  database: () => import('./pages/DatabasePage'),
-  map: () => import('./pages/MapPage'),
-  about: () => import('./pages/About'),
-};
-
-const Games = lazy(pageImports.games);
-const DatabasePage = lazy(pageImports.database);
-const MapPage = lazy(pageImports.map);
-const About = lazy(pageImports.about);
-const CapitalQuiz = lazy(() => import('./pages/CapitalQuiz'));
-const MapDash = lazy(() => import('./pages/MapDash'));
-const FlagFrenzy = lazy(() => import('./pages/FlagFrenzy'));
-const KnowYourNeighbor = lazy(() => import('./pages/KnowYourNeighbor'));
-const PopulationPursuit = lazy(() => import('./pages/PopulationPursuit'));
-const GlobalDetective = lazy(() => import('./pages/GlobalDetective'));
-const CapitalConnection = lazy(() => import('./pages/CapitalConnection'));
-const RegionRoundup = lazy(() => import('./pages/RegionRoundup'));
-const LandmarkLegend = lazy(() => import('./pages/LandmarkLegend'));
+import Games from './pages/Games';
+import DatabasePage from './pages/DatabasePage';
+import MapPage from './pages/MapPage';
+import About from './pages/About';
+import CapitalQuiz from './pages/CapitalQuiz';
+import MapDash from './pages/MapDash';
+import FlagFrenzy from './pages/FlagFrenzy';
+import KnowYourNeighbor from './pages/KnowYourNeighbor';
+import PopulationPursuit from './pages/PopulationPursuit';
+import GlobalDetective from './pages/GlobalDetective';
+import CapitalConnection from './pages/CapitalConnection';
+import RegionRoundup from './pages/RegionRoundup';
+import LandmarkLegend from './pages/LandmarkLegend';
 // Premium Games
-const TerritoryTitans = lazy(() => import('./pages/TerritoryTitans'));
-const AreaAce = lazy(() => import('./pages/AreaAce'));
-const CurrencyCraze = lazy(() => import('./pages/CurrencyCraze'));
-const LanguageLegend = lazy(() => import('./pages/LanguageLegend'));
-const TimeZoneTrekker = lazy(() => import('./pages/TimeZoneTrekker'));
-const DrivingDirection = lazy(() => import('./pages/DrivingDirection'));
-const CountryExploration = lazy(() => import('./pages/CountryExploration'));
-const CountryDetail = lazy(() => import('./pages/CountryDetail'));
-const Settings = lazy(() => import('./pages/Settings'));
-const Profile = lazy(() => import('./pages/Profile'));
-const Auth = lazy(() => import('./pages/Auth'));
-const AuthAction = lazy(() => import('./pages/AuthAction'));
-const Loyalty = lazy(() => import('./pages/Loyalty'));
-const Terms = lazy(() => import('./pages/Terms'));
-const Privacy = lazy(() => import('./pages/Privacy'));
-const Premium = lazy(() => import('./pages/Premium'));
-
-// Prefetch helper - call on hover to preload page chunks
-export const prefetchPage = (page: keyof typeof pageImports) => {
-  const importFn = pageImports[page];
-  if (importFn) {
-    importFn(); // Triggers the import, browser will cache it
-  }
-};
-
-// Loading fallback - visible indicator that page is loading
-const PageLoader = () => (
-  <div className="flex-grow flex flex-col items-center justify-center bg-[#0F172A] min-h-[40vh] gap-4">
-    <div className="relative">
-      <div className="w-10 h-10 rounded-full border-3 border-sky/10 border-t-sky animate-spin" 
-           style={{ borderWidth: '3px' }} />
-    </div>
-  </div>
-);
+import TerritoryTitans from './pages/TerritoryTitans';
+import AreaAce from './pages/AreaAce';
+import CurrencyCraze from './pages/CurrencyCraze';
+import LanguageLegend from './pages/LanguageLegend';
+import TimeZoneTrekker from './pages/TimeZoneTrekker';
+import DrivingDirection from './pages/DrivingDirection';
+import CountryExploration from './pages/CountryExploration';
+import CountryDetail from './pages/CountryDetail';
+import Settings from './pages/Settings';
+import Profile from './pages/Profile';
+import Auth from './pages/Auth';
+import AuthAction from './pages/AuthAction';
+import Loyalty from './pages/Loyalty';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Premium from './pages/Premium';
 
 
 /**
@@ -108,39 +80,6 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const [appReady, setAppReady] = useState(false);
-  
-  // Mark app as ready after first paint, then preload other pages
-  useEffect(() => {
-    // Use double-rAF to ensure we're past first meaningful paint
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setAppReady(true);
-      });
-    });
-  }, []);
-
-  // Preload key pages after app is interactive
-  useEffect(() => {
-    if (!appReady) return;
-    
-    const preload = () => {
-      pageImports.games();
-      pageImports.about();
-      // Delay heavy pages slightly
-      setTimeout(() => {
-        pageImports.database();
-        pageImports.map();
-      }, 2000);
-    };
-
-    // Use requestIdleCallback for non-blocking preload
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(preload, { timeout: 5000 });
-    } else {
-      setTimeout(preload, 3000);
-    }
-  }, [appReady]);
   
   return (
     <div className="min-h-screen flex flex-col bg-[#0F172A] relative">
@@ -148,7 +87,6 @@ const AppContent: React.FC = () => {
       <Navigation />
       <CookieConsent />
       <div className="flex-grow flex flex-col relative w-full">
-        <Suspense fallback={<PageLoader />}>
           <AnimatePresence mode="popLayout" initial={false}>
             <div key={location.pathname}>
             <Routes location={location}>
@@ -189,7 +127,6 @@ const AppContent: React.FC = () => {
             </Routes>
             </div>
           </AnimatePresence>
-        </Suspense>
       </div>
       <ConditionalFooter />
     </div>

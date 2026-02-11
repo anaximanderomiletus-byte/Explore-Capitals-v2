@@ -288,7 +288,7 @@ export default function DrivingDirection() {
                       const isSelected = selectedSide === side;
                       const isWrong = isSelected && !isCorrect;
                       
-                      let cardStyle = "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/30 active:bg-white/15 active:border-sky/50";
+                      let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
                       let iconColor = "text-white/60";
                       let textColor = "text-white/80";
                       

@@ -639,17 +639,15 @@
         align-items: center; 
         -webkit-justify-content: center;
         justify-content: center;
-        /* GPU Acceleration - Cross Browser */
-        will-change: transform;
-        -webkit-transform: translate3d(0,0,0);
-        transform: translate3d(0,0,0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
         /* Ensure markers are tappable on mobile */
         cursor: pointer;
         pointer-events: auto !important;
-        touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* MapDash game markers - tighter hit area, no touch-action override so panning works naturally */
+      .mapdash-marker {
+        touch-action: auto;
       }
       
       .marker-pin { 
@@ -659,12 +657,9 @@
         border: 2px solid #FFFFFF; 
         border-radius: 50%; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
-        -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease; 
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease; 
         cursor: pointer; 
-        will-change: transform;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
       }
       
       .marker-pin.territory { background: #22c55e; }

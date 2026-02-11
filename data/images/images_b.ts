@@ -53,20 +53,20 @@ export const imagesB: Record<string, string> = {
   "National Assembly": "/png/BELIZE/national-assembly.png",
   "The Great Blue Hole": "/png/BELIZE/great-blue-hole.png",
   "Xunantunich": "/png/BELIZE/xunantunich.png",
-  "Actun Tunichil Muknal (ATM) Cave": "/png/BELIZE/actun-tunichil-muknal.png",
+  "Actun Tunichil Muknal": "/png/BELIZE/actun-tunichil-muknal.png",
   "The Belize Barrier Reef": "/png/BELIZE/belize-barrier-reef.png",
 
   // --- Benin ---
   "Benin": "/png/BENIN/porto-novo-benin.png",
   "Ganvie Lake Village": "/png/BENIN/ganvie-lake-village.png",
-  "The Door of No Return (Ouidah)": "/png/BENIN/door-of-no-return.png",
+  "The Door of No Return": "/png/BENIN/door-of-no-return.png",
   "Royal Palaces of Abomey": "/png/BENIN/royal-palaces-of-abomey.png",
   "Pendjari National Park": "/png/BENIN/pendjari-national-park.png",
   "Temple of Pythons": "/png/BENIN/temple-of-pythons.png",
 
   // --- Bhutan ---
   "Bhutan": "/png/BHUTAN/thimphu-bhutan.png",
-  "Paro Taktsang (Tiger's Nest)": "/png/BHUTAN/paro-takstang.png",
+  "Paro Taktsang": "/png/BHUTAN/paro-takstang.png",
   "Punakha Dzong": "/png/BHUTAN/punakha-dzong.png",
   "Dochula Pass": "/png/BHUTAN/dochula-pass.png",
   "Phobjikha Valley": "/png/BHUTAN/phobjikha-valley.png",
@@ -75,17 +75,17 @@ export const imagesB: Record<string, string> = {
   // --- Bolivia ---
   "Bolivia": "/png/BOLIVIA/sucre-bolivia.png",
   "Salar de Uyuni": "/png/BOLIVIA/salar-de-uyuni.png",
-  "Isla del Sol (Lake Titicaca)": "/png/BOLIVIA/isla-del-sol.png",
-  "Mi Teleférico (La Paz)": "/png/BOLIVIA/mi-teleferico-la-paz.png",
+  "Isla del Sol": "/png/BOLIVIA/isla-del-sol.png",
+  "Mi Teleférico": "/png/BOLIVIA/mi-teleferico-la-paz.png",
   "North Yungas Road": "/png/BOLIVIA/yungas-road.png",
   "Laguna Colorada": "/png/BOLIVIA/laguna-colorada.png",
 
   // --- Bosnia and Herzegovina ---
   "Bosnia and Herzegovina": "/png/BOSNIA-AND-HERZEGOVINA/sarajevo-bosnia-and-herzegovina.png",
-  "Stari Most (Old Bridge)": "/png/BOSNIA-AND-HERZEGOVINA/stari-most.png",
-  "Baščaršija (Sarajevo Old Town)": "/png/BOSNIA-AND-HERZEGOVINA/bascarsija.png",
+  "Stari Most": "/png/BOSNIA-AND-HERZEGOVINA/stari-most.png",
+  "Baščaršija": "/png/BOSNIA-AND-HERZEGOVINA/bascarsija.png",
   "Kravice Waterfalls": "/png/BOSNIA-AND-HERZEGOVINA/kravice-waterfalls.png",
-  "Tjentište War Memorial (Valley of Heroes)": "/png/BOSNIA-AND-HERZEGOVINA/tjentiste-war-memorial.png",
+  "Tjentište War Memorial": "/png/BOSNIA-AND-HERZEGOVINA/tjentiste-war-memorial.png",
   "Blagaj Tekke": "/png/BOSNIA-AND-HERZEGOVINA/blagaj-tekke.png",
 
   // --- Botswana ---
@@ -99,18 +99,18 @@ export const imagesB: Record<string, string> = {
   // --- Brazil ---
   "Brazil": "/png/BRAZIL/brasilia-brazil.png",
   "Christ the Redeemer": "/png/BRAZIL/christ-the-redeemer.png",
-  "The Meeting of Waters (Amazon River)": "/png/BRAZIL/meeting-of-waters.png",
-  "Lençóis Maranhenses National Park": "/png/BRAZIL/lencois-maranhenses.png",
-  "Pelourinho (Salvador)": "/png/BRAZIL/pelourinho.png",
+  "Meeting of Waters Amazon": "/png/BRAZIL/meeting-of-waters.png",
+  "Lençóis Maranhenses": "/png/BRAZIL/lencois-maranhenses.png",
+  "Pelourinho": "/png/BRAZIL/pelourinho.png",
   "Cathedral of Brasília": "/png/BRAZIL/cathedral-of-brasilia.png",
 
   // --- Brunei ---
   "Brunei": "/png/BRUNEI/bandar-seri-begawan-brunei.png",
   "Sultan Omar Ali Saifuddien Mosque": "/png/BRUNEI/sultan-omar-ali-saifuddien-mosque.png",
-  "Kampong Ayer (Water Village)": "/png/BRUNEI/kampong-ayer.png",
+  "Kampong Ayer": "/png/BRUNEI/kampong-ayer.png",
   "Ulu Temburong National Park": "/png/BRUNEI/ulu-temburong-national-park.png",
   "Istana Nurul Iman": "/png/BRUNEI/istana-nurul-iman.png",
-  "The Billionth Barrel Monument": "/png/BRUNEI/billionth-barrel-monument.png",
+  "Billionth Barrel Monument": "/png/BRUNEI/billionth-barrel-monument.png",
 
   // --- Bulgaria ---
   "Bulgaria": "/png/BULGARIA/sofia-bulgaria.png",
@@ -122,9 +122,9 @@ export const imagesB: Record<string, string> = {
 
   // --- Burkina Faso ---
   "Burkina Faso": "/png/BURKINA-FASO/ouagadougou-burkina-faso.png",
-  "The Grand Mosque of Bobo-Dioulasso": "/png/BURKINA-FASO/grand-mosque-bobo-dioulasso.png",
-  "The Peaks of Sindou": "/png/BURKINA-FASO/peaks-of-sindou.png",
-  "The Ruins of Loropéni": "/png/BURKINA-FASO/ruins-of-loropeni.png",
+  "Grand Mosque Bobo-Dioulasso": "/png/BURKINA-FASO/grand-mosque-bobo-dioulasso.png",
+  "Peaks of Sindou": "/png/BURKINA-FASO/peaks-of-sindou.png",
+  "Ruins of Loropéni": "/png/BURKINA-FASO/ruins-of-loropeni.png",
   "Tiébélé Royal Court": "/png/BURKINA-FASO/tiebele-royal-court.png",
   "Nazinga Game Ranch": "/png/BURKINA-FASO/nazinga-game-ranch.png",
 
@@ -132,7 +132,7 @@ export const imagesB: Record<string, string> = {
   "Burundi": "/png/BURUNDI/gitega-burundi.png",
   "Lake Tanganyika": "/png/BURUNDI/lake-tanganyika.png",
   "Gishora Drum Sanctuary": "/png/BURUNDI/gishora-drum-sanctuary.png",
-  "Source of the Nile (Rutovu)": "/png/BURUNDI/source-of-the-nile-rutovu.png",
+  "Source of the Nile Rutovu": "/png/BURUNDI/source-of-the-nile-rutovu.png",
   "Kibira National Park": "/png/BURUNDI/kibira-national-park.png",
-  "The Livingstone-Stanley Monument": "/png/BURUNDI/livingstone-stanley-monument.png"
+  "Livingstone-Stanley Monument": "/png/BURUNDI/livingstone-stanley-monument.png"
 };

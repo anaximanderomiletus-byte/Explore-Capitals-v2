@@ -275,7 +275,7 @@ export default function LanguageLegend() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                     {currentQuestion.options.map((option, idx) => {
                       const isSelected = selectedAnswer === option;
                       const isCorrect = currentQuestion.country.languages.includes(option);

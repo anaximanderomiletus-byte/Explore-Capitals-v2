@@ -37,6 +37,6 @@ export const imagesD: Record<string, string> = {
   "Pico Duarte": "/png/DOMINICAN-REPUBLIC/pico-duarte.png",
   "Zona Colonial": "/png/DOMINICAN-REPUBLIC/zona-colonial-santo-domingo.png",
   "Lake Enriquillo": "/png/DOMINICAN-REPUBLIC/lake-enriquillo-crocodile.png",
-  "The 27 Waterfalls of Damajagua": "/png/DOMINICAN-REPUBLIC/27-waterfalls-damajagua.png",
+  "27 Waterfalls of Damajagua": "/png/DOMINICAN-REPUBLIC/27-waterfalls-damajagua.png",
   "Altos de Chavón": "/png/DOMINICAN-REPUBLIC/altos-de-chavon.png"
 };

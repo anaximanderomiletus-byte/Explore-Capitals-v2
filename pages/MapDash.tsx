@@ -161,6 +161,8 @@ export default function MapDash() {
       maxBounds: [[-85, -5000], [85, 5000]],
       maxBoundsViscosity: 1.0,
       preferCanvas: false,
+      // Tighter tap tolerance so panning doesn't accidentally trigger marker clicks
+      tapTolerance: 10,
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(map);
@@ -170,30 +172,20 @@ export default function MapDash() {
 
     MOCK_COUNTRIES.forEach(country => {
       const icon = L.divIcon({
-        className: 'custom-map-marker',
+        className: 'custom-map-marker mapdash-marker',
         html: `<div class="marker-pin"></div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
       });
 
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
-
-      // Track if touch already handled this interaction to prevent double-firing
-      let touchHandledRef = { current: false };
       
-      // Unified handler for marker interactions (click and touch)
-      const handleMarkerInteraction = (e: any, isTouchEvent = false) => {
-        // If touch already handled this, skip the click handler
-        if (!isTouchEvent && touchHandledRef.current) {
-          touchHandledRef.current = false;
-          return;
-        }
-        
-        // CRITICAL: Stop propagation for reliable mobile/tablet touch handling
+      // Use Leaflet's built-in click event only - it properly distinguishes
+      // taps from pan/scroll gestures on mobile, preventing accidental selections
+      marker.on('click', (e: any) => {
         if (e && e.originalEvent) {
           e.originalEvent.stopPropagation();
-          e.originalEvent.preventDefault();
         }
         if (e && typeof L.DomEvent?.stopPropagation === 'function') {
           L.DomEvent.stopPropagation(e);
@@ -247,30 +239,6 @@ export default function MapDash() {
             setWrongSelectionData(null);
             feedbackTimeoutRef.current = null;
           }, 1000);
-        }
-      };
-      
-      // Handle click (works for desktop and as fallback)
-      marker.on('click', (e: any) => handleMarkerInteraction(e, false));
-      
-      // Bind touch events after marker is added to map for reliable mobile handling
-      marker.on('add', () => {
-        const markerElement = marker.getElement?.();
-        if (markerElement && !(markerElement as any)._touchBound) {
-          (markerElement as any)._touchBound = true;
-          // Use touchstart for immediate response on iOS
-          markerElement.addEventListener('touchstart', (e: TouchEvent) => {
-            // Mark that touch handled this to prevent click from double-firing
-            touchHandledRef.current = true;
-            // Reset after a delay in case click doesn't fire
-            setTimeout(() => { touchHandledRef.current = false; }, 400);
-          }, { passive: true });
-          
-          markerElement.addEventListener('touchend', (e: TouchEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleMarkerInteraction({ originalEvent: e }, true);
-          }, { passive: false });
         }
       });
 

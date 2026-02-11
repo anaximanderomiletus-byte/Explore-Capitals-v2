@@ -63,6 +63,14 @@ export const imagesP: Record<string, string> = {
   "Malbork Castle": "/png/POLAND/malbork-castle.png",
   "Białowieża Forest": "/png/POLAND/bialowieza-forest.png",
 
+  // --- Palestine ---
+  "Palestine": "/png/PALESTINE/ramallah-palestine.png",
+  "Church of the Nativity": "/png/PALESTINE/church-of-the-nativity.png",
+  "Ibrahimi Mosque Hebron": "/png/PALESTINE/ibrahimi-mosque-hebron.png",
+  "Hisham's Palace Jericho": "/png/PALESTINE/hishams-palace-jericho.png",
+  "Wadi Qelt Monastery": "/png/PALESTINE/wadi-qelt-st-georges-monastery.png",
+  "Gaza City Mediterranean": "/png/PALESTINE/gaza-city-mediterranean.png",
+
   // --- Portugal ---
   "Portugal": "/png/PORTUGAL/lisbon-portugal.png",
   "Lisbon Tram 28": "/png/PORTUGAL/lisbon-tram-28.png",
