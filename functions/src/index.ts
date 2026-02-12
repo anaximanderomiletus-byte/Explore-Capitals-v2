@@ -347,7 +347,7 @@ export const createCustomerPortalSession = functions.https.onCall(async (data, c
   // Use a safe default if no valid returnUrl provided
   const safeReturnUrl = returnUrl && validateRedirectUrl(returnUrl) 
     ? returnUrl 
-    : 'https://explorecapitals.com/#/settings';
+    : 'https://explorecapitals.com/settings';
 
   const session = await stripe.billingPortal.sessions.create({
     customer: userData.stripeCustomerId,

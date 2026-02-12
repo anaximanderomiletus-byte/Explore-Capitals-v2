@@ -64,7 +64,7 @@ export const createSubscriptionCheckout = async (
 
   const { data } = await createSession({
     plan,
-    successUrl: `${window.location.origin}/#/settings?subscription=success`,
+    successUrl: `${window.location.origin}/settings?subscription=success`,
     cancelUrl: window.location.href,
   });
 
@@ -85,7 +85,7 @@ export const getCustomerPortalUrl = async (): Promise<string> => {
   >(functions, 'createCustomerPortalSession');
 
   const { data } = await createPortal({
-    returnUrl: `${window.location.origin}/#/settings`,
+    returnUrl: `${window.location.origin}/settings`,
     origin: window.location.origin,
   });
 

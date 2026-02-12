@@ -61,11 +61,14 @@ const SEO: React.FC<SEOProps> = ({
     setMeta('robots', 'index, follow');
     setMeta('author', 'ExploreCapitals');
 
+    // Build canonical URL: always use production domain with clean path
+    const canonicalUrl = `https://explorecapitals.com${window.location.pathname}`;
+
     // 4. Open Graph / Social Media
     setProperty('og:title', fullTitle);
     setProperty('og:description', description);
     setProperty('og:type', type);
-    setProperty('og:url', window.location.href);
+    setProperty('og:url', canonicalUrl);
     setProperty('og:image', image);
     setProperty('og:image:alt', imageAlt);
     setProperty('og:site_name', siteName);
@@ -86,7 +89,7 @@ const SEO: React.FC<SEOProps> = ({
       linkCanonical.setAttribute('rel', 'canonical');
       document.head.appendChild(linkCanonical);
     }
-    linkCanonical.setAttribute('href', window.location.href);
+    linkCanonical.setAttribute('href', canonicalUrl);
 
     // 7. Structured Data (JSON-LD)
     const existingScript = document.getElementById('json-ld-seo');

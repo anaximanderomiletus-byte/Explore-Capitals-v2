@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: './', // <--- The "GPS" Fix for custom domains
+  base: '/', // Absolute paths required for BrowserRouter (custom domain via CNAME)
   build: {
     outDir: 'docs', // GitHub Pages can serve from /docs
   },

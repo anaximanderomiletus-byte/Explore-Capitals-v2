@@ -184,38 +184,37 @@
       }
     </style>
 
-    <!-- Analytics - Load well after page is interactive -->
+    <!-- GitHub Pages SPA redirect handler -->
     <script>
-      // Defer analytics until user can interact (not just 'load')
-      function loadAnalytics() {
-        // Google Analytics
+      // Restores the correct URL after 404.html redirect (GitHub Pages SPA workaround)
+      (function(l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      }(window.location));
+    </script>
+
+    <!-- Google AdSense - MUST load directly for crawler verification -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997" crossorigin="anonymous"></script>
+
+    <!-- Google Analytics - Deferred for performance (not needed by AdSense crawler) -->
+    <script>
+      var analyticsLoaded = false;
+      function triggerAnalytics() {
+        if (analyticsLoaded) return;
+        analyticsLoaded = true;
         var gtag = document.createElement('script');
         gtag.src = 'https://www.googletagmanager.com/gtag/js?id=G-8NEFW5WL3V';
         gtag.async = true;
         document.head.appendChild(gtag);
-        
         window.dataLayer = window.dataLayer || [];
         function gtagFn(){dataLayer.push(arguments);}
         window.gtag = gtagFn;
         gtagFn('js', new Date());
         gtagFn('config', 'G-8NEFW5WL3V');
-        
-        // Google AdSense - load even later
-        setTimeout(function() {
-          var adsense = document.createElement('script');
-          adsense.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997';
-          adsense.async = true;
-          adsense.crossOrigin = 'anonymous';
-          document.head.appendChild(adsense);
-        }, 3000);
-      }
-      
-      // Load analytics on first user interaction or after 5 seconds (whichever first)
-      var analyticsLoaded = false;
-      function triggerAnalytics() {
-        if (analyticsLoaded) return;
-        analyticsLoaded = true;
-        loadAnalytics();
       }
       ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
         document.addEventListener(evt, triggerAnalytics, { once: true, passive: true });
@@ -940,7 +939,46 @@
       <div class="loader-circle"></div>
     </div>
 
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col w-full"></div>
+    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col w-full">
+      <!-- Fallback content for search engine crawlers and noscript -->
+      <noscript>
+        <div style="background:#0F172A;color:#fff;font-family:Inter,sans-serif;padding:40px 20px;max-width:900px;margin:0 auto;">
+          <h1 style="font-size:2rem;margin-bottom:16px;">ExploreCapitals — Learn World Geography Through Interactive Games</h1>
+          <p style="font-size:1.1rem;line-height:1.7;margin-bottom:24px;">
+            Master world capitals, flags, and maps through fun, free geography games. 
+            ExploreCapitals is an educational platform featuring interactive quizzes, 
+            an explorable world atlas, and a comprehensive country database covering 195+ nations.
+          </p>
+          <h2 style="font-size:1.4rem;margin-bottom:12px;">Geography Games</h2>
+          <ul style="line-height:2;margin-bottom:24px;">
+            <li><a href="/games/capital-quiz" style="color:#00C2FF;">Capital Quiz</a> — Test your knowledge of world capitals</li>
+            <li><a href="/games/flag-frenzy" style="color:#00C2FF;">Flag Frenzy</a> — Identify country flags from around the world</li>
+            <li><a href="/games/map-dash" style="color:#00C2FF;">Map Dash</a> — Race to locate countries on an interactive map</li>
+            <li><a href="/games/know-your-neighbor" style="color:#00C2FF;">Know Your Neighbor</a> — Learn about bordering countries</li>
+            <li><a href="/games/population-pursuit" style="color:#00C2FF;">Population Pursuit</a> — Compare populations worldwide</li>
+            <li><a href="/games/global-detective" style="color:#00C2FF;">Global Detective</a> — Solve geography clues</li>
+            <li><a href="/games/capital-connection" style="color:#00C2FF;">Capital Connection</a> — Match capitals to countries</li>
+            <li><a href="/games/region-roundup" style="color:#00C2FF;">Region Roundup</a> — Explore world regions</li>
+            <li><a href="/games/landmark-legend" style="color:#00C2FF;">Landmark Legend</a> — Identify famous landmarks</li>
+          </ul>
+          <h2 style="font-size:1.4rem;margin-bottom:12px;">Explore</h2>
+          <ul style="line-height:2;margin-bottom:24px;">
+            <li><a href="/database" style="color:#00C2FF;">Country Database</a> — Browse facts about 195+ countries</li>
+            <li><a href="/map" style="color:#00C2FF;">Interactive World Map</a> — Explore the world visually</li>
+            <li><a href="/games" style="color:#00C2FF;">All Games</a> — View our full collection of geography games</li>
+          </ul>
+          <nav style="margin-top:32px;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
+            <a href="/" style="color:#00C2FF;margin-right:16px;">Home</a>
+            <a href="/games" style="color:#00C2FF;margin-right:16px;">Games</a>
+            <a href="/database" style="color:#00C2FF;margin-right:16px;">Database</a>
+            <a href="/map" style="color:#00C2FF;margin-right:16px;">Map</a>
+            <a href="/about" style="color:#00C2FF;margin-right:16px;">About</a>
+            <a href="/terms" style="color:#00C2FF;margin-right:16px;">Terms</a>
+            <a href="/privacy" style="color:#00C2FF;">Privacy Policy</a>
+          </nav>
+        </div>
+      </noscript>
+    </div>
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
