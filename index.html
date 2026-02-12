@@ -332,6 +332,11 @@
         z-index: 20;
       }
       
+      /* Ensure Leaflet popups render ABOVE the mobile UI overlays (z-1000) */
+      #map .leaflet-popup-pane {
+        z-index: 1500 !important;
+      }
+
       /* Specific fix for Map Page popups to hide the join line */
       .custom-popup .leaflet-popup-content-wrapper {
         background: #0F172A !important;
@@ -546,20 +551,14 @@
       }
       
       /* Fix for Safari hover states sticking on touch devices */
-      /* On touch-only devices, disable sticky hover effects */
+      /* On touch-only devices, disable sticky hover visual effects only */
+      /* IMPORTANT: Do NOT override transform globally - it kills active:scale press feedback */
       @media (hover: none) and (pointer: coarse) {
         .hover\:brightness-110:hover, 
         .hover\:bg-white\/20:hover,
         .hover\:shadow-premium-hover:hover {
           filter: none !important;
           box-shadow: inherit !important;
-        }
-        
-        /* Game answer buttons - remove hover highlights on touch devices */
-        button:hover,
-        [role="button"]:hover {
-          transform: none !important;
-          -webkit-tap-highlight-color: transparent;
         }
       }
       
@@ -643,6 +642,8 @@
         cursor: pointer;
         pointer-events: auto !important;
         -webkit-tap-highlight-color: transparent;
+        /* Allow the visible pin to overflow the larger touch target container */
+        overflow: visible !important;
       }
       
       /* MapDash game markers - tighter hit area, no touch-action override so panning works naturally */
@@ -800,10 +801,10 @@
       .reduce-effects .backdrop-blur-xl,
       .reduce-effects .backdrop-blur-2xl,
       .reduce-effects .backdrop-blur-3xl {
-        /* Completely disable backdrop blur on Safari/iOS - use solid bg instead */
+        /* Disable heavy backdrop blur on Safari/iOS for performance */
+        /* Do NOT force a background-color here - let each element's own bg show through */
         -webkit-backdrop-filter: none !important;
         backdrop-filter: none !important;
-        background-color: rgba(15, 23, 42, 0.95) !important;
       }
       
       /* Instant touch feedback for Safari/iOS */

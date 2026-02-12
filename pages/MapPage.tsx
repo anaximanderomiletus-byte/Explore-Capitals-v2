@@ -230,6 +230,11 @@ const MapPage: React.FC = () => {
         }, 100);
 
         if (allMarkersRef.current.length === 0) {
+            // Use larger touch targets on touch devices for reliable tapping (Apple HIG: 44px min)
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const iconDim = isTouchDevice ? 44 : 20;
+            const anchorDim = iconDim / 2;
+
             const createMarkers = (list: Country[], type: 'sovereign' | 'territory' | 'defacto') => {
                 list.forEach(country => {
                     try {
@@ -253,8 +258,8 @@ const MapPage: React.FC = () => {
                             const icon = L.divIcon({
                                 className: `custom-map-marker ${markerClass}`,
                                 html: `<div class="marker-pin ${pinClass}"></div>`,
-                                iconSize: [20, 20],
-                                iconAnchor: [10, 10]
+                                iconSize: [iconDim, iconDim],
+                                iconAnchor: [anchorDim, anchorDim]
                             });
 
                             const marker = L.marker([country.lat, country.lng + offset], { 
@@ -274,10 +279,10 @@ const MapPage: React.FC = () => {
 
                             // Unified handler for marker interaction
                             const handleMarkerInteraction = (e: any) => {
-                                // CRITICAL: Stop propagation to prevent map click from clearing activeCountryId
+                                // Stop propagation to prevent map click from clearing activeCountryId
+                                // NOTE: Do NOT call preventDefault() - it interferes with iOS touch-to-click conversion
                                 if (e && e.originalEvent) {
                                   e.originalEvent.stopPropagation();
-                                  e.originalEvent.preventDefault();
                                 }
                                 if (e && typeof L.DomEvent?.stopPropagation === 'function') {
                                   L.DomEvent.stopPropagation(e);

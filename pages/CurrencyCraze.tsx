@@ -334,7 +334,6 @@ export default function CurrencyCraze() {
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">
                   Play Again <Play size={20} fill="currentColor" />
                 </Button>
-                <TimeSelector value={gameDuration} onChange={setGameDuration} />
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-warning transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"

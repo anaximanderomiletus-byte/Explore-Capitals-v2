@@ -335,7 +335,6 @@ export default function CapitalConnection() {
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
-                <TimeSelector value={gameDuration} onChange={setGameDuration} />
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
                   <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
                   Back to Games
