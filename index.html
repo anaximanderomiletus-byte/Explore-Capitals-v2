@@ -31,18 +31,17 @@
     <!-- Google Fonts: Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts non-blocking with media trick -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Caveat:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Load fonts directly -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS - Provides base reset and utility classes for initial render -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Leaflet CSS - Only needed for map pages, load with low priority -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" media="print" onload="this.media='all'" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     
-    <!-- Leaflet JS - Defer since it's only needed on map pages -->
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
       tailwind.config = {

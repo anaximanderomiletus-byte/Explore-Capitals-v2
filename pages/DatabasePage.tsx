@@ -77,7 +77,7 @@ const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({
         src={`/flags/${code}.png`} 
         alt={`${country.name} Flag`}
         className="w-full h-full object-contain"
-        decoding="async"
+        decoding="sync"
       />
     </div>
   );

@@ -10,10 +10,9 @@ import {
 } from 'lucide-react';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
-// Dynamic imports for heavy data to speed up initial page load
-const getStaticImages = () => import('../data/images').then(m => m.STATIC_IMAGES);
-const getStaticTours = () => import('../data/staticTours').then(m => m.staticTours);
-const getOfficialNames = () => import('../data/officialNames').then(m => m.OFFICIAL_NAMES);
+import { STATIC_IMAGES } from '../data/images';
+import { staticTours } from '../data/staticTours';
+import { OFFICIAL_NAMES } from '../data/officialNames';
 
 import Button from '../components/Button';
 import SEO from '../components/SEO';
@@ -30,26 +29,12 @@ const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { setPageLoading, setTransitionStyle } = useLayout();
-  
-  // State for dynamically loaded data
-  const [staticImages, setStaticImages] = React.useState<Record<string, string>>({});
-  const [staticTours, setStaticTours] = React.useState<any>({});
-  const [officialNamesData, setOfficialNamesData] = React.useState<Record<string, string>>({});
-  const [dataLoaded, setDataLoaded] = React.useState(false);
+
+  // Data is statically imported - no lazy loading
+  const dataLoaded = true;
 
   useEffect(() => {
-    // Load heavy data in parallel
-    Promise.all([
-      getStaticImages(),
-      getStaticTours(),
-      getOfficialNames()
-    ]).then(([images, tours, names]) => {
-      setStaticImages(images);
-      setStaticTours(tours);
-      setOfficialNamesData(names);
-      setDataLoaded(true);
-      setPageLoading(false);
-    });
+    setPageLoading(false);
   }, [setPageLoading]);
   
   const country = useMemo(() => MOCK_COUNTRIES.find(c => c.id === id) || TERRITORIES.find(t => t.id === id) || DE_FACTO_COUNTRIES.find(d => d.id === id), [id]);
@@ -66,22 +51,22 @@ const CountryDetail: React.FC = () => {
       if (!country || !dataLoaded) return { image: '', caption: '' };
       
       // 1. Try Country Main Image (Usually Capital or Iconic)
-      if (staticImages[country.name]) {
-          return { image: staticImages[country.name], caption: `${country.capital}, ${country.name}` };
+      if (STATIC_IMAGES[country.name]) {
+          return { image: STATIC_IMAGES[country.name], caption: `${country.capital}, ${country.name}` };
       }
 
       // 2. Try Tour Stop Image
       const tourData = staticTours[country.name];
       if (tourData && tourData.stops.length > 0) {
           const stop = tourData.stops[0];
-          const img = staticImages[stop.imageKeyword || stop.stopName];
+          const img = STATIC_IMAGES[stop.imageKeyword || stop.stopName];
           if (img) return { image: img, caption: `${stop.stopName}, ${country.name}` };
       }
 
       // 3. Fallback
       const idx = (country.id.charCodeAt(0) + country.name.length) % FALLBACK_SCENES.length;
       return { image: FALLBACK_SCENES[idx], caption: `${country.capital}, ${country.name}` };
-  }, [country, dataLoaded, staticImages, staticTours]);
+  }, [country, dataLoaded]);
 
   // Two photos for the expedition section
   const expeditionPhotos = useMemo(() => {
@@ -89,8 +74,8 @@ const CountryDetail: React.FC = () => {
     const photos: { image: string; caption: string }[] = [];
     
     // Try country main image first
-    if (staticImages[country.name]) {
-      photos.push({ image: staticImages[country.name], caption: country.capital });
+    if (STATIC_IMAGES[country.name]) {
+      photos.push({ image: STATIC_IMAGES[country.name], caption: country.capital });
     }
     
     // Pull from tour stops for variety
@@ -98,7 +83,7 @@ const CountryDetail: React.FC = () => {
     if (tourData?.stops) {
       for (const stop of tourData.stops) {
         if (photos.length >= 2) break;
-        const img = staticImages[stop.imageKeyword || stop.stopName];
+        const img = STATIC_IMAGES[stop.imageKeyword || stop.stopName];
         if (img && !photos.some(p => p.image === img)) {
           photos.push({ image: img, caption: stop.stopName });
         }
@@ -117,12 +102,12 @@ const CountryDetail: React.FC = () => {
     }
     
     return photos;
-  }, [country, dataLoaded, staticImages, staticTours]);
+  }, [country, dataLoaded]);
 
   const officialName = useMemo(() => {
     if (!country) return '';
-    return officialNamesData[country.name] || country.name;
-  }, [country, officialNamesData]);
+    return OFFICIAL_NAMES[country.name] || country.name;
+  }, [country]);
 
   if (!country) {
     return (
