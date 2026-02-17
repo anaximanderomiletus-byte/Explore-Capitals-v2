@@ -6,6 +6,23 @@ export default defineConfig({
   base: '/', // Absolute paths required for BrowserRouter (custom domain via CNAME)
   build: {
     outDir: 'docs', // GitHub Pages can serve from /docs
+    rollupOptions: {
+      output: {
+        // Split heavy dependencies into separate cached chunks
+        manualChunks: {
+          // React core — shared across all chunks
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          // Animation library — used by many pages
+          'vendor-motion': ['framer-motion'],
+          // Firebase — only needed after user interaction
+          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          // 3D — only needed by pages that use Three.js
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+        },
+      },
+    },
+    // Target modern browsers for smaller output
+    target: 'es2020',
   },
   server: {
     port: 3000,

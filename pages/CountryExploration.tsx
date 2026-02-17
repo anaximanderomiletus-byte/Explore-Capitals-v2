@@ -104,7 +104,7 @@ const Container: React.FC<ContainerProps> = ({ children, className = "", transpa
 // Image Helper (Internal use for small icons/previews)
 const ExpeditionVisual: React.FC<{ src: string | null; alt: string; className?: string; draggable?: boolean }> = ({ src, alt, className = "", draggable }) => {
   if (src) {
-    return <img src={src} alt={alt} className={`w-full h-full object-cover ${className}`} draggable={draggable} />;
+    return <img src={src} alt={alt} className={`w-full h-full object-cover ${className}`} draggable={draggable} loading="lazy" decoding="async" />;
   }
 
   return (

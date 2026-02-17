@@ -428,14 +428,12 @@
       /* Scrollbar hidden - scroll functionality preserved */
       
       /* ===== BACKDROP FILTER CROSS-BROWSER & PERFORMANCE ===== */
-      .backdrop-blur-md, .backdrop-blur-sm, .backdrop-blur-lg, .backdrop-blur-xl, .backdrop-blur-2xl, .backdrop-blur-3xl {
-        -webkit-backdrop-filter: blur(8px); /* Cap blur on Safari for performance */
-        backdrop-filter: blur(8px);
-        /* GPU acceleration for blurred elements */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-      }
-      
+      /*
+       * Removed forced translateZ(0) — it was creating separate GPU compositor
+       * layers for every blurred element, which flash as visible rectangles
+       * during fast scrolling. The browser already promotes backdrop-filter
+       * elements to compositor layers when needed.
+       */
       .backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
       .backdrop-blur-md { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
       .backdrop-blur-lg { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }

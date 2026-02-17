@@ -50,23 +50,8 @@ const Games: React.FC = () => {
   };
 
   useEffect(() => {
-    // Start Preloading Images
-    const imageUrls = GAMES.map(game => game.image);
-    
-    // Create an array of image load promises
-    const loadPromises = imageUrls.map(src => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = src;
-        img.onload = resolve;
-        img.onerror = resolve; // Resolve even on error to avoid hanging the UI
-      });
-    });
-
-    // Wait for all images, then signal that the page is ready
-    Promise.all(loadPromises).then(() => {
-      setPageLoading(false);
-    });
+    // Render page immediately — images load progressively via native loading="lazy"
+    setPageLoading(false);
   }, [setPageLoading]);
 
   const renderGameCard = (game: typeof GAMES[0], isPremiumGame: boolean) => {
@@ -76,7 +61,7 @@ const Games: React.FC = () => {
     return (
       <div 
         key={game.id} 
-        className={`group bg-white/20 backdrop-blur-3xl rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''}`}
+        className={`group bg-white/20 rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''}`}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
         
@@ -88,10 +73,12 @@ const Games: React.FC = () => {
         )}
         
         <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden border-b border-white/20">
-          <img 
-            src={game.image} 
-            alt={game.title} 
-            className="w-full h-full object-cover" 
+          <img
+            src={game.image}
+            alt={game.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-70" />
           
@@ -185,7 +172,7 @@ const Games: React.FC = () => {
 
           <button 
             onClick={playRandomGame}
-            className="flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl text-[11px] font-black text-white uppercase tracking-[0.3em] hover:bg-white/20 transition-all group relative overflow-hidden"
+            className="flex items-center gap-3 px-8 py-4 bg-white/10 border border-white/20 rounded-2xl text-[11px] font-black text-white uppercase tracking-[0.3em] hover:bg-white/20 transition-all group relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
             <Shuffle size={18} className="text-sky-light transition-transform duration-700 relative z-10" />

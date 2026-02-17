@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
                 </div>
               </motion.div>
@@ -154,7 +154,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                 className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 backdrop-blur-2xl border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
                 </div>
               </motion.div>
@@ -235,7 +235,7 @@ const Home: React.FC = () => {
 
       <ParallaxSection>
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group">
+          <div className="bg-white/[0.02] border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group">
             <div className="absolute inset-0 bg-aurora opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" />
             
             <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center relative z-10">
@@ -258,7 +258,7 @@ const Home: React.FC = () => {
               </div>
 
               <div className="relative">
-                <div className="bg-white/5 backdrop-blur-3xl border border-white/10 p-4 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] transform transition-all duration-700">
+                <div className="bg-white/5 border border-white/10 p-4 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] transform transition-all duration-700">
                   <div className="flex items-center gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-10">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white border border-white/20 relative overflow-hidden flex-shrink-0">
                       <Trophy size={24} className="relative z-10 drop-shadow-lg sm:w-7 sm:h-7 md:w-8 md:h-8" />
@@ -322,7 +322,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-8 lg:gap-10">
             <Link to="/database" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
                   <BookOpen size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
@@ -335,7 +335,7 @@ const Home: React.FC = () => {
             </Link>
 
             <Link to="/map" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
                   <Compass size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
@@ -407,8 +407,8 @@ const GameCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; c
   stats,
 }) => (
   <Link to={link} className="group block h-full relative">
-    {/* Solid Gel-style background for higher visibility */}
-    <div className={`absolute inset-0 bg-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15)]`}>
+    {/* Solid Gel-style background — no backdrop-blur to avoid rendering rectangles on hover/scroll */}
+    <div className={`absolute inset-0 bg-white/10 rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15)]`}>
       {/* Glossy overlay layer */}
       <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       {/* Accent glow on hover */}
