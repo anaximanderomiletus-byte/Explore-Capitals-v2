@@ -3,13 +3,13 @@
   "name": "ExploreCapitals.com | World Geography Platform",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/png/0-STYLE/ExploreCapitalsAppIcon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
     },
     {
-      "src": "/logo.png",
+      "src": "/png/0-STYLE/ExploreCapitalsAppIcon.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
