@@ -9,7 +9,6 @@ import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useUser } from '../context/UserContext';
 import { useLayout } from '../context/LayoutContext';
-import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { getCountryCode, getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
@@ -344,7 +343,7 @@ export default function MapDash() {
             </div>
 
             {/* Zoom Controls - hidden on mobile/tablet, visible on desktop */}
-            <div className="absolute bottom-32 sm:bottom-36 md:bottom-40 right-3 sm:right-4 md:right-6 z-30 hidden lg:flex flex-col gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className="absolute bottom-20 sm:bottom-22 md:bottom-24 right-3 sm:right-4 md:right-6 z-30 hidden lg:flex flex-col gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-right-4 duration-500">
               <button 
                 onClick={handleZoomIn}
                 className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95"
@@ -359,37 +358,36 @@ export default function MapDash() {
               </button>
             </div>
 
-            {/* Target Country Card - centered at bottom with proper safe area */}
+            {/* Target Country Card - compact bottom bar */}
             {targetCountry && (
-              <div 
+              <div
                 key={`${targetCountry.id}-${feedbackKey}`}
-                className={`absolute bottom-4 sm:bottom-5 md:bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-24px)] max-w-[320px] sm:max-w-[360px] md:max-w-sm z-20 pointer-events-none transform transition-all duration-500 opacity-100 translate-y-0 ${lastResult === 'incorrect' ? 'card-shake' : ''}`}
+                className={`absolute bottom-4 sm:bottom-5 md:bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transform transition-all duration-300 ${lastResult === 'incorrect' ? 'card-shake' : ''}`}
               >
-                <div 
-                  className={`pointer-events-auto backdrop-blur-2xl rounded-2xl sm:rounded-[1.5rem] md:rounded-[2rem] py-8 px-5 sm:py-10 sm:px-6 md:py-10 md:px-6 lg:py-6 text-center relative transition-all duration-200 overflow-hidden
-                    ${lastResult === 'correct' ? 'bg-accent border-2 sm:border-[3px] md:border-4 border-white' : 
-                      lastResult === 'incorrect' ? 'bg-error border-2 sm:border-[3px] md:border-4 border-white' : 
-                      'bg-surface-dark/95 border-2 sm:border-[3px] md:border-4 border-white/40'}`}
+                <div
+                  className={`pointer-events-auto backdrop-blur-2xl rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
+                    ${lastResult === 'correct' ? 'bg-accent border-2 border-white shadow-[0_8px_32px_rgba(52,199,89,0.4)]' :
+                      lastResult === 'incorrect' ? 'bg-error border-2 border-white shadow-[0_8px_32px_rgba(255,59,48,0.4)]' :
+                      'bg-surface-dark/90 border-2 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'}`}
                 >
-                  {/* Premium Glossy Overlays */}
+                  {/* Glossy top edge */}
                   <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                  
-                  <div className="flex flex-col items-center justify-center gap-2 sm:gap-2.5 md:gap-1.5 relative z-10">
-                    <p className={`text-[10px] sm:text-xs md:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] ${lastResult ? 'text-white drop-shadow-md' : 'text-sky'}`}>
-                      FIND COUNTRY
+
+                  {/* Flag */}
+                  <div className="w-10 h-7 sm:w-12 sm:h-8 flex items-center justify-center relative shrink-0">
+                    <img
+                      src={getFlagUrl(targetCountry.flag)}
+                      alt={`${targetCountry.name} Flag`}
+                      className="w-full h-full object-contain filter drop-shadow-lg relative z-10 brightness-[1.05] rounded-sm"
+                    />
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex flex-col relative z-10">
+                    <p className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] leading-none mb-1 ${lastResult ? 'text-white/80' : 'text-sky'}`}>
+                      FIND
                     </p>
-                    
-                    <div className="flex flex-col items-center justify-center gap-2.5 sm:gap-3 md:gap-3">
-                      <h2 className="text-2xl sm:text-3xl md:text-2xl font-display font-black text-white leading-tight tracking-tighter uppercase drop-shadow-2xl whitespace-nowrap pr-0.5">{targetCountry.name}</h2>
-                      <div className="w-14 h-10 sm:w-16 sm:h-11 md:w-12 md:h-8 flex items-center justify-center relative">
-                        <div className="absolute inset-0 bg-white/20 blur-xl rounded-full scale-150 opacity-50" />
-                        <img 
-                          src={getFlagUrl(targetCountry.flag)} 
-                          alt={`${targetCountry.name} Flag`} 
-                          className="w-full h-full object-contain filter drop-shadow-2xl relative z-10 brightness-[1.05]" 
-                        />
-                      </div>
-                    </div>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white leading-none tracking-tighter uppercase drop-shadow-lg whitespace-nowrap">{targetCountry.name}</h2>
                   </div>
                 </div>
               </div>
@@ -416,11 +414,11 @@ export default function MapDash() {
                 <div className="mb-4 sm:mb-5 md:mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
                   <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
-                  <button 
+                  <button
                     onClick={() => navigate('/games')}
                     className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
                   >
-                    <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" /> 
+                    <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" />
                     Back to Games
                   </button>
                 </div>
@@ -434,13 +432,13 @@ export default function MapDash() {
           <motion.div
             key="finished"
             initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
-            animate={{ 
+            animate={{
               opacity: [0, 1, 1, 1, 1],
               scale: [0.3, 1.15, 0.95, 1.05, 1],
               y: [-300, 20, -15, 5, 0],
               rotate: [-8, 4, -3, 1, 0]
             }}
-            transition={{ 
+            transition={{
               duration: 0.7,
               times: [0, 0.45, 0.65, 0.85, 1],
               ease: "easeOut"
@@ -459,11 +457,11 @@ export default function MapDash() {
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
                 <div className="flex flex-col gap-6">
                   <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
-                  <button 
+                  <button
                     onClick={() => navigate('/games')}
                     className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto py-2"
                   >
-                    <ArrowLeft size={14} className="transition-transform" /> 
+                    <ArrowLeft size={14} className="transition-transform" />
                     Back to Games
                   </button>
                 </div>
@@ -472,12 +470,42 @@ export default function MapDash() {
           </motion.div>
       )}
       </AnimatePresence>
-      <FeedbackOverlay 
-        type={lastResult} 
-        triggerKey={feedbackKey} 
-        subText={lastResult === 'incorrect' ? (wrongSelectionData?.name || undefined) : undefined} 
-        incorrectFlagCode={lastResult === 'incorrect' ? (wrongSelectionData?.flagCode || undefined) : undefined}
-      />
+      {/* Inline feedback toast - compact, doesn't block the map */}
+      <AnimatePresence>
+        {lastResult && gameState === 'playing' && (
+          <motion.div
+            key={`feedback-${feedbackKey}`}
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed top-[7.5rem] sm:top-[8rem] md:top-[8.5rem] left-1/2 -translate-x-1/2 z-[9999] pointer-events-none"
+          >
+            <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border-2 backdrop-blur-xl shadow-lg ${
+              lastResult === 'correct'
+                ? 'bg-accent/90 border-white/60 shadow-accent/30'
+                : 'bg-error/90 border-white/60 shadow-error/30'
+            }`}>
+              {lastResult === 'correct' ? (
+                <Check size={18} className="text-white shrink-0" strokeWidth={3} />
+              ) : (
+                <X size={18} className="text-white shrink-0" strokeWidth={3} />
+              )}
+              <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
+                {lastResult === 'correct' ? 'Correct!' : 'Wrong'}
+              </span>
+              {lastResult === 'incorrect' && wrongSelectionData && (
+                <>
+                  <span className="text-white/50 font-black text-xs">•</span>
+                  <span className="text-white/80 font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
+                    {wrongSelectionData.name}
+                  </span>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

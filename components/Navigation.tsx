@@ -258,13 +258,11 @@ const Navigation: React.FC = () => {
   // 3. Subtle backdrop blur on scroll for legibility
   
   let navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
-  let textColorClass = "text-white"; 
-  let logoBgClass = "bg-gel-blue text-white border border-white/40";
+  let textColorClass = "text-white";
 
   if (isOverMap) {
     textColorClass = "text-[#1A1C1E]"; // Deep dark color for light background
-    logoBgClass = "bg-primary text-white border border-black/5";
-    
+
     if (isScrolled) {
       navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
     } else {
@@ -273,8 +271,7 @@ const Navigation: React.FC = () => {
   } else {
     // Default Mode (Dark Background Pages)
     textColorClass = "text-white";
-    logoBgClass = "bg-gel-blue text-white border border-white/40";
-    
+
     if (isScrolled) {
       navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg transition-[background-color,padding,box-shadow] duration-200";
     } else {
@@ -286,7 +283,6 @@ const Navigation: React.FC = () => {
   if (isMobileMenuOpen) {
     navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
     textColorClass = "text-white";
-    logoBgClass = "bg-primary text-white";
   }
 
   // Logic to hide header on Map Page in Landscape mode
@@ -303,10 +299,7 @@ const Navigation: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
-              <div className={`w-7 h-7 rounded-full transition-all duration-500 relative overflow-hidden flex items-center justify-center shrink-0 ${logoBgClass}`}>
-                <img src={`${import.meta.env.BASE_URL}logo.png`} alt="ExploreCapitals Logo" className="w-full h-full object-contain scale-[1.5] relative z-10 drop-shadow-md" />
-                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
-              </div>
+              <img src={`${import.meta.env.BASE_URL}png/0-STYLE/ExploreCapitalsAppIcon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
               <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
                 Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
               </span>
@@ -315,7 +308,7 @@ const Navigation: React.FC = () => {
 
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-5">
             <div className="flex items-center gap-8 relative">
             {navLinks.map((link) => {
               const active = isActive(link.path);
@@ -348,12 +341,7 @@ const Navigation: React.FC = () => {
             {/* Sliding active indicator */}
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
-            <div className="flex items-center gap-3 border-l border-white/10 pl-8 shrink-0">
-              <Link to="/games" className="shrink-0">
-                <Button variant="primary" size="sm" className="h-9 px-5 border border-white/20 text-[11px] uppercase tracking-wider whitespace-nowrap">
-                  Play Now
-                </Button>
-              </Link>
+            <div className="flex items-center shrink-0 border-l border-white/10 pl-5">
               <AccountMenu />
             </div>
           </div>

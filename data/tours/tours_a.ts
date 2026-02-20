@@ -966,22 +966,22 @@ export const toursA: Record<string, TourData> = {
     introText: "Natural gas vents shoot eternal flames from the rocky ground. Stroll through a capital city where future glass meets ancient stone.",
     stops: [
       {
-        stopName: "Baku Skyline and Old City",
-        imageKeyword: "Baku Skyline and Old City",
+        stopName: "Ateshgah Fire Temple",
+        imageKeyword: "Ateshgah Fire Temple",
         description: [
-          "Baku is a city of layers. The walled Old City (Icherisheher) is a maze of narrow alleys and mosques dating back to the 12th century, featuring the iconic Maiden Tower, a massive stone cylinder whose original purpose remains a mystery.",
-          "Surrounding this ancient core is a city of 19th-century European oil-boom architecture, and beyond that, the futuristic Flame Towers. These three skyscrapers are shaped like tongues of fire and are covered in LED screens that display dancing flames at night.",
-          "This visual contrast represents Azerbaijan perfectly: a nation deeply rooted in history but aggressively modernizing using its vast oil and gas wealth."
+          "On the windswept Absheron Peninsula, a pentagonal stone temple sits atop a natural gas vent that has burned for centuries. Ateshgah, meaning \"Place of Fire,\" was a pilgrimage site for Zoroastrian and Hindu travelers along the ancient Silk Road.",
+          "The temple's central altar features an eternal flame that once erupted naturally from the earth below. Surrounding it are small stone cells where monks and pilgrims would meditate in the glow of the fire, carving Sanskrit and Gurmukhi inscriptions into the walls.",
+          "Industrial gas extraction in the 19th century temporarily silenced the natural flames, but today the temple burns again, fed by a modern pipeline. It remains a powerful symbol of why the ancients called this land the place where the earth itself breathes fire."
         ],
-        question: "What shape do the iconic modern skyscrapers in Baku resemble?",
+        question: "What does the name 'Ateshgah' mean?",
         options: [
-          "Tongues of fire.",
-          "Oil derricks.",
-          "Swords.",
-          "Sails."
+          "Place of Fire.",
+          "House of God.",
+          "Eternal Light.",
+          "Sacred Mountain."
         ],
-        answer: "Tongues of fire.",
-        explanation: "The Flame Towers are designed to look like flames, referencing Azerbaijan's nickname, \"The Land of Fire.\""
+        answer: "Place of Fire.",
+        explanation: "The name comes from Persian, reflecting the site's centuries-old connection to natural gas flames that burn from the earth."
       },
       {
         stopName: "Gobustan Mud Volcanoes",

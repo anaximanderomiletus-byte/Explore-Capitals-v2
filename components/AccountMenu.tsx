@@ -75,7 +75,7 @@ const AccountMenu: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={`shing-btn relative flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all overflow-hidden ${
           isOpen ? 'border-sky-light' : 'border-white/60 hover:border-sky/40'
-        } ${avatar ? avatar.color : 'bg-gel-blue'} text-white font-display font-bold`}
+        } bg-transparent text-white font-display font-bold`}
       >
         {avatar ? (
           <div className="relative z-10">{React.cloneElement(avatar.icon as React.ReactElement, { size: 18 })}</div>
@@ -84,7 +84,6 @@ const AccountMenu: React.FC = () => {
         ) : (
           <span className="text-[10px] tracking-tighter relative z-10">{initials}</span>
         )}
-        <div className="absolute inset-0 bg-glossy-gradient opacity-50 pointer-events-none" />
         <span className="shing-container absolute inset-0 overflow-hidden rounded-full pointer-events-none">
           <span className="shing-glare" />
         </span>

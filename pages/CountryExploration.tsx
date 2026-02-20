@@ -39,11 +39,11 @@ const PhotoPrint: React.FC<{
   return (
     <div className={`relative group max-w-full ${className}`}>
       {/* Liquid Glass Container - TV Style */}
-      <div className={`p-1.5 sm:p-2 bg-black/80 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}>
+      <div className={`p-1.5 sm:p-2 bg-[#141414] rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass shadow-2xl shadow-black/50`}>
         {/* Bezel Gloss */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
-        <div className="w-full aspect-video rounded-xl sm:rounded-[1.8rem] overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
+        <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
           {currentSrc ? (
             <img 
               src={currentSrc} 
@@ -794,7 +794,7 @@ const CountryExploration: React.FC = () => {
                     caption={`${country.capital}, ${country.name}`}
                     region={country.region}
                     rotation="rotate-0"
-                    className="w-full shadow-2xl shadow-black/50"
+                    className="w-full"
                   />
                   {/* Decorative Elements for TV */}
                   <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-48 h-1.5 bg-sky/20 blur-2xl rounded-full" />

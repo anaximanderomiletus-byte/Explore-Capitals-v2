@@ -82,7 +82,7 @@ export const imagesA: Record<string, string> = {
 
   // --- Azerbaijan ---
   "Azerbaijan": "/png/AZERBAIJAN/baku-azerbaijan.png",
-  "Baku Skyline and Old City": "/png/AZERBAIJAN/baku-skyline-and-old-city.png",
+  "Ateshgah Fire Temple": "/png/AZERBAIJAN/ateshgah-fire-temple.png",
   "Gobustan Mud Volcanoes": "/png/AZERBAIJAN/gobustan-mud-volcanoes.png",
   "Yanar Dag": "/png/AZERBAIJAN/yanar-dag.png",
   "Palace of Shaki Khans": "/png/AZERBAIJAN/palace-of-shaki-khans.png",
