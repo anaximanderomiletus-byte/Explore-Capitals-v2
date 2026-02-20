@@ -252,13 +252,13 @@ export default function KnowYourNeighbor() {
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {
-                    btnStyle = "bg-accent/70 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "bg-accent/70 border-2 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else if (isActualNeighbor && !isSelected) {
-                    btnStyle = "bg-warning/40 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "bg-warning/40 border-2 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else if (isSelected && !isActualNeighbor) {
-                    btnStyle = "bg-red-500/70 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "bg-red-500/70 border-2 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
                   } else {
-                    btnStyle = "bg-white/5 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "bg-white/5 border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
                   }
                 } else {
                   if (isSelected) {

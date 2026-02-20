@@ -278,10 +278,10 @@ export default function CurrencyCraze() {
                       
                       let stateStyles = "bg-white/10 border-2 border-white/40 text-white active:bg-white/20 active:border-warning/50";
                       if (selectedAnswer) {
-                        if (isCorrect) stateStyles = "bg-accent/70 border-accent text-white";
-                        else if (isSelected) stateStyles = "bg-red-500/70 border-red-500 text-white";
-                        else if (option === currentQuestion.country.currency) stateStyles = "bg-accent/40 border-accent/80 text-white";
-                        else stateStyles = "bg-white/5 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
+                        if (isCorrect) stateStyles = "bg-accent/70 border-2 border-accent text-white";
+                        else if (isSelected) stateStyles = "bg-red-500/70 border-2 border-red-500 text-white";
+                        else if (option === currentQuestion.country.currency) stateStyles = "bg-accent/40 border-2 border-accent/80 text-white";
+                        else stateStyles = "bg-white/5 border-2 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
                       }
 
                       return (

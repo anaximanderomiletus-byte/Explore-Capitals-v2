@@ -1059,18 +1059,18 @@ const CountryExploration: React.FC = () => {
                              {currentQuestion.options.map((option, idx) => {
                                const isSelected = selectedOption === option;
                                
-                              let stateStyles = "bg-white/5 border border-white/20 text-white/70 hover:bg-white/15 hover:border-sky/50 hover:text-white";
+                              let stateStyles = "bg-white/5 border-2 border-white/20 text-white/70 hover:bg-white/15 hover:border-sky/50 hover:text-white";
 
                               if (isSelected) {
                                  if (isCorrect) {
-                                   stateStyles = "bg-accent/70 border-accent text-white";
+                                   stateStyles = "bg-accent/70 border-2 border-accent text-white";
                                  } else {
-                                   stateStyles = "bg-red-500/60 border-red-500 text-white";
+                                   stateStyles = "bg-red-500/60 border-2 border-red-500 text-white";
                                  }
                               } else if (selectedOption && option === currentQuestion.answer) {
-                                 stateStyles = "bg-accent/40 border-accent/80 text-white"; 
+                                 stateStyles = "bg-accent/40 border-2 border-accent/80 text-white";
                               } else if (selectedOption) {
-                                 stateStyles = "opacity-20 grayscale border-white/5 bg-transparent scale-95 blur-[1px]";
+                                 stateStyles = "opacity-20 grayscale border-2 border-white/5 bg-transparent scale-95 blur-[1px]";
                               }
 
                               return (
