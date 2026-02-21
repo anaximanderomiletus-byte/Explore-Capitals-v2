@@ -268,7 +268,7 @@ export default function TerritoryTitans() {
               <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-8 overflow-hidden relative z-10">
               
               {/* Points and Timer */}
               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -291,17 +291,17 @@ export default function TerritoryTitans() {
                   transition={{ duration: 0.3 }}
                   className="flex-1 flex flex-col min-h-0"
                 >
-                  <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-4 md:pb-16 relative z-10">
+                  <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
                     <p className="text-accent font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80 shrink-0">
                       {currentQuestion.type === 'sovereignty' ? 'IDENTIFY SOVEREIGNTY' : 'IDENTIFY CAPITAL'}
                     </p>
-                    <h3 className="text-xl md:text-4xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] mb-2 md:mb-6 shrink-0">
+                    <h3 className="text-xl md:text-4xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] mb-2 md:mb-4 shrink-0">
                       {currentQuestion.territory.name}
                     </h3>
-                    <img 
+                    <img
                       src={getFlagUrl(currentQuestion.territory.flag)}
                       alt={`${currentQuestion.territory.name} Flag`}
-                      className="max-h-20 md:max-h-40 w-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                      className="max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
                     />
                   </div>
 

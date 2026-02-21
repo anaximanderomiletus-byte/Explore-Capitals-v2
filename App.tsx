@@ -64,21 +64,9 @@ const ScrollToTop: React.FC = () => {
  * Uses a short delay before showing the spinner to avoid flicker on fast loads.
  */
 const PageLoadFallback: React.FC = () => {
-  const [showSpinner, setShowSpinner] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowSpinner(true), 120);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="flex-grow flex flex-col w-full min-h-[60vh] items-center justify-center bg-[#0F172A]">
-      <div
-        className="transition-opacity duration-200"
-        style={{ opacity: showSpinner ? 1 : 0 }}
-      >
-        <div className="w-10 h-10 border-3 border-white/10 border-t-sky rounded-full animate-spin" />
-      </div>
+      <div className="w-8 h-8 border-[2.5px] border-white/10 border-t-sky rounded-full animate-spin" />
     </div>
   );
 };
@@ -94,9 +82,8 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15, ease: "easeOut" }}
+      animate={{ opacity: 1, transition: { duration: 0.15, ease: "easeOut" } }}
+      exit={{ opacity: 0, transition: { duration: 0.07 } }}
       className="flex-grow flex flex-col w-full"
     >
       <Suspense fallback={<PageLoadFallback />}>

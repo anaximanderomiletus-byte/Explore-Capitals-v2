@@ -206,7 +206,7 @@ export default function FlagFrenzy() {
                <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-8 overflow-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -229,21 +229,21 @@ export default function FlagFrenzy() {
                    transition={{ duration: 0.3 }}
                    className="flex-1 flex flex-col min-h-0"
                  >
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-4 md:pb-24 relative z-10">
-                      <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-4 md:mb-8 font-sans mt-[-1rem] md:mt-[-2rem] shrink-0">IDENTIFY FLAG</p>
-                      <div className="flex-1 flex items-center justify-center w-full min-h-0 max-h-[140px] relative">
+                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
+                      <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-3 md:mb-4 font-sans shrink-0">IDENTIFY FLAG</p>
+                      <div className="flex-1 flex items-center justify-center w-full min-h-0 relative">
                         {!imgError ? (
-                          <img 
+                          <img
                             src={`/flags/${currentCountryCode}.png`}
                             alt="Target Flag"
-                            className="max-w-full max-h-[100px] md:max-h-[140px] object-contain drop-shadow-2xl transform scale-110 md:scale-105"
+                            className="max-w-full max-h-full object-contain drop-shadow-2xl"
                             onError={() => setImgError(true)}
                           />
                         ) : (
-                          <img 
+                          <img
                             src={getFlagUrl(currentQuestion.country.flag)}
                             alt="Target Flag Fallback"
-                            className="max-w-full max-h-[100px] md:max-h-[140px] object-contain drop-shadow-2xl"
+                            className="max-w-full max-h-full object-contain drop-shadow-2xl"
                           />
                         )}
                       </div>
