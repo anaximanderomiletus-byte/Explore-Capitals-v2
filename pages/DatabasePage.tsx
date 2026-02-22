@@ -72,9 +72,9 @@ const FlagIcon: React.FC<{ country: Country; size: 'small' | 'card' }> = memo(({
   const height = size === 'small' ? 'h-7' : 'h-11';
   
   return (
-    <div className={`${width} ${height} flex items-center justify-center bg-white/5 rounded overflow-hidden`}>
-      <img 
-        src={`/flags/${code}.png`} 
+    <div className={`${width} ${height} flex items-center justify-center`}>
+      <img
+        src={`/flags/${code}.png`}
         alt={`${country.name} Flag`}
         className="w-full h-full object-contain"
         decoding="sync"

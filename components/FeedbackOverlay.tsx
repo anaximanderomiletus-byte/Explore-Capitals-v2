@@ -143,10 +143,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                       <div className="px-5 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
                         {incorrectFlagCode && (
                           <div className="relative flex-shrink-0">
-                            <div className="absolute inset-0 bg-white/20 blur-md rounded-full scale-150 opacity-50" />
-                            <img 
-                              src={`/flags/${incorrectFlagCode}.png`} 
-                              className="w-8 h-5 sm:w-10 sm:h-7 md:w-12 md:h-8 object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] relative z-10 rounded-sm" 
+                            <img
+                              src={`/flags/${incorrectFlagCode}.png`}
+                              className="w-8 h-5 sm:w-10 sm:h-7 md:w-12 md:h-8 object-contain relative z-10"
                               alt=""
                             />
                           </div>

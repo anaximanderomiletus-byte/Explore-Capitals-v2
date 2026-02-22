@@ -21,6 +21,8 @@ import { imagesU } from "./images/images_u";
 import { imagesV } from "./images/images_v";
 import { imagesY } from "./images/images_y";
 import { imagesZ } from "./images/images_z";
+import { imagesTerritories } from "./images/images_territories";
+import { imagesDeFacto } from "./images/images_defacto";
 
 export const STATIC_IMAGES: Record<string, string> = {
   ...imagesA,
@@ -45,5 +47,7 @@ export const STATIC_IMAGES: Record<string, string> = {
   ...imagesU,
   ...imagesV,
   ...imagesY,
-  ...imagesZ
+  ...imagesZ,
+  ...imagesTerritories,
+  ...imagesDeFacto
 };

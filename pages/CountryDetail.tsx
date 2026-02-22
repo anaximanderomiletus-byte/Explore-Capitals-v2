@@ -229,9 +229,8 @@ const CountryDetail: React.FC = () => {
         {/* Country Identity — stacked on mobile, side-by-side on desktop */}
         {/* Desktop: Flag left + text right */}
         <section className="hidden md:flex items-center gap-5 mb-10">
-          <div className="w-[88px] h-[88px] lg:w-[104px] lg:h-[104px] rounded-2xl lg:rounded-3xl overflow-hidden shrink-0 bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none" />
-            <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain p-2.5 lg:p-3 relative z-10 drop-shadow-xl" />
+          <div className="w-[88px] h-[88px] lg:w-[104px] lg:h-[104px] shrink-0 flex items-center justify-center">
+            <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain" />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-4xl xl:text-5xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
@@ -248,7 +247,7 @@ const CountryDetail: React.FC = () => {
             {isTerritory && (country as any).sovereignty && (
               <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] mt-2">
                 Territory of{' '}
-                <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">{(country as any).sovereignty}</button>
+                <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30 uppercase">{(country as any).sovereignty}</button>
               </p>
             )}
             {isDeFacto && (
@@ -263,9 +262,8 @@ const CountryDetail: React.FC = () => {
         {/* Mobile/Tablet: Flag → Name → Badges stacked */}
         <section className="md:hidden mb-8">
           <div className="mb-2.5">
-            <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] rounded-xl overflow-hidden bg-white/10 border-2 border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.4)] backdrop-blur-sm relative">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-15 pointer-events-none" />
-              <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain p-1.5 sm:p-2 relative z-10 drop-shadow-xl" />
+            <div className="w-[64px] h-[64px] sm:w-[72px] sm:h-[72px] flex items-center justify-center">
+              <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain" />
             </div>
           </div>
           <h1 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
@@ -282,7 +280,7 @@ const CountryDetail: React.FC = () => {
           {isTerritory && (country as any).sovereignty && (
             <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.15em] mt-2">
               Territory of{' '}
-              <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30">{(country as any).sovereignty}</button>
+              <button onClick={() => handleSovereigntyClick((country as any).sovereignty)} className="text-sky hover:text-sky-light transition-colors underline underline-offset-2 decoration-sky/30 uppercase">{(country as any).sovereignty}</button>
             </p>
           )}
           {isDeFacto && (

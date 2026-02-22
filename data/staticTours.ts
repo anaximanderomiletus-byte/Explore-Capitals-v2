@@ -22,6 +22,10 @@ import { toursU } from "./tours/tours_u";
 import { toursV } from "./tours/tours_v";
 import { toursY } from "./tours/tours_y";
 import { toursZ } from "./tours/tours_z";
+import { toursTerritoriesAG } from "./tours/tours_territories_ag";
+import { toursTerritoriesHN } from "./tours/tours_territories_hn";
+import { toursTerritoriesPZ } from "./tours/tours_territories_pz";
+import { toursDeFacto } from "./tours/tours_defacto";
 
 export const staticTours: Record<string, TourData> = {
   ...toursA,
@@ -46,5 +50,9 @@ export const staticTours: Record<string, TourData> = {
   ...toursU,
   ...toursV,
   ...toursY,
-  ...toursZ
+  ...toursZ,
+  ...toursTerritoriesAG,
+  ...toursTerritoriesHN,
+  ...toursTerritoriesPZ,
+  ...toursDeFacto
 };

@@ -16,7 +16,7 @@ export const imagesQR: Record<string, string> = {
   "Voronet Monastery": "/png/ROMANIA/voronet-monastery.png",
 
   // --- Russia ---
-  "Russia": "/logo.png",
+  "Russia": "/png/RUSSIA/moscow-russia.png",
   "Saint Basil's Cathedral": "/png/RUSSIA/saint-basils-cathedral.png",
   "Hermitage Museum": "/png/RUSSIA/hermitage-museum.png",
   "Lake Baikal": "/png/RUSSIA/lake-baikal.png",

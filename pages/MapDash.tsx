@@ -378,7 +378,7 @@ export default function MapDash() {
                     <img
                       src={getFlagUrl(targetCountry.flag)}
                       alt={`${targetCountry.name} Flag`}
-                      className="w-full h-full object-contain filter drop-shadow-lg relative z-10 brightness-[1.05] rounded-sm"
+                      className="w-full h-full object-contain relative z-10"
                     />
                   </div>
 
