@@ -32,7 +32,7 @@ const SEO: React.FC<SEOProps> = ({
 
   useEffect(() => {
     // 1. Update Title
-    document.title = fullTitle;
+    document.title = fullTitle.toUpperCase();
 
     // 2. Helper to update or create meta tags
     const setMeta = (name: string, content: string) => {

@@ -783,7 +783,7 @@ const MapPage: React.FC = () => {
   return (
     <div className="fixed inset-0 z-40 bg-surface-dark">
       <SEO 
-        title="Interactive World Map"
+        title="MAP"
         description="Explore an interactive world map with all 195 countries. Click to view capitals, flags, populations, and start guided country expeditions."
       />
       

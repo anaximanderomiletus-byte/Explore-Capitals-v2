@@ -114,9 +114,17 @@ const Home: React.FC = () => {
               }} 
             />
             
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-[540px] lg:h-[540px] flex-shrink-0 pointer-events-none">
+            <div className="relative w-52 h-52 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[600px] lg:h-[600px] flex-shrink-0 pointer-events-none">
               <motion.div
                 className="w-full h-full"
+                animate={{
+                  scale: [1, 1.03, 1],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
                 <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
