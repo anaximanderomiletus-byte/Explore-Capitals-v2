@@ -133,8 +133,11 @@ export default function LanguageLegend() {
   if (!isPremium && gameState === 'start') {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img src={`${import.meta.env.BASE_URL}png/0-GAMES/language-legend.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        </div>
         <SEO title="Language Legend - Premium Game" description="Identify countries by their official languages. A premium geography game." />
-        
+
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
@@ -166,6 +169,9 @@ export default function LanguageLegend() {
 
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/language-legend.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
           <motion.div

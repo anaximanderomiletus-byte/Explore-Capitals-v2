@@ -161,8 +161,11 @@ export default function TerritoryTitans() {
   if (!isPremium && gameState === 'start') {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img src={`${import.meta.env.BASE_URL}png/0-GAMES/territory-titan.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        </div>
         <SEO title="Territory Titans - Premium Game" description="Master autonomous regions and dependencies worldwide. A premium geography game." />
-        
+
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
@@ -194,6 +197,9 @@ export default function TerritoryTitans() {
 
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/territory-titan.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
           <motion.div

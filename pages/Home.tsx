@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap } from 'lucide-react';
+import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
 import { ResponsiveAd } from '../components/AdSense';
+import { MOCK_COUNTRIES } from '../constants';
+import { staticTours } from '../data/staticTours';
+import { STATIC_IMAGES } from '../data/images';
 
 const ParallaxSection: React.FC<{
   children: React.ReactNode;
@@ -41,10 +44,58 @@ const Home: React.FC = () => {
     setPageLoading(false);
   }, [setPageLoading]);
 
+  // Fact of the Day — seeded by today's date so it changes daily
+  const factOfTheDay = useMemo(() => {
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+    // Simple seeded pseudo-random
+    const seededRandom = (s: number) => {
+      const x = Math.sin(s) * 10000;
+      return x - Math.floor(x);
+    };
+
+    // Pick a country that has tour data
+    const countriesWithTours = MOCK_COUNTRIES.filter(c => staticTours[c.name]?.stops?.length > 0);
+    const countryIndex = Math.floor(seededRandom(seed) * countriesWithTours.length);
+    const country = countriesWithTours[countryIndex];
+    const tour = staticTours[country.name];
+
+    // Pick a random stop from that country's tour
+    const stopIndex = Math.floor(seededRandom(seed + 1) * tour.stops.length);
+    const stop = tour.stops[stopIndex];
+
+    // Get the image — use the stop's imageKeyword to look up in STATIC_IMAGES
+    const image = STATIC_IMAGES[stop.imageKeyword] || STATIC_IMAGES[country.name] || '';
+
+    // Pick a fun fact paragraph from the stop's description
+    const factIndex = Math.floor(seededRandom(seed + 2) * stop.description.length);
+    const fact = stop.description[factIndex];
+
+    return { country, stop, image, fact };
+  }, []);
+
   return (
-    <main className="relative flex-grow bg-[#0F172A] w-full">
+    <main className="relative flex-grow bg-[#0F172A] w-full home-glow">
+      <style>{`
+        .home-glow h1, .home-glow h2 {
+          text-shadow: 0 0 40px rgba(0,194,255,0.15), 0 0 80px rgba(0,194,255,0.08);
+        }
+        .home-glow h3 {
+          text-shadow: 0 0 25px rgba(0,194,255,0.12), 0 0 50px rgba(0,194,255,0.06);
+        }
+        .home-glow .glow-badge {
+          box-shadow: 0 0 15px rgba(0,194,255,0.15), 0 0 40px rgba(0,194,255,0.06);
+        }
+        .home-glow .glow-card {
+          box-shadow: 0 0 30px rgba(0,194,255,0.08), 0 0 60px rgba(0,194,255,0.04);
+        }
+        .home-glow .glow-bubble {
+          box-shadow: 0 0 20px rgba(0,194,255,0.2), 0 0 50px rgba(0,194,255,0.08), inset -4px -4px 12px rgba(255,255,255,0.25), inset 4px 4px 8px rgba(255,255,255,0.1);
+        }
+      `}</style>
       <SEO
-        title="ExploreCapitals - Learn World Geography Through Interactive Games"
+        title="EXPLORECAPITALS.COM"
         description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database."
         isHomePage={true}
       />
@@ -78,7 +129,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left lg:col-start-1"
           >
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-xl border-2 border-white/30 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white shadow-premium transition-all hover:bg-white/10 cursor-default">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-xl border-2 border-white/30 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white shadow-premium transition-all hover:bg-white/10 cursor-default glow-badge">
               <Zap size={10} fill="currentColor" className="animate-pulse text-sky sm:w-3 sm:h-3" />
               <span>Free Global Education</span>
             </div>
@@ -106,15 +157,41 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
-            {/* Static glow using radial gradient instead of blur filter to prevent flickering */}
-            <div 
-              className="absolute w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] lg:w-[680px] lg:h-[680px] rounded-full pointer-events-none"
-              style={{ 
-                background: 'radial-gradient(circle, rgba(0,194,255,0.05) 0%, rgba(0,194,255,0.02) 40%, transparent 70%)',
-              }} 
+            {/* Outer faint glow — larger, subtler halo */}
+            <motion.div
+              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[880px] lg:h-[880px] rounded-full pointer-events-none"
+              animate={{
+                opacity: [0.3, 0.5, 0.3],
+                scale: [0.97, 1.03, 0.97],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)',
+              }}
             />
-            
-            <div className="relative w-52 h-52 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[600px] lg:h-[600px] flex-shrink-0 pointer-events-none">
+
+            {/* Bright glow behind the globe (z-plane backlight) */}
+            <motion.div
+              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[720px] lg:h-[720px] rounded-full pointer-events-none"
+              animate={{
+                opacity: [0.6, 1, 0.6],
+                scale: [0.95, 1.05, 0.95],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)',
+              }}
+            />
+
+            <div className="relative w-52 h-52 sm:w-68 sm:h-68 md:w-76 md:h-76 lg:w-[560px] lg:h-[560px] flex-shrink-0 pointer-events-none">
               <motion.div
                 className="w-full h-full"
                 animate={{
@@ -150,7 +227,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
                 </div>
               </motion.div>
@@ -163,7 +240,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                 className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
                 </div>
               </motion.div>
@@ -198,6 +275,76 @@ const Home: React.FC = () => {
         </div>
       </ParallaxSection>
 
+      {/* Fact of the Day */}
+      <ParallaxSection>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] glow-badge">
+              <Zap size={10} fill="currentColor" className="text-sky" />
+              <span>Fact of the Day</span>
+            </div>
+          </div>
+
+          <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden relative group glow-card">
+            {/* Background image */}
+            <div className="absolute inset-0 pointer-events-none">
+              {factOfTheDay.image && (
+                <img
+                  src={`${import.meta.env.BASE_URL}${factOfTheDay.image.startsWith('/') ? factOfTheDay.image.slice(1) : factOfTheDay.image}`}
+                  alt=""
+                  className="w-full h-full object-cover opacity-[0.07] blur-sm scale-110"
+                />
+              )}
+            </div>
+
+            <div className="grid md:grid-cols-[1fr_1.2fr] gap-0 relative z-10">
+              {/* Landmark Image */}
+              <div className="relative aspect-[4/3] md:aspect-auto overflow-hidden">
+                {factOfTheDay.image && (
+                  <img
+                    src={`${import.meta.env.BASE_URL}${factOfTheDay.image.startsWith('/') ? factOfTheDay.image.slice(1) : factOfTheDay.image}`}
+                    alt={factOfTheDay.stop.stopName}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0F172A]/80" />
+                {/* Country badge */}
+                <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 md:bottom-4 md:left-4 flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-md rounded-lg px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-white/10">
+                  <span className="text-base sm:text-lg md:text-xl">{factOfTheDay.country.flag}</span>
+                  <div>
+                    <div className="text-[7px] sm:text-[8px] font-black text-sky uppercase tracking-[0.15em] leading-none">{factOfTheDay.country.region}</div>
+                    <div className="text-xs sm:text-sm md:text-base font-display font-black text-white uppercase tracking-tight leading-none">{factOfTheDay.country.name}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Fact Content */}
+              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center">
+                <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                  <MapPin size={14} className="text-sky shrink-0" />
+                  <h3 className="text-sm sm:text-base md:text-lg font-black text-sky uppercase tracking-wider leading-tight">{factOfTheDay.stop.stopName}</h3>
+                </div>
+                <p className="text-white/60 text-sm sm:text-base md:text-lg leading-relaxed mb-6 sm:mb-8 font-medium">
+                  {factOfTheDay.fact}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link to={`/database/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
+                      Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </ParallaxSection>
 
       <ParallaxSection>
         <div className="max-w-7xl mx-auto">
@@ -244,12 +391,12 @@ const Home: React.FC = () => {
 
       <ParallaxSection>
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white/[0.02] border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group">
+          <div className="bg-white/[0.02] border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group glow-card">
             <div className="absolute inset-0 bg-aurora opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" />
             
             <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center relative z-10">
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-sky/10 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 md:mb-8">
+                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-sky/10 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 md:mb-8 glow-badge">
                   <span>Loyalty Path</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-black text-white mb-3 sm:mb-4 md:mb-8 leading-[0.95] tracking-tighter uppercase">
@@ -267,7 +414,7 @@ const Home: React.FC = () => {
               </div>
 
               <div className="relative">
-                <div className="bg-white/5 border border-white/10 p-4 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] transform transition-all duration-700">
+                <div className="bg-white/5 border border-white/10 p-4 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] transform transition-all duration-700 glow-card">
                   <div className="flex items-center gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-10">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white border border-white/20 relative overflow-hidden flex-shrink-0">
                       <Trophy size={24} className="relative z-10 drop-shadow-lg sm:w-7 sm:h-7 md:w-8 md:h-8" />
@@ -298,11 +445,11 @@ const Home: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center">
+                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
                         <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2">1,240</div>
                         <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Total Pts</div>
                       </div>
-                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center">
+                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
                         <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2">12</div>
                         <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Day Streak</div>
                       </div>
@@ -331,26 +478,87 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-8 lg:gap-10">
             <Link to="/database" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)] glow-card">
+                {/* Database preview background */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-700">
+                  <div className="absolute inset-0 flex flex-col gap-[6px] p-3 sm:p-4 md:p-6 pt-8 sm:pt-10 md:pt-14">
+                    {/* Mock header row */}
+                    <div className="flex items-center gap-2 pb-2 border-b border-white/15 mb-1">
+                      <div className="w-6 h-3 rounded bg-white/25" />
+                      <div className="w-16 h-3 rounded bg-white/25" />
+                      <div className="flex-1" />
+                      <div className="w-12 h-3 rounded bg-white/20" />
+                      <div className="w-14 h-3 rounded bg-white/20" />
+                    </div>
+                    {/* Mock data rows */}
+                    {[...Array(12)].map((_, i) => (
+                      <div key={i} className="flex items-center gap-2 py-[5px] px-2 rounded-lg bg-white/[0.04]">
+                        <div className="w-5 h-4 rounded-sm bg-white/20 shrink-0" />
+                        <div className="h-3 rounded bg-white/25" style={{ width: `${50 + (i * 7) % 40}%` }} />
+                        <div className="flex-1" />
+                        <div className="w-10 h-3 rounded bg-sky/20 shrink-0" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
                   <BookOpen size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10">Database</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10">Nation database with population and cultural data.</p>
-                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10">
+                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>Database</h3>
+                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>Nation database with population and cultural data.</p>
+                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
                   Browse Now <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 </div>
               </div>
             </Link>
 
             <Link to="/map" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)]">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10">
+              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)] glow-card">
+                {/* Map wireframe preview background — SVG continents like Database wireframe */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-700">
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid slice">
+                    {/* Simplified continent outlines */}
+                    <g stroke="white" strokeWidth="0.8" fill="none">
+                      {/* North America */}
+                      <path d="M 100 150 L 120 120 L 140 130 L 130 160 Z" />
+                      {/* South America */}
+                      <path d="M 130 200 L 145 180 L 155 220 Z" />
+                      {/* Europe */}
+                      <path d="M 350 140 L 380 130 L 400 150 L 370 160 Z" />
+                      {/* Africa */}
+                      <path d="M 400 180 L 430 160 L 450 240 L 420 260 Z" />
+                      {/* Asia */}
+                      <path d="M 480 120 L 550 100 L 600 150 L 520 180 Z" />
+                      {/* Australia */}
+                      <path d="M 650 320 L 680 310 L 690 340 L 660 350 Z" />
+                    </g>
+                    {/* Grid lines for map feel */}
+                    <g stroke="white" strokeWidth="0.3" opacity="0.3">
+                      <line x1="0" y1="100" x2="960" y2="100" />
+                      <line x1="0" y1="200" x2="960" y2="200" />
+                      <line x1="0" y1="300" x2="960" y2="300" />
+                      <line x1="0" y1="400" x2="960" y2="400" />
+                      <line x1="200" y1="0" x2="200" y2="500" />
+                      <line x1="400" y1="0" x2="400" y2="500" />
+                      <line x1="600" y1="0" x2="600" y2="500" />
+                      <line x1="800" y1="0" x2="800" y2="500" />
+                    </g>
+                  </svg>
+                  {/* Simulated map markers */}
+                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '30%', left: '15%' }} />
+                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '35%', left: '42%' }} />
+                  <div className="absolute w-1.5 h-1.5 rounded-full bg-accent/20" style={{ top: '50%', left: '45%' }} />
+                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '25%', left: '65%' }} />
+                  <div className="absolute w-1.5 h-1.5 rounded-full bg-warning/20" style={{ top: '65%', left: '70%' }} />
+                </div>
+
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
                   <Compass size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10">Atlas</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10">Explore the world with immersive guided tours.</p>
-                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-accent uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10">
+                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>Atlas</h3>
+                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>Explore the world with immersive guided tours.</p>
+                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-accent uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
                   Open Atlas <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 </div>
               </div>
@@ -417,7 +625,7 @@ const GameCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; c
 }) => (
   <Link to={link} className="group block h-full relative">
     {/* Solid Gel-style background — no backdrop-blur to avoid rendering rectangles on hover/scroll */}
-    <div className={`absolute inset-0 bg-white/10 rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15)]`}>
+    <div className={`absolute inset-0 bg-white/10 rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15),0_0_25px_rgba(0,194,255,0.08),0_0_50px_rgba(0,194,255,0.04)]`}>
       {/* Glossy overlay layer */}
       <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       {/* Accent glow on hover */}

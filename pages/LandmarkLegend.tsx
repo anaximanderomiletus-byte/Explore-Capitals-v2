@@ -281,10 +281,10 @@ export default function LandmarkLegend() {
                <AnimatePresence mode="wait">
                  <motion.div
                    key={questionIndex}
-                   initial={{ opacity: 0, x: 20 }}
-                   animate={{ opacity: 1, x: 0 }}
-                   exit={{ opacity: 0, x: -20 }}
-                   transition={{ duration: 0.3 }}
+                   initial={{ opacity: 0, scale: 0.95, y: 12 }}
+                   animate={{ opacity: 1, scale: 1, y: 0 }}
+                   exit={{ opacity: 0, scale: 0.97, y: -8 }}
+                   transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
                    className="flex-1 flex flex-col min-h-0"
                  >
                    {/* Centered image area */}

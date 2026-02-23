@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2 } from 'lucide-react';
+import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2, Zap, Globe2, MapPin, Trophy } from 'lucide-react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
@@ -88,187 +89,314 @@ const About: React.FC = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
       </div>
 
-      <div className="max-w-5xl mx-auto space-y-12 relative z-10">
+      <div className="max-w-6xl mx-auto space-y-16 md:space-y-24 relative z-10">
         {/* Mission & Hero Section */}
-        <section className="bg-white/5 backdrop-blur-3xl rounded-[3rem] border border-white/20 overflow-hidden relative group">
-          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-          
-          <div className="p-8 md:p-16 relative z-10">
-            <header className="max-w-3xl mb-10 md:mb-14">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-sky/20 border-2 border-white/40 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-6 relative overflow-hidden group/badge">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-20" />
-                <Compass size={12} className="text-sky-light relative z-10" /> 
-                <span className="relative z-10 drop-shadow-md">Our Mission</span>
-              </div>
-              <h1 className="text-4xl md:text-7xl font-display font-black text-white leading-tight mb-5 tracking-tighter uppercase drop-shadow-lg">
-                Redefining the <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Digital Atlas</span>
-              </h1>
-              <p className="text-white/60 text-base md:text-xl leading-relaxed font-bold max-w-2xl">
-                ExploreCapitals is a premier digital gateway designed to bridge the gap between complex global data and high-fidelity interactive education.
-              </p>
-            </header>
+        <section className="relative">
+          {/* Animated background accent */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gradient-to-br from-sky/10 to-accent/5 blur-3xl pointer-events-none"
+          />
 
-            <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch mb-10 md:mb-14">
-              <div className="space-y-6 text-white/50 leading-relaxed text-base font-bold flex flex-col justify-center">
-                <h2 className="text-3xl md:text-4xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-md">Our Story</h2>
-                <div className="space-y-6">
-                  <p className="text-lg md:text-2xl border-l-4 border-sky/30 pl-8 italic leading-relaxed">
-                    We architected ExploreCapitals from a singular vision: geography should be as beautiful as it is informative. Most educational tools prioritize function over form; we choose both.
-                  </p>
-                  <p className="text-lg md:text-2xl border-l-4 border-white/10 pl-8 leading-relaxed">
-                    By leveraging <strong className="text-sky-light font-black">high-fidelity interfaces</strong> and <strong className="text-white font-black">gamified logic</strong>, we've created a premium environment for mastering the global landscape.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                {[
-                  { icon: <Target size={22} />, title: "Precision", text: "Curated datasets for every sovereign nation." },
-                  { icon: <ShieldCheck size={22} />, title: "Security", text: "Encrypted progress and private data protocols." },
-                  { icon: <Microscope size={22} />, title: "Analysis", text: "Deep demographic insights and analytics." },
-                  { icon: <Award size={22} />, title: "Excellence", text: "A new benchmark for digital cartography." },
-                ].map((item, i) => (
-                  <article key={i} className="bg-white/5 backdrop-blur-2xl p-8 rounded-3xl border-2 border-white/20 relative overflow-hidden flex flex-col h-full hover:border-white/40 transition-colors duration-300">
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                    <div className="text-sky mb-6">{item.icon}</div>
-                    <h3 className="font-display font-black text-white text-base mb-2 uppercase tracking-tighter drop-shadow-sm">{item.title}</h3>
-                    <p className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em] leading-relaxed mt-auto">{item.text}</p>
-                  </article>
-                ))}
-              </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky/20 to-accent/10 border-2 border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 relative overflow-hidden group/badge hover:border-white/60 transition-all duration-300">
+              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
+                <Compass size={14} className="text-sky-light relative z-10" />
+              </motion.div>
+              <span className="relative z-10">Welcome to the Mission</span>
             </div>
 
-            {/* Section Divider */}
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14"></div>
+            <h1 className="text-5xl md:text-8xl font-display font-black text-white leading-[1.1] mb-6 tracking-tighter uppercase drop-shadow-xl">
+              Master World<br />
+              <span className="bg-clip-text bg-gradient-to-r from-sky-light via-accent to-sky-light [-webkit-text-fill-color:transparent] animate-pulse">Geography</span>
+            </h1>
 
-            {/* Support Section */}
-            <div id="support" className="scroll-mt-32 relative z-10 mb-10 md:mb-14">
-              <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Support Us</h2>
-              <p className="text-white/50 text-sm md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
-                ExploreCapitals is a passion project. Your support helps cover server costs and keeps the game free for everyone.
-              </p>
+            <p className="text-lg md:text-2xl text-white/70 leading-relaxed font-bold max-w-3xl">
+              High-fidelity maps, precision data, and competitive challenges.
+            </p>
+          </motion.div>
 
-              {/* Status Messages */}
-              {donationStatus && (
-                <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-400 text-sm font-bold">
-                  {donationStatus}
-                </div>
-              )}
-              {donationError && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-bold">
-                  {donationError}
-                </div>
-              )}
-
-              <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-pink-500/30 transition-all duration-500 relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                <div className="flex flex-col md:flex-row items-start gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-500 border-2 border-white/30 shrink-0">
-                    <Heart size={32} strokeWidth={2} className={user?.isSupporter ? "fill-current" : ""} />
+          {/* Story & Pillars Grid */}
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch mt-16">
+            {/* Story Section */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="space-y-8"
+            >
+              <div>
+                <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase mb-6 leading-none drop-shadow-md">The Platform</h2>
+                <div className="space-y-5">
+                  <div className="text-xl md:text-2xl text-white/80 leading-relaxed font-bold border-l-4 border-sky/60 pl-6 py-2">
+                    Vetted datasets, immersive cartography, and a ranking system that rewards mastery.
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg md:text-xl font-black text-white mb-2 uppercase tracking-tight">
-                      {user?.isSupporter ? "Thank You for Your Support!" : "Become a Supporter"}
-                    </h3>
-                    <p className="text-white/50 text-sm leading-relaxed font-bold mb-6">
-                      {user?.isSupporter 
-                        ? "Your contribution helps keep ExploreCapitals running. You have a special supporter badge on your profile!"
-                        : "Choose an amount below to support the project. All supporters receive a special badge on their profile."
-                      }
-                    </p>
-                    
-                    <div className="grid grid-cols-3 gap-4 max-w-md">
-                      {[5, 10, 20].map((amount) => (
-                        <button
-                          key={amount}
-                          onClick={() => handleDonation(amount)}
-                          disabled={donationBusy}
-                          className="py-4 px-4 bg-white/5 hover:bg-pink-500/20 border-2 border-white/20 hover:border-pink-500/40 rounded-2xl text-base font-black text-white uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                          {donationBusy ? (
-                            <Loader2 size={18} className="animate-spin" />
-                          ) : (
-                            `$${amount}`
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-[10px] text-white/30 mt-4 uppercase tracking-[0.2em] font-bold">
-                      Secure payment via Stripe
-                    </p>
+                  <div className="text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
+                    We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Section Divider */}
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-10 md:my-14"></div>
-
-            {/* Contact Section */}
-            <div id="contact" className="scroll-mt-32 relative z-10">
-              <h2 className="text-2xl md:text-5xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact</h2>
-              <p className="text-white/50 text-sm md:text-lg font-bold mb-8 max-w-2xl leading-relaxed">
-                Direct all inquiries, technical feedback, or partnership requests to <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-white transition-all underline underline-offset-8 decoration-sky/30 hover:decoration-white/50">anaximanderomiletus@gmail.com</a>.
-              </p>
-
-              {/* Protocols */}
-              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                  <div className="w-14 h-14 rounded-2xl bg-sky/20 flex items-center justify-center text-sky border-2 border-white/30">
-                    <ShieldCheck size={28} strokeWidth={2} />
+            {/* Four Pillars - Fun Cards */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6"
+            >
+              {[
+                { icon: <Trophy size={24} />, title: "Competitive", text: "Ranking and mastery tracking", color: "from-accent/30 to-accent/10", iconBg: "bg-accent/20", textColor: "text-accent" },
+                { icon: <MapPin size={24} />, title: "Authoritative", text: "Verified geography data", color: "from-sky/30 to-sky/10", iconBg: "bg-sky/20", textColor: "text-sky" },
+                { icon: <Zap size={24} />, title: "Immersive", text: "High-fidelity cartography", color: "from-warning/30 to-warning/10", iconBg: "bg-warning/20", textColor: "text-warning" },
+                { icon: <Globe2 size={24} />, title: "Rigorous", text: "Professional-grade tools", color: "from-gel-blue/30 to-gel-blue/10", iconBg: "bg-gel-blue/20", textColor: "text-gel-blue" },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
+                  whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.4)' }}
+                  className={`bg-gradient-to-br ${item.color} p-6 md:p-8 rounded-2xl md:rounded-3xl border-2 border-white/20 relative overflow-hidden flex flex-col h-full transition-all duration-300 group cursor-default`}
+                >
+                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+                  <div className={`${item.iconBg} w-12 h-12 rounded-xl flex items-center justify-center ${item.textColor} mb-4 relative z-10 group-hover:scale-110 transition-transform`}>
+                    {item.icon}
                   </div>
-                  <div>
-                    <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-2">Privacy Protocol</h4>
-                    <p className="text-sm text-white/60 leading-relaxed font-bold">
-                      User data is handled with strict encryption standards. We never share archives with third-party entities.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="group bg-white/5 p-8 rounded-[2rem] border-2 border-white/20 hover:border-white/40 hover:bg-white/10 transition-all duration-500 flex flex-col items-start gap-5 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                  <div className="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center text-accent border-2 border-white/30">
-                    <Clock size={28} strokeWidth={2} />
-                  </div>
-                  <div>
-                    <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] mb-2">Response Time</h4>
-                    <p className="text-sm text-white/60 leading-relaxed font-bold">
-                      Our mission control aims to process and respond to all frequency transmissions within 24-48 business hours.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <h3 className="font-display font-black text-white text-lg mb-1 uppercase tracking-tight relative z-10">{item.title}</h3>
+                  <p className="text-white/60 text-sm font-bold relative z-10">{item.text}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Bottom Banner - Expedition Call to Action */}
-          <section className="bg-white/10 backdrop-blur-3xl p-10 md:p-14 text-center border-t border-white/20 relative overflow-hidden group/banner">
-             <div className="absolute inset-0 bg-aurora opacity-30 group-hover/banner:opacity-60 transition-opacity duration-300 group-hover/banner:duration-1000 ease-in-out pointer-events-none" />
-             <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-             
-             <div className="relative z-10 max-w-3xl mx-auto">
-                <h2 className="text-3xl md:text-6xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">Start Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-light via-white to-sky-light">Expedition</span></h2>
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                    <Link to="/map" className="w-full sm:w-auto">
-                      <Button variant="secondary" size="lg" className="h-16 px-14 text-lg w-full uppercase tracking-[0.2em] font-black border-white/40">
-                        Open Map
-                      </Button>
-                    </Link>
-                    <Link to="/games" className="w-full sm:w-auto">
-                      <Button 
-                        variant="primary" 
-                        size="lg" 
-                        className="h-16 px-12 text-xl w-full uppercase tracking-[0.2em] flex items-center justify-center font-black"
-                      >
-                        Play Now <Compass size={24} className="ml-4 shrink-0 drop-shadow-md" />
-                      </Button>
-                    </Link>
-                </div>
-             </div>
-          </section>
+          {/* Decorative Section Divider */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="h-1 w-full bg-gradient-to-r from-transparent via-sky/30 to-transparent my-16 md:my-20 origin-left"
+          ></motion.div>
         </section>
+
+        {/* Support Section */}
+        <motion.section
+          id="support"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="scroll-mt-32 relative"
+        >
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Support the Mission</h2>
+            <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
+              ExploreCapitals remains free and ad-free. Your contribution covers infrastructure costs and funds ongoing map improvements.
+            </p>
+          </div>
+
+          {/* Status Messages */}
+          {donationStatus && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 md:p-6 bg-green-500/10 border-2 border-green-500/30 rounded-2xl text-green-400 text-sm md:text-base font-bold"
+            >
+              ✨ {donationStatus}
+            </motion.div>
+          )}
+          {donationError && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 md:p-6 bg-red-500/10 border-2 border-red-500/30 rounded-2xl text-red-400 text-sm md:text-base font-bold"
+            >
+              ⚠️ {donationError}
+            </motion.div>
+          )}
+
+          <motion.div
+            whileHover={{ borderColor: 'rgba(236, 72, 153, 0.5)', scale: 1.02 }}
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 30,
+              mass: 0.8
+            }}
+            className="group bg-gradient-to-br from-pink-500/20 to-pink-500/5 p-8 md:p-12 rounded-3xl border-2 border-white/20 hover:border-pink-500/40 transition-[border-color] duration-150 relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-pink-500/10 blur-3xl pointer-events-none"
+            />
+
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12 relative z-10">
+              <motion.div
+                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br from-pink-500/40 to-pink-500/10 flex items-center justify-center text-pink-400 border-2 border-white/30 shrink-0"
+              >
+                <Heart size={40} className={user?.isSupporter ? "fill-current" : ""} strokeWidth={1.5} />
+              </motion.div>
+
+              <div className="flex-1">
+                <h3 className="text-2xl md:text-3xl font-black text-white mb-3 uppercase tracking-tight">
+                  {user?.isSupporter ? "You're Supporting ExploreCapitals" : "Support the Project"}
+                </h3>
+                <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold mb-8">
+                  {user?.isSupporter
+                    ? "Your contribution directly funds server infrastructure and new geographic datasets. Supporters receive a badge on their profile."
+                    : "Choose an amount to support ongoing development. All supporters are recognized on their profile as contributors to geographic education."
+                  }
+                </p>
+
+                <div className="grid grid-cols-3 gap-4 max-w-xs">
+                  {[5, 10, 20].map((amount) => (
+                    <motion.button
+                      key={amount}
+                      whileHover={{ y: -2, boxShadow: '0 12px 24px rgba(236, 72, 153, 0.2)' }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleDonation(amount)}
+                      disabled={donationBusy}
+                      className="py-4 px-4 bg-gradient-to-br from-pink-500/20 to-pink-500/5 hover:from-pink-500/30 hover:to-pink-500/10 border-2 border-white/20 hover:border-pink-500/40 rounded-2xl text-base font-black text-white uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {donationBusy ? (
+                        <Loader2 size={18} className="animate-spin" />
+                      ) : (
+                        <span>${amount}</span>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+                <p className="text-[10px] md:text-xs text-white/40 mt-4 uppercase tracking-[0.2em] font-bold">
+                  🔒 Secure payment via Stripe
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </motion.section>
+
+        {/* Decorative Section Divider */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          transition={{ duration: 0.8 }}
+          className="h-1 w-full bg-gradient-to-r from-transparent via-accent/30 to-transparent origin-left"
+        ></motion.div>
+
+        {/* Contact Section */}
+        <motion.section
+          id="contact"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="scroll-mt-32 relative"
+        >
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact & Support</h2>
+            <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
+              Questions, feedback, or partnership inquiries: <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-sky transition-all underline underline-offset-4">anaximanderomiletus@gmail.com</a>
+            </p>
+          </div>
+
+          {/* Info Cards */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              {
+                icon: <ShieldCheck size={28} />,
+                title: "Privacy & Security",
+                text: "User data is encrypted end-to-end. We never share or sell personal information.",
+                color: "from-sky/30 to-sky/10",
+                iconBg: "bg-sky/20",
+                textColor: "text-sky"
+              },
+              {
+                icon: <Zap size={28} />,
+                title: "Response Commitment",
+                text: "We respond to all inquiries within 24-48 business hours.",
+                color: "from-accent/30 to-accent/10",
+                iconBg: "bg-accent/20",
+                textColor: "text-accent"
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -4 }}
+                className={`group bg-gradient-to-br ${item.color} p-8 md:p-10 rounded-3xl border-2 border-white/20 hover:border-white/40 transition-all duration-300 flex flex-col items-start gap-6 relative overflow-hidden`}
+              >
+                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+                <div className={`${item.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center ${item.textColor} border-2 border-white/30 relative z-10 group-hover:scale-110 transition-transform`}>
+                  {item.icon}
+                </div>
+                <div>
+                  <h4 className="text-lg md:text-xl font-black text-white mb-2 uppercase tracking-tight relative z-10">{item.title}</h4>
+                  <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold relative z-10">
+                    {item.text}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Bottom Banner - Call to Action */}
+        <motion.section
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="bg-gradient-to-br from-sky/20 via-accent/10 to-transparent p-10 md:p-16 text-center rounded-3xl border-2 border-white/20 relative overflow-hidden group/banner"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-gradient-to-br from-sky/10 to-accent/5 blur-3xl pointer-events-none"
+          />
+          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
+
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <motion.h2
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-4xl md:text-7xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg"
+            >
+              Ready to Learn<br />the World?
+            </motion.h2>
+
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/games" className="block">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    className="h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center gap-3"
+                  >
+                    Play Now <Compass size={22} className="shrink-0" />
+                  </Button>
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/map" className="block">
+                  <Button variant="secondary" size="lg" className="h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl uppercase tracking-[0.15em] font-black border-white/40">
+                    Explore Map
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
       </div>
     </main>
   );
