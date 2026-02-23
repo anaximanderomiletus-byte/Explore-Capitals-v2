@@ -37,9 +37,15 @@ const CountryDetail: React.FC = () => {
     setPageLoading(false);
   }, [setPageLoading]);
   
-  const country = useMemo(() => MOCK_COUNTRIES.find(c => c.id === id) || TERRITORIES.find(t => t.id === id) || DE_FACTO_COUNTRIES.find(d => d.id === id), [id]);
-  const isTerritory = useMemo(() => TERRITORIES.some(t => t.id === id), [id]);
-  const isDeFacto = useMemo(() => DE_FACTO_COUNTRIES.some(d => d.id === id), [id]);
+  const toSlug = (name: string) => name.toLowerCase().replace(/\s+/g, '-');
+  const country = useMemo(() => {
+    // Match by numeric id first, then by name slug
+    return MOCK_COUNTRIES.find(c => c.id === id || toSlug(c.name) === id)
+      || TERRITORIES.find(t => t.id === id || toSlug(t.name) === id)
+      || DE_FACTO_COUNTRIES.find(d => d.id === id || toSlug(d.name) === id);
+  }, [id]);
+  const isTerritory = useMemo(() => TERRITORIES.some(t => t.id === id || toSlug(t.name) === id), [id]);
+  const isDeFacto = useMemo(() => DE_FACTO_COUNTRIES.some(d => d.id === id || toSlug(d.name) === id), [id]);
 
   const controlledTerritories = useMemo(() => {
     if (!country || isTerritory || isDeFacto) return [];

@@ -191,7 +191,7 @@ const Home: React.FC = () => {
               }}
             />
 
-            <div className="relative w-52 h-52 sm:w-68 sm:h-68 md:w-76 md:h-76 lg:w-[560px] lg:h-[560px] flex-shrink-0 pointer-events-none">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[600px] lg:h-[600px] flex-shrink-0 pointer-events-none">
               <motion.div
                 className="w-full h-full"
                 animate={{
@@ -208,7 +208,7 @@ const Home: React.FC = () => {
                   <img
                     src={`${import.meta.env.BASE_URL}png/0-STYLE/explorecapitals-globe-favicon.png`}
                     alt="Globe - Click to explore the map"
-                    className="w-full h-full object-contain"
+                    className="w-[82%] h-[82%] object-contain"
                     loading="eager"
                     fetchPriority="high"
                   />
@@ -334,7 +334,7 @@ const Home: React.FC = () => {
                   {factOfTheDay.fact}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link to={`/database/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <Link to={`/country/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
                     <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
                       Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
                     </Button>

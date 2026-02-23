@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
-import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
 import { VerticalSidebarAd } from '../components/AdSense';
 import { createCheckoutSession } from '../services/payment';
 
@@ -13,7 +13,7 @@ const About: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { hash } = useLocation();
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+  const { userProfile } = useUser();
   
   // Donation state
   const [donationBusy, setDonationBusy] = useState(false);
@@ -89,7 +89,7 @@ const About: React.FC = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
       </div>
 
-      <div className="max-w-6xl mx-auto space-y-16 md:space-y-24 relative z-10">
+      <div className="max-w-6xl mx-auto space-y-12 md:space-y-16 relative z-10">
         {/* Mission & Hero Section */}
         <section className="relative">
           {/* Animated background accent */}
@@ -124,13 +124,13 @@ const About: React.FC = () => {
           </motion.div>
 
           {/* Story & Pillars Grid */}
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-stretch mt-16">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mt-16">
             {/* Story Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="space-y-8"
+              className="space-y-5"
             >
               <div>
                 <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase mb-6 leading-none drop-shadow-md">The Platform</h2>
@@ -138,8 +138,11 @@ const About: React.FC = () => {
                   <div className="text-xl md:text-2xl text-white/80 leading-relaxed font-bold border-l-4 border-sky/60 pl-6 py-2">
                     Vetted datasets, immersive cartography, and a ranking system that rewards mastery.
                   </div>
-                  <div className="text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
+                  <div className="hidden lg:block text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
                     We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
+                  </div>
+                  <div className="hidden lg:block text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
+                    Every dataset is <strong className="text-sky-light">sourced and verified</strong>. Every interaction is designed to <strong className="text-accent">reinforce retention</strong>. Whether you're a student, educator, or geography enthusiast — this platform is <strong className="text-white">built for depth</strong>.
                   </div>
                 </div>
               </div>
@@ -156,18 +159,17 @@ const About: React.FC = () => {
                 { icon: <Trophy size={24} />, title: "Competitive", text: "Ranking and mastery tracking", color: "from-accent/30 to-accent/10", iconBg: "bg-accent/20", textColor: "text-accent" },
                 { icon: <MapPin size={24} />, title: "Authoritative", text: "Verified geography data", color: "from-sky/30 to-sky/10", iconBg: "bg-sky/20", textColor: "text-sky" },
                 { icon: <Zap size={24} />, title: "Immersive", text: "High-fidelity cartography", color: "from-warning/30 to-warning/10", iconBg: "bg-warning/20", textColor: "text-warning" },
-                { icon: <Globe2 size={24} />, title: "Rigorous", text: "Professional-grade tools", color: "from-gel-blue/30 to-gel-blue/10", iconBg: "bg-gel-blue/20", textColor: "text-gel-blue" },
+                { icon: <Globe2 size={24} />, title: "Rigorous", text: "Professional-grade tools", color: "from-purple-500/30 to-purple-500/10", iconBg: "bg-purple-500/20", textColor: "text-purple-400" },
               ].map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
-                  whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.4)' }}
-                  className={`bg-gradient-to-br ${item.color} p-6 md:p-8 rounded-2xl md:rounded-3xl border-2 border-white/20 relative overflow-hidden flex flex-col h-full transition-all duration-300 group cursor-default`}
+                  className={`bg-gradient-to-br ${item.color} p-6 md:p-8 rounded-2xl md:rounded-3xl border-2 border-white/20 hover:border-white/40 hover:-translate-y-1 relative overflow-hidden flex flex-col h-full transition-all duration-150 group cursor-default`}
                 >
                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-                  <div className={`${item.iconBg} w-12 h-12 rounded-xl flex items-center justify-center ${item.textColor} mb-4 relative z-10 group-hover:scale-110 transition-transform`}>
+                  <div className={`${item.iconBg} w-12 h-12 rounded-xl flex items-center justify-center ${item.textColor} mb-4 relative z-10 group-hover:scale-110 transition-transform duration-150`}>
                     {item.icon}
                   </div>
                   <h3 className="font-display font-black text-white text-lg mb-1 uppercase tracking-tight relative z-10">{item.title}</h3>
@@ -177,12 +179,24 @@ const About: React.FC = () => {
             </motion.div>
           </div>
 
+          {/* Supporting Text - Mobile/Tablet Only */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:hidden mt-8 max-w-3xl"
+          >
+            <p className="text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
+              We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
+            </p>
+          </motion.div>
+
           {/* Decorative Section Divider */}
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="h-1 w-full bg-gradient-to-r from-transparent via-sky/30 to-transparent my-16 md:my-20 origin-left"
+            className="h-1 w-full bg-gradient-to-r from-transparent via-sky/30 to-transparent mt-10 md:mt-12 mb-0 origin-left"
           ></motion.div>
         </section>
 
@@ -244,15 +258,15 @@ const About: React.FC = () => {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br from-pink-500/40 to-pink-500/10 flex items-center justify-center text-pink-400 border-2 border-white/30 shrink-0"
               >
-                <Heart size={40} className={user?.isSupporter ? "fill-current" : ""} strokeWidth={1.5} />
+                <Heart size={40} className={userProfile?.isSupporter ? "fill-current" : ""} strokeWidth={1.5} />
               </motion.div>
 
               <div className="flex-1">
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 uppercase tracking-tight">
-                  {user?.isSupporter ? "You're Supporting ExploreCapitals" : "Support the Project"}
+                  {userProfile?.isSupporter ? "You're Supporting ExploreCapitals" : "Support the Project"}
                 </h3>
                 <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold mb-8">
-                  {user?.isSupporter
+                  {userProfile?.isSupporter
                     ? "Your contribution directly funds server infrastructure and new geographic datasets. Supporters receive a badge on their profile."
                     : "Choose an amount to support ongoing development. All supporters are recognized on their profile as contributors to geographic education."
                   }
