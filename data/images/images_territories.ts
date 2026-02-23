@@ -292,7 +292,6 @@ export const imagesTerritories: Record<string, string> = {
   "Sint Maarten": "/png/SINT-MAARTEN/philipsburg-sint-maarten.png",
   "Maho Beach": "/png/SINT-MAARTEN/maho-beach.png",
   "Philipsburg boardwalk": "/png/SINT-MAARTEN/philipsburg-boardwalk.png",
-  "Loterie Farm": "/png/SINT-MAARTEN/loterie-farm.png",
   "Fort Amsterdam": "/png/SINT-MAARTEN/fort-amsterdam.png",
   "Great Bay Beach": "/png/SINT-MAARTEN/great-bay-beach.png",
 
