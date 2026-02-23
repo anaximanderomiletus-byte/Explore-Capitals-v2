@@ -119,15 +119,16 @@ const Home: React.FC = () => {
                 className="w-full h-full"
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
-                <Link to="/map" className="w-full h-full bg-white/5 rounded-full border-2 border-white/40 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-4px_-4px_12px_rgba(255,255,255,0.25),inset_4px_4px_8px_rgba(255,255,255,0.1)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
-                  <img 
-                    src={`${import.meta.env.BASE_URL}logo.png`} 
-                    alt="Globe - Click to explore the map" 
-                    className="w-full h-full object-contain scale-[1.35]"
+                <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                  <img
+                    src={`${import.meta.env.BASE_URL}png/0-STYLE/explorecapitals-globe-favicon.png`}
+                    alt="Globe - Click to explore the map"
+                    className="w-full h-full object-contain"
                     loading="eager"
                     fetchPriority="high"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
+                  <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
                 </Link>
               </motion.div>
               
