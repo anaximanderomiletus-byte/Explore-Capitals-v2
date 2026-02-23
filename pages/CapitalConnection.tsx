@@ -215,6 +215,9 @@ export default function CapitalConnection() {
 
     return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/capital-connection.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
           <motion.div
@@ -233,8 +236,8 @@ export default function CapitalConnection() {
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
             <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
-          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden">
-            <Network size={36} className="relative z-10" />
+          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Connection</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>

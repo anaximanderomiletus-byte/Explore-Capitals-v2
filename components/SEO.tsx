@@ -23,16 +23,26 @@ const SEO: React.FC<SEOProps> = ({
   isHomePage = false
 }) => {
   const siteName = "ExploreCapitals";
-  // For home page, use title as-is. For other pages, append site name if not already included
-  const fullTitle = isHomePage 
-    ? title 
-    : title.includes(siteName) 
-      ? title 
+  const siteDomain = "ExploreCapitals.com";
+  // For home page, use title as-is. For other pages, append site domain
+  const fullTitle = isHomePage
+    ? title
+    : title.includes(siteName)
+      ? title
       : `${title} | ${siteName}`;
 
+  // Browser tab title: strip category suffixes (e.g. " - Games", " - Premium Game") and use .com domain
+  const browserTitle = isHomePage
+    ? title
+    : (() => {
+        // Remove category suffixes like " - Games", " - Premium Game", " - Playing", " - Expedition"
+        const cleanName = title.replace(/\s*-\s*(Games|Premium Game|Playing|Expedition|Premium)$/i, '');
+        return `${cleanName} | ${siteDomain}`;
+      })();
+
   useEffect(() => {
-    // 1. Update Title
-    document.title = fullTitle.toUpperCase();
+    // 1. Update Title (all caps for browser tab)
+    document.title = browserTitle.toUpperCase();
 
     // 2. Helper to update or create meta tags
     const setMeta = (name: string, content: string) => {

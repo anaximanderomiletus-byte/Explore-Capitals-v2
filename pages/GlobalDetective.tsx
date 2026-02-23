@@ -140,6 +140,9 @@ export default function GlobalDetective() {
 
   return (
     <div className="h-[100dvh] min-h-screen w-full relative overflow-hidden font-sans bg-surface-dark">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/global-detective.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <SEO title="Global Detective - Games" description="Can you guess the mystery country from clues? Use deduction skills to identify nations based on hints about their geography and culture." />
       
       <div className="absolute inset-0 -z-10">
@@ -159,8 +162,8 @@ export default function GlobalDetective() {
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
               <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
-          <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30 relative overflow-hidden transition-transform duration-700">
-            <Search size={36} className="relative z-10" />
+          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/global-detective.png`} alt="Global Detective" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Global Detective</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>

@@ -121,16 +121,19 @@ export default function DrivingDirection() {
   if (!isPremium && gameState === 'start') {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        </div>
         <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
-        
+
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
         </div>
 
         <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
-          <div className="w-20 h-20 bg-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-amber-500/30">
-            <Lock size={36} className="text-amber-400" />
+          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
+            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
           <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
@@ -154,6 +157,9 @@ export default function DrivingDirection() {
 
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
           <motion.div
@@ -176,8 +182,8 @@ export default function DrivingDirection() {
               <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <Crown size={10} /> Premium
               </div>
-              <div className="w-20 h-20 bg-sky/20 rounded-2xl flex items-center justify-center mx-auto mb-8 text-sky border border-white/30">
-                <Car size={36} />
+              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+                <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
               <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>

@@ -136,8 +136,8 @@ export default function CurrencyCraze() {
         </div>
 
         <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
-          <div className="w-20 h-20 bg-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-amber-500/30">
-            <Lock size={36} className="text-amber-400" />
+          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
+            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/currency-craze.png`} alt="Currency Craze" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Currency Craze</h1>
           <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
@@ -184,8 +184,8 @@ export default function CurrencyCraze() {
               <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <Crown size={10} /> Premium
               </div>
-              <div className="w-20 h-20 bg-warning rounded-full flex items-center justify-center mx-auto mb-8 text-white border border-white/40 relative overflow-hidden transition-transform duration-700">
-                <Coins size={36} className="relative z-10 drop-shadow-lg" />
+              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+                <img src={`${import.meta.env.BASE_URL}png/0-GAMES/currency-craze.png`} alt="Currency Craze" className="w-full h-full object-cover" />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Currency Craze</h1>
               <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Match countries to their currencies.</p>

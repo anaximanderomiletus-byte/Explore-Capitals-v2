@@ -268,6 +268,9 @@ export default function MapDash() {
 
   return (
     <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+      </div>
       <SEO title="Map Dash - Games" description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out." />
       
       <style>{`
@@ -406,8 +409,8 @@ export default function MapDash() {
             <GameSideAds />
             <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md">
               <div className="w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-sky/20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 md:mb-8 text-sky border border-white/30">
-                  <MapIcon size={28} className="sm:w-8 sm:h-8 md:w-9 md:h-9 relative z-10" />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl mx-auto mb-5 sm:mb-6 md:mb-8 border border-white/30 relative overflow-hidden">
+                  <img src={`${import.meta.env.BASE_URL}png/0-GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-1.5 sm:mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
                 <p className="text-white/60 text-[9px] sm:text-[10px] mb-4 sm:mb-5 md:mb-6 font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
