@@ -384,10 +384,10 @@ const CountryDetail: React.FC = () => {
         {/* Gradient divider */}
         <div className={`h-px bg-gradient-to-r from-transparent via-white/10 to-transparent ${isTerritory || isDeFacto ? 'my-6 sm:my-8' : 'my-8 sm:my-10'}`} />
 
-        {/* Coordinates + Actions — flanked by polaroids on desktop (polaroids hidden for territories/de facto) */}
+        {/* Coordinates + Actions — flanked by polaroids on desktop */}
         <section>
-          {/* Mobile/Tablet: Tour location photograph (hide for territories/de facto) */}
-          {!isTerritory && !isDeFacto && expeditionPhotos[1] && (
+          {/* Mobile/Tablet: Tour location photograph */}
+          {expeditionPhotos[1] && (
             <div className="md:hidden flex justify-center mb-8">
               <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-1 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-[280px]">
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
@@ -403,11 +403,17 @@ const CountryDetail: React.FC = () => {
               </div>
             </div>
           )}
-          <div className={`${isTerritory || isDeFacto ? '' : 'md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6 lg:gap-8 md:items-center'}`}>
-            {/* Left polaroid (desktop only, hide for territories/de facto) */}
-            {!isTerritory && !isDeFacto && expeditionPhotos[0] && (
+        </section>
+      </div>
+
+      {/* Full-width polaroid + CTA section — breaks out of max-w-4xl for wider photos */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
+        <section>
+          <div className="md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 lg:gap-12 md:items-center">
+            {/* Left polaroid (desktop only) */}
+            {expeditionPhotos[0] && (
               <div className="hidden md:flex justify-center">
-                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[220px] lg:max-w-[240px]">
+                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] lg:max-w-[280px]">
                   <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
                   <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
                     <img src={expeditionPhotos[0].image} alt={expeditionPhotos[0].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
@@ -423,9 +429,9 @@ const CountryDetail: React.FC = () => {
             )}
 
             {/* Center: coordinates + CTA */}
-            <div className={`flex flex-col items-center text-center ${isTerritory || isDeFacto ? 'gap-3 sm:gap-4 py-0' : 'gap-6 sm:gap-7 py-2 md:px-2 lg:px-4'}`}>
+            <div className="flex flex-col items-center text-center gap-6 sm:gap-7 py-2 md:px-2 lg:px-4">
               {/* Coordinates */}
-              <div className={`flex flex-col items-center ${isTerritory || isDeFacto ? 'gap-1.5' : 'gap-2.5'}`}>
+              <div className="flex flex-col items-center gap-2.5">
                 <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Coordinates</span>
                 <div className="inline-flex items-center gap-3 sm:gap-5">
                   <span className="font-display font-black text-sm sm:text-base tracking-[0.08em] text-white/70 tabular-nums">
@@ -438,8 +444,8 @@ const CountryDetail: React.FC = () => {
                 </div>
               </div>
 
-              {/* Expedition CTA */}
-              {!isTerritory && !isDeFacto && (
+              {/* Expedition CTA — show for all entries that have tour data */}
+              {staticTours[country.name]?.stops?.length > 0 && (
                 <Link to={`/expedition/${country.id}`} className="w-full sm:w-auto">
                   <Button variant="primary" size="md" className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-14 text-sm sm:text-base text-white border border-white/20 rounded-full">
                     <span className="flex items-center gap-3">
@@ -458,22 +464,20 @@ const CountryDetail: React.FC = () => {
                 VIEW ON MAP
               </Link>
 
-              {/* Back to Directory — inline for territories/de facto (compact layout) */}
-              {(isTerritory || isDeFacto) && (
-                <button
-                  onClick={() => navigate('/database')}
-                  className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/15 hover:text-white/40 transition-colors mt-1"
-                >
-                  <ArrowLeft size={12} strokeWidth={2.5} />
-                  Back to Directory
-                </button>
-              )}
+              {/* Back to Directory */}
+              <button
+                onClick={() => navigate('/database')}
+                className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/15 hover:text-white/40 transition-colors"
+              >
+                <ArrowLeft size={12} strokeWidth={2.5} />
+                Back to Directory
+              </button>
             </div>
 
-            {/* Right polaroid (desktop only, hide for territories/de facto) */}
-            {!isTerritory && !isDeFacto && expeditionPhotos[1] && (
+            {/* Right polaroid (desktop only) */}
+            {expeditionPhotos[1] && (
               <div className="hidden md:flex justify-center">
-                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[220px] lg:max-w-[240px]">
+                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] lg:max-w-[280px]">
                   <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
                   <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
                     <img src={expeditionPhotos[1].image} alt={expeditionPhotos[1].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
@@ -489,19 +493,6 @@ const CountryDetail: React.FC = () => {
             )}
           </div>
         </section>
-
-        {/* Bottom back (only for sovereign countries — territories/de facto show it inline above) */}
-        {!isTerritory && !isDeFacto && (
-          <div className="flex justify-center pt-2 pb-4">
-            <button
-              onClick={() => navigate('/database')}
-              className="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/15 hover:text-white/40 transition-colors py-2"
-            >
-              <ArrowLeft size={12} strokeWidth={2.5} />
-              Back to Directory
-            </button>
-          </div>
-        )}
 
 
       </div>

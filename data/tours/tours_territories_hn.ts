@@ -678,84 +678,66 @@ export const toursTerritoriesHN: Record<string, TourData> = {
     introText: "A massive barrier reef surrounds the largest lagoon in the world. Speak French while relaxing on a South Pacific beach.",
     stops: [
       {
-        stopName: "Noumea",
-        imageKeyword: "Noumea",
+        stopName: "Île des Pins",
+        imageKeyword: "Île des Pins",
         description: [
-          "Noumea is the capital and largest city of New Caledonia, a French overseas territory in the South Pacific. The city has a distinctly French atmosphere with boulangeries, bistros, and tree-lined boulevards, yet it sits on a stunning tropical peninsula surrounded by turquoise bays and white sand beaches.",
-          "The Anse Vata and Baie des Citrons beachfront areas are the social hub of the city, where locals and visitors swim, windsurf, and dine at seaside restaurants. The contrast between the French cafe culture and the Melanesian tropical setting creates a unique ambiance found nowhere else in the Pacific.",
-          "Noumea is also the gateway to New Caledonia\'s extraordinary UNESCO-listed lagoon. The city\'s aquarium, one of the best in the South Pacific, showcases the remarkable biodiversity of the surrounding waters, including nautilus, sea snakes, and fluorescent corals."
+          "The Île des Pins (Isle of Pines) is a small island south of the main island that is widely considered one of the most beautiful places in the Pacific. Captain James Cook named it for the towering columnar pines (Araucaria columnaris) that cover the island and give it a distinctive silhouette visible from far out at sea.",
+          "The island is famous for its natural swimming pool at Oro Bay, a shallow lagoon enclosed by coral where the water is impossibly clear and turquoise. The pool is fed by the ocean through gaps in the reef, keeping the water fresh and full of tropical fish. White sand beaches ring the island, framed by the tall, narrow pines that give the landscape an almost surreal quality.",
+          "The indigenous Kanak people of the island maintain strong cultural traditions. Visitors can participate in customary ceremonies, taste traditional bougna — a dish of meat and vegetables cooked in banana leaves in an underground oven — and learn about the deep spiritual connection the Kanak have with their land. The island also holds a darker history as the site of a French penal colony in the late 19th century, and ruins of the prison can still be explored."
         ],
-        question: "What European country administers New Caledonia as an overseas territory?",
-        options: [
-          "France.",
-          "Britain.",
-          "Spain.",
-          "The Netherlands."
-        ],
-        answer: "France.",
-        explanation: "New Caledonia is a special collectivity of France, giving Noumea its distinctive Gallic character."
-      },
-      {
-        stopName: "Ile des Pins",
-        imageKeyword: "Ile des Pins",
-        description: [
-          "The Ile des Pins (Isle of Pines) is a small island south of the main island that is widely considered one of the most beautiful places in the Pacific. Captain James Cook named it for the towering columnar pines (Araucaria columnaris) that cover the island and give it a distinctive silhouette.",
-          "The island is famous for its natural swimming pool at Oro Bay, a shallow lagoon enclosed by coral where the water is impossibly clear and turquoise. The pool is fed by the ocean through gaps in the reef, keeping the water fresh and full of tropical fish.",
-          "The indigenous Kanak people of the island maintain strong cultural traditions. Visitors can participate in customary ceremonies, taste traditional bougna (a dish of meat and vegetables cooked in banana leaves in an underground oven), and learn about the deep spiritual connection the Kanak have with their land."
-        ],
-        question: "Who gave the Ile des Pins its English name?",
+        question: "Who gave the Île des Pins its English name?",
         options: [
           "Captain James Cook.",
           "Louis-Antoine de Bougainville.",
           "Abel Tasman.",
-          "Jean-Francois de La Perouse."
+          "Jean-François de La Pérouse."
         ],
         answer: "Captain James Cook.",
-        explanation: "Cook named the island after the distinctive tall columnar pine trees he observed covering its landscape."
+        explanation: "Cook named the island after the distinctive tall columnar pine trees he observed covering its landscape during his voyage in 1774."
       },
       {
-        stopName: "Lagoon barrier-reef snorkeling",
-        imageKeyword: "Lagoon barrier-reef snorkeling",
+        stopName: "New Caledonia Lagoon Barrier Reef",
+        imageKeyword: "New Caledonia Lagoon Barrier Reef",
         description: [
-          "New Caledonia\'s barrier reef is the longest continuous reef in the world after Australia\'s Great Barrier Reef, and it encloses the world\'s largest lagoon at 24,000 square kilometers. The entire lagoon system was inscribed as a UNESCO World Heritage site in 2008 for its outstanding universal value.",
-          "The lagoon supports an incredibly diverse ecosystem, including over 1,000 species of fish, 350 species of coral, endangered dugongs, and several species of sea turtles. Snorkeling from boats or directly off the many small islets scattered throughout the lagoon reveals underwater gardens of staggering beauty.",
-          "The water clarity is exceptional because the lagoon is fed by relatively few rivers, meaning sediment levels are low. This creates ideal conditions for coral growth and underwater visibility that can exceed 30 meters, making it a world-class destination for both snorkeling and scuba diving."
+          "New Caledonia's barrier reef is the longest continuous reef in the world after Australia's Great Barrier Reef, stretching over 1,500 kilometers. It encloses the world's largest lagoon at 24,000 square kilometers. The entire lagoon system was inscribed as a UNESCO World Heritage site in 2008 for its outstanding universal value and extraordinary marine biodiversity.",
+          "The lagoon supports an incredibly diverse ecosystem, including over 1,000 species of fish, 350 species of coral, endangered dugongs, and several species of sea turtles. Snorkeling from boats or directly off the many small islets scattered throughout the lagoon reveals underwater gardens of staggering beauty, with visibility that can exceed 30 meters.",
+          "The water clarity is exceptional because the lagoon is fed by relatively few rivers, meaning sediment levels are low. This creates ideal conditions for coral growth and makes it a world-class destination for both snorkeling and scuba diving. The outer reef drops off dramatically into deep ocean, creating a wall of marine life where pelagic species patrol the edge of the continental shelf."
         ],
-        question: "What record does New Caledonia\'s lagoon hold?",
+        question: "What record does New Caledonia's lagoon hold?",
         options: [
-          "It is the world\'s largest lagoon.",
+          "It is the world's largest lagoon.",
           "It has the warmest water in the Pacific.",
           "It contains the deepest point in any lagoon.",
           "It has the highest concentration of sharks."
         ],
-        answer: "It is the world\'s largest lagoon.",
-        explanation: "At 24,000 square kilometers, New Caledonia\'s lagoon is the largest in the world, protected by its enormous barrier reef."
+        answer: "It is the world's largest lagoon.",
+        explanation: "At 24,000 square kilometers, New Caledonia's lagoon is the largest in the world, protected by its enormous barrier reef and recognized by UNESCO."
       },
       {
         stopName: "Heart of Voh",
         imageKeyword: "Heart of Voh",
         description: [
-          "The Heart of Voh is a natural clearing in the mangrove swamp near the town of Voh on the northwest coast of Grande Terre. When viewed from above, the clearing forms a near-perfect heart shape, created by the natural patterns of mangrove vegetation and tidal water flow.",
-          "The formation was made famous by aerial photographer Yann Arthus-Bertrand, who featured it in his bestselling book \"Earth from Above.\" The image became an iconic symbol of New Caledonia and is used extensively in the territory\'s tourism promotions.",
-          "Visitors can hike to a viewpoint on the hillside above the mangrove to see the heart shape from an elevated angle. The Tiendanite trail takes about three hours round trip and passes through dry scrubland before revealing the famous formation surrounded by the lush green mangrove forest below."
+          "The Heart of Voh is a natural clearing in the mangrove swamp near the town of Voh on the northwest coast of Grande Terre. When viewed from above, the clearing forms a near-perfect heart shape, created entirely by the natural patterns of mangrove vegetation and tidal water flow over centuries.",
+          "The formation was made famous by aerial photographer Yann Arthus-Bertrand, who featured it in his bestselling book \"Earth from Above.\" The image became an iconic symbol of New Caledonia and is used extensively in the territory's tourism promotions, appearing on everything from postcards to airline advertisements.",
+          "Visitors can hike to a viewpoint on the hillside above the mangrove to see the heart shape from an elevated angle. The Tiendanite trail takes about three hours round trip and passes through dry scrubland before revealing the famous formation surrounded by the lush green mangrove forest below. The surrounding area is part of a rich ecosystem where saltwater crocodiles, tropical birds, and unique plant species thrive."
         ],
         question: "How did the Heart of Voh formation become internationally famous?",
         options: [
-          "Through aerial photographer Yann Arthus-Bertrand\'s book \"Earth from Above.\"",
+          "Through aerial photographer Yann Arthus-Bertrand's book \"Earth from Above.\"",
           "Through a National Geographic television documentary.",
           "Through a viral social media post by a tourist.",
           "Through a French government tourism campaign."
         ],
-        answer: "Through aerial photographer Yann Arthus-Bertrand\'s book \"Earth from Above.\"",
-        explanation: "The photographer\'s aerial image of the natural heart shape became one of the most recognized photographs of New Caledonia."
+        answer: "Through aerial photographer Yann Arthus-Bertrand's book \"Earth from Above.\"",
+        explanation: "The photographer's aerial image of the natural heart shape became one of the most recognized photographs of New Caledonia worldwide."
       },
       {
         stopName: "Tjibaou Cultural Centre",
         imageKeyword: "Tjibaou Cultural Centre",
         description: [
           "The Tjibaou Cultural Centre is a striking architectural masterpiece designed by Italian architect Renzo Piano, set on the Tina Peninsula outside Noumea. It was built in 1998 to celebrate and preserve the indigenous Kanak culture of New Caledonia and is named after Jean-Marie Tjibaou, a Kanak independence leader who was assassinated in 1989.",
-          "The buildings are designed to resemble traditional Kanak huts (called cases) but are constructed from modern materials like steel, glass, and iroko wood. The ten tall, curved structures are open at the top to allow wind to flow through naturally, blending traditional design principles with cutting-edge sustainability.",
-          "Inside, the center houses exhibitions on Kanak art, history, and spirituality, as well as a library, performance spaces, and gardens planted with native species. The surrounding landscape integrates a traditional Kanak pathway lined with sacred plants, connecting the modern architecture to centuries of indigenous knowledge."
+          "The buildings are designed to resemble traditional Kanak huts (called cases) but are constructed from modern materials like steel, glass, and iroko wood. The ten tall, curved structures are open at the top to allow wind to flow through naturally, blending traditional design principles with cutting-edge sustainability. The architecture earned Piano the Pritzker Prize.",
+          "Inside, the center houses exhibitions on Kanak art, history, and spirituality, as well as a library, performance spaces, and gardens planted with native species. The surrounding landscape integrates a traditional Kanak pathway lined with sacred plants, connecting the modern architecture to centuries of indigenous knowledge and creating one of the most important cultural institutions in the entire Pacific region."
         ],
         question: "Who designed the Tjibaou Cultural Centre?",
         options: [
@@ -766,6 +748,24 @@ export const toursTerritoriesHN: Record<string, TourData> = {
         ],
         answer: "Renzo Piano.",
         explanation: "The renowned Italian architect designed the centre to harmonize modern architecture with traditional Kanak building forms."
+      },
+      {
+        stopName: "Amédée Lighthouse",
+        imageKeyword: "Amédée Lighthouse",
+        description: [
+          "The Amédée Lighthouse stands on a tiny coral islet just 24 kilometers from Noumea, rising 56 meters above the turquoise lagoon. Built in Paris in 1862 and shipped in pieces to New Caledonia, it was one of the first metallic lighthouses in the world. Its iron framework was assembled on the islet to guide ships through the treacherous reef passages surrounding the territory.",
+          "The islet itself is a pristine ring of white sand barely 500 meters across, surrounded by some of the clearest water in the lagoon. Sea turtles nest on its beaches, and the shallow reef flats around the island are home to an astonishing variety of coral and fish. Visitors can climb the 247 steps of the spiral staircase to the top for panoramic views across the lagoon to the mainland mountains.",
+          "Amédée Island is one of the most popular day-trip destinations from Noumea. Glass-bottom boat tours bring visitors across the lagoon, where they can snorkel the surrounding reef, watch traditional Kanak dance performances on the beach, and enjoy a seafood lunch under the coconut palms with the towering lighthouse as a backdrop."
+        ],
+        question: "Where was the Amédée Lighthouse originally constructed before being shipped to New Caledonia?",
+        options: [
+          "Paris.",
+          "London.",
+          "Sydney.",
+          "Marseille."
+        ],
+        answer: "Paris.",
+        explanation: "The lighthouse was built in Paris in 1862 and transported in pieces to be assembled on the small coral islet in New Caledonia's lagoon."
       }
     ]
   },
