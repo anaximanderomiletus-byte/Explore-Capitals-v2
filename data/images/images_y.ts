@@ -1,9 +1,9 @@
 export const imagesY: Record<string, string> = {
   // --- Yemen ---
-  "Yemen": "/png/YEMEN/sanaa-yemen.png",
-  "Socotra Dragon Blood Tree": "/png/YEMEN/socotra-dragon-blood-tree.png",
-  "Shibam Skyscrapers": "/png/YEMEN/shibam-skyscrapers.png",
-  "Dar al-Hajar": "/png/YEMEN/dar-al-hajar.png",
-  "Sana'a Old City": "/png/YEMEN/sanaa-old-city.png",
-  "Marib Dam Ruins": "/png/YEMEN/marib-dam-ruins.png"
+  "Yemen": "/png/COUNTRY-IMAGES/YEMEN/sanaa-yemen.png",
+  "Socotra Dragon Blood Tree": "/png/COUNTRY-IMAGES/YEMEN/socotra-dragon-blood-tree.png",
+  "Shibam Skyscrapers": "/png/COUNTRY-IMAGES/YEMEN/shibam-skyscrapers.png",
+  "Dar al-Hajar": "/png/COUNTRY-IMAGES/YEMEN/dar-al-hajar.png",
+  "Sana'a Old City": "/png/COUNTRY-IMAGES/YEMEN/sanaa-old-city.png",
+  "Marib Dam Ruins": "/png/COUNTRY-IMAGES/YEMEN/marib-dam-ruins.png"
 };

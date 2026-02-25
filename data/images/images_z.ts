@@ -1,17 +1,17 @@
 export const imagesZ: Record<string, string> = {
   // --- Zambia ---
-  "Zambia": "/png/ZAMBIA/lusaka-zambia.png",
-  "Victoria Falls Zambia": "/png/ZAMBIA/victoria-falls.png",
-  "South Luangwa National Park": "/png/ZAMBIA/south-luangwa-national-park.png",
-  "Lake Kariba": "/png/ZAMBIA/lake-kariba.png",
-  "Kasanka Bat Migration": "/png/ZAMBIA/kasanka-national-park.png",
-  "Mukuni Village": "/png/ZAMBIA/mukuni-village.png",
+  "Zambia": "/png/COUNTRY-IMAGES/ZAMBIA/lusaka-zambia.png",
+  "Victoria Falls Zambia": "/png/COUNTRY-IMAGES/ZAMBIA/victoria-falls.png",
+  "South Luangwa National Park": "/png/COUNTRY-IMAGES/ZAMBIA/south-luangwa-national-park.png",
+  "Lake Kariba": "/png/COUNTRY-IMAGES/ZAMBIA/lake-kariba.png",
+  "Kasanka Bat Migration": "/png/COUNTRY-IMAGES/ZAMBIA/kasanka-national-park.png",
+  "Mukuni Village": "/png/COUNTRY-IMAGES/ZAMBIA/mukuni-village.png",
 
   // --- Zimbabwe ---
-  "Zimbabwe": "/png/ZIMBABWE/harare-zimbabwe.png",
-  "Great Zimbabwe Walls": "/png/ZIMBABWE/great-zimbabwe-walls.png",
-  "Hwange Elephants": "/png/ZIMBABWE/hwange-national-park.png",
-  "Mana Pools Elephant": "/png/ZIMBABWE/mana-pools-national-park.png",
-  "Matobo Balancing Rocks": "/png/ZIMBABWE/matobo-national-park.png",
-  "Birchenough Bridge": "/png/ZIMBABWE/birchenough-bridge.png"
+  "Zimbabwe": "/png/COUNTRY-IMAGES/ZIMBABWE/harare-zimbabwe.png",
+  "Great Zimbabwe Walls": "/png/COUNTRY-IMAGES/ZIMBABWE/great-zimbabwe-walls.png",
+  "Hwange Elephants": "/png/COUNTRY-IMAGES/ZIMBABWE/hwange-national-park.png",
+  "Mana Pools Elephant": "/png/COUNTRY-IMAGES/ZIMBABWE/mana-pools-national-park.png",
+  "Matobo Balancing Rocks": "/png/COUNTRY-IMAGES/ZIMBABWE/matobo-national-park.png",
+  "Birchenough Bridge": "/png/COUNTRY-IMAGES/ZIMBABWE/birchenough-bridge.png"
 };
