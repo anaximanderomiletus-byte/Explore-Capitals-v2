@@ -299,7 +299,7 @@ const Navigation: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
-              <img src={`${import.meta.env.BASE_URL}png/0-STYLE/explorecapitals-globe-favicon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
+              <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
               <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
                 Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
               </span>

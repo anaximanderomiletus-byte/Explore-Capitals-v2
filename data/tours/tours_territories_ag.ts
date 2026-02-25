@@ -1254,8 +1254,8 @@ export const toursTerritoriesAG: Record<string, TourData> = {
     introText: "Wild Barbary macaques sit on the railings of a rocky overlook. From the top of the Rock, you can see both Europe and Africa.",
     stops: [
       {
-        stopName: "Upper Rock Nature Reserve",
-        imageKeyword: "Upper Rock Nature Reserve",
+        stopName: "Rock of Gibraltar",
+        imageKeyword: "Rock of Gibraltar",
         description: [
           "The Upper Rock Nature Reserve covers most of the upper area of the Rock of Gibraltar, a dramatic limestone promontory that rises 426 meters above the narrow strait separating Europe from Africa. The reserve is home to approximately 230 Barbary macaques, the only wild primate population on the European continent. Legend holds that as long as the macaques remain on Gibraltar, the territory will stay under British rule, a superstition that Winston Churchill himself took seriously enough to order their population be maintained during World War II.",
           "The views from the Upper Rock are extraordinary in every direction. To the south, the Strait of Gibraltar narrows to just 14 kilometers, and on clear days the Rif Mountains of Morocco are visible in sharp detail across the water. To the north, the flat isthmus connecting the Rock to mainland Spain stretches out, with the runway of Gibraltar International Airport cutting directly across it.",

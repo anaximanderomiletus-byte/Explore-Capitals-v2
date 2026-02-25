@@ -268,63 +268,63 @@ export const GAMES: Game[] = [
   { 
     id: '1', 
     title: 'Capital Quiz', 
-    image: './png/0-GAMES/capital-quiz.png', 
+    image: './png/GAMES/capital-quiz.png', 
     status: 'active', 
     description: 'Test your knowledge against the clock.' 
   },
   { 
     id: '2', 
     title: 'Map Dash', 
-    image: './png/0-GAMES/map-dash.png', 
+    image: './png/GAMES/map-dash.png', 
     status: 'active', 
     description: 'Find the country before time runs out.' 
   },
   { 
     id: '3', 
     title: 'Flag Frenzy', 
-    image: './png/0-GAMES/flag-frenzy.png', 
+    image: './png/GAMES/flag-frenzy.png', 
     status: 'active', 
     description: 'Match the flags to their nations.' 
   },
   {
     id: '4',
     title: 'Know Your Neighbor',
-    image: './png/0-GAMES/know-your-neighbor.png', 
+    image: './png/GAMES/know-your-neighbor.png', 
     status: 'active', 
     description: 'Identify all the bordering countries.'
   },
   {
     id: '5',
     title: 'Population Pursuit',
-    image: './png/0-GAMES/population-pursuit.png',
+    image: './png/GAMES/population-pursuit.png',
     status: 'active', 
     description: 'Which country has more people?'
   },
   {
     id: '6',
     title: 'Global Detective',
-    image: './png/0-GAMES/global-detective.png', 
+    image: './png/GAMES/global-detective.png', 
     status: 'active', 
     description: 'Deduce the mystery country from 3 clues.'
   },
   {
     id: '7',
     title: 'Capital Connection',
-    image: './png/0-GAMES/capital-connection.png',
+    image: './png/GAMES/capital-connection.png',
     status: 'active', 
     description: 'Match countries to their capitals in a race against time.'
   },
   {
     id: '8',
     title: 'Region Roundup',
-    image: './png/0-GAMES/region-roundup.png',
+    image: './png/GAMES/region-roundup.png',
     status: 'active', 
     description: 'Sort countries into their correct continents.'
   },
   {
     id: '9',
     title: 'Landmark Legend',
-    image: './png/0-GAMES/landmark-legend.png',
+    image: './png/GAMES/landmark-legend.png',
     status: 'active', 
     description: 'Identify the country from a famous landmark image.'
   },
@@ -332,7 +332,7 @@ export const GAMES: Game[] = [
   {
     id: '10',
     title: 'Territory Titans',
-    image: './png/0-GAMES/territory-titan.png',
+    image: './png/GAMES/territory-titan.png',
     status: 'active',
     description: 'Master autonomous regions and dependencies worldwide.',
     premium: true
@@ -340,7 +340,7 @@ export const GAMES: Game[] = [
   {
     id: '11',
     title: 'Area Ace',
-    image: './png/0-GAMES/area-ace.png',
+    image: './png/GAMES/area-ace.png',
     status: 'active',
     description: 'Which country is larger? Test your size knowledge.',
     premium: true
@@ -348,7 +348,7 @@ export const GAMES: Game[] = [
   {
     id: '12',
     title: 'Currency Craze',
-    image: './png/0-GAMES/currency-craze.png',
+    image: './png/GAMES/currency-craze.png',
     status: 'active',
     description: 'Match countries to their official currencies.',
     premium: true
@@ -356,7 +356,7 @@ export const GAMES: Game[] = [
   {
     id: '13',
     title: 'Language Legend',
-    image: './png/0-GAMES/language-legend.png',
+    image: './png/GAMES/language-legend.png',
     status: 'active',
     description: 'Identify countries by their official languages.',
     premium: true
@@ -364,7 +364,7 @@ export const GAMES: Game[] = [
   {
     id: '14',
     title: 'Time Zone Trekker',
-    image: './png/0-GAMES/time-zone-trekker.png',
+    image: './png/GAMES/time-zone-trekker.png',
     status: 'active',
     description: 'Match countries to their time zones.',
     premium: true
@@ -372,7 +372,7 @@ export const GAMES: Game[] = [
   {
     id: '15',
     title: 'Driving Direction',
-    image: './png/0-GAMES/driving-direction.png',
+    image: './png/GAMES/driving-direction.png',
     status: 'active',
     description: 'Left or right? Know which side countries drive on.',
     premium: true

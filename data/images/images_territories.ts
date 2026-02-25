@@ -106,7 +106,7 @@ export const imagesTerritories: Record<string, string> = {
 
   // --- Gibraltar ---
   "Gibraltar": "/png/GIBRALTAR/gibraltar-gibraltar.png",
-  "Upper Rock Nature Reserve": "/png/GIBRALTAR/upper-rock-nature-reserve.png",
+  "Rock of Gibraltar": "/png/GIBRALTAR/upper-rock-nature-reserve.png",
   "St. Michael's Cave": "/png/GIBRALTAR/st-michaels-cave.png",
   "Europa Point": "/png/GIBRALTAR/europa-point.png",
   "Great Siege Tunnels": "/png/GIBRALTAR/great-siege-tunnels.png",

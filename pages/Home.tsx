@@ -206,7 +206,7 @@ const Home: React.FC = () => {
               >
                 <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img
-                    src={`${import.meta.env.BASE_URL}png/0-STYLE/explorecapitals-globe-favicon.png`}
+                    src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
                     alt="Globe - Click to explore the map"
                     className="w-[82%] h-[82%] object-contain"
                     loading="eager"
