@@ -153,7 +153,7 @@ export default function AreaAce() {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src={`${import.meta.env.BASE_URL}png/0-GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
         <SEO title="Area Ace - Premium Game" description="Which country is larger? Test your geographic size knowledge." />
 
@@ -164,7 +164,7 @@ export default function AreaAce() {
 
         <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Area Ace</h1>
           <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
@@ -189,7 +189,7 @@ export default function AreaAce() {
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
@@ -239,7 +239,7 @@ export default function AreaAce() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Area Ace - Playing" description="Which country is larger? Compare land areas in this geography game." />
             
@@ -248,7 +248,7 @@ export default function AreaAce() {
               <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
             </div>
 
-            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 z-10">
+            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
               <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all border border-white/10 shrink-0">
                 <ArrowLeft size={18} />
               </Link>
@@ -259,7 +259,7 @@ export default function AreaAce() {
               <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-hidden relative z-10 p-3 md:p-6">
+            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
               
               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                 <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40">

@@ -1,16 +1,16 @@
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getCountryCode } from '../utils/flags';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, Map, Compass, Navigation, 
-  Clock, Phone, Car, Users, Maximize2, Banknote, 
+import {
+  ArrowLeft, Map, Compass, Navigation,
+  Clock, Phone, Car, Users, Maximize2, Banknote,
   TrendingUp, Languages, Building2, AlertTriangle,
   MapPin
 } from 'lucide-react';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
-import { STATIC_IMAGES } from '../data/images';
+import { getStaticImages } from '../data/images';
 import { staticTours } from '../data/staticTours';
 import { OFFICIAL_NAMES } from '../data/officialNames';
 
@@ -30,13 +30,15 @@ const CountryDetail: React.FC = () => {
   const navigate = useNavigate();
   const { setPageLoading, setTransitionStyle } = useLayout();
 
-  // Data is statically imported - no lazy loading
-  const dataLoaded = true;
+  const [images, setImages] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setPageLoading(false);
+    getStaticImages().then(setImages);
   }, [setPageLoading]);
-  
+
+  const dataLoaded = Object.keys(images).length > 0;
+
   const toSlug = (name: string) => name.toLowerCase().replace(/\s+/g, '-');
   const country = useMemo(() => {
     // Match by numeric id first, then by name slug
@@ -57,15 +59,15 @@ const CountryDetail: React.FC = () => {
       if (!country || !dataLoaded) return { image: '', caption: '' };
       
       // 1. Try Country Main Image (Usually Capital or Iconic)
-      if (STATIC_IMAGES[country.name]) {
-          return { image: STATIC_IMAGES[country.name], caption: `${country.capital}, ${country.name}` };
+      if (images[country.name]) {
+          return { image: images[country.name], caption: `${country.capital}, ${country.name}` };
       }
 
       // 2. Try Tour Stop Image
       const tourData = staticTours[country.name];
       if (tourData && tourData.stops.length > 0) {
           const stop = tourData.stops[0];
-          const img = STATIC_IMAGES[stop.imageKeyword || stop.stopName];
+          const img = images[stop.imageKeyword || stop.stopName];
           if (img) return { image: img, caption: `${stop.stopName}, ${country.name}` };
       }
 
@@ -80,8 +82,8 @@ const CountryDetail: React.FC = () => {
     const photos: { image: string; caption: string }[] = [];
     
     // Try country main image first
-    if (STATIC_IMAGES[country.name]) {
-      photos.push({ image: STATIC_IMAGES[country.name], caption: country.capital });
+    if (images[country.name]) {
+      photos.push({ image: images[country.name], caption: country.capital });
     }
     
     // Pull from tour stops for variety
@@ -89,7 +91,7 @@ const CountryDetail: React.FC = () => {
     if (tourData?.stops) {
       for (const stop of tourData.stops) {
         if (photos.length >= 2) break;
-        const img = STATIC_IMAGES[stop.imageKeyword || stop.stopName];
+        const img = images[stop.imageKeyword || stop.stopName];
         if (img && !photos.some(p => p.image === img)) {
           photos.push({ image: img, caption: stop.stopName });
         }
@@ -206,6 +208,7 @@ const CountryDetail: React.FC = () => {
             alt=""
             className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
             aria-hidden="true"
+            loading="lazy"
             decoding="async"
           />
         ) : (

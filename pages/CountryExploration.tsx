@@ -1059,7 +1059,7 @@ const CountryExploration: React.FC = () => {
                              {currentQuestion.options.map((option, idx) => {
                                const isSelected = selectedOption === option;
                                
-                              let stateStyles = "bg-white/5 border-2 border-white/20 text-white/70 hover:bg-white/15 hover:border-sky/50 hover:text-white";
+                              let stateStyles = "bg-white/5 border-2 border-white/20 text-white/70 active:bg-white/15 active:border-sky/50 active:text-white";
 
                               if (isSelected) {
                                  if (isCorrect) {

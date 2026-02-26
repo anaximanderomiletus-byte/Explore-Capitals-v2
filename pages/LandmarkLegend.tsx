@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Camera, Check, X, MapPin, Loader2, Play } from 'lucide-react';
 import { MOCK_COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
-import { STATIC_IMAGES } from '../data/images';
+import { getStaticImages } from '../data/images';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -80,15 +80,16 @@ export default function LandmarkLegend() {
   }, [gameState, gameDuration, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft]);
 
   // Generate a finite list of questions for this session (Limit to 15 for faster loading)
-  const getQuestionsList = useCallback((): Question[] => {
+  const getQuestionsList = useCallback(async (): Promise<Question[]> => {
+    const IMAGES = await getStaticImages();
     const validCountries = MOCK_COUNTRIES.filter(c => staticTours[c.name]);
     const shuffledValid = shuffle(validCountries).slice(0, 15); // Limit to 15 questions per game
-    
+
     return shuffledValid.map(country => {
         const tour = staticTours[country.name];
         const stop = tour.stops[Math.floor(Math.random() * tour.stops.length)];
         const landmarkName = stop.stopName;
-        const imageUrl = STATIC_IMAGES[stop.imageKeyword || landmarkName] || STATIC_IMAGES[country.name];
+        const imageUrl = IMAGES[stop.imageKeyword || landmarkName] || IMAGES[country.name];
         
         const distractors: Country[] = [];
         while (distractors.length < 3) {
@@ -109,7 +110,7 @@ export default function LandmarkLegend() {
 
   const startGame = async () => {
     setGameState('preparing');
-    const newQuestions = getQuestionsList();
+    const newQuestions = await getQuestionsList();
     
     // Pre-load all images for the current set
     const imagePromises = newQuestions.map(q => {
@@ -172,7 +173,7 @@ export default function LandmarkLegend() {
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/landmark-legend.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img src={`${import.meta.env.BASE_URL}png/GAMES/landmark-legend.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
@@ -195,7 +196,7 @@ export default function LandmarkLegend() {
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
               <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
-                  <img src={`${import.meta.env.BASE_URL}png/0-GAMES/landmark-legend.png`} alt="Landmark Legend" className="w-full h-full object-cover" />
+                  <img src={`${import.meta.env.BASE_URL}png/GAMES/landmark-legend.png`} alt="Landmark Legend" className="w-full h-full object-cover" />
                 </div>
                 <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Landmark Legend</h1>
                 <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify nations through their landmarks.</p>
@@ -238,7 +239,7 @@ export default function LandmarkLegend() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
@@ -249,7 +250,7 @@ export default function LandmarkLegend() {
             </div>
 
             {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 z-10">
+            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
                <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
@@ -264,7 +265,7 @@ export default function LandmarkLegend() {
                <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2.5 sm:p-4 md:p-6 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-6 overflow-y-auto overflow-x-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -335,7 +336,7 @@ export default function LandmarkLegend() {
                             key={option.id}
                             onClick={() => handleAnswer(option.id)}
                             disabled={!!selectedAnswerId}
-                            className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[42px] sm:min-h-[52px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                            className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[36px] sm:min-h-[44px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                             style={{ WebkitTapHighlightColor: 'transparent' }}
                           >
                             <span className="text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>

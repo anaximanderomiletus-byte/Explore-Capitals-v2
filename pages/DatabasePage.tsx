@@ -6,6 +6,7 @@ import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
 import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
+import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
 import { BannerAd } from '../components/AdSense';
@@ -472,9 +473,8 @@ const DatabasePage: React.FC = () => {
         description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."
       />
 
-      <div className="max-w-7xl mx-auto relative z-10 animate-[fadeIn_0.3s_ease-out_both]">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12"
-        >
+      <div className="max-w-7xl mx-auto relative z-10">
+        <RevealSection className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
                <Globe size={12} className="relative z-10 text-sky-light" />
@@ -483,7 +483,7 @@ const DatabasePage: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">Database</h1>
             <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">Detailed data for 195 sovereign states.</p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
             <button
               onClick={handleRandomSearch}
@@ -507,29 +507,28 @@ const DatabasePage: React.FC = () => {
               />
             </div>
           </div>
-        </div>
+        </RevealSection>
 
-        {/* Sovereign Countries Section - Desktop Table */}
-        <div className="hidden lg:block mb-16">
-          <SimpleTable
+        {/* Sovereign Countries Section */}
+        <RevealSection className="mb-16" delay={0.1}>
+          <div className="hidden lg:block">
+            <SimpleTable
+              items={processedCountries}
+              onItemClick={handleCountryClick}
+              sortConfig={sortConfig}
+              onSort={handleSort}
+            />
+          </div>
+
+          <MobileList
             items={processedCountries}
             onItemClick={handleCountryClick}
-            sortConfig={sortConfig}
-            onSort={handleSort}
           />
-        </div>
-
-        {/* Sovereign Countries - Mobile List */}
-        <div className="mb-20">
-          <MobileList 
-            items={processedCountries}
-            onItemClick={handleCountryClick}
-          />
-        </div>
+        </RevealSection>
 
         {/* --- Autonomous Regions Section --- */}
         {processedTerritories.length > 0 && (
-          <div className="mb-16">
+          <RevealSection className="mb-16">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 bg-accent/30 rounded-xl text-white border border-white/40 flex items-center justify-center">
                 <Globe size={24} />
@@ -539,7 +538,7 @@ const DatabasePage: React.FC = () => {
                 <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Major non-sovereign dependencies and territories.</p>
               </div>
             </div>
-            
+
             <div className="hidden lg:block">
               <SimpleTable
                 items={processedTerritories}
@@ -553,18 +552,18 @@ const DatabasePage: React.FC = () => {
               />
             </div>
 
-            <MobileList 
+            <MobileList
               items={processedTerritories}
               onItemClick={handleCountryClick}
               isTerritory
               getSovereignty={getTerritorysovereignty}
             />
-          </div>
+          </RevealSection>
         )}
 
         {/* --- De Facto States Section --- */}
         {processedDeFacto.length > 0 && (
-          <div className="mb-16">
+          <RevealSection className="mb-16">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 bg-warning/30 rounded-xl text-white border border-white/40 flex items-center justify-center">
                 <AlertTriangle size={24} />
@@ -574,7 +573,7 @@ const DatabasePage: React.FC = () => {
                 <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Entities with limited international recognition.</p>
               </div>
             </div>
-            
+
             <div className="hidden lg:block">
               <SimpleTable
                 items={processedDeFacto}
@@ -588,30 +587,32 @@ const DatabasePage: React.FC = () => {
               />
             </div>
 
-            <MobileList 
+            <MobileList
               items={processedDeFacto}
               onItemClick={handleCountryClick}
               isDeFacto
               getSovereignty={getTerritorysovereignty}
             />
-          </div>
+          </RevealSection>
         )}
 
         {!hasResults && (
-          <div className="bg-white/5 rounded-2xl p-16 text-center border border-white/10">
-            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
-               <Search className="w-8 h-8 text-white/10" />
+          <RevealSection>
+            <div className="bg-white/5 rounded-2xl p-16 text-center border border-white/10">
+              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
+                 <Search className="w-8 h-8 text-white/10" />
+              </div>
+              <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">No results found</h3>
+              <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">Protocol failed to match "{debouncedSearch}" within current dataset.</p>
             </div>
-            <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">No results found</h3>
-            <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">Protocol failed to match "{debouncedSearch}" within current dataset.</p>
-          </div>
+          </RevealSection>
         )}
 
         {/* Strategic Ad Placement - After content */}
         {hasResults && (
-          <div className="mt-12 md:mt-16">
+          <RevealSection className="mt-12 md:mt-16">
             <BannerAd slot="1514422173" />
-          </div>
+          </RevealSection>
         )}
 
         {/* Scroll to Top Button */}

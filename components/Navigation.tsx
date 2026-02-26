@@ -177,28 +177,33 @@ const Navigation: React.FC = () => {
   const isOverMap = isMapPage || isMapDash;
 
   useEffect(() => {
+    let rafId = 0;
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Determine visibility based on scroll direction
-      // Hide when scrolling down, show when scrolling up
-      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
+      if (rafId) return; // Already scheduled
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        const currentScrollY = window.scrollY;
 
-      // Check threshold from context
-      setIsScrolled(currentScrollY > scrollThreshold);
-      
-      lastScrollY.current = currentScrollY;
+        // Determine visibility based on scroll direction
+        if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+
+        setIsScrolled(currentScrollY > scrollThreshold);
+        lastScrollY.current = currentScrollY;
+      });
     };
-    
+
     // Check initially
     handleScroll();
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [scrollThreshold]);
 
   // Close mobile menu when route changes

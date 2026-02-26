@@ -122,7 +122,7 @@ export default function DrivingDirection() {
     return (
       <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
         <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
 
@@ -133,7 +133,7 @@ export default function DrivingDirection() {
 
         <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
           <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
@@ -158,7 +158,7 @@ export default function DrivingDirection() {
   return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
@@ -183,7 +183,7 @@ export default function DrivingDirection() {
                 <Crown size={10} /> Premium
               </div>
               <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
-                <img src={`${import.meta.env.BASE_URL}png/0-GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
+                <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
               </div>
               <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
               <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
@@ -211,7 +211,7 @@ export default function DrivingDirection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Driving Direction - Playing" description="Which side of the road do they drive on?" />
             
@@ -222,7 +222,7 @@ export default function DrivingDirection() {
             </div>
 
             {/* Top Bar */}
-            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 z-10">
+            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
               <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                 <ArrowLeft size={18} className="transition-transform" />
               </Link>
@@ -235,7 +235,7 @@ export default function DrivingDirection() {
               <div className="w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-hidden relative z-10 p-3 md:p-6">
+            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
               
               {/* Points and Timer */}
               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
@@ -319,7 +319,7 @@ export default function DrivingDirection() {
                           key={side}
                           onClick={() => handleChoice(side)}
                           disabled={!!result}
-                          className={`min-h-[120px] md:min-h-[180px] relative rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
+                          className={`min-h-[80px] sm:min-h-[100px] md:min-h-[180px] relative rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >
                           <div className={`mb-2 md:mb-4 transition-colors duration-300 ${iconColor}`}>

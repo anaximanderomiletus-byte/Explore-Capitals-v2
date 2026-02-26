@@ -1,6 +1,6 @@
 import { TourData } from "../types";
 import { staticTours } from "../data/staticTours";
-import { STATIC_IMAGES } from "../data/images";
+import { getStaticImages } from "../data/images";
 import { MOCK_COUNTRIES } from "../constants";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -55,7 +55,8 @@ const getFirestoreImage = async (keyword: string): Promise<string | null> => {
 export const getGeneratedImage = async (keyword: string, type: 'landscape' | 'landmark' = 'landscape'): Promise<string | null> => {
   try {
     // A. Static Image
-    const staticUrl = STATIC_IMAGES[keyword];
+    const IMAGES = await getStaticImages();
+    const staticUrl = IMAGES[keyword];
     if (staticUrl) {
       return staticUrl;
     }

@@ -130,7 +130,7 @@ export default function KnowYourNeighbor() {
     return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/know-your-neighbor.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img src={`${import.meta.env.BASE_URL}png/GAMES/know-your-neighbor.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
@@ -153,7 +153,7 @@ export default function KnowYourNeighbor() {
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
             <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/know-your-neighbor.png`} alt="Know Your Neighbor" className="w-full h-full object-cover" />
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/know-your-neighbor.png`} alt="Know Your Neighbor" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
@@ -180,7 +180,7 @@ export default function KnowYourNeighbor() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-y-auto overflow-x-hidden"
           >
       <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
       
@@ -206,7 +206,7 @@ export default function KnowYourNeighbor() {
          <div className="w-[42px] shrink-0" />
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
+      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-1.5 sm:p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
          
          {/* Points and Timer - Responsive layout for all screen sizes */}
          <div className="flex items-center justify-between gap-2 mb-1 sm:mb-2 md:mb-2 relative z-20 shrink-0">
@@ -274,7 +274,7 @@ export default function KnowYourNeighbor() {
                     key={countryName}
                     onClick={() => toggleOption(countryName)}
                     disabled={!!roundResult}
-                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[44px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
+                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[36px] sm:min-h-[40px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     <span className="leading-tight line-clamp-2 relative z-10 drop-shadow-md">{countryName}</span>

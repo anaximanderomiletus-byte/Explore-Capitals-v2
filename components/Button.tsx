@@ -47,8 +47,10 @@ if (typeof document !== 'undefined' && !document.getElementById(shingStyleId)) {
       opacity: 0;
       pointer-events: none;
     }
-    .shing-btn:hover .shing-glare {
-      animation: shingGlare 0.5s ease-out forwards;
+    @media (hover: hover) and (pointer: fine) {
+      .shing-btn:hover .shing-glare {
+        animation: shingGlare 0.5s ease-out forwards;
+      }
     }
   `;
   document.head.appendChild(styleEl);

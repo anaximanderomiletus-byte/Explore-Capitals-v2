@@ -127,24 +127,24 @@ const CookieConsent: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-2.5">
                   <button
                     onClick={acceptAll}
-                    className="flex-1 bg-sky hover:bg-sky-light text-surface-dark font-black text-xs uppercase tracking-widest py-4 px-6 rounded-2xl transition-all hover:shadow-glow-sky"
+                    className="flex-1 bg-sky hover:bg-sky-light text-surface-dark font-black text-[10px] uppercase tracking-widest py-2.5 px-5 rounded-xl transition-all hover:shadow-glow-sky"
                   >
                     Accept All
                   </button>
                   <button
                     onClick={acceptEssentialOnly}
-                    className="flex-1 bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-widest py-4 px-6 rounded-2xl transition-all border border-white/20"
+                    className="flex-1 bg-white/10 hover:bg-white/20 text-white font-black text-[10px] uppercase tracking-widest py-2.5 px-5 rounded-xl transition-all border border-white/20"
                   >
                     Essential Only
                   </button>
                   <button
                     onClick={() => setShowPreferences(true)}
-                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white font-black text-xs uppercase tracking-widest py-4 px-6 rounded-2xl transition-all border border-white/10"
+                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white font-black text-[10px] uppercase tracking-widest py-2.5 px-5 rounded-xl transition-all border border-white/10"
                   >
-                    <Settings size={14} />
+                    <Settings size={13} />
                     Customize
                   </button>
                 </div>
@@ -225,7 +225,7 @@ const CookieConsent: React.FC = () => {
 
                 <button
                   onClick={saveCustomPreferences}
-                  className="w-full bg-sky hover:bg-sky-light text-surface-dark font-black text-xs uppercase tracking-widest py-4 px-6 rounded-2xl transition-all hover:shadow-glow-sky"
+                  className="w-full bg-sky hover:bg-sky-light text-surface-dark font-black text-[10px] uppercase tracking-widest py-2.5 px-5 rounded-xl transition-all hover:shadow-glow-sky"
                 >
                   Save Preferences
                 </button>

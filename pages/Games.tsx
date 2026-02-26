@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Play, Clock, Lock, Shuffle, Crown, Sparkles, X } from 'lucide-react';
 import Button from '../components/Button';
+import RevealSection from '../components/RevealSection';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
@@ -59,8 +60,7 @@ const Games: React.FC = () => {
     const isActive = game.status === 'active';
     
     return (
-      <div 
-        key={game.id} 
+      <div
         className={`group bg-white/20 rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''}`}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
@@ -153,8 +153,7 @@ const Games: React.FC = () => {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12 animate-[fadeIn_0.3s_ease-out_both]"
-        >
+        <RevealSection className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky/30 border border-white/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
@@ -173,36 +172,42 @@ const Games: React.FC = () => {
             <Shuffle size={18} className="text-sky-light transition-transform duration-700 relative z-10" />
             <span className="relative z-10">Random Game</span>
           </button>
-        </div>
+        </RevealSection>
 
         {/* Free Games Section */}
-        <div className="mb-12 animate-[fadeIn_0.3s_ease-out_0.1s_both]"
-        >
+        <RevealSection className="mb-12" delay={0.1}>
           <h2 className="text-lg font-bold text-white/60 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
             <Play size={16} className="text-sky-light" fill="currentColor" />
             Free Games
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {freeGames.map((game) => renderGameCard(game, false))}
+            {freeGames.map((game, i) => (
+              <RevealSection key={game.id} delay={0.05 * i}>
+                {renderGameCard(game, false)}
+              </RevealSection>
+            ))}
           </div>
-        </div>
+        </RevealSection>
 
         {/* Premium Games Section */}
-        <div className="mb-12 animate-[fadeIn_0.3s_ease-out_0.2s_both]"
-        >
+        <RevealSection className="mb-12" delay={0.1}>
           <h2 className="text-lg font-bold text-amber-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
             <Crown size={16} className="text-amber-400" />
             Premium Games
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {premiumGames.map((game) => renderGameCard(game, true))}
+            {premiumGames.map((game, i) => (
+              <RevealSection key={game.id} delay={0.05 * i}>
+                {renderGameCard(game, true)}
+              </RevealSection>
+            ))}
           </div>
-        </div>
+        </RevealSection>
 
         {/* Strategic Ad Placement - After game grid */}
-        <div className="mt-12 md:mt-16">
+        <RevealSection className="mt-12 md:mt-16">
           <BannerAd slot="9489406693" />
-        </div>
+        </RevealSection>
       </div>
 
       {/* Upgrade Modal */}

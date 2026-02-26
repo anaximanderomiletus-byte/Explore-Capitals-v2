@@ -216,7 +216,7 @@ export default function CapitalConnection() {
     return (
     <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/0-GAMES/capital-connection.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-connection.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <AnimatePresence mode="wait">
         {gameState === 'start' && (
@@ -237,7 +237,7 @@ export default function CapitalConnection() {
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
             <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}png/0-GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Capital Connection</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
@@ -261,7 +261,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-20 pb-4 md:pb-6 overflow-hidden"
+            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
       <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -270,7 +270,7 @@ export default function CapitalConnection() {
       </div>
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-      <div className="max-w-3xl mx-auto w-full flex shrink-0 items-center gap-2 mb-3 md:mb-4 bg-white/10 backdrop-blur-2xl p-2.5 md:p-3 rounded-2xl border border-white/20 z-10">
+      <div className="max-w-3xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
          <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
@@ -285,7 +285,7 @@ export default function CapitalConnection() {
          <div className="w-[42px] shrink-0" />
       </div>
 
-      <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-3 sm:p-4 md:p-6">
+      <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-y-auto overflow-x-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-2 sm:p-3 md:p-6">
           {/* Points and Timer - Responsive layout for all screen sizes */}
           <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4 relative z-20 shrink-0">
              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-warning/15 border border-warning/30 shrink-0">
@@ -374,7 +374,7 @@ const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => voi
     <button
       onClick={onClick}
       disabled={card.isMatched || card.isCorrect}
-      className={`h-full min-h-[80px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0`}
+      className={`h-full min-h-[60px] sm:min-h-[70px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0`}
       style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>

@@ -1,54 +1,17 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
 import { ResponsiveAd } from '../components/AdSense';
 import { MOCK_COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
-import { STATIC_IMAGES } from '../data/images';
-
-/* ── Scroll-reveal wrapper ─────────────────────────────────────────────
-   Pure CSS approach: uses IntersectionObserver only to toggle a class,
-   no framer-motion layout thrash. GPU-friendly translate + opacity.    */
-const RevealSection: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-}> = ({ children, className = '', delay = 0 }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.08 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(36px)',
-        transition: `opacity 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
-        willChange: 'opacity, transform',
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+import { getStaticImages } from '../data/images';
 
 const Section: React.FC<{
   children: React.ReactNode;
@@ -73,6 +36,7 @@ const Section: React.FC<{
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { isAuthenticated, isLoading: loading } = useUser();
+  const [factImage, setFactImage] = useState('');
   useEffect(() => {
     setPageLoading(false);
     // Dismiss the HTML splash-screen loader (prevents double-spinner)
@@ -100,15 +64,20 @@ const Home: React.FC = () => {
     const stopIndex = Math.floor(seededRandom(seed + 1) * tour.stops.length);
     const stop = tour.stops[stopIndex];
 
-    // Get the image — use the stop's imageKeyword to look up in STATIC_IMAGES
-    const image = STATIC_IMAGES[stop.imageKeyword] || STATIC_IMAGES[country.name] || '';
-
     // Pick a fun fact paragraph from the stop's description
     const factIndex = Math.floor(seededRandom(seed + 2) * stop.description.length);
     const fact = stop.description[factIndex];
 
-    return { country, stop, image, fact };
+    return { country, stop, fact };
   }, []);
+
+  // Load STATIC_IMAGES asynchronously — does not block initial paint
+  useEffect(() => {
+    getStaticImages().then(images => {
+      const img = images[factOfTheDay.stop.imageKeyword] || images[factOfTheDay.country.name] || '';
+      setFactImage(img);
+    });
+  }, [factOfTheDay]);
 
   return (
     <main className="relative flex-grow bg-[#0F172A] w-full home-glow">
@@ -278,11 +247,13 @@ const Home: React.FC = () => {
           <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden relative group glow-card">
             {/* Background image */}
             <div className="absolute inset-0 pointer-events-none">
-              {factOfTheDay.image && (
+              {factImage && (
                 <img
-                  src={`${import.meta.env.BASE_URL}${factOfTheDay.image.startsWith('/') ? factOfTheDay.image.slice(1) : factOfTheDay.image}`}
+                  src={`${import.meta.env.BASE_URL}${factImage.startsWith('/') ? factImage.slice(1) : factImage}`}
                   alt=""
                   className="w-full h-full object-cover opacity-[0.07] blur-sm scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
             </div>
@@ -290,9 +261,9 @@ const Home: React.FC = () => {
             <div className="grid md:grid-cols-[1fr_1.2fr] gap-0 relative z-10">
               {/* Landmark Image */}
               <div className="relative aspect-[16/9] sm:aspect-[2/1] md:aspect-auto overflow-hidden">
-                {factOfTheDay.image && (
+                {factImage && (
                   <img
-                    src={`${import.meta.env.BASE_URL}${factOfTheDay.image.startsWith('/') ? factOfTheDay.image.slice(1) : factOfTheDay.image}`}
+                    src={`${import.meta.env.BASE_URL}${factImage.startsWith('/') ? factImage.slice(1) : factImage}`}
                     alt={factOfTheDay.stop.stopName}
                     className="w-full h-full object-cover"
                     loading="lazy"
@@ -568,22 +539,22 @@ const Home: React.FC = () => {
             Master the atlas and join the global elite.
           </p>
 
-          <div className="flex flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
-            <Link to="/games" className="group/btn">
-              <Button variant="primary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
+            <Link to="/games" className="group/btn w-full sm:w-auto">
+              <Button variant="primary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
                 Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
               </Button>
             </Link>
             {!isAuthenticated && !loading && (
-            <Link to="/auth" className="group/btn">
-              <Button variant="secondary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all group">
+            <Link to="/auth" className="group/btn w-full sm:w-auto">
+              <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all group">
                 Sign Up <UserPlus className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
               </Button>
             </Link>
             )}
             {isAuthenticated && (
-              <Link to="/profile" className="group/btn">
-                <Button variant="secondary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all whitespace-nowrap group">
+              <Link to="/profile" className="group/btn w-full sm:w-auto">
+                <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all whitespace-nowrap group">
                   View Profile <User className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
                 </Button>
               </Link>
