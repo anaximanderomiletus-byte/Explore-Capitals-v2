@@ -9,10 +9,10 @@ import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
 import { AuthProvider } from './context/AuthContext';
 
-// ── Lazy-loaded pages ──────────────────────────────────────────────
-// Each page is code-split into its own chunk, loaded on demand.
-// This dramatically reduces the initial bundle size.
-const Home = React.lazy(() => import('./pages/Home'));
+// ── Home is eagerly loaded for instant first paint ─────────────────
+import Home from './pages/Home';
+
+// ── Navbar pages: lazy but prefetched on idle after Home mounts ────
 const Games = React.lazy(() => import('./pages/Games'));
 const DatabasePage = React.lazy(() => import('./pages/DatabasePage'));
 const MapPage = React.lazy(() => import('./pages/MapPage'));
@@ -44,6 +44,32 @@ const Terms = React.lazy(() => import('./pages/Terms'));
 const Privacy = React.lazy(() => import('./pages/Privacy'));
 const Premium = React.lazy(() => import('./pages/Premium'));
 
+
+/**
+ * PrefetchNavbarPages
+ * After the initial page has rendered and the browser is idle, prefetch the
+ * chunks for every page reachable from the navbar. This means navigating
+ * to Games, Database, Map, or About will feel instant because the JS is
+ * already cached.  Uses requestIdleCallback (with setTimeout fallback)
+ * so it never competes with the critical render path.
+ */
+const prefetchNavbarPages = () => {
+  const load = () => {
+    import('./pages/Games');
+    import('./pages/DatabasePage');
+    import('./pages/About');
+    // MapPage is heavy (Leaflet) — still prefetch but slightly delayed
+    setTimeout(() => import('./pages/MapPage'), 200);
+  };
+  if ('requestIdleCallback' in window) {
+    (window as any).requestIdleCallback(load, { timeout: 3000 });
+  } else {
+    setTimeout(load, 1500);
+  }
+};
+
+// Fire once on module load — runs after the initial React render is committed
+let prefetchScheduled = false;
 
 /**
  * ScrollToTop
@@ -151,6 +177,14 @@ const PersistentBackground: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+
+  // Prefetch navbar page chunks once after initial mount
+  useEffect(() => {
+    if (!prefetchScheduled) {
+      prefetchScheduled = true;
+      prefetchNavbarPages();
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0F172A] relative">
