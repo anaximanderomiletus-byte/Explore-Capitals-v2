@@ -1,5 +1,5 @@
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '../firebase';
+import { httpsCallable, getFunctions, Functions } from 'firebase/functions';
+import { functions, app } from '../firebase';
 import type { PaymentEligibility, SubscriptionPlan } from '../types';
 
 export interface CheckoutSessionResponse {
@@ -14,15 +14,38 @@ export interface PortalSessionResponse {
 export interface EligibilityResponse extends PaymentEligibility {}
 
 /**
+ * Resolve a working Functions instance.
+ * Primary: use the eagerly-initialised export from firebase.ts.
+ * Fallback: re-derive from the app instance (handles rare init-order issues).
+ */
+const resolveFunctions = (): Functions | null => {
+  if (functions) return functions;
+  if (app) {
+    try {
+      return getFunctions(app);
+    } catch {
+      /* fall through */
+    }
+  }
+  return null;
+};
+
+const requireFunctions = (): Functions => {
+  const fns = resolveFunctions();
+  if (!fns) {
+    throw new Error('Unable to connect to payment service. Please refresh the page and try again.');
+  }
+  return fns;
+};
+
+/**
  * Check if user is eligible to make a payment
  */
 export const checkPaymentEligibility = async (amount?: number): Promise<EligibilityResponse> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const checkEligibility = httpsCallable<{ amount?: number }, EligibilityResponse>(
-    functions,
+    fns,
     'checkPaymentEligibility'
   );
 
@@ -34,12 +57,10 @@ export const checkPaymentEligibility = async (amount?: number): Promise<Eligibil
  * Accept terms of service
  */
 export const acceptTermsOfService = async (): Promise<{ success: boolean; version: string }> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const acceptTerms = httpsCallable<void, { success: boolean; version: string }>(
-    functions,
+    fns,
     'acceptTerms'
   );
 
@@ -53,14 +74,12 @@ export const acceptTermsOfService = async (): Promise<{ success: boolean; versio
 export const createSubscriptionCheckout = async (
   plan: SubscriptionPlan
 ): Promise<CheckoutSessionResponse> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const createSession = httpsCallable<
     { plan: SubscriptionPlan; successUrl: string; cancelUrl: string },
     CheckoutSessionResponse
-  >(functions, 'createSubscriptionSession');
+  >(fns, 'createSubscriptionSession');
 
   const { data } = await createSession({
     plan,
@@ -75,14 +94,12 @@ export const createSubscriptionCheckout = async (
  * Get customer portal URL for managing subscription
  */
 export const getCustomerPortalUrl = async (): Promise<string> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const createPortal = httpsCallable<
     { returnUrl: string; origin: string },
     PortalSessionResponse
-  >(functions, 'createCustomerPortalSession');
+  >(fns, 'createCustomerPortalSession');
 
   const { data } = await createPortal({
     returnUrl: `${window.location.origin}/settings`,
@@ -96,12 +113,10 @@ export const getCustomerPortalUrl = async (): Promise<string> => {
  * Cancel subscription
  */
 export const cancelSubscription = async (): Promise<{ success: boolean; message: string }> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const cancel = httpsCallable<void, { success: boolean; message: string }>(
-    functions,
+    fns,
     'cancelSubscription'
   );
 
@@ -115,12 +130,10 @@ export const cancelSubscription = async (): Promise<{ success: boolean; message:
 export const requestRefund = async (
   paymentIntentId: string
 ): Promise<{ success: boolean; message: string }> => {
-  if (!functions) {
-    throw new Error('Firebase Functions not initialized');
-  }
+  const fns = requireFunctions();
 
   const refund = httpsCallable<{ paymentIntentId: string }, { success: boolean; message: string }>(
-    functions,
+    fns,
     'requestRefund'
   );
 

@@ -33,28 +33,28 @@ try {
     functions = getFunctions(app);
     analytics = isSupported().then(yes => yes ? getAnalytics(app!) : null).catch(() => null);
 
-    // Initialize App Check
-    const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY;
-    const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
-    
-    if (import.meta.env.DEV) {
-      // Use the manual token from .env if it exists, otherwise use 'true' to auto-generate
-      (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true;
-      
-      // NOTE: Only enable this for fictional phone numbers. 
-      // For real SMS, this MUST be false or commented out.
-      if (auth) {
-        auth.settings.appVerificationDisabledForTesting = true;
-      }
-    }
+    // Initialize App Check (in a separate try/catch so it never blocks core services)
+    try {
+      const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY;
+      const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
 
-    if (appCheckSiteKey) {
-      initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider(appCheckSiteKey),
-        isTokenAutoRefreshEnabled: true
-      });
-    } else if (import.meta.env.DEV) {
-      console.warn("App Check Site Key is missing. Requests will fail if Enforcement is enabled in Firebase.");
+      if (import.meta.env.DEV) {
+        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true;
+        if (auth) {
+          auth.settings.appVerificationDisabledForTesting = true;
+        }
+      }
+
+      if (appCheckSiteKey) {
+        initializeAppCheck(app, {
+          provider: new ReCaptchaV3Provider(appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+      } else if (import.meta.env.DEV) {
+        console.warn("App Check Site Key is missing. Requests will fail if Enforcement is enabled in Firebase.");
+      }
+    } catch (appCheckError) {
+      console.warn("App Check initialization failed (non-critical):", appCheckError);
     }
   }
 } catch (error) {
