@@ -302,7 +302,7 @@ export const imagesTerritories: Record<string, string> = {
   "Pyramiden": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/pyramiden.png",
   "Glacier boat safari in Isfjorden": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/isfjorden.png",
   "Global Seed Vault viewpoint": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/global-seed-vault-viewpoint.png",
-  "Nordenskiöld glacier hike": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/nordenskiold-glacier-hike.png",
+  "Nordenskiöld glacier hike": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/nordenskiold.png",
 
   // --- Tokelau ---
   "Tokelau": "/png/DATABASE/TERRITORY-IMAGES/TOKELAU/tokelau.png",
@@ -322,15 +322,15 @@ export const imagesTerritories: Record<string, string> = {
 
   // --- US Virgin Islands ---
   "US Virgin Islands": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/charlotte-amalie-us-virgin-islands.png",
-  "Trunk Bay (St. John)": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/trunk-bay.png",
-  "Magens Bay (St. Thomas)": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/magens-bay.png",
-  "Buck Island Reef (St. Croix)": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/buck-island-reef.png",
-  "Charlotte Amalie": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/charlotte-amalie.png",
-  "Coral World Ocean Park": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/coral-world-ocean-park.png",
+  "Virgin Islands National Park": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/virgin-islands-national-park.png",
+  "Reef Bay Trail": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/reef-bay-trail.png",
+  "Buck Island Reef": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/buck-island-reef.png",
+  "Christiansted National Historic Site": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/christiansted-national-historic-site.png",
+  "Fort Christian Charlotte Amalie": "/png/DATABASE/TERRITORY-IMAGES/US-VIRGIN-ISLANDS/fort-christian-charlotte-amalie.png",
 
   // --- Wallis and Futuna ---
   "Wallis and Futuna": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/mata-utu-wallis-and-futuna.png",
-  "Mata-Utu": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/mata-utu.png",
+  "Sanctuary of St Pierre Chanel": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/sanctuary-of-st-pierre-chanel.png",
   "Lake Lalolalo": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/lake-lalolalo.png",
   "Alofi Island reef lagoon": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/alofi-island-reef-lagoon.png",
   "Talietumu archaeological site": "/png/DATABASE/TERRITORY-IMAGES/WALLIS-AND-FUTUNA/talietumu-archaeological-site.png",

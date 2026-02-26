@@ -1058,52 +1058,52 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
     ]
   },
   "US Virgin Islands": {
-    tourTitle: "Sails, Reefs, and Island Hopping",
-    introText: "Trunk Bay features an underwater snorkeling trail with signs. Sail between the three main islands in the warm Caribbean.",
+    tourTitle: "Reefs, Ruins, and Island Time",
+    introText: "Three Caribbean islands where protected coral reefs, colonial-era forts, and tropical forest trails tell over a thousand years of human and natural history.",
     stops: [
       {
-        stopName: "Trunk Bay (St. John)",
-        imageKeyword: "Trunk Bay (St. John)",
+        stopName: "Virgin Islands National Park (St. John)",
+        imageKeyword: "Virgin Islands National Park",
         description: [
-          "Trunk Bay on the island of Saint John is one of the most photographed beaches in the Caribbean and home to a unique underwater snorkeling trail. The trail features explanatory signs mounted on the seabed that identify coral species, fish, and marine organisms as snorkelers swim along a marked path over the reef. This innovative approach to marine education was one of the first of its kind when it was established in the 1960s.",
-          "The beach itself is a sweeping crescent of white sand backed by lush green hills, most of which are protected within the Virgin Islands National Park. The park covers approximately sixty percent of Saint John and was made possible by a donation of land from Laurance Rockefeller, who fell in love with the island\'s beauty in the 1950s. The clear water and gentle currents at Trunk Bay make it suitable for snorkelers of all skill levels.",
-          "Beyond the snorkeling trail, the waters around Trunk Bay support healthy populations of sea turtles, spotted eagle rays, and colorful reef fish. The small cay offshore, known as Trunk Cay, creates a sheltered channel where marine life congregates. Despite its popularity with cruise ship excursions, the beach maintains its natural beauty thanks to the strict protections of the national park, which prohibit development along the shoreline."
+          "Virgin Islands National Park protects roughly sixty percent of Saint John's land area along with over five thousand acres of surrounding ocean, making it one of the few national parks that safeguards both tropical forest and coral reef. The park was established in 1956 after Laurance Rockefeller, captivated by the island during a visit in 1952, purchased approximately five thousand acres through Jackson Hole Preserve, Inc. and donated them to the National Park Service on the condition the land would never be developed.",
+          "The park's celebrated North Shore beaches rank among the most beautiful in the Caribbean. Trunk Bay draws visitors to its two-hundred-and-twenty-five-yard underwater snorkeling trail, one of the first of its kind, where seabed signs identify coral species and reef fish. Cinnamon Bay stretches nearly a mile and includes plantation ruins at its edge, while Hawksnest Bay offers a quieter shoreline just minutes from Cruz Bay. Viewpoints such as the Peace Hill Windmill ruins provide panoramic vistas across Trunk Bay to the British Virgin Islands.",
+          "Beyond the beaches, the park's interior holds the remains of more than twenty sugar plantations dating to the Danish colonial period, along with pre-Columbian Taino archaeological sites. Hurricanes Irma and Maria, both Category 5 storms, struck in September 2017 and caused widespread damage, but the park reopened by December of that year. The resilience of the reef systems and forest canopy continues to be monitored by researchers studying tropical recovery in a protected landscape."
         ],
-        question: "Who donated the land that made the Virgin Islands National Park possible?",
+        question: "Who donated the land that established Virgin Islands National Park?",
         options: [
           "Laurance Rockefeller.",
           "Andrew Carnegie.",
-          "John D. Rockefeller Sr.",
-          "Theodore Roosevelt."
+          "Theodore Roosevelt.",
+          "John D. Rockefeller Sr."
         ],
         answer: "Laurance Rockefeller.",
-        explanation: "Laurance Rockefeller purchased and donated over five thousand acres of Saint John in the 1950s, creating the foundation for the national park."
+        explanation: "Laurance Rockefeller purchased roughly five thousand acres of Saint John in the 1950s and donated them to the National Park Service, creating the foundation for the park."
       },
       {
-        stopName: "Magens Bay (St. Thomas)",
-        imageKeyword: "Magens Bay (St. Thomas)",
+        stopName: "Reef Bay Trail (St. John)",
+        imageKeyword: "Reef Bay Trail",
         description: [
-          "Magens Bay is a heart-shaped bay on the northern coast of Saint Thomas, consistently ranked among the top ten beaches in the world. The bay is nearly a mile long and completely enclosed by forested hills on three sides, creating calm, protected swimming conditions in water that transitions from pale aquamarine in the shallows to deep sapphire further out. The beach is lined with coconut palms and sea grape trees that provide natural shade.",
-          "The bay was purchased by the territorial government in 1946 to ensure it would remain a public beach forever, a decision that has preserved it from the resort development that dominates other parts of Saint Thomas. A small admission fee helps maintain the facilities, which include changing rooms, a snack bar, and kayak and paddleboard rentals. The surrounding hillsides are a protected arboretum with trails through native tropical vegetation.",
-          "Magens Bay benefits from its north-facing orientation, which shelters it from the prevailing easterly trade winds and keeps the water remarkably flat most of the year. The bay floor is sandy without significant reef, making it ideal for swimming rather than snorkeling. At the eastern end, mangrove wetlands provide habitat for juvenile fish and wading birds, while the western headland offers rocky points where more adventurous visitors can explore tidal pools."
+          "The Reef Bay Trail is a nearly three-mile descent from Centerline Road at nine hundred feet above sea level down through the heart of Virgin Islands National Park to the southern coast of Saint John. Originally a donkey path used to transport sugar and provisions, the trail passes through almost every land habitat on the island, from moist tropical forest near the ridgeline to dry coastal scrub at the shore. Park rangers lead guided hikes that end with a boat ride back to Cruz Bay, sparing visitors the steep climb in reverse.",
+          "About one and a half miles from the trailhead, a short spur trail leads to a freshwater pool at the base of a forty-foot cliff where Taino petroglyphs are carved into the rock face. The symbols, known as zemis, were made over a thousand years ago during the pre-Columbian era, and the site was added to the National Register of Historic Places in 1982. The pool beneath the carvings is one of the few year-round freshwater sources on the island, likely part of why the Taino considered the valley sacred.",
+          "The trail also passes the ruins of four sugar estates that once dominated the Reef Bay Valley. The Danes colonized Saint John in 1718, and by 1726 all lands in the valley had been parceled into twelve plantations. The Reef Bay Sugar Factory at the bottom of the trail was converted to steam power in 1855, the first on Saint John, after the abolition of slavery. A devastating hurricane in 1916 closed the factory for good, and by the 1950s the land was sold to Rockefeller's preservation organization and folded into the national park."
         ],
-        question: "Why was Magens Bay purchased by the territorial government in 1946?",
+        question: "What pre-Columbian artifacts can be found along the Reef Bay Trail?",
         options: [
-          "To ensure it would remain a public beach forever.",
-          "To build a military naval base.",
-          "To develop a luxury resort complex.",
-          "To establish a marine research station."
+          "Taino petroglyphs carved into rock near a freshwater pool.",
+          "Arawak pottery buried beneath the trail surface.",
+          "Carib stone tools displayed in a trailside shelter.",
+          "Aztec calendar stones embedded in the cliff face."
         ],
-        answer: "To ensure it would remain a public beach forever.",
-        explanation: "The government purchase protected Magens Bay from private development and guaranteed public access in perpetuity."
+        answer: "Taino petroglyphs carved into rock near a freshwater pool.",
+        explanation: "The Reef Bay Trail features Taino rock carvings called zemis, made over a thousand years ago near a sacred freshwater pool at the base of a cliff."
       },
       {
-        stopName: "Buck Island Reef (St. Croix)",
-        imageKeyword: "Buck Island Reef (St. Croix)",
+        stopName: "Buck Island Reef National Monument (St. Croix)",
+        imageKeyword: "Buck Island Reef",
         description: [
-          "Buck Island Reef National Monument, located off the northeastern coast of Saint Croix, protects one of the finest marine gardens in the Caribbean Sea. The uninhabited island is surrounded by an elkhorn coral barrier reef that forms an underwater trail similar to the one at Trunk Bay but in a more pristine open-ocean setting. President Kennedy designated it a national monument in 1961, and it was later expanded to protect over nineteen thousand acres of surrounding ocean.",
-          "The barrier reef creates a shallow lagoon on the island\'s south side where visibility regularly exceeds thirty meters. The underwater trail leads snorkelers through gardens of brain coral, elkhorn coral, and staghorn coral, with plaques explaining the ecosystem. Sea turtles are abundant, particularly hawksbill turtles that feed on the sponges growing among the coral. The reef also supports barracuda, parrotfish, and the occasional nurse shark resting on the sandy bottom.",
-          "The island itself features a short hiking trail to an observation point at the summit, where views extend across the deep blue Caribbean to Saint Croix and beyond. The beach on the western end is a pristine strip of white sand accessible only by boat, and charter vessels from Saint Croix make the journey daily. The combination of a healthy reef system, clear water, and national monument protection makes Buck Island one of the most ecologically significant sites in the US territory."
+          "Buck Island Reef National Monument protects nineteen thousand and fifteen acres of ocean and a one-hundred-and-seventy-six-acre uninhabited island located about one and a half miles off the northeastern coast of Saint Croix. President Kennedy designated it a national monument in 1961, and President Clinton greatly expanded its boundaries in 2001 to safeguard the surrounding seascape. Two-thirds of the island is encircled by an elkhorn coral barrier reef that is unique within United States waters and supports over two hundred and fifty fish species.",
+          "The monument's underwater snorkeling trail, one of only three in the United States, guides visitors along the shallow reef on the island's eastern tip with submerged signs identifying corals and marine life. Visibility in the lagoon regularly exceeds thirty meters, revealing gardens of brain coral, staghorn coral, and sea fans. Hawksbill, leatherback, and green sea turtles nest on the island's beaches, while nurse sharks, spotted eagle rays, and blacktip reef sharks patrol the deeper edges of the reef.",
+          "The island itself was used as goat pasture for two centuries beginning in the 1750s. After the animals were removed in the 1950s, native vegetation was allowed to regrow, and a short hiking trail now leads to a summit observation point with views across the Caribbean to Saint Croix. All extractive uses are prohibited within the monument, meaning no fishing, collecting, or anchoring on coral is permitted. Charter boats from Christiansted make the crossing daily, bringing roughly fifty thousand visitors per year to what many consider the territory's most iconic marine experience."
         ],
         question: "Which US president designated Buck Island Reef as a national monument?",
         options: [
@@ -1113,43 +1113,43 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
           "President Johnson."
         ],
         answer: "President Kennedy.",
-        explanation: "John F. Kennedy signed the proclamation establishing Buck Island Reef National Monument in 1961 to protect its exceptional coral reef system."
+        explanation: "John F. Kennedy signed the proclamation establishing Buck Island Reef National Monument in 1961 to protect its exceptional elkhorn coral barrier reef system."
       },
       {
-        stopName: "Charlotte Amalie",
-        imageKeyword: "Charlotte Amalie",
+        stopName: "Christiansted National Historic Site (St. Croix)",
+        imageKeyword: "Christiansted National Historic Site",
         description: [
-          "Charlotte Amalie is the capital of the US Virgin Islands and one of the busiest cruise ship ports in the Caribbean, with its harbor capable of accommodating multiple large vessels simultaneously. The town was established by the Danish in 1666 and named after the queen consort of Denmark. Its long history as a free port and trading hub is reflected in the historic warehouses, cobblestone alleys, and colonial buildings that climb the steep hillsides above the harbor.",
-          "The town\'s Main Street and Back Street are lined with duty-free shops that draw cruise passengers with competitive prices on jewelry, liquor, perfume, and electronics. The narrow passages between the streets, known as staircase streets or gades, are a distinctive feature of the town\'s Danish colonial layout. Some of these passages, like Riise Alley and Royal Dane Mall, have been converted into charming shopping arcades.",
-          "Charlotte Amalie is also home to one of the oldest synagogues in the Americas. The congregation was established in 1796 by Sephardic Jews, and the synagogue features a sand floor, a tradition that commemorates the Exodus through the desert and the secrecy required during the Spanish Inquisition. Fort Christian, a red-brick Danish fortress built in 1672, is the oldest standing structure in the US Virgin Islands and now houses a museum of local history and culture."
+          "Christiansted National Historic Site preserves over seven acres of Danish colonial waterfront architecture in the heart of Saint Croix's main town, making it the first National Park Service unit established in the US Virgin Islands when it was created in 1952. The centerpiece is Fort Christiansvaern, a yellow-brick fortress built between 1738 and 1749 using bricks imported from Denmark as ship ballast and large blocks of coral cut from the harbor's reefs. Named for King Christian VI, it is regarded as the best-preserved Danish fortification in the Caribbean.",
+          "The historic site includes five additional structures that tell the story of one hundred and eighty-three years of Danish rule on Saint Croix, from 1734 to 1917. The Danish West India and Guinea Company Warehouse, built in 1749, was the site of slave auctions until Denmark outlawed the slave trade in 1803. The Steeple Building, Christiansted's first church constructed in 1753, later served as a bakery, storehouse, and town hall. The Scale House and Customs House reflect the port's central role in the triangular trade of sugar, molasses, and rum.",
+          "Denmark sold the Virgin Islands to the United States in 1917 for twenty-five million dollars, and the transfer ceremony took place at Fort Christiansvaern on March 31 of that year. Today the fort is restored to its 1833 appearance and serves as the visitor information point for all three National Park Service units on Saint Croix. The surrounding streets of Christiansted retain their Danish colonial grid layout, with pastel-colored neoclassical buildings that reflect a building code established in 1747 dictating street widths, setbacks, and construction materials."
         ],
-        question: "What country originally established and controlled Charlotte Amalie?",
+        question: "What building material gives Fort Christiansvaern its distinctive yellow color?",
         options: [
-          "Denmark.",
-          "Spain.",
-          "The Netherlands.",
-          "Great Britain."
+          "Bricks imported from Denmark as ship ballast.",
+          "Locally quarried volcanic sandstone.",
+          "Sun-bleached coral limestone blocks.",
+          "Painted stucco over concrete walls."
         ],
-        answer: "Denmark.",
-        explanation: "The Danish established Charlotte Amalie in 1666, and Denmark controlled the Virgin Islands until selling them to the United States in 1917."
+        answer: "Bricks imported from Denmark as ship ballast.",
+        explanation: "Fort Christiansvaern was built with yellow bricks brought from Denmark in the ballast holds of sailing ships, along with coral blocks cut from the harbor reefs."
       },
       {
-        stopName: "Coral World Ocean Park",
-        imageKeyword: "Coral World Ocean Park",
+        stopName: "Fort Christian and Charlotte Amalie (St. Thomas)",
+        imageKeyword: "Fort Christian Charlotte Amalie",
         description: [
-          "Coral World Ocean Park is a marine park and underwater observatory located at Coki Point on Saint Thomas, one of the island\'s best snorkeling beaches. The centerpiece is the Undersea Observatory Tower, a structure that extends down to a depth of five meters below the ocean surface, allowing visitors to view the reef through large windows without getting wet. Schools of fish, sea turtles, and rays swim past the windows in their natural habitat.",
-          "The park also features touch pools where visitors can handle sea stars, sea cucumbers, and sea urchins, as well as larger exhibits with sharks, stingrays, and sea lions. One of the most popular experiences is the Sea Trek, where participants wear weighted diving helmets and walk on the ocean floor surrounded by tropical fish, requiring no scuba certification. The park combines entertainment with education, running marine research and coral restoration programs.",
-          "Adjacent Coki Beach is considered the best shore snorkeling spot on Saint Thomas, with coral formations beginning just a few meters from the waterline. The reef here supports an incredible density of fish, partly because the park\'s feeding programs have conditioned local marine life to congregate in the area. Sergeant majors, blue tang, and yellowtail snappers swarm snorkelers in iridescent clouds, creating a memorable experience just steps from the parking lot."
+          "Fort Christian is a red-brick Danish fortress built between 1672 and 1680 on a rocky peninsula in the harbor of Charlotte Amalie, making it the oldest standing structure in the US Virgin Islands. Named for King Christian V of Denmark, the fort was constructed by Governor Jorgen Iversen Dyppel and the second Danish expeditionary force to arrive on Saint Thomas. Its walls, three to six feet thick, enclosed a self-contained colonial community with chapels, kitchens, guardrooms, and the governor's residence. A Victorian clock tower was added to the entrance in 1874.",
+          "Charlotte Amalie grew up around the fort and was originally called Taphus, a Danish word for tavern, before being renamed in 1691 after Queen Charlotte Amalie of Hesse-Kassel. The town's steep hillsides are laced with staircase streets known as gades, built in the 1700s using red bricks brought from Denmark as ship ballast. The most famous, the Ninety-Nine Steps, actually has one hundred and three steps and climbs to Blackbeard's Castle with panoramic harbor views. At the foot of the hills, the St. Thomas Synagogue, built in 1833, is the oldest synagogue in continuous use in American territory and features a sand-covered floor honoring Sephardic Jewish tradition.",
+          "Fort Christian has served as a defense post, governor's residence, police station, and jail over its three-and-a-half-century history. After a decade-long renovation, it reopened in 2017 to coincide with the centennial of the transfer of the Danish West Indies to the United States. The fort now houses a museum documenting colonial history, the enslaved people who built and sustained the settlement, and the natural disasters that have shaped the islands. Emancipation Garden, directly opposite the fort, commemorates the abolition of slavery in the Danish West Indies in 1848."
         ],
-        question: "What is the Undersea Observatory Tower at Coral World?",
+        question: "What distinction does Fort Christian hold in the US Virgin Islands?",
         options: [
-          "A structure extending below the ocean surface for viewing the reef through windows.",
-          "A lighthouse converted into a marine science laboratory.",
-          "A glass-bottomed boat permanently anchored over the reef.",
-          "A tall tower providing aerial views of the coral reef from above."
+          "It is the oldest standing structure in the territory.",
+          "It is the largest fort ever built in the Caribbean.",
+          "It was the first structure built by the United States government.",
+          "It is the only surviving wooden colonial fortress."
         ],
-        answer: "A structure extending below the ocean surface for viewing the reef through windows.",
-        explanation: "The observatory tower descends five meters underwater, giving visitors a window into the reef ecosystem without requiring them to swim or dive."
+        answer: "It is the oldest standing structure in the territory.",
+        explanation: "Built between 1672 and 1680, Fort Christian is the oldest standing structure in the US Virgin Islands and has served continuously in various civic roles for over three centuries."
       }
     ]
   },
@@ -1158,22 +1158,22 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
     introText: "Volcanic ridges and lagoons meet Polynesian tradition far from the crowds. Visit village churches, then snorkel reef flats in silence.",
     stops: [
       {
-        stopName: "Mata-Utu",
-        imageKeyword: "Mata-Utu",
+        stopName: "Sanctuary of St Pierre Chanel (Poï Basilica), Futuna",
+        imageKeyword: "Sanctuary of St Pierre Chanel",
         description: [
-          "Mata-Utu is the capital of Wallis and Futuna, a tiny French overseas collectivity in the South Pacific located between Fiji and Samoa. The town sits on the eastern coast of Wallis Island, facing a vast turquoise lagoon enclosed by a barrier reef. With a population of only about one thousand, Mata-Utu is one of the smallest capitals in the world, yet it serves as the administrative center for this remote territory that is home to roughly eleven thousand people.",
-          "The town is dominated by the Cathedral of Our Lady of the Assumption, a grand coral-stone church that seems almost impossibly large for such a small community. The strong Catholic faith on Wallis dates to the arrival of Marist missionaries in 1837, and today the islands have one of the highest ratios of churches to population anywhere in the world. Religious festivals and processions are major community events that blend Catholic ceremony with traditional Polynesian customs.",
-          "Wallis retains a traditional Polynesian monarchy alongside the French administration. The Lavelua, or king of Wallis, holds significant cultural authority and maintains a palace in Mata-Utu. The dual governance structure means that French laws coexist with customary law, and land tenure follows traditional clan-based systems rather than Western property rights. This unique political arrangement makes Wallis and Futuna one of the last places in the Pacific where a pre-colonial monarchy still functions."
+          "The Basilique Saint-Pierre-Chanel is a Roman Catholic minor basilica located in Poï on the northern coast of Futuna Island. Built in 1986, the imposing structure was erected on the site where Father Pierre Chanel, a French Marist missionary, was clubbed to death in April 1841 at the instigation of a local chief whose son had converted to Christianity. Chanel was canonized by Pope Pius XII in 1954 and is recognized as the protomartyr and patron saint of Oceania.",
+          "The basilica's architecture features an enormous stepped tower and fine stained-glass windows, characteristic of the grand Catholic churches found across Wallis and Futuna. Inside a smaller chapel beside the main church, the saint's relics are preserved in a glass showcase alongside the two original war clubs used in his killing. In 1987, for the one hundred and fiftieth anniversary of Chanel's arrival in Futuna, his skull was returned from Rome to the sanctuary.",
+          "Every year on April 28, worshippers from across the Pacific gather at the sanctuary for a pilgrimage commemorating Chanel's martyrdom. The site has gained fame as a place where miraculous healings are said to occur. A museum devoted to Chanel, the Musée Océanien et de Saint Pierre Chanel, opened nearby in 1991 and documents the history of Catholic missions in the region as well as the traditional culture of Futuna."
         ],
-        question: "What traditional political institution still functions alongside French administration in Wallis?",
+        question: "Why is Pierre Chanel historically significant in the context of Oceania?",
         options: [
-          "A Polynesian monarchy headed by the Lavelua.",
-          "A council of elected tribal chiefs.",
-          "A military junta from the colonial era.",
-          "An assembly of village elders with no formal title."
+          "He is the first Catholic martyr and patron saint of Oceania.",
+          "He was the first European to circumnavigate the Pacific.",
+          "He established the first democratic parliament in the South Pacific.",
+          "He discovered Futuna Island for the French Empire."
         ],
-        answer: "A Polynesian monarchy headed by the Lavelua.",
-        explanation: "The Lavelua, or king of Wallis, maintains cultural authority and a palace in Mata-Utu, governing alongside the French administration."
+        answer: "He is the first Catholic martyr and patron saint of Oceania.",
+        explanation: "Pierre Chanel was killed on Futuna in 1841 and was canonized in 1954, becoming the protomartyr and patron saint of all Oceania."
       },
       {
         stopName: "Lake Lalolalo",
