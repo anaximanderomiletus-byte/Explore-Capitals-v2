@@ -116,24 +116,24 @@ const Games: React.FC = () => {
           <div className="mt-auto">
             {isActive ? (
               isLocked ? (
-                <Button 
-                  variant="secondary" 
-                  className="w-full h-12 sm:h-14 text-[10px] sm:text-[11px] md:text-xs border border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
+                <Button
+                  variant="secondary"
+                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xs sm:text-sm border-2 border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
-                  <Lock size={14} className="mr-1.5 shrink-0" /> UNLOCK WITH PREMIUM
+                  <Lock size={16} className="mr-2 shrink-0" /> UNLOCK WITH PREMIUM
                 </Button>
               ) : (
                 <Link to={`/games/${getGamePath(game.id)}`}>
-                  <Button variant="primary" className="w-full h-12 sm:h-14 text-base sm:text-lg border border-white/30">
-                    PLAY <Play size={18} fill="currentColor" />
+                  <Button variant="primary" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl border-2 border-white/30">
+                    PLAY <Play size={20} fill="currentColor" />
                   </Button>
                 </Link>
               )
             ) : (
-              <Button 
-                variant="secondary" 
-                className="w-full h-12 sm:h-14 opacity-50 text-base sm:text-lg font-black uppercase tracking-[0.1em]"
+              <Button
+                variant="secondary"
+                className="w-full h-14 sm:h-16 md:h-[4.5rem] opacity-50 text-lg sm:text-xl font-black uppercase tracking-[0.1em]"
                 disabled={true}
               >
                 Coming Soon
@@ -147,19 +147,14 @@ const Games: React.FC = () => {
 
   return (
     <div className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
-      </div>
-
       <SEO 
         title="Geography Games"
         description="Play free geography games online. Test your knowledge of world capitals, flags, maps, borders, and populations with fun interactive quizzes."
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12 animate-[fadeIn_0.3s_ease-out_both]"
+        >
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky/30 border border-white/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
@@ -170,7 +165,7 @@ const Games: React.FC = () => {
             <p className="text-white/70 text-lg font-bold uppercase tracking-wide drop-shadow-md">Earn points and rank up.</p>
           </div>
 
-          <button 
+          <button
             onClick={playRandomGame}
             className="flex items-center gap-3 px-8 py-4 bg-white/10 border border-white/20 rounded-2xl text-[11px] font-black text-white uppercase tracking-[0.3em] hover:bg-white/20 transition-all group relative overflow-hidden"
           >
@@ -181,7 +176,8 @@ const Games: React.FC = () => {
         </div>
 
         {/* Free Games Section */}
-        <div className="mb-12">
+        <div className="mb-12 animate-[fadeIn_0.3s_ease-out_0.1s_both]"
+        >
           <h2 className="text-lg font-bold text-white/60 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
             <Play size={16} className="text-sky-light" fill="currentColor" />
             Free Games
@@ -192,7 +188,8 @@ const Games: React.FC = () => {
         </div>
 
         {/* Premium Games Section */}
-        <div className="mb-12">
+        <div className="mb-12 animate-[fadeIn_0.3s_ease-out_0.2s_both]"
+        >
           <h2 className="text-lg font-bold text-amber-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
             <Crown size={16} className="text-amber-400" />
             Premium Games

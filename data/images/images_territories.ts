@@ -291,15 +291,16 @@ export const imagesTerritories: Record<string, string> = {
   // --- Sint Maarten ---
   "Sint Maarten": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/philipsburg-sint-maarten.png",
   "Maho Beach": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/maho-beach.png",
-  "Philipsburg boardwalk": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/philipsburg-boardwalk.png",
+  "Philipsburg Boardwalk & Great Bay": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/philipsburg-boardwalk.png",
   "Fort Amsterdam": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/fort-amsterdam.png",
-  "Great Bay Beach": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/great-bay-beach.png",
+  "Mullet Bay Beach": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/mullet-bay-beach.png",
+  "Simpson Bay Lagoon": "/png/DATABASE/TERRITORY-IMAGES/SINT-MAARTEN/simpson-bay-lagoon.png",
 
   // --- Svalbard ---
   "Svalbard": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/longyearbyen-svalbard.png",
   "Longyearbyen": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/longyearbyen.png",
   "Pyramiden": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/pyramiden.png",
-  "Glacier boat safari in Isfjorden": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/glacier-boat-safari-in-isfjorden.png",
+  "Glacier boat safari in Isfjorden": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/isfjorden.png",
   "Global Seed Vault viewpoint": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/global-seed-vault-viewpoint.png",
   "Nordenskiöld glacier hike": "/png/DATABASE/TERRITORY-IMAGES/SVALBARD/nordenskiold-glacier-hike.png",
 

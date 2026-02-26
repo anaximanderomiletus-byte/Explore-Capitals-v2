@@ -190,7 +190,7 @@ const MapPage: React.FC = () => {
       try {
         const map = L.map(mapRef.current, {
           center: [20, 0],
-          zoom: 3,
+          zoom: 2,
           zoomControl: false,
           attributionControl: false,
           minZoom: 2,
@@ -781,8 +781,9 @@ const MapPage: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-40 bg-surface-dark">
-      <SEO 
+    <div className="fixed inset-0 z-40 bg-surface-dark animate-[fadeIn_0.3s_ease-out_both]"
+    >
+      <SEO
         title="MAP"
         description="Explore an interactive world map with all 195 countries. Click to view capitals, flags, populations, and start guided country expeditions."
       />

@@ -979,35 +979,28 @@
     <div id="modal-root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>
-      // Remove loader once React has actually rendered content
-      // Uses MutationObserver to detect when #root has children (React mounted)
+      // Remove loader once the actual page content has rendered.
+      // Pages call window.__dismissLoader() when they mount, so the splash
+      // stays until real content is visible (no double-spinner flash).
       (function() {
         var loader = document.getElementById('initial-loader');
         if (!loader) return;
-        
+
         function dismissLoader() {
           if (!loader) return;
           loader.style.opacity = '0';
           loader.style.visibility = 'hidden';
           setTimeout(function() { loader.remove(); loader = null; }, 500);
         }
-        
-        // Strategy 1: Watch for React rendering content into #root
-        var root = document.getElementById('root');
-        if (root) {
-          var observer = new MutationObserver(function(mutations) {
-            if (root.children.length > 0) {
-              observer.disconnect();
-              // Brief delay for paint to complete
-              requestAnimationFrame(function() {
-                requestAnimationFrame(dismissLoader);
-              });
-            }
+
+        // Expose so pages can call it when mounted
+        window.__dismissLoader = function() {
+          requestAnimationFrame(function() {
+            requestAnimationFrame(dismissLoader);
           });
-          observer.observe(root, { childList: true });
-        }
-        
-        // Strategy 2: Safety timeout - never show loader for more than 4 seconds
+        };
+
+        // Safety timeout - never show loader for more than 4 seconds
         setTimeout(dismissLoader, 4000);
       })();
     </script>

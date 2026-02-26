@@ -83,10 +83,10 @@ const About: React.FC = () => {
       <VerticalSidebarAd slot="9489406693" position="left" />
       <VerticalSidebarAd slot="9489406693" position="right" />
 
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.04)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
+      {/* Background glow — matches persistent background transition */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.04)_0%,transparent_70%)] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-[100px]" />
       </div>
 
       <div className="max-w-6xl mx-auto space-y-12 md:space-y-16 relative z-10">

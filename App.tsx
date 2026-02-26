@@ -1,7 +1,7 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+// framer-motion animations handled per-page via whileInView
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import CookieConsent from './components/CookieConsent';
@@ -61,35 +61,91 @@ const ScrollToTop: React.FC = () => {
  * PageLoadFallback
  * Full-screen minimal spinner shown while a lazy chunk is loading.
  * Matches the app background so there's no flash of white/empty content.
- * Uses a short delay before showing the spinner to avoid flicker on fast loads.
+ * Skips showing its own spinner while the HTML initial-loader is still visible
+ * to avoid two spinners on screen at once.
  */
 const PageLoadFallback: React.FC = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    // If the HTML splash-screen loader is still present, don't show a second spinner
+    const htmlLoader = document.getElementById('initial-loader');
+    if (htmlLoader) return;
+
+    const timer = setTimeout(() => setShow(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex-grow flex flex-col w-full min-h-[60vh] items-center justify-center bg-[#0F172A]">
-      <div className="w-8 h-8 border-[2.5px] border-white/10 border-t-sky rounded-full animate-spin" />
+      {show && (
+        <div className="w-8 h-8 border-[2.5px] border-white/10 border-t-sky rounded-full animate-spin" />
+      )}
     </div>
   );
 };
 
 /**
  * PageWrapper
- * Provides a fade-in transition for page content.
- * Uses `mode="wait"` in AnimatePresence (see below) so only one page
- * is in the DOM at a time — avoids the double-render issue on Safari
- * that caused partial/half-appearing pages.
+ * Simple wrapper that provides Suspense boundary for lazy-loaded pages.
+ * No motion animation — pages handle their own entry animations via whileInView.
+ * This avoids stacking animations and keeps navigation instant.
  */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { duration: 0.15, ease: "easeOut" } }}
-      exit={{ opacity: 0, transition: { duration: 0.07 } }}
-      className="flex-grow flex flex-col w-full"
-    >
+    <div className="flex-grow flex flex-col w-full">
       <Suspense fallback={<PageLoadFallback />}>
         {children}
       </Suspense>
-    </motion.div>
+    </div>
+  );
+};
+
+/**
+ * PersistentBackground
+ * A single fixed background layer that crossfades between different
+ * glow configurations based on the current route. This prevents hard
+ * cuts when navigating between pages.
+ */
+const PersistentBackground: React.FC = () => {
+  const { pathname } = useLocation();
+
+  // Determine which background "mode" based on route
+  const isHome = pathname === '/';
+  const isGames = pathname === '/games' || pathname.startsWith('/games/');
+  const isDatabase = pathname === '/database' || pathname.startsWith('/country/');
+  const isMap = pathname === '/map';
+  const isAbout = pathname === '/about';
+
+  // "Glow" pages: Games, Database, About — brighter orbs
+  const showGlow = isGames || isDatabase || isAbout;
+  // Home has its own subtle radial gradients
+  const showHome = isHome;
+  // Map handles its own background (full-screen dark)
+
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      {/* Base dark layer — always present */}
+      <div className="absolute inset-0 bg-[#0F172A]" />
+
+      {/* Home-style subtle gradients */}
+      <div
+        className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+        style={{ opacity: showHome ? 1 : 0 }}
+      >
+        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.03)_0%,transparent_70%)] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[110%] h-[110%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_70%)] blur-[100px]" />
+      </div>
+
+      {/* Glow-style orbs for Games / Database / About */}
+      <div
+        className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+        style={{ opacity: showGlow ? 1 : 0 }}
+      >
+        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[120px] opacity-50" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/8 rounded-full blur-[100px] opacity-40" />
+      </div>
+    </div>
   );
 };
 
@@ -98,18 +154,12 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0F172A] relative">
+      <PersistentBackground />
       <ScrollToTop />
       <Navigation />
       <CookieConsent />
-      <div className="flex-grow flex flex-col relative w-full">
-          {/*
-            mode="wait" ensures the exiting page fully unmounts before the
-            entering page mounts. This prevents the "half-appearing" issue
-            on Safari where both old and new pages were visible simultaneously.
-            Shorter duration (0.15s) keeps it feeling snappy.
-          */}
-          <AnimatePresence mode="wait" initial={false}>
-            <PageWrapper key={location.pathname}>
+      <div className="flex-grow flex flex-col relative z-[1] w-full">
+            <PageWrapper>
               <Routes location={location}>
                 <Route path="/" element={<Home />} />
                 <Route path="/games" element={<Games />} />
@@ -147,7 +197,6 @@ const AppContent: React.FC = () => {
                 <Route path="/privacy" element={<Privacy />} />
               </Routes>
             </PageWrapper>
-          </AnimatePresence>
       </div>
       <ConditionalFooter />
     </div>

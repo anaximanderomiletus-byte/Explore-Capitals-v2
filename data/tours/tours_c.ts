@@ -467,7 +467,7 @@ export const toursC: Record<string, TourData> = {
         description: [
           "Located in the north, this UNESCO World Heritage site is the largest park in the Central African savannas. It covers a vast area of grassy plains, floodplains, and rocky massifs.",
           "Historically, it was teeming with wildlife, including black rhinos, elephants, and cheetahs. However, heavy poaching during periods of instability has severely reduced animal numbers, placing the park on the List of World Heritage in Danger.",
-          "Despite the challenges, it remains a critical ecosystem. Conservation efforts are ongoing to protect the remaining wildlife and restore the park to its former glory as a haven for biodiversity."
+          "Covering over 17,400 square kilometers, the park was inscribed as a UNESCO World Heritage Site in 1988 but placed on the Danger list in 1997. It remains one of the largest protected areas in Central Africa, home to species such as leopards, red-fronted gazelles, and several primate species."
         ],
         question: "Why is Manovo-Gounda St. Floris National Park on the List of World Heritage in Danger?",
         options: [

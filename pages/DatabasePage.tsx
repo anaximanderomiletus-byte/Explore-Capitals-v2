@@ -467,19 +467,14 @@ const DatabasePage: React.FC = () => {
 
   return (
     <div className="pt-32 pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
-      {/* Simplified Background - reduced blur for performance */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[100px] opacity-60" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/10 rounded-full blur-[80px] opacity-40" />
-      </div>
-
       <SEO 
         title="Country Database"
         description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."
       />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">
+      <div className="max-w-7xl mx-auto relative z-10 animate-[fadeIn_0.3s_ease-out_both]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12"
+        >
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
                <Globe size={12} className="relative z-10 text-sky-light" />
@@ -622,9 +617,9 @@ const DatabasePage: React.FC = () => {
         {/* Scroll to Top Button */}
         {hasResults && (
           <div className="mt-12 flex justify-center">
-            <Button 
-              variant="secondary" 
-              size="md" 
+            <Button
+              variant="secondary"
+              size="md"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="group h-14 px-10 border border-white/20 hover:border-white/40 text-[10px] uppercase tracking-[0.3em]"
             >

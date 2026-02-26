@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin } from 'lucide-react';
+import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
@@ -12,36 +12,71 @@ import { MOCK_COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
 import { STATIC_IMAGES } from '../data/images';
 
-const ParallaxSection: React.FC<{
+/* ── Scroll-reveal wrapper ─────────────────────────────────────────────
+   Pure CSS approach: uses IntersectionObserver only to toggle a class,
+   no framer-motion layout thrash. GPU-friendly translate + opacity.    */
+const RevealSection: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}> = ({ children, className = '', delay = 0 }) => {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold: 0.08 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(36px)',
+        transition: `opacity 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.5s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
+        willChange: 'opacity, transform',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+const Section: React.FC<{
   children: React.ReactNode;
   background?: React.ReactNode;
   className?: string;
-  noPadding?: boolean;
-}> = ({ children, background, className = '', noPadding = false }) => {
-  // Simplified section - removed heavy parallax transforms for mobile performance
-  // Uses CSS-only effects instead of JS-driven animations
-  return (
-    <section className={`relative overflow-hidden isolate w-full ${className}`}>
-      {background && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          {background}
-        </div>
-      )}
-      <div 
-        className={`relative z-10 w-full max-w-7xl mx-auto ${noPadding ? 'px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12' : 'px-4 sm:px-5 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12'}`}
-        style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
-      >
-        {children}
+}> = ({ children, background, className = '' }) => (
+  <section className={`relative overflow-hidden isolate w-full ${className}`}>
+    {background && (
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {background}
       </div>
-    </section>
-  );
-};
+    )}
+    <div
+      className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8"
+      style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
+    >
+      {children}
+    </div>
+  </section>
+);
 
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { isAuthenticated, isLoading: loading } = useUser();
   useEffect(() => {
     setPageLoading(false);
+    // Dismiss the HTML splash-screen loader (prevents double-spinner)
+    (window as any).__dismissLoader?.();
   }, [setPageLoading]);
 
   // Fact of the Day — seeded by today's date so it changes daily
@@ -100,30 +135,20 @@ const Home: React.FC = () => {
         isHomePage={true}
       />
 
-      {/* Persistent Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-[#0F172A]" />
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.03)_0%,transparent_70%)] blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[110%] h-[110%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_70%)] blur-[100px]" />
-        </div>
-      </div>
-
-      <ParallaxSection
+      {/* ═══════════════ HERO ═══════════════ */}
+      <Section
         className="min-h-screen flex items-center justify-center"
         background={
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {/* CSS-only gradient background - no external image loading */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.08)_0%,transparent_50%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,rgba(52,199,89,0.05)_0%,transparent_40%)]" />
-            {/* Subtle top fade */}
             <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-[#0F172A] to-transparent" />
           </div>
         }
       >
-        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-16 lg:gap-y-5 items-center pt-8 sm:pt-12 lg:pt-20">
+        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-10 lg:gap-y-3 xl:gap-x-16 xl:gap-y-4 items-center pt-20 sm:pt-24 md:pt-28 lg:pt-28 pb-12 sm:pb-16 md:pb-20">
           {/* Badge */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -136,13 +161,13 @@ const Home: React.FC = () => {
           </motion.div>
 
           {/* Heading */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-center lg:text-left lg:col-start-1"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[7rem] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
               Play Your <br />
               <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible" style={{ paddingBottom: '0.15em', paddingRight: '0.1em', display: 'inline-block' }}>
                 Atlas.
@@ -150,58 +175,31 @@ const Home: React.FC = () => {
             </h1>
           </motion.div>
 
-          {/* Globe - in the flow on mobile, spans right column on desktop */}
-          <motion.div 
+          {/* Globe */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
-            {/* Outer faint glow — larger, subtler halo */}
             <motion.div
-              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[880px] lg:h-[880px] rounded-full pointer-events-none"
-              animate={{
-                opacity: [0.3, 0.5, 0.3],
-                scale: [0.97, 1.03, 0.97],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              style={{
-                background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)',
-              }}
+              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[580px] lg:h-[580px] xl:w-[880px] xl:h-[880px] rounded-full pointer-events-none"
+              animate={{ opacity: [0.3, 0.5, 0.3], scale: [0.97, 1.03, 0.97] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
+            />
+            <motion.div
+              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[480px] lg:h-[480px] xl:w-[720px] xl:h-[720px] rounded-full pointer-events-none"
+              animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.05, 0.95] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
             />
 
-            {/* Bright glow behind the globe (z-plane backlight) */}
-            <motion.div
-              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[720px] lg:h-[720px] rounded-full pointer-events-none"
-              animate={{
-                opacity: [0.6, 1, 0.6],
-                scale: [0.95, 1.05, 0.95],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              style={{
-                background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)',
-              }}
-            />
-
-            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[600px] lg:h-[600px] flex-shrink-0 pointer-events-none">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[380px] lg:h-[380px] xl:w-[600px] xl:h-[600px] flex-shrink-0 pointer-events-none">
               <motion.div
                 className="w-full h-full"
-                animate={{
-                  scale: [1, 1.03, 1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+                animate={{ scale: [1, 1.03, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
                 <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
@@ -216,73 +214,60 @@ const Home: React.FC = () => {
                   <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
                 </Link>
               </motion.div>
-              
-              {/* Decorative floating bubbles - purely decorative, no click blocking */}
+
+              {/* Decorative floating bubbles */}
               <motion.div
-                animate={{ 
-                  y: [0, -6, 2, -4, 1, -7, 0], 
-                  x: [0, 3, -2, 5, -1, 2, 0],
-                  rotate: [0, 2, -1, 3, -2, 1, 0]
-                }}
+                animate={{ y: [0, -6, 2, -4, 1, -7, 0], x: [0, 3, -2, 5, -1, 2, 0], rotate: [0, 2, -1, 3, -2, 1, 0] }}
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-28 lg:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                  <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-[60px] lg:h-[60px]" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-28 xl:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
+                  <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-11 lg:h-11 xl:w-14 xl:h-14" />
                 </div>
               </motion.div>
               <motion.div
-                animate={{ 
-                  y: [0, 4, -3, 6, -2, 5, -4, 0], 
-                  x: [0, -4, 2, -3, 4, -1, 3, 0],
-                  rotate: [0, -2, 3, -1, 2, -3, 1, 0]
-                }}
+                animate={{ y: [0, 4, -3, 6, -2, 5, -4, 0], x: [0, -4, 2, -3, 4, -1, 3, 0], rotate: [0, -2, 3, -1, 2, -3, 1, 0] }}
                 transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                 className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-36 lg:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                  <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-[80px] lg:h-[80px]" />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-36 xl:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
+                  <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-[80px] xl:h-[80px]" />
                 </div>
               </motion.div>
             </div>
           </motion.div>
 
           {/* Description */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center lg:text-left lg:col-start-1 lg:-mt-1 lg:mb-4"
+            className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4"
           >
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
+            <p className="text-base sm:text-lg md:text-xl lg:text-lg xl:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
               Master world capitals, identify flags, and conquer the map. High-fidelity geography games designed to build global intuition.
             </p>
           </motion.div>
 
           {/* Button */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center lg:text-left lg:col-start-1 mt-4 sm:mt-6 lg:mt-0"
+            className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0"
           >
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-64 sm:w-72 md:w-80 h-14 sm:h-16 md:h-18 text-xl sm:text-2xl group uppercase">
-                Play Now <ArrowRight className="ml-2 transition-transform" size={22} />
+              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-80 xl:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-[4.5rem] xl:h-20 text-2xl sm:text-3xl md:text-3xl lg:text-2xl xl:text-3xl group uppercase">
+                Play Now <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-6 lg:h-6 xl:w-8 xl:h-8" size={24} fill="currentColor" />
               </Button>
             </Link>
           </motion.div>
         </div>
-      </ParallaxSection>
+      </Section>
 
-      {/* Fact of the Day */}
-      <ParallaxSection>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-5xl mx-auto"
-        >
+      {/* ═══════════════ FACT OF THE DAY ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] glow-badge">
               <Zap size={10} fill="currentColor" className="text-sky" />
@@ -304,7 +289,7 @@ const Home: React.FC = () => {
 
             <div className="grid md:grid-cols-[1fr_1.2fr] gap-0 relative z-10">
               {/* Landmark Image */}
-              <div className="relative aspect-[4/3] md:aspect-auto overflow-hidden">
+              <div className="relative aspect-[16/9] sm:aspect-[2/1] md:aspect-auto overflow-hidden">
                 {factOfTheDay.image && (
                   <img
                     src={`${import.meta.env.BASE_URL}${factOfTheDay.image.startsWith('/') ? factOfTheDay.image.slice(1) : factOfTheDay.image}`}
@@ -325,29 +310,28 @@ const Home: React.FC = () => {
               </div>
 
               {/* Fact Content */}
-              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center">
-                <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                  <MapPin size={14} className="text-sky shrink-0" />
-                  <h3 className="text-sm sm:text-base md:text-lg font-black text-sky uppercase tracking-wider leading-tight">{factOfTheDay.stop.stopName}</h3>
-                </div>
-                <p className="text-white/60 text-sm sm:text-base md:text-lg leading-relaxed mb-6 sm:mb-8 font-medium">
+              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+                <h3 className="flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base md:text-lg font-black text-sky uppercase tracking-wider leading-tight mb-2 sm:mb-3 max-w-full whitespace-nowrap overflow-hidden">
+                  <MapPin className="text-sky shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
+                  <span className="truncate">{factOfTheDay.stop.stopName}</span>
+                </h3>
+                <p className="text-white/60 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-6 sm:mb-8 font-medium">
                   {factOfTheDay.fact}
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link to={`/country/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                    <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
-                      Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
-                    </Button>
-                  </Link>
-                </div>
+                <Link to={`/country/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
+                    Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
-        </motion.div>
-      </ParallaxSection>
+        </RevealSection>
+      </Section>
 
-      <ParallaxSection>
-        <div className="max-w-7xl mx-auto">
+      {/* ═══════════════ GAMES ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between mb-6 sm:mb-8 md:mb-12 gap-4 sm:gap-6 text-center sm:text-left">
             <div className="max-w-xl">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none drop-shadow-xl">Games</h2>
@@ -368,6 +352,7 @@ const Home: React.FC = () => {
               color="bg-gel-blue"
               link="/games/capital-quiz"
               stats="12.4k Played"
+              image="./png/GAMES/capital-quiz.png"
             />
             <GameCard
               title="Map Dash"
@@ -376,6 +361,7 @@ const Home: React.FC = () => {
               color="bg-sky"
               link="/games/map-dash"
               stats="8.1k Played"
+              image="./png/GAMES/map-dash.png"
             />
             <GameCard
               title="Flag Frenzy"
@@ -384,16 +370,18 @@ const Home: React.FC = () => {
               color="bg-accent"
               link="/games/flag-frenzy"
               stats="15.2k Played"
+              image="./png/GAMES/flag-frenzy.png"
             />
           </div>
-        </div>
-      </ParallaxSection>
+        </RevealSection>
+      </Section>
 
-      <ParallaxSection>
-        <div className="max-w-7xl mx-auto">
+      {/* ═══════════════ LOYALTY PATH ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-7xl mx-auto">
           <div className="bg-white/[0.02] border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group glow-card">
             <div className="absolute inset-0 bg-aurora opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" />
-            
+
             <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center relative z-10">
               <div className="text-center lg:text-left">
                 <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-sky/10 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 md:mb-8 glow-badge">
@@ -433,7 +421,7 @@ const Home: React.FC = () => {
                         <span className="text-base sm:text-lg md:text-xl font-black text-sky">75%</span>
                       </div>
                       <div className="h-2.5 sm:h-3 md:h-4 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <motion.div 
+                        <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: "75%" }}
                           transition={{ duration: 1.5, ease: "easeOut" }}
@@ -459,18 +447,19 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </ParallaxSection>
+        </RevealSection>
+      </Section>
 
-      {/* Strategic Ad Placement - Between Loyalty and Explore sections */}
-      <ParallaxSection className="py-4 md:py-8">
+      {/* Strategic Ad Placement */}
+      <Section className="py-4 md:py-8">
         <div className="max-w-4xl mx-auto">
           <ResponsiveAd slot="2512934803" className="rounded-2xl overflow-hidden" />
         </div>
-      </ParallaxSection>
+      </Section>
 
-      <ParallaxSection>
-        <div className="max-w-7xl mx-auto">
+      {/* ═══════════════ EXPLORE ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-7xl mx-auto">
           <div className="text-center mb-6 sm:mb-8 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display font-black text-white mb-2 sm:mb-4 md:mb-6 tracking-tighter uppercase leading-none">Explore</h2>
             <p className="text-white/40 text-sm sm:text-base md:text-xl font-bold max-w-2xl mx-auto uppercase tracking-widest px-2">Master the atlas in our interactive database.</p>
@@ -515,25 +504,17 @@ const Home: React.FC = () => {
 
             <Link to="/map" className="group">
               <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)] glow-card">
-                {/* Map wireframe preview background — SVG continents like Database wireframe */}
+                {/* Map wireframe preview background */}
                 <div className="absolute inset-0 pointer-events-none opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-700">
                   <svg className="absolute inset-0 w-full h-full" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid slice">
-                    {/* Simplified continent outlines */}
                     <g stroke="white" strokeWidth="0.8" fill="none">
-                      {/* North America */}
                       <path d="M 100 150 L 120 120 L 140 130 L 130 160 Z" />
-                      {/* South America */}
                       <path d="M 130 200 L 145 180 L 155 220 Z" />
-                      {/* Europe */}
                       <path d="M 350 140 L 380 130 L 400 150 L 370 160 Z" />
-                      {/* Africa */}
                       <path d="M 400 180 L 430 160 L 450 240 L 420 260 Z" />
-                      {/* Asia */}
                       <path d="M 480 120 L 550 100 L 600 150 L 520 180 Z" />
-                      {/* Australia */}
                       <path d="M 650 320 L 680 310 L 690 340 L 660 350 Z" />
                     </g>
-                    {/* Grid lines for map feel */}
                     <g stroke="white" strokeWidth="0.3" opacity="0.3">
                       <line x1="0" y1="100" x2="960" y2="100" />
                       <line x1="0" y1="200" x2="960" y2="200" />
@@ -545,7 +526,6 @@ const Home: React.FC = () => {
                       <line x1="800" y1="0" x2="800" y2="500" />
                     </g>
                   </svg>
-                  {/* Simulated map markers */}
                   <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '30%', left: '15%' }} />
                   <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '35%', left: '42%' }} />
                   <div className="absolute w-1.5 h-1.5 rounded-full bg-accent/20" style={{ top: '50%', left: '45%' }} />
@@ -564,74 +544,81 @@ const Home: React.FC = () => {
               </div>
             </Link>
           </div>
-        </div>
-      </ParallaxSection>
+        </RevealSection>
+      </Section>
 
-      <ParallaxSection 
-        className="pt-8 sm:pt-12 md:pt-20 pb-16 sm:pb-24 md:pb-32"
+      {/* ═══════════════ START YOUR EXPEDITION ═══════════════ */}
+      <Section
+        className="py-12 sm:py-16 md:py-24"
         background={
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            {/* CSS-only decorative background - no external image */}
             <div className="w-[80%] h-[60%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(0,194,255,0.06)_0%,transparent_60%)] blur-[30px]" />
           </div>
         }
       >
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display font-black text-white mb-3 sm:mb-6 md:mb-10 tracking-tighter uppercase leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <RevealSection className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display font-black text-white mb-3 sm:mb-6 md:mb-10 tracking-tighter uppercase leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
             Start Your <br />
             <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">
               Expedition.
             </span>
           </h2>
-          
-          <p className="text-sm sm:text-base md:text-xl lg:text-2xl mb-6 sm:mb-10 md:mb-16 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed text-white/30 px-2">
+
+          <p className="text-sm sm:text-base md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-10 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed text-white/30 px-2">
             Master the atlas and join the global elite.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 md:gap-8 px-2">
-            <Link to="/games" className="w-full sm:w-auto group/btn">
-              <Button variant="primary" size="lg" className="w-full sm:w-56 md:w-72 h-12 sm:h-14 md:h-20 text-lg sm:text-xl md:text-2xl uppercase border-2 border-white/30 transition-all">
-                Play Now
+          <div className="flex flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
+            <Link to="/games" className="group/btn">
+              <Button variant="primary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
+                Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
               </Button>
             </Link>
             {!isAuthenticated && !loading && (
-            <Link to="/auth" className="w-full sm:w-auto group/btn">
-              <Button variant="secondary" size="lg" className="w-full sm:w-44 md:w-56 h-12 sm:h-14 md:h-20 text-base sm:text-lg md:text-xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all">
-                Sign Up
+            <Link to="/auth" className="group/btn">
+              <Button variant="secondary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all group">
+                Sign Up <UserPlus className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
               </Button>
             </Link>
             )}
             {isAuthenticated && (
-              <Link to="/profile" className="w-full sm:w-auto group/btn">
-                <Button variant="secondary" size="lg" className="w-full sm:w-44 md:w-56 h-12 sm:h-14 md:h-20 text-base sm:text-lg md:text-xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all">
-                  View Profile
+              <Link to="/profile" className="group/btn">
+                <Button variant="secondary" size="lg" className="w-56 sm:w-72 md:w-80 lg:w-72 xl:w-96 h-20 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all whitespace-nowrap group">
+                  View Profile <User className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
                 </Button>
               </Link>
             )}
           </div>
-        </div>
-      </ParallaxSection>
+        </RevealSection>
+      </Section>
     </main>
   );
 };
 
-const GameCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; color: string; link: string; stats: string }> = ({
+const GameCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; color: string; link: string; stats: string; image?: string }> = ({
   title,
   desc,
   icon,
   color,
   link,
   stats,
+  image,
 }) => (
   <Link to={link} className="group block h-full relative">
     {/* Solid Gel-style background — no backdrop-blur to avoid rendering rectangles on hover/scroll */}
     <div className={`absolute inset-0 bg-white/10 rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15),0_0_25px_rgba(0,194,255,0.08),0_0_50px_rgba(0,194,255,0.04)]`}>
+      {/* Thumbnail background image */}
+      {image && (
+        <div className="absolute inset-0">
+          <img src={image} alt="" className="w-full h-full object-cover opacity-[0.07] group-hover:opacity-[0.12] scale-110 group-hover:scale-105 transition-all duration-700" loading="lazy" decoding="async" />
+        </div>
+      )}
       {/* Glossy overlay layer */}
       <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       {/* Accent glow on hover */}
       <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 ease-out ${color}`} />
     </div>
-    
+
     <div className="relative p-5 sm:p-6 md:p-8 lg:p-12 flex flex-col h-full z-10">
       <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 ${color} rounded-xl sm:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-8 lg:mb-10 transition-all duration-700 ease-out relative overflow-hidden border-2 border-white/40`}>
         <div className="relative z-10 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6 md:[&>svg]:w-7 md:[&>svg]:h-7 lg:[&>svg]:w-8 lg:[&>svg]:h-8">{icon}</div>

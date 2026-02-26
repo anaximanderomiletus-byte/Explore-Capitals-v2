@@ -675,7 +675,7 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
   },
   "Sint Maarten": {
     tourTitle: "Where Planes Kiss the Sand",
-    introText: "Planes fly just feet above the beach at Maho Bay. Cross the open border between the Dutch and French sides.",
+    introText: "Planes fly just feet above the beach at Maho Bay. Explore the Dutch side of the smallest island shared by two nations.",
     stops: [
       {
         stopName: "Maho Beach",
@@ -696,12 +696,12 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
         explanation: "The runway of Princess Juliana International Airport ends at the beach, causing arriving planes to fly extremely low over sunbathers."
       },
       {
-        stopName: "Philipsburg boardwalk",
-        imageKeyword: "Philipsburg boardwalk",
+        stopName: "Philipsburg Boardwalk & Great Bay",
+        imageKeyword: "Philipsburg Boardwalk & Great Bay",
         description: [
-          "Philipsburg is the capital of Sint Maarten and sits on a narrow strip of land between Great Bay and the Great Salt Pond. The town\'s mile-long boardwalk runs along the waterfront of Great Bay, a broad crescent of white sand that serves as both public beach and cruise ship welcome mat. On busy days, up to five cruise ships anchor in the bay simultaneously, bringing thousands of day-trippers to the shops and restaurants along Front Street.",
-          "Front Street is the commercial heart of Philipsburg, lined with duty-free shops selling electronics, jewelry, liquor, and designer goods at prices well below retail. The street runs parallel to the boardwalk, and the narrow lanes connecting them are filled with restaurants serving everything from Dutch pancakes to Caribbean jerk chicken. The old Courthouse, a whitewashed colonial building with a cupola, anchors the center of town and has served as the seat of government since 1793.",
-          "The boardwalk itself is a pleasant walk lined with palm trees, restaurants, and beach bars where visitors can sit with their toes in the sand while watching enormous cruise ships glide into the bay. Great Bay Beach stretches the full length of the boardwalk, offering free public access to warm calm water. In the evening, the boardwalk transforms into a lively promenade with live music, food vendors, and stunning sunset views."
+          "Philipsburg is the capital of Sint Maarten and sits on a narrow strip of land between Great Bay and the Great Salt Pond. The town's mile-long boardwalk runs along the waterfront of Great Bay, a broad crescent of white sand that stretches nearly two kilometers and serves as both public beach and cruise ship welcome mat. On busy days, up to five cruise ships anchor in the bay simultaneously, bringing thousands of day-trippers to the shops and restaurants along Front Street.",
+          "Front Street is the commercial heart of Philipsburg, lined with duty-free shops selling electronics, jewelry, liquor, and designer goods at prices well below retail. The old Courthouse, a whitewashed colonial building with a cupola, anchors the center of town and has served as the seat of government since 1793. The narrow lanes connecting Front Street and the boardwalk are filled with restaurants serving everything from Dutch pancakes to Caribbean jerk chicken.",
+          "Great Bay Beach stretches the full length of the boardwalk, offering free public access to calm, shallow water ideal for families. At the eastern end, Bobby's Marina is home to water sports outfitters and excursion boats, while the western end offers a quieter setting backed by historic colonial buildings. In the evening, the boardwalk transforms into a lively promenade with live music, food vendors, and stunning sunset views as the sun dips behind the hills of the French side."
         ],
         question: "What body of water sits on the opposite side of Philipsburg from Great Bay?",
         options: [
@@ -714,29 +714,11 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
         explanation: "Philipsburg occupies a narrow sandbar between Great Bay on the south and the Great Salt Pond on the north."
       },
       {
-        stopName: "Loterie Farm",
-        imageKeyword: "Loterie Farm",
-        description: [
-          "Loterie Farm straddles the border between the French and Dutch sides of the island, occupying the forested slopes of Pic Paradis, the island\'s highest mountain. This former sugar plantation has been converted into a nature sanctuary and eco-adventure park, preserving one of the last tracts of tropical forest on an island where development has consumed much of the natural landscape.",
-          "The property features a network of hiking trails that wind through secondary tropical forest, home to green vervet monkeys, iguanas, and dozens of bird species. The highlight for thrill-seekers is the zipline course that sends riders soaring through the canopy, while the Hidden Forest Pool offers a more tranquil experience with spring-fed water surrounded by lush vegetation and sun loungers.",
-          "Loterie Farm takes its name from the historical practice of distributing plantation land through a lottery system during the colonial era. Remnants of the old sugar estate, including stone walls and processing equipment, can still be found along the trails. The property demonstrates how the island\'s colonial-era agricultural land can be repurposed for conservation and sustainable recreation."
-        ],
-        question: "What animals, not native to the Caribbean, can be found in the forests of Loterie Farm?",
-        options: [
-          "Green vervet monkeys.",
-          "Red foxes.",
-          "Ring-tailed lemurs.",
-          "European badgers."
-        ],
-        answer: "Green vervet monkeys.",
-        explanation: "Green vervet monkeys were introduced to the island during the colonial era and now live in the forest on the slopes of Pic Paradis."
-      },
-      {
         stopName: "Fort Amsterdam",
         imageKeyword: "Fort Amsterdam",
         description: [
           "Fort Amsterdam is the oldest Dutch military fortification in the Caribbean, built in 1631 on a peninsula overlooking the entrance to Great Bay. The Dutch West India Company constructed the fort to protect their salt-mining operations on the island, as salt was an enormously valuable commodity used to preserve herring, the backbone of the Dutch economy. The Spanish captured the fort in 1633 and held it for fifteen years before the Dutch regained control.",
-          "The fort\'s thick stone walls and strategic position on the high ground made it virtually impregnable from sea attack. Cannons mounted along the ramparts could fire on any ship attempting to enter Great Bay without permission. The ruins are remarkably well preserved, with walls, archways, and gun emplacements still clearly visible. A monument at the fort commemorates the long history of conflict over this strategically located island.",
+          "The fort's thick stone walls and strategic position on the high ground made it virtually impregnable from sea attack. Cannons mounted along the ramparts could fire on any ship attempting to enter Great Bay without permission. The ruins are remarkably well preserved, with walls, archways, and gun emplacements still clearly visible. A monument at the fort commemorates the long history of conflict over this strategically located island.",
           "Today Fort Amsterdam is accessible via a short hike from Philipsburg and offers panoramic views of the capital, Great Bay, and the cruise ship terminal below. The fort sits on the grounds of a government building complex, and visitors can explore the ruins freely. Standing among the old cannons, it is easy to understand why this small island was fought over by the Dutch, French, Spanish, and English for centuries."
         ],
         question: "Why was salt mining so important to the Dutch on Sint Maarten?",
@@ -750,22 +732,40 @@ export const toursTerritoriesPZ: Record<string, TourData> = {
         explanation: "The Dutch herring trade depended on large quantities of salt for preservation, making the salt ponds of Sint Maarten strategically valuable."
       },
       {
-        stopName: "Great Bay Beach",
-        imageKeyword: "Great Bay Beach",
+        stopName: "Mullet Bay Beach",
+        imageKeyword: "Mullet Bay Beach",
         description: [
-          "Great Bay Beach stretches for nearly two kilometers along the southern shore of Philipsburg, forming a wide arc of white sand that is the most accessible beach on the Dutch side of the island. The beach is backed by the boardwalk and Front Street, making it easy to alternate between shopping, dining, and swimming throughout the day. The calm, shallow water is ideal for families, and the gentle slope means children can wade far from shore in safety.",
-          "The bay is large enough to accommodate multiple cruise ships at anchor, and watching these floating cities glide in at dawn is a spectacle in itself. Water taxis ferry passengers between the ships and the pier, creating a constant buzz of activity on the water. Despite the cruise traffic, the beach remains clean and welcoming, with enough space that even on the busiest days there is room to spread a towel.",
-          "At the eastern end of the beach, the Bobby\'s Marina area is home to restaurants, water sports outfitters, and excursion boats offering trips to nearby islands and snorkeling reefs. The western end is quieter, with the historic buildings of old Philipsburg providing a charming backdrop. As the sun sets behind the hills of the French side, the entire bay is bathed in golden light, and the boardwalk bars fill with music and laughter."
+          "Mullet Bay Beach is widely regarded as the most beautiful beach on the Dutch side of Sint Maarten, a sweeping crescent of powder-white sand framed by rocky headlands and backed by the grounds of a long-abandoned resort. Unlike the bustling cruise-port beaches of Philipsburg, Mullet Bay retains a quieter, more local character and is a favorite weekend spot for residents who arrive early to claim the best shade under the sea grape trees.",
+          "The beach takes its name from the mullet fish that once schooled in great numbers in the bay. The water is calm and brilliantly turquoise, sheltered by the curve of the headlands, making it excellent for swimming and snorkeling along the rocky edges where parrotfish, sergeant majors, and sea turtles are regularly spotted. The abandoned Mullet Bay Resort, once the island's largest hotel and casino complex, looms behind the tree line as a concrete monument to the devastation of Hurricane Luis in 1995.",
+          "At the western end of the beach, a short scramble over the rocks leads to a small hidden cove popular with snorkelers. The main stretch of sand faces southwest, catching the full force of Caribbean sunsets that paint the sky in shades of orange and violet. Mullet Bay's combination of natural beauty, relatively uncrowded conditions, and easy access from the airport road makes it the beach most recommended by locals to visitors seeking an authentic Dutch-side experience."
         ],
-        question: "How long does Great Bay Beach stretch along the shore of Philipsburg?",
+        question: "What abandoned structure sits behind the tree line at Mullet Bay Beach?",
         options: [
-          "Nearly two kilometers.",
-          "Five hundred meters.",
-          "Five kilometers.",
-          "Just one hundred meters."
+          "The Mullet Bay Resort, destroyed by Hurricane Luis in 1995.",
+          "A colonial-era sugar mill from the 1700s.",
+          "An old Dutch naval barracks.",
+          "A decommissioned lighthouse."
         ],
-        answer: "Nearly two kilometers.",
-        explanation: "Great Bay Beach extends approximately two kilometers along the southern coast of Philipsburg, making it the largest beach on the Dutch side."
+        answer: "The Mullet Bay Resort, destroyed by Hurricane Luis in 1995.",
+        explanation: "The Mullet Bay Resort was once the island's largest hotel and casino complex but was devastated by Hurricane Luis and has never been rebuilt."
+      },
+      {
+        stopName: "Simpson Bay Lagoon",
+        imageKeyword: "Simpson Bay Lagoon",
+        description: [
+          "Simpson Bay Lagoon is the largest inland body of water in the Eastern Caribbean, spanning both the Dutch and French sides of the island. The lagoon covers roughly three square kilometers and is connected to the open sea by two narrow channels, each controlled by a drawbridge that opens on a set schedule to allow sailboats and yachts to pass through. The Dutch-side bridge at Simpson Bay lifts several times daily, creating a procession of masts that has become a signature sight of the island.",
+          "The lagoon is one of the premier yacht harbors in the Caribbean, home to multiple marinas that collectively berth hundreds of vessels ranging from modest sailing boats to superyachts exceeding fifty meters. During hurricane season, the lagoon's sheltered waters serve as a safe haven, and its boatyards perform major refits and repairs. The strip of land between the lagoon and the sea on the Dutch side is lined with restaurants, bars, and shops that cater to the yachting community and tourists alike.",
+          "The ecological significance of the lagoon is often overlooked beneath the marina activity. Mangrove stands along the eastern and northern shores provide nursery habitat for juvenile fish, crabs, and lobsters. Brown pelicans dive for baitfish in the shallows, and magnificent frigatebirds circle overhead. Conservation efforts are underway to protect the remaining mangroves from development, recognizing that the lagoon's health is directly linked to the reef systems and fisheries that sustain the island's economy."
+        ],
+        question: "What makes Simpson Bay Lagoon notable among bodies of water in the Eastern Caribbean?",
+        options: [
+          "It is the largest inland body of water in the Eastern Caribbean.",
+          "It contains the deepest point in the Caribbean Sea.",
+          "It is the only freshwater lake in the Lesser Antilles.",
+          "It is home to the Caribbean's largest coral reef."
+        ],
+        answer: "It is the largest inland body of water in the Eastern Caribbean.",
+        explanation: "Simpson Bay Lagoon covers roughly three square kilometers and spans both the Dutch and French sides of the island, making it the largest lagoon in the Eastern Caribbean."
       }
     ]
   },

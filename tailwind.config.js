@@ -84,6 +84,10 @@ module.exports = {
         'bounce-slow': 'bounce 3s infinite',
       },
       keyframes: {
+        'fadeIn': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
         'globe-pulse': {
           '0%, 100%': { transform: 'scale(1.3)' },
           '50%': { transform: 'scale(1.35)' },
