@@ -234,19 +234,19 @@ export default function FlagFrenzy() {
                  >
                    <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
                       <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-3 md:mb-4 font-sans shrink-0">IDENTIFY FLAG</p>
-                      <div className="flex-1 flex items-center justify-center w-full min-h-0 relative">
+                      <div className="flex-1 flex items-center justify-center w-full min-h-0 relative px-4 sm:px-6">
                         {!imgError ? (
                           <img
                             src={`/flags/${currentCountryCode}.png`}
                             alt="Target Flag"
-                            className="max-w-full max-h-full object-contain drop-shadow-2xl"
+                            className="max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
                             onError={() => setImgError(true)}
                           />
                         ) : (
                           <img
                             src={getFlagUrl(currentQuestion.country.flag)}
                             alt="Target Flag Fallback"
-                            className="max-w-full max-h-full object-contain drop-shadow-2xl"
+                            className="max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
                           />
                         )}
                       </div>

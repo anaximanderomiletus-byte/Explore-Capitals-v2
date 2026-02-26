@@ -61,7 +61,7 @@ const Games: React.FC = () => {
     
     return (
       <div
-        className={`group bg-white/20 rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''}`}
+        className={`group bg-white/20 rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''} h-full flex flex-col`}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
         
@@ -72,7 +72,7 @@ const Games: React.FC = () => {
           </div>
         )}
         
-        <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden border-b border-white/20">
+        <div className="relative h-40 sm:h-44 md:h-48 shrink-0 overflow-hidden border-b border-white/20">
           <img
             src={game.image}
             alt={game.title}
@@ -109,7 +109,7 @@ const Games: React.FC = () => {
           )}
         </div>
         
-        <div className="p-5 sm:p-6 md:p-8 flex flex-col h-[calc(100%-10rem)] sm:h-[calc(100%-11rem)] md:h-[calc(100%-12rem)] relative z-10">
+        <div className="p-5 sm:p-6 md:p-8 flex flex-col flex-1 min-h-0 relative z-10">
           <h3 className={`text-xl sm:text-2xl font-display font-black mb-2 tracking-tighter leading-none uppercase drop-shadow-md ${isPremiumGame ? 'text-amber-400' : 'text-white'}`}>{game.title}</h3>
           <p className="text-white/60 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base leading-relaxed font-bold uppercase tracking-tight line-clamp-2 drop-shadow-sm">{game.description}</p>
           
@@ -182,7 +182,7 @@ const Games: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {freeGames.map((game, i) => (
-              <RevealSection key={game.id} delay={0.05 * i}>
+              <RevealSection key={game.id} delay={0.05 * i} className="h-full">
                 {renderGameCard(game, false)}
               </RevealSection>
             ))}
@@ -197,7 +197,7 @@ const Games: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {premiumGames.map((game, i) => (
-              <RevealSection key={game.id} delay={0.05 * i}>
+              <RevealSection key={game.id} delay={0.05 * i} className="h-full">
                 {renderGameCard(game, true)}
               </RevealSection>
             ))}
