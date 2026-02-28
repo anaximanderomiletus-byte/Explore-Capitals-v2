@@ -34,7 +34,7 @@ export const imagesP: Record<string, string> = {
   // --- Paraguay ---
   "Paraguay": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/asuncion-paraguay.png",
   "Itaipú Dam": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/itaipu-dam.png",
-  "Jesuit Missions Paraguay": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/jesuit-missions-of-la-santissima-trinidad-de-parana.png",
+  "Jesuit Missions Paraguay": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/jesuit-missions-of-la-santisima-trinidad-de-parana.png",
   "Saltos del Monday": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/saltos-del-monday.png",
   "The Chaco Wilderness": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/chaco-wilderness.png",
   "Tereré Culture": "/png/DATABASE/COUNTRY-IMAGES/PARAGUAY/terere-culture.png",

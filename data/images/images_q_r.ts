@@ -1,6 +1,6 @@
 export const imagesQR: Record<string, string> = {
-  // --- Qatar --- (no images yet)
-  "Qatar": "/logo.png",
+  // --- Qatar ---
+  "Qatar": "/png/DATABASE/COUNTRY-IMAGES/QATAR/doha-qatar.png",
   "Museum of Islamic Art": "/png/DATABASE/COUNTRY-IMAGES/QATAR/museum-of-islamic-art.png",
   "Souq Waqif": "/png/DATABASE/COUNTRY-IMAGES/QATAR/souq-waqif.png",
   "The Pearl-Qatar": "/png/DATABASE/COUNTRY-IMAGES/QATAR/the-pearl-qatar.png",
@@ -12,7 +12,7 @@ export const imagesQR: Record<string, string> = {
   "Bran Castle": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/bran-castle.png",
   "Palace of the Parliament": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/palace-of-the-parliament.png",
   "Transfagarasan Highway": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/transfagarasan-highway.png",
-  "Merry Cemetery": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/merry-cemetery.png",
+  "Merry Cemetery": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/the-merry-cemetary.png",
   "Voronet Monastery": "/png/DATABASE/COUNTRY-IMAGES/ROMANIA/voronet-monastery.png",
 
   // --- Russia ---
@@ -29,5 +29,5 @@ export const imagesQR: Record<string, string> = {
   "Kigali Genocide Memorial": "/png/DATABASE/COUNTRY-IMAGES/RWANDA/kigali-genocide-memorial.png",
   "Nyungwe Forest": "/png/DATABASE/COUNTRY-IMAGES/RWANDA/nyungwe-forest.png",
   "Lake Kivu": "/png/DATABASE/COUNTRY-IMAGES/RWANDA/lake-kivu.png",
-  "King's Palace Nyanza": "/png/DATABASE/COUNTRY-IMAGES/RWANDA/kings-palace-nyanza.png"
+  "King's Palace Nyanza": "/png/DATABASE/COUNTRY-IMAGES/RWANDA/kings-palace-museum-nyanza.png"
 };

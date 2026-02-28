@@ -72,7 +72,7 @@ export const imagesN: Record<string, string> = {
   "Kijong-dong": "/png/DATABASE/COUNTRY-IMAGES/NORTH-KOREA/kijong-dong-peace-village.png",
 
   // --- North Macedonia ---
-  "North Macedonia": "/png/DATABASE/COUNTRY-IMAGES/NORTH-MACEDONIA/skopje-north-macedonia.png",
+  "North Macedonia": "/png/DATABASE/COUNTRY-IMAGES/NORTH-MACEDONIA/skopje-macedonia.png",
   "Lake Ohrid": "/png/DATABASE/COUNTRY-IMAGES/NORTH-MACEDONIA/lake-ohrid.png",
   "Old Bazaar Skopje": "/png/DATABASE/COUNTRY-IMAGES/NORTH-MACEDONIA/old-bazaar-skopje.png",
   "Matka Canyon": "/png/DATABASE/COUNTRY-IMAGES/NORTH-MACEDONIA/matka-canyon.png",

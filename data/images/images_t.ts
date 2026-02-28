@@ -1,11 +1,11 @@
 export const imagesT: Record<string, string> = {
-  // --- Tajikistan --- (no images yet)
-  "Tajikistan": "/logo.png",
-  "The Pamir Highway": "/logo.png",
-  "Iskanderkul": "/logo.png",
-  "Dushanbe Flagpole": "/logo.png",
-  "Yamchun Fortress": "/logo.png",
-  "Sarazm": "/logo.png",
+  // --- Tajikistan ---
+  "Tajikistan": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/dushanbe-tajikistan.png",
+  "The Pamir Highway": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/the-pamir-highway.png",
+  "Iskanderkul": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/iskanderkul.png",
+  "Dushanbe Flagpole": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/dushanbe-flagpole-and-teahouse.png",
+  "Yamchun Fortress": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/the-wakhan-valley-yamchun-fortress.png",
+  "Sarazm": "/png/DATABASE/COUNTRY-IMAGES/TAJIKISTAN/sarazm.png",
 
   // --- Tanzania ---
   "Tanzania": "/png/DATABASE/COUNTRY-IMAGES/TANZANIA/dodoma-tanzania.png",
@@ -25,8 +25,8 @@ export const imagesT: Record<string, string> = {
 
   // --- Timor-Leste ---
   "Timor-Leste": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/dili-timor-leste.png",
-  "Christo Rei Dili": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/christo-rei-dili.png",
-  "Atauro Island": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/aturo-island.png",
+  "Christo Rei Dili": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/cristo-rei-of-dili.png",
+  "Atauro Island": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/atauro-island.png",
   "Mount Ramelau": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/mount-ramelau.png",
   "Jaco Island": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/jaco-island.png",
   "Tais Market": "/png/DATABASE/COUNTRY-IMAGES/TIMOR-LESTE/tais-market.png",
@@ -53,7 +53,7 @@ export const imagesT: Record<string, string> = {
   "The Nylon Pool": "/png/DATABASE/COUNTRY-IMAGES/TRINIDAD-AND-TOBAGO/nylon-pool-tobago.png",
   "Caroni Bird Sanctuary": "/png/DATABASE/COUNTRY-IMAGES/TRINIDAD-AND-TOBAGO/caroni-bird-sanctuary.png",
   "Steel Pan Drums": "/png/DATABASE/COUNTRY-IMAGES/TRINIDAD-AND-TOBAGO/the-steel-pan-yards.png",
-  "Leatherback Turtle Trinidad": "/png/DATABASE/COUNTRY-IMAGES/TRINIDAD-AND-TOBAGO/grand-riviere-beach.png",
+  "Leatherback Turtle Trinidad": "/png/DATABASE/COUNTRY-IMAGES/TRINIDAD-AND-TOBAGO/grande-riviere-beach.png",
 
   // --- Tunisia ---
   "Tunisia": "/png/DATABASE/COUNTRY-IMAGES/TUNISIA/tunis-tunisia.png",
@@ -65,7 +65,7 @@ export const imagesT: Record<string, string> = {
 
   // --- Turkey ---
   "Turkey": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/ankara-turkey.png",
-  "Hagia Sophia": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/hagia-sophia-church-turned-mosque-turned-museum.png",
+  "Hagia Sophia": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/hagia-sophia.png",
   "Cappadocia": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/cappadocia.png",
   "Pamukkale": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/pamukkale.png",
   "Ephesus Library": "/png/DATABASE/COUNTRY-IMAGES/TURKEY/ephesus-library.png",

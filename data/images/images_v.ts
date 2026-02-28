@@ -20,8 +20,8 @@ export const imagesV: Record<string, string> = {
   "Angel Falls": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/angel-falls.png",
   "Mount Roraima": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/mount-roraima.png",
   "Catatumbo Lightning": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/catatumbo-lightning.png",
-  "Los Roques": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/los-roques.png",
-  "Coro Sand Dunes": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/coro-sand-dunes.png",
+  "Los Roques": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/los-roques-archipelago.png",
+  "Coro Sand Dunes": "/png/DATABASE/COUNTRY-IMAGES/VENEZUELA/coro-and-its-port.png",
 
   // --- Vietnam ---
   "Vietnam": "/png/DATABASE/COUNTRY-IMAGES/VIETNAM/hanoi-vietnam.png",

@@ -12,6 +12,6 @@ export const imagesZ: Record<string, string> = {
   "Great Zimbabwe Walls": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/great-zimbabwe-walls.png",
   "Hwange Elephants": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/hwange-national-park.png",
   "Mana Pools Elephant": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/mana-pools-national-park.png",
-  "Matobo Balancing Rocks": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/matobo-national-park.png",
+  "Matobo Balancing Rocks": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/matabo-national-park.png",
   "Birchenough Bridge": "/png/DATABASE/COUNTRY-IMAGES/ZIMBABWE/birchenough-bridge.png"
 };

@@ -155,7 +155,7 @@ export const imagesTerritories: Record<string, string> = {
   // --- Isle of Man ---
   "Isle of Man": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/douglas-isle-of-man.png",
   "TT Mountain Course viewpoints": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/tt-mountain-course-viewpoints.png",
-  "Snaefell Mountain Railway": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/snaefell-mountain-railway.png",
+  "Snaefell Mountain Railway": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/snaefall-mountain-railway.png",
   "Peel Castle": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/peel-castle.png",
   "Laxey Wheel": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/laxey-wheel.png",
   "Calf of Man": "/png/DATABASE/TERRITORY-IMAGES/ISLE-OF-MAN/calf-of-man.png",
@@ -225,7 +225,7 @@ export const imagesTerritories: Record<string, string> = {
   "Bloody Bridge": "/png/DATABASE/TERRITORY-IMAGES/NORFOLK-ISLAND/bloody-bridge.png",
 
   // --- Northern Mariana Islands ---
-  "Northern Mariana Islands": "/png/DATABASE/TERRITORY-IMAGES/NORTHERN-MARIANA-ISLANDS/saipan-northern-mariana-islands.png",
+  "Northern Mariana Islands": "/png/DATABASE/TERRITORY-IMAGES/NORTHERN-MARIANA-ISLANDS/saipan-northern-mariana-island.png",
   "The Grotto (Saipan)": "/png/DATABASE/TERRITORY-IMAGES/NORTHERN-MARIANA-ISLANDS/grotto.png",
   "Managaha Island": "/png/DATABASE/TERRITORY-IMAGES/NORTHERN-MARIANA-ISLANDS/managaha-island.png",
   "Banzai Cliff": "/png/DATABASE/TERRITORY-IMAGES/NORTHERN-MARIANA-ISLANDS/banzai-cliff.png",

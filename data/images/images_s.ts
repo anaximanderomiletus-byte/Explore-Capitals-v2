@@ -32,7 +32,7 @@ export const imagesS: Record<string, string> = {
   "Lalomanu Beach Fales": "/png/DATABASE/COUNTRY-IMAGES/SAMOA/lalomanu-beach-fales.png",
 
   // --- San Marino ---
-  "San Marino": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/san-marino.png",
+  "San Marino": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/san-marino-san-marino.png",
   "The Three Towers San Marino": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/the-three-towers-san-marino.png",
   "Palazzo Pubblico San Marino": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/palazzo-pubblico-san-marino.png",
   "Mount Titano": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/mount-titano.png",
@@ -40,12 +40,12 @@ export const imagesS: Record<string, string> = {
   "The Crossbow Corps": "/png/DATABASE/COUNTRY-IMAGES/SAN-MARINO/the-crossbow-corps.png",
 
   // --- São Tomé and Príncipe ---
-  "São Tomé and Príncipe": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/sao-tome-sao-tome-principe.png",
+  "São Tomé and Príncipe": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/sao-tome-sao-tome-and-principe.png",
   "Pico Cão Grande": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/pico-cao-grande.png",
   "Roça Sundy": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/roca-sundy.png",
   "Equator Mark Sao Tome": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/equator-mark-sao-tome.png",
   "Boca de Inferno Sao Tome": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/boca-de-inferno.png",
-  "Obo National Park Begonia": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/obo-national-park-begonia.png",
+  "Obo National Park Begonia": "/png/DATABASE/COUNTRY-IMAGES/SAO-TOME-AND-PRINCIPE/obo-national-park.png",
 
   // --- Saudi Arabia ---
   "Saudi Arabia": "/png/DATABASE/COUNTRY-IMAGES/SAUDI-ARABIA/riyadh-saudi-arabia.png",
@@ -124,7 +124,7 @@ export const imagesS: Record<string, string> = {
   "Laas Geel Cave Paintings": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/laas-geel.png",
   "Lido Beach Mogadishu": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/lido-beach.png",
   "Daljirka Dahsoon Monument": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/daljirka-dahsoon-monument.png",
-  "Ras Hafun": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/ras-hafun.png",
+  "Ras Hafun": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/hafun.png",
   "Frankincense Tree": "/png/DATABASE/COUNTRY-IMAGES/SOMALIA/frankincense-forests.png",
 
   // --- South Africa ---
@@ -156,12 +156,12 @@ export const imagesS: Record<string, string> = {
   "The Sagrada Família": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/the-sagrada-familia-barcelona.png",
   "The Alhambra": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/the-alhambra-granada.png",
   "Plaza de España Seville": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/plaza-de-espana-seville.png",
-  "Running of the Bulls": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/running-of-the-bulls-pamplona.png",
+  "Running of the Bulls": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/the-running-of-the-bulls-pamplona.png",
   "The Prado Museum": "/png/DATABASE/COUNTRY-IMAGES/SPAIN/the-prado-museum-madrid.png",
 
   // --- Sri Lanka ---
   "Sri Lanka": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/sri-jayawardenepura-kotte-sri-lanka.png",
-  "Sigiriya Lion Rock": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/sigiriya-lion-rock.png",
+  "Sigiriya Lion Rock": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/sigiriya-lion-park.png",
   "Nine Arch Bridge": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/nine-arch-bridge.png",
   "Yala National Park Leopard": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/yala-national-park.png",
   "Galle Fort": "/png/DATABASE/COUNTRY-IMAGES/SRI-LANKA/galle-fort.png",
@@ -179,7 +179,7 @@ export const imagesS: Record<string, string> = {
   "Suriname": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/paramaribo-suriname.png",
   "Paramaribo Historic Inner City": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/paramaribo-historic-inner-city.png",
   "Central Suriname Nature Reserve": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/central-suriname-nature-reserve.png",
-  "Galibi Nature Reserve": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/galibi-nature-reserve.png",
+  "Galibi Nature Reserve": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/galibi-natural-reserve.png",
   "Jodensavanne": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/jodensavanne-nature-reserve.png",
   "Upper Suriname River": "/png/DATABASE/COUNTRY-IMAGES/SURINAME/upper-suriname-river.png",
 
