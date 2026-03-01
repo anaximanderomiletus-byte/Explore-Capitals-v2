@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2, Zap, Globe2, MapPin, Trophy } from 'lucide-react';
+import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2, Zap, Globe2, MapPin, Trophy, Play } from 'lucide-react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
@@ -388,23 +388,23 @@ const About: React.FC = () => {
               Ready to Learn<br />the World?
             </motion.h2>
 
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center px-2">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                 <Link to="/games" className="block">
                   <Button
                     variant="primary"
                     size="lg"
-                    className="h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center gap-3"
+                    className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase border-2 border-white/30 transition-all group font-black"
                   >
-                    Play Now <Compass size={22} className="shrink-0" />
+                    Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
                   </Button>
                 </Link>
               </motion.div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                 <Link to="/map" className="block">
-                  <Button variant="secondary" size="lg" className="h-14 md:h-16 px-8 md:px-12 text-lg md:text-xl uppercase tracking-[0.15em] font-black border-white/40">
-                    Explore Map
+                  <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all group font-black">
+                    Explore Map <Compass className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 md:w-7 md:h-7" />
                   </Button>
                 </Link>
               </motion.div>

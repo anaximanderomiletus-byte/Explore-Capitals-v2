@@ -36,10 +36,16 @@ try {
     // Initialize App Check (in a separate try/catch so it never blocks core services)
     try {
       const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY;
-      const debugToken = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN;
 
       if (import.meta.env.DEV) {
-        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken || true;
+        // In dev mode, enable the debug provider so the Firebase emulator
+        // accepts requests without a real reCAPTCHA token.
+        // Setting to `true` auto-generates a debug token logged to the console;
+        // register that token in the Firebase Console → App Check → Debug tokens.
+        // IMPORTANT: we intentionally do NOT read the debug token from a VITE_
+        // env var — Vite inlines all VITE_ values into the production bundle,
+        // which would leak the token to every visitor.
+        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
         if (auth) {
           auth.settings.appVerificationDisabledForTesting = true;
         }
