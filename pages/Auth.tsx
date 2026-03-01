@@ -24,7 +24,11 @@ const Auth: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const [mode, setMode] = useState<Mode>('signin');
+  const [mode, setMode] = useState<Mode>(() => {
+    const params = new URLSearchParams(location.search);
+    const urlMode = params.get('mode');
+    return urlMode === 'signup' ? 'signup' : 'signin';
+  });
   const [authMethod, setAuthMethod] = useState<'email' | 'phone'>('email');
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [mfaStep, setMfaStep] = useState<1 | 2>(1); // 1: choose/send, 2: verify

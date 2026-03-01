@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Crown, Check, X, Sparkles, Zap, BarChart3, 
-  Gamepad2, Shield, Star, ArrowRight, Loader2
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  Crown, Check, X, Sparkles, Zap, BarChart3,
+  Gamepad2, Shield, Star, ArrowRight, ArrowLeft, Loader2
 } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
@@ -18,6 +18,7 @@ import {
   isPremiumUser 
 } from '../services/subscription';
 import type { SubscriptionPlan } from '../types';
+import { GAMES } from '../constants';
 
 const Premium: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -104,19 +105,38 @@ const Premium: React.FC = () => {
   if (!user) {
     return (
       <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
-        {/* Background Decor */}
+        {/* Game thumbnails background */}
         <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-1 w-full h-full">
+            {GAMES.filter(g => g.image).slice(0, 12).map(game => (
+              <div key={game.id} className="relative overflow-hidden">
+                <img
+                  src={game.image}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-surface-dark/85 backdrop-blur-sm" />
           <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
         </div>
 
-        <SEO 
+        <SEO
           title="Premium - Unlimited Access"
           description="Upgrade to ExploreCapitals Premium for unlimited games, ad-free experience, advanced analytics, and exclusive features."
         />
 
         <div className="max-w-lg mx-auto relative z-10 text-center">
-          <div className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-8 md:p-12">
+          <div className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-8 md:p-12 relative">
+            <button
+              onClick={() => navigate(-1)}
+              className="absolute top-4 left-4 p-2 text-white/40 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+            >
+              <ArrowLeft size={20} />
+            </button>
             <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <Crown size={40} className="text-amber-400" />
             </div>
@@ -126,16 +146,19 @@ const Premium: React.FC = () => {
             <p className="text-white/70 text-lg mb-8">
               Sign in to view our premium plans and unlock unlimited games, ad-free experience, and advanced analytics.
             </p>
-            <Button 
-              variant="accent" 
+            <Button
+              variant="accent"
               size="lg"
-              className="w-full"
+              className="w-full uppercase"
               onClick={() => navigate('/auth?redirect=/premium')}
             >
               Sign In to Continue <ArrowRight size={20} />
             </Button>
             <p className="text-white/50 text-sm mt-4">
-              Don't have an account? You can create one for free.
+              Don't have an account?{' '}
+              <Link to="/auth?mode=signup&redirect=/premium" className="text-amber-400 hover:text-amber-300 underline underline-offset-2 transition-colors">
+                Create one for free
+              </Link>.
             </p>
           </div>
         </div>

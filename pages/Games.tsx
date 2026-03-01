@@ -218,30 +218,23 @@ const Games: React.FC = () => {
             onClick={() => setShowUpgradeModal(false)}
           />
           <div className="relative bg-surface-dark border-2 border-amber-500/30 rounded-3xl p-6 w-full max-w-md shadow-2xl">
-            <button
-              onClick={() => setShowUpgradeModal(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
-            >
-              <X size={20} className="text-white/60" />
-            </button>
-
             <div className="text-center">
-              <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Crown size={40} className="text-amber-400" />
+              <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Crown size={32} className="text-amber-400" />
               </div>
-              
-              <h3 className="text-2xl font-display font-bold text-white mb-2">
+
+              <h3 className="text-2xl font-display font-bold text-white mb-1.5 uppercase tracking-tight">
                 Unlock Premium Games
               </h3>
-              <p className="text-white/60 mb-6">
-                Get access to {premiumGames.length} exclusive games including Territory Titans, Area Ace, and more!
+              <p className="text-white/60 text-sm mb-4">
+                Get access to {premiumGames.length} more exclusive games!
               </p>
 
-              <div className="bg-white/5 rounded-xl p-4 mb-6">
-                <div className="text-left space-y-3">
+              <div className="bg-white/5 rounded-xl p-3 mb-4">
+                <div className="text-left space-y-2.5">
                   {premiumGames.map(game => (
                     <div key={game.id} className="flex items-start gap-3 text-sm">
-                      <Crown size={12} className="text-amber-400 mt-1 shrink-0" />
+                      <Crown size={12} className="text-amber-400 mt-0.5 shrink-0" />
                       <div className="flex-1">
                         <span className="text-white/80 font-medium">{game.title}</span>
                         <p className="text-white/40 text-xs mt-0.5">{game.description}</p>
@@ -251,9 +244,9 @@ const Games: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <Button 
-                  variant="accent" 
+              <div className="space-y-2">
+                <Button
+                  variant="accent"
                   className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0"
                   onClick={() => {
                     setShowUpgradeModal(false);
@@ -264,9 +257,9 @@ const Games: React.FC = () => {
                 </Button>
                 <button
                   onClick={() => setShowUpgradeModal(false)}
-                  className="w-full py-3 text-white/50 text-sm hover:text-white transition-colors"
+                  className="w-full py-2 text-white/50 text-xs font-bold uppercase tracking-wider underline underline-offset-4 hover:text-white transition-colors"
                 >
-                  Maybe later
+                  Maybe Later
                 </button>
               </div>
             </div>
