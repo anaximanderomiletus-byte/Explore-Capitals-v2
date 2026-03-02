@@ -131,12 +131,6 @@ const Premium: React.FC = () => {
 
         <div className="max-w-lg mx-auto relative z-10 text-center">
           <div className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-8 md:p-12 relative">
-            <button
-              onClick={() => navigate(-1)}
-              className="absolute top-4 left-4 p-2 text-white/40 hover:text-white hover:bg-white/10 rounded-full transition-colors"
-            >
-              <ArrowLeft size={20} />
-            </button>
             <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <Crown size={40} className="text-amber-400" />
             </div>
@@ -161,6 +155,13 @@ const Premium: React.FC = () => {
               </Link>.
             </p>
           </div>
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link mt-6"
+          >
+            <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
+            Back
+          </button>
         </div>
       </div>
     );
