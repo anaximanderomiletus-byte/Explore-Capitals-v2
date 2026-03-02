@@ -137,7 +137,7 @@ const Premium: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl font-display font-black text-white mb-4 tracking-tighter uppercase">
               Premium Access
             </h1>
-            <p className="text-white/70 text-lg mb-8">
+            <p className="text-white/70 text-lg mb-8 text-left">
               Sign in to view our premium plans and unlock unlimited games, ad-free experience, and advanced analytics.
             </p>
             <Button
@@ -146,7 +146,7 @@ const Premium: React.FC = () => {
               className="w-full uppercase"
               onClick={() => navigate('/auth?redirect=/premium')}
             >
-              Sign In to Continue <ArrowRight size={20} />
+              Sign In <ArrowRight size={20} />
             </Button>
             <p className="text-white/50 text-sm mt-4">
               Don't have an account?{' '}
