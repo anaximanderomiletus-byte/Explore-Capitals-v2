@@ -77,6 +77,7 @@ const MobileProfileLinkSignedIn: React.FC<{
         to="/profile"
         onClick={onClose}
         className="flex items-center gap-4 py-4 border-b border-white/5 group"
+        style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         {/* Avatar */}
         <div className={`relative shrink-0 w-11 h-11 rounded-xl ${avatar ? avatar.color : 'bg-gel-blue'} flex items-center justify-center shadow-lg border border-white/30 overflow-hidden`}>
@@ -89,18 +90,18 @@ const MobileProfileLinkSignedIn: React.FC<{
           )}
           <div className="absolute inset-0 bg-glossy-gradient opacity-40 pointer-events-none" />
         </div>
-        
+
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-display font-black text-white/90 truncate tracking-tight group-hover:text-sky-light transition-colors">
+          <h3 className="text-xl font-display font-black text-white/90 truncate tracking-tight group-active:text-sky-light transition-colors">
             {authUser?.displayName || user?.name}
           </h3>
           <p className="text-[10px] font-bold uppercase tracking-wider text-white/40">
             {loyaltyProgress.tier} • {loyaltyProgress.points.toLocaleString()} pts
           </p>
         </div>
-        
-        <ChevronRight size={20} className="text-white/30 group-hover:text-sky-light group-hover:translate-x-1 transition-all shrink-0" />
+
+        <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
       </Link>
       
       {/* Sign Out */}
@@ -126,24 +127,25 @@ const MobileProfileLinkSignedOut: React.FC<{
       state={{ from: location }}
       onClick={onClose}
       className="flex items-center gap-4 py-4 border-b border-white/5 group"
+      style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       {/* Icon */}
-      <div className="relative shrink-0 w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-sky/40 group-hover:bg-sky/10 transition-all">
-        <UserIcon size={22} className="text-white/60 group-hover:text-sky-light transition-colors" />
+      <div className="relative shrink-0 w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden group-active:border-sky/40 group-active:bg-sky/10 transition-all">
+        <UserIcon size={22} className="text-white/60 group-active:text-sky-light transition-colors" />
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
       </div>
-      
+
       {/* Text */}
       <div className="flex-1">
-        <h3 className="text-xl font-display font-black text-white/60 tracking-tight group-hover:text-sky-light transition-colors uppercase">
+        <h3 className="text-xl font-display font-black text-white/60 tracking-tight group-active:text-sky-light transition-colors uppercase">
           Sign In
         </h3>
         <p className="text-[10px] font-bold uppercase tracking-wider text-white/30">
           Track progress & earn rewards
         </p>
       </div>
-      
-      <ChevronRight size={20} className="text-white/30 group-hover:text-sky-light group-hover:translate-x-1 transition-all shrink-0" />
+
+      <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
     </Link>
   );
 };
@@ -386,16 +388,16 @@ const Navigation: React.FC = () => {
       </nav>
 
       {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
-      <div 
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden transition-all duration-300 ease-out flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
-          isMobileMenuOpen 
-            ? 'translate-x-0 opacity-100 visible' 
+      <div
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden will-change-[transform,opacity] ${
+          isMobileMenuOpen
+            ? 'translate-x-0 opacity-100 visible'
             : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
-        style={{ 
+        style={{
+          transition: 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease',
           WebkitOverflowScrolling: 'touch',
           touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
-          // Use accurate viewport height on iOS
           height: 'var(--viewport-height, 100vh)',
           minHeight: 'var(--viewport-height, 100vh)',
           paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)'
@@ -408,16 +410,18 @@ const Navigation: React.FC = () => {
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
             return (
-              <Link 
-                key={link.path} 
+              <Link
+                key={link.path}
                 to={link.path}
+                onClick={() => setIsMobileMenuOpen(false)}
                 style={{
                   transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
                   transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+                  WebkitTapHighlightColor: 'transparent',
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
-                  isActive(link.path) ? 'text-primary' : 'text-white/60 hover:text-white'
+                  isActive(link.path) ? 'text-primary' : 'text-white/60 active:text-white'
                 }`}
               >
                 {link.label}
