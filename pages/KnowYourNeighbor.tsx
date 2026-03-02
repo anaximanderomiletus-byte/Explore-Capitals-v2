@@ -237,12 +237,12 @@ export default function KnowYourNeighbor() {
             {/* Country Prompt - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center min-h-0">
               <div className="text-center">
-                 <p className="text-sky font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3 font-sans">SELECT ALL LAND NEIGHBORS FOR</p>
+                 <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">SELECT ALL NEIGHBORS</p>
                  <h3 className="text-xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg mb-2 md:mb-3">{targetCountry.name}</h3>
                  <img
                    src={getFlagUrl(targetCountry.flag)}
                    alt={`${targetCountry.name} Flag`}
-                   className="max-h-[12vh] md:max-h-[18vh] w-auto mx-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                   className="max-h-[10vh] md:max-h-[14vh] w-auto mx-auto min-h-0 shrink drop-shadow-2xl object-contain"
                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
                  />
               </div>

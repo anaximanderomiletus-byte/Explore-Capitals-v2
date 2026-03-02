@@ -274,7 +274,7 @@ export default function AreaAce() {
 
               <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
                 <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
-                  <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.3em]">Which country has the</p>
+                  <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] opacity-80">Which country has the</p>
                   <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter flex items-center gap-2">
                     <Maximize2 size={24} className="text-sky-light" /> Larger Area?
                   </h2>
