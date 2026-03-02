@@ -267,7 +267,7 @@ export default function MapDash() {
   }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft, gameDuration]);
 
   return (
-    <div className="relative h-[100dvh] min-h-screen w-full z-40 bg-surface-dark overflow-hidden font-sans">
+    <div className="relative h-screen h-[100svh] w-full z-40 bg-surface-dark overflow-hidden font-sans">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>

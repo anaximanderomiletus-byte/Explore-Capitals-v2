@@ -139,7 +139,7 @@ export default function GlobalDetective() {
   const clueBarBase = "px-4 rounded-xl border-2 flex justify-between items-center h-[54px] transition-all duration-300";
 
   return (
-    <div className="h-[100dvh] min-h-screen w-full relative overflow-hidden font-sans bg-surface-dark">
+    <div className="h-screen h-[100svh] w-full relative overflow-hidden font-sans bg-surface-dark">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img src={`${import.meta.env.BASE_URL}png/GAMES/global-detective.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>

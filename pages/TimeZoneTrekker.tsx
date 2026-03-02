@@ -135,7 +135,7 @@ export default function TimeZoneTrekker() {
   // Premium check screen
   if (!isPremium && gameState === 'start') {
     return (
-      <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
+      <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
         <div className="absolute inset-0 z-0 pointer-events-none">
           <img src={`${import.meta.env.BASE_URL}png/GAMES/time-zone-trekker.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
@@ -171,7 +171,7 @@ export default function TimeZoneTrekker() {
   }
 
   return (
-    <div className="h-[100dvh] min-h-screen bg-surface-dark font-sans relative overflow-hidden">
+    <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img src={`${import.meta.env.BASE_URL}png/GAMES/time-zone-trekker.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
