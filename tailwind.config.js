@@ -85,8 +85,30 @@ module.exports = {
         'aero-wipe-full-backward': 'aero-wipe-full-backward 1.4s cubic-bezier(0.77, 0, 0.175, 1) forwards',
         'float-delayed': 'float 6s ease-in-out 3s infinite',
         'bounce-slow': 'bounce 3s infinite',
+        'ambient-drift-1': 'ambient-drift-1 30s ease-in-out infinite',
+        'ambient-drift-2': 'ambient-drift-2 36s ease-in-out infinite',
+        'ambient-drift-3': 'ambient-drift-3 26s ease-in-out infinite',
       },
       keyframes: {
+        'ambient-drift-1': {
+          '0%': { opacity: '0', transform: 'translate(0, 0)' },
+          '30%': { opacity: '1', transform: 'translate(-25%, 15%)' },
+          '70%': { opacity: '0.2', transform: 'translate(20%, -10%)' },
+          '100%': { opacity: '0', transform: 'translate(0, 0)' },
+        },
+        'ambient-drift-2': {
+          '0%': { opacity: '0.1', transform: 'translate(0, 0)' },
+          '25%': { opacity: '0', transform: 'translate(20%, 20%)' },
+          '55%': { opacity: '1', transform: 'translate(-15%, 10%)' },
+          '80%': { opacity: '0.15', transform: 'translate(-30%, -15%)' },
+          '100%': { opacity: '0.1', transform: 'translate(0, 0)' },
+        },
+        'ambient-drift-3': {
+          '0%': { opacity: '0.15', transform: 'translate(0, 0)' },
+          '40%': { opacity: '1', transform: 'translate(30%, -20%)' },
+          '65%': { opacity: '0', transform: 'translate(10%, 25%)' },
+          '100%': { opacity: '0.15', transform: 'translate(0, 0)' },
+        },
         'fadeIn': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },

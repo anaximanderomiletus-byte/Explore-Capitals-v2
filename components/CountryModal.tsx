@@ -4,6 +4,7 @@ import { Country } from '../types';
 import Button from './Button';
 import { Link } from 'react-router-dom';
 import { getCountryCode } from '../utils/flags';
+import { toSlug } from '../utils/slug';
 
 interface CountryModalProps {
   country: Country;
@@ -169,7 +170,7 @@ const CountryModal: React.FC<CountryModalProps> = ({ country, onClose }) => {
                 [@media(max-height:620px)]:col-start-1 [@media(max-height:620px)]:row-start-2
                 [@media(max-height:620px)]:border-t-0 [@media(max-height:620px)]:border-r
             ">
-                <Link to={`/expedition/${country.id}`} onClick={onClose} className="w-full">
+                <Link to={`/expedition/${toSlug(country.name)}`} onClick={onClose} className="w-full">
                   <Button variant="primary" className="w-full rounded-full" size="md">
                       Start Expedition
                   </Button>

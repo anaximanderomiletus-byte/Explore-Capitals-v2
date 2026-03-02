@@ -12,6 +12,7 @@ import { ResponsiveAd } from '../components/AdSense';
 import { MOCK_COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
+import { toSlug } from '../utils/slug';
 
 const Section: React.FC<{
   children: React.ReactNode;
@@ -289,7 +290,7 @@ const Home: React.FC = () => {
                 <p className="text-white/60 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-6 sm:mb-8 font-medium">
                   {factOfTheDay.fact}
                 </p>
-                <Link to={`/country/${factOfTheDay.country.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                <Link to={`/country/${toSlug(factOfTheDay.country.name)}`}>
                   <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
                     Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
                   </Button>

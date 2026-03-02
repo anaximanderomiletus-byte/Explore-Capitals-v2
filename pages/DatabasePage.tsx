@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
 import { getCountryCode } from '../utils/flags';
+import { toSlug } from '../utils/slug';
 import SEO from '../components/SEO';
 import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
@@ -216,7 +217,7 @@ MobileCountryCard.displayName = 'MobileCountryCard';
 // Simple table for desktop - renders all rows
 interface SimpleTableProps {
   items: Country[];
-  onItemClick: (id: string) => void;
+  onItemClick: (name: string) => void;
   sortConfig: { key: SortKey; direction: SortDirection } | null;
   onSort: (key: SortKey) => void;
   hoverColor?: string;
@@ -269,7 +270,7 @@ const SimpleTable: React.FC<SimpleTableProps> = memo(({
             <TableRow 
               key={country.id}
               country={country}
-              onClick={() => onItemClick(country.id)}
+              onClick={() => onItemClick(country.name)}
               hoverColor={hoverColor}
               showSovereignty={showSovereignty}
               sovereignty={(country as Territory).sovereignty}
@@ -287,7 +288,7 @@ SimpleTable.displayName = 'SimpleTable';
 // Simple mobile list - renders all items
 interface MobileListProps {
   items: Country[];
-  onItemClick: (id: string) => void;
+  onItemClick: (name: string) => void;
   isTerritory?: boolean;
   isDeFacto?: boolean;
   getSovereignty?: (item: Country) => string | undefined;
@@ -307,7 +308,7 @@ const MobileList: React.FC<MobileListProps> = memo(({
           <MobileCountryCard 
             key={item.id} 
             country={item} 
-            onClick={() => onItemClick(item.id)}
+            onClick={() => onItemClick(item.name)}
             isTerritory={isTerritory}
             isDeFacto={isDeFacto}
             sovereignty={getSovereignty?.(item)}
@@ -428,15 +429,15 @@ const DatabasePage: React.FC = () => {
     });
   }, []);
 
-  const handleCountryClick = useCallback((id: string) => {
-    navigate(`/country/${id}`);
+  const handleCountryClick = useCallback((name: string) => {
+    navigate(`/country/${toSlug(name)}`);
   }, [navigate]);
 
   const handleRandomSearch = useCallback(() => {
     const allItems = [...MOCK_COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES];
     if (allItems.length === 0) return;
     const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
-    navigate(`/country/${randomItem.id}`);
+    navigate(`/country/${toSlug(randomItem.name)}`);
   }, [navigate]);
 
   // Use pre-sorted data for initial render (no search, default sort)
@@ -467,7 +468,7 @@ const DatabasePage: React.FC = () => {
   const hasResults = processedCountries.length > 0 || processedTerritories.length > 0 || processedDeFacto.length > 0;
 
   return (
-    <div className="pt-32 pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
+    <div className="pt-32 pb-20 px-4 md:px-6 min-h-screen relative overflow-hidden">
       <SEO 
         title="Country Database"
         description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."

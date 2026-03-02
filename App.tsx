@@ -163,13 +163,19 @@ const PersistentBackground: React.FC = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[110%] h-[110%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_70%)] blur-[100px]" />
       </div>
 
-      {/* Glow-style orbs for Games / Database / About */}
+      {/* Ambient lighting for Games / Database / About */}
       <div
         className="absolute inset-0 transition-opacity duration-700 ease-in-out"
         style={{ opacity: showGlow ? 1 : 0 }}
       >
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[120px] opacity-50" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/8 rounded-full blur-[100px] opacity-40" />
+        {/* Sky orb — starts top-right, drifts across */}
+        <div className="absolute top-[-10%] right-[0%] w-[55%] h-[55%] rounded-full blur-[120px] bg-sky/[0.14] animate-ambient-drift-1" />
+
+        {/* Purple orb — starts bottom-left, drifts opposite */}
+        <div className="absolute bottom-[0%] left-[-5%] w-[50%] h-[50%] rounded-full blur-[120px] bg-secondary/[0.10] animate-ambient-drift-2" />
+
+        {/* Green orb — starts center-left, roams */}
+        <div className="absolute top-[20%] left-[10%] w-[45%] h-[45%] rounded-full blur-[120px] bg-accent/[0.08] animate-ambient-drift-3" />
       </div>
     </div>
   );
@@ -187,7 +193,7 @@ const AppContent: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0F172A] relative">
+    <div className="min-h-screen flex flex-col relative">
       <PersistentBackground />
       <ScrollToTop />
       <Navigation />

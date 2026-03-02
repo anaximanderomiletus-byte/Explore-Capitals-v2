@@ -1,6 +1,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { getCountryCode } from '../utils/flags';
+import { toSlug } from '../utils/slug';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Map, Compass, Navigation,
@@ -39,7 +40,6 @@ const CountryDetail: React.FC = () => {
 
   const dataLoaded = Object.keys(images).length > 0;
 
-  const toSlug = (name: string) => name.toLowerCase().replace(/\s+/g, '-');
   const country = useMemo(() => {
     // Match by numeric id first, then by name slug
     return MOCK_COUNTRIES.find(c => c.id === id || toSlug(c.name) === id)
@@ -142,35 +142,31 @@ const CountryDetail: React.FC = () => {
     );
   }
 
-  // Helper to find country ID by name for bordering nations
-  const getCountryIdByName = (name: string) => {
-    return MOCK_COUNTRIES.find(c => c.name.toLowerCase() === name.toLowerCase())?.id 
-        || DE_FACTO_COUNTRIES.find(d => d.name.toLowerCase() === name.toLowerCase())?.id;
-  };
-
   const handleNeighborClick = (neighborName: string) => {
-    const neighborId = getCountryIdByName(neighborName);
-    if (neighborId) {
+    const exists = MOCK_COUNTRIES.some(c => c.name.toLowerCase() === neighborName.toLowerCase())
+      || DE_FACTO_COUNTRIES.some(d => d.name.toLowerCase() === neighborName.toLowerCase());
+    if (exists) {
       setTransitionStyle('cartographic');
-      navigate(`/country/${neighborId}`);
+      navigate(`/country/${toSlug(neighborName)}`);
     } else {
       setTransitionStyle('default');
       navigate(`/database?search=${neighborName}`);
     }
   };
 
-  const handleTerritoryClick = (territoryId: string) => {
+  const handleTerritoryClick = (territoryName: string) => {
     setTransitionStyle('cartographic');
-    navigate(`/country/${territoryId}`);
+    navigate(`/country/${toSlug(territoryName)}`);
   };
 
   const handleSovereigntyClick = (sovereigntyName: string) => {
     if (sovereigntyName === 'Disputed' || sovereigntyName === 'Limited Recognition') return;
-    
-    const sovereignId = getCountryIdByName(sovereigntyName);
-    if (sovereignId) {
+
+    const exists = MOCK_COUNTRIES.some(c => c.name.toLowerCase() === sovereigntyName.toLowerCase())
+      || DE_FACTO_COUNTRIES.some(d => d.name.toLowerCase() === sovereigntyName.toLowerCase());
+    if (exists) {
       setTransitionStyle('cartographic');
-      navigate(`/country/${sovereignId}`);
+      navigate(`/country/${toSlug(sovereigntyName)}`);
     } else {
       setTransitionStyle('default');
       navigate(`/database?search=${sovereigntyName}`);
@@ -333,7 +329,7 @@ const CountryDetail: React.FC = () => {
                 {controlledTerritories.map(t => (
                   <button 
                     key={t.id} 
-                    onClick={() => handleTerritoryClick(t.id)}
+                    onClick={() => handleTerritoryClick(t.name)}
                     className="text-xs font-bold uppercase tracking-[0.08em] px-4 py-2 bg-accent/5 text-accent/65 rounded-xl border border-accent/10 hover:border-accent/30 hover:bg-accent/10 hover:text-accent transition-all duration-300"
                   >
                     {t.name}
@@ -449,7 +445,7 @@ const CountryDetail: React.FC = () => {
 
               {/* Expedition CTA — show for all entries that have tour data */}
               {staticTours[country.name]?.stops?.length > 0 && (
-                <Link to={`/expedition/${country.id}`} className="w-full sm:w-auto">
+                <Link to={`/expedition/${toSlug(country.name)}`} className="w-full sm:w-auto">
                   <Button variant="primary" size="md" className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-14 text-sm sm:text-base text-white border border-white/20 rounded-full">
                     <span className="flex items-center gap-3">
                       START EXPEDITION <Compass size={18} />

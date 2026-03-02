@@ -89,6 +89,10 @@ export default function KnowYourNeighbor() {
     const numDistractors = Math.max(4, 15 - neighbors.length); 
     const roundDistractors = shuffledDistractors.slice(0, numDistractors);
     setOptions(shuffle([...neighbors, ...roundDistractors]));
+
+    // Preload flag for target country
+    const img = new Image();
+    img.src = getFlagUrl(target.flag);
   };
 
   const startGame = () => {
@@ -227,18 +231,20 @@ export default function KnowYourNeighbor() {
                    animate={{ opacity: 1, x: 0 }}
                    exit={{ opacity: 0, x: -20 }}
                    transition={{ duration: 0.3 }}
+                   style={{ willChange: 'transform, opacity' }}
                    className="h-full flex flex-col justify-between relative z-10"
                  >
             {/* Country Prompt - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center min-h-0">
               <div className="text-center">
-                 <p className="text-sky font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] mb-3 md:mb-4 font-sans">SELECT ALL LAND NEIGHBORS FOR</p>
-                 <img 
+                 <p className="text-sky font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3 font-sans">SELECT ALL LAND NEIGHBORS FOR</p>
+                 <h3 className="text-xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg mb-2 md:mb-3">{targetCountry.name}</h3>
+                 <img
                    src={getFlagUrl(targetCountry.flag)}
                    alt={`${targetCountry.name} Flag`}
-                   className="max-h-10 md:max-h-14 w-auto mx-auto mb-2 md:mb-3 min-h-0 shrink drop-shadow-lg object-contain"
+                   className="max-h-[12vh] md:max-h-[18vh] w-auto mx-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
                  />
-                 <h3 className="text-2xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg">{targetCountry.name}</h3>
               </div>
             </div>
               
@@ -321,20 +327,20 @@ export default function KnowYourNeighbor() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-white/40 overflow-hidden">
+            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
               <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
-              <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
+              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
-                <button 
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black border border-white/20">Play Again <Play size={20} fill="currentColor" /></Button>
+                <button
                   onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
+                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
                 >
-                  <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
+                  <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
                   Back to Games
                 </button>
           </div>

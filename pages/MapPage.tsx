@@ -7,6 +7,7 @@ import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { getFlagUrl } from '../utils/flags';
+import { toSlug } from '../utils/slug';
 
 // Define regions for filtering
 const REGIONS = ['All', 'Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'];
@@ -92,7 +93,7 @@ const MapPage: React.FC = () => {
 
         <div class="text-center relative">
           <button 
-            data-country-id="${country.id}" 
+            data-country-slug="${toSlug(country.name)}"
             class="learn-more-btn ${linkClass} ${linkGlow} w-full h-12 bg-white/10 border-2 border-white/40 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all outline-none"
           >
             Launch Profile
@@ -361,9 +362,9 @@ const MapPage: React.FC = () => {
     const handlePopupClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (target && target.classList.contains('learn-more-btn')) {
-        const countryId = target.getAttribute('data-country-id');
-        if (countryId) {
-          navigate(`/country/${countryId}`);
+        const slug = target.getAttribute('data-country-slug');
+        if (slug) {
+          navigate(`/country/${slug}`);
         }
       }
     };

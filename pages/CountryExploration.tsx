@@ -12,6 +12,7 @@ import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { getCountryTour, getGeneratedImage } from '../services/geminiService';
 import { TourData } from '../types';
 import { getFlagUrl } from '../utils/flags';
+import { toSlug } from '../utils/slug';
 
 // High-Fidelity Aero Display for Tour/Expedition
 const PhotoPrint: React.FC<{ 
@@ -121,10 +122,10 @@ const CountryExploration: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
-  const country = useMemo(() => 
-    MOCK_COUNTRIES.find(c => c.id === id) || 
-    TERRITORIES.find(t => t.id === id) || 
-    DE_FACTO_COUNTRIES.find(d => d.id === id)
+  const country = useMemo(() =>
+    MOCK_COUNTRIES.find(c => c.id === id || toSlug(c.name) === id) ||
+    TERRITORIES.find(t => t.id === id || toSlug(t.name) === id) ||
+    DE_FACTO_COUNTRIES.find(d => d.id === id || toSlug(d.name) === id)
   , [id]);
 
   const { setNavbarMode, setScrollThreshold, setHideFooter } = useLayout();
@@ -742,7 +743,7 @@ const CountryExploration: React.FC = () => {
             </div>
             <h2 className="text-2xl font-display font-black mb-4 text-white uppercase tracking-tighter">Connection Issue</h2>
             <p className="text-white/40 mb-10 leading-relaxed font-bold uppercase tracking-widest text-[10px]">We couldn't retrieve the expedition data from the archive.</p>
-            <Button onClick={() => navigate(`/country/${country.id}`)} variant="primary" className="w-full h-16 text-white uppercase tracking-widest rounded-full">RETURN TO COUNTRY</Button>
+            <Button onClick={() => navigate(`/country/${toSlug(country.name)}`)} variant="primary" className="w-full h-16 text-white uppercase tracking-widest rounded-full">RETURN TO COUNTRY</Button>
           </div>
         </Container>
       );
@@ -863,7 +864,7 @@ const CountryExploration: React.FC = () => {
                     </button>
 
                     <button 
-                      onClick={() => navigate(`/country/${country.id}`)}
+                      onClick={() => navigate(`/country/${toSlug(country.name)}`)}
                       className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
                     >
                       GO BACK
@@ -1393,7 +1394,7 @@ const CountryExploration: React.FC = () => {
                   </button>
                   
                   <button 
-                    onClick={() => navigate(`/country/${country.id}`)}
+                    onClick={() => navigate(`/country/${toSlug(country.name)}`)}
                     className="py-1.5 text-[9px] font-black text-white/30 hover:text-white uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group/back"
                   >
                     RETURN TO PROFILE

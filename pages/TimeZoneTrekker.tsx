@@ -98,6 +98,10 @@ export default function TimeZoneTrekker() {
     
     const options = shuffle([correctAnswer, ...distractors]);
     setCurrentQuestion({ country, options });
+
+    // Preload flag image
+    const img = new Image();
+    img.src = getFlagUrl(country.flag);
   }, [countriesWithTimeZone, uniqueTimeZones, previousCountryId]);
 
   const startGame = () => {
@@ -266,6 +270,7 @@ export default function TimeZoneTrekker() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
+                  style={{ willChange: 'transform, opacity' }}
                   className="flex-1 flex flex-col min-h-0"
                 >
                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
@@ -277,6 +282,7 @@ export default function TimeZoneTrekker() {
                       src={getFlagUrl(currentQuestion.country.flag)}
                       alt={`${currentQuestion.country.name} Flag`}
                       className="max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                   </div>
 
@@ -299,7 +305,7 @@ export default function TimeZoneTrekker() {
                           key={idx}
                           onClick={() => handleAnswer(option)}
                           disabled={!!selectedAnswer}
-                          className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[36px] sm:min-h-[44px] md:min-h-[64px] transition-colors duration-500 tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                          className={`game-option relative p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[48px] sm:min-h-[56px] md:min-h-[64px] transition-colors duration-500 tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >
                           <span className="px-1 sm:px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option}</span>
@@ -347,9 +353,9 @@ export default function TimeZoneTrekker() {
                 </Button>
                 <button 
                   onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-primary transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"
+                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
                 >
-                  <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" /> 
+                  <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
                   Back to Games
                 </button>
               </div>

@@ -72,7 +72,7 @@ const About: React.FC = () => {
   };
 
   return (
-    <main className="pt-28 pb-16 px-4 md:px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
+    <main className="pt-28 pb-16 px-4 md:px-6 min-h-screen overflow-x-hidden relative">
       <SEO
         title="About"
         description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."

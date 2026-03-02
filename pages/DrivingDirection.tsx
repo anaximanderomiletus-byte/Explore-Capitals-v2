@@ -265,6 +265,7 @@ export default function DrivingDirection() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.05 }}
                     transition={{ duration: 0.25 }}
+                    style={{ willChange: 'transform, opacity' }}
                     className="flex items-center justify-center mb-4 md:mb-6"
                   >
                     <div className={`w-full max-w-[140px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
@@ -359,20 +360,20 @@ export default function DrivingDirection() {
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
               <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
-              <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
+              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
-                <button 
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black border border-white/20">Play Again <Play size={20} fill="currentColor" /></Button>
+                <button
                   onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
+                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
                 >
-                  <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
+                  <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
                   Back to Games
                 </button>
               </div>

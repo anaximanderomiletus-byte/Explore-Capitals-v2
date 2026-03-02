@@ -208,15 +208,15 @@ export default function GlobalDetective() {
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
           <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
-          <p className="text-white/40 mb-6 text-[10px] font-bold uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
-          <div className="text-7xl font-display font-black text-white mb-8 tabular-nums">{score}</div>
+          <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+          <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
           <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">Play Again <Play size={20} fill="currentColor" /></Button>
-            <button 
+            <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">Play Again <Play size={20} fill="currentColor" /></Button>
+            <button
               onClick={() => navigate('/games')}
-              className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
+              className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
             >
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
+              <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
               Back to Games
             </button>
           </div>
@@ -271,6 +271,7 @@ export default function GlobalDetective() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.05 }}
                         transition={{ duration: 0.3 }}
+                        style={{ willChange: 'transform, opacity' }}
                         className="h-full flex flex-col justify-between relative z-10"
                       >
                     <div className="flex flex-col flex-1 justify-center">
@@ -329,7 +330,7 @@ export default function GlobalDetective() {
                                  key={option.id} 
                                  onClick={() => handleAnswer(option.name)} 
                                  disabled={!!selectedAnswer} 
-                               className={`game-option relative p-1.5 sm:p-2 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[36px] sm:min-h-[44px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
+                               className={`game-option relative p-1.5 sm:p-2 md:p-3 rounded-xl sm:rounded-2xl font-display font-black text-xs sm:text-sm md:text-lg flex items-center justify-center min-h-[48px] sm:min-h-[56px] md:min-h-[64px] transition-colors duration-500 uppercase tracking-tighter overflow-hidden ${stateStyles} ${isWrong ? 'animate-shake' : ''}`}
                                style={{ WebkitTapHighlightColor: 'transparent' }}
                              >
                                <span className="px-1 sm:px-2 text-center leading-tight relative z-10 drop-shadow-sm">{option.name}</span>

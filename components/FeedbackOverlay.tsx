@@ -14,18 +14,11 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
 
   useEffect(() => {
     if (type) {
-      setIsVisible(false); // Reset first if it was visible
-      const nextFrame = requestAnimationFrame(() => {
-        setIsVisible(true);
-      });
-      
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 1000);
-      return () => {
-        cancelAnimationFrame(nextFrame);
-        clearTimeout(timer);
-      };
+      setIsVisible(true);
+      const timer = setTimeout(() => setIsVisible(false), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setIsVisible(false);
     }
   }, [type, triggerKey]);
 
@@ -36,10 +29,12 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
     <AnimatePresence>
       {isVisible && type && (
         <motion.div
+          key={triggerKey}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
+          style={{ willChange: 'transform, opacity' }}
           className="fixed inset-0 z-[9999] flex items-center justify-center pb-[3vh] sm:pb-[5vh] pointer-events-none overflow-hidden px-4 select-none"
         >
           {/* Full screen background flash */}
