@@ -501,7 +501,7 @@ const Auth: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative z-10 flex-grow flex items-center justify-center px-4 pt-20 pb-8 sm:pt-32 sm:pb-12">
+      <div className="relative z-10 flex-grow flex items-center justify-center px-4 pt-16 pb-8 sm:pt-20 sm:pb-12">
         <div className="w-full max-w-[1000px] grid lg:grid-cols-2 bg-white/20 backdrop-blur-3xl rounded-[3rem] border-2 border-white/40 overflow-hidden relative">
           <div className="absolute inset-0 bg-glossy-gradient opacity-30 pointer-events-none" />
           
