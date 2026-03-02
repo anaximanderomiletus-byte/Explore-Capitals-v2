@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Mail, Phone, ShieldCheck, User, Lock, ArrowRight, CheckCircle2, AlertCircle, Globe2, Compass, Eye, EyeOff } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/Button';
 import PhoneInput from '../components/PhoneInput';
@@ -868,7 +868,7 @@ const Auth: React.FC = () => {
               <div ref={recaptchaRef} id="recaptcha-container" />
               
               <p className="mt-12 text-center text-[9px] text-white/30 font-bold uppercase tracking-[0.3em]">
-                By signing in, you agree to our <span className="text-sky hover:underline cursor-pointer">Terms of Service</span>.
+                By signing in, you agree to our <Link to="/terms" className="text-sky hover:underline">Terms of Service</Link>.
               </p>
             </div>
           </div>
