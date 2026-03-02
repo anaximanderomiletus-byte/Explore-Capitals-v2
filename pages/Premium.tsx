@@ -154,14 +154,14 @@ const Premium: React.FC = () => {
                 Create one for free
               </Link>.
             </p>
+            <button
+              onClick={() => navigate('/games')}
+              className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link mt-6"
+            >
+              <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
+              Back to Games
+            </button>
           </div>
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link mt-6"
-          >
-            <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-            Back
-          </button>
         </div>
       </div>
     );
