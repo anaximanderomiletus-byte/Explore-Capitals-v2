@@ -135,7 +135,7 @@ const Premium: React.FC = () => {
               <Crown size={36} className="relative z-10 drop-shadow-lg" />
             </div>
             <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">
-              Premium
+              Premium Access
             </h1>
             <p className="text-white/60 mb-8 text-sm leading-relaxed drop-shadow-sm">
               Sign in to view our premium plans and unlock unlimited games, ad-free experience, and advanced analytics.
