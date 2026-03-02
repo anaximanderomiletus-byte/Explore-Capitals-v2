@@ -188,13 +188,13 @@ const CookieConsent: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setPreferences(p => ({ ...p, analytics: !p.analytics }))}
-                      className={`w-12 h-7 rounded-full transition-all relative ${
+                      className={`w-11 h-6 rounded-full transition-all relative shrink-0 ${
                         preferences.analytics ? 'bg-sky' : 'bg-white/20'
                       }`}
                     >
                       <div
-                        className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-md transition-all ${
-                          preferences.analytics ? 'left-6' : 'left-1'
+                        className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all ${
+                          preferences.analytics ? 'left-[22px]' : 'left-0.5'
                         }`}
                       />
                     </button>
@@ -210,13 +210,13 @@ const CookieConsent: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setPreferences(p => ({ ...p, advertising: !p.advertising }))}
-                      className={`w-12 h-7 rounded-full transition-all relative ${
+                      className={`w-11 h-6 rounded-full transition-all relative shrink-0 ${
                         preferences.advertising ? 'bg-sky' : 'bg-white/20'
                       }`}
                     >
                       <div
-                        className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-md transition-all ${
-                          preferences.advertising ? 'left-6' : 'left-1'
+                        className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all ${
+                          preferences.advertising ? 'left-[22px]' : 'left-0.5'
                         }`}
                       />
                     </button>
