@@ -129,38 +129,40 @@ const Premium: React.FC = () => {
           description="Upgrade to ExploreCapitals Premium for unlimited games, ad-free experience, advanced analytics, and exclusive features."
         />
 
-        <div className="max-w-lg mx-auto relative z-10 text-center">
-          <div className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-2xl p-8 md:p-12 relative">
-            <div className="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Crown size={40} className="text-amber-400" />
+        <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md px-4">
+          <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
+              <Crown size={36} className="relative z-10 drop-shadow-lg" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-display font-black text-white mb-4 tracking-tighter uppercase">
-              Premium Access
+            <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">
+              Premium
             </h1>
-            <p className="text-white/70 text-lg mb-8 text-left">
+            <p className="text-white/60 mb-8 text-sm leading-relaxed drop-shadow-sm">
               Sign in to view our premium plans and unlock unlimited games, ad-free experience, and advanced analytics.
             </p>
-            <Button
-              variant="accent"
-              size="lg"
-              className="w-full uppercase"
-              onClick={() => navigate('/auth?redirect=/premium')}
-            >
-              Sign In <ArrowRight size={20} />
-            </Button>
-            <p className="text-white/50 text-sm mt-4">
-              Don't have an account?{' '}
-              <Link to="/auth?mode=signup&redirect=/premium" className="text-amber-400 hover:text-amber-300 underline underline-offset-2 transition-colors">
-                Create one for free
-              </Link>.
-            </p>
-            <button
-              onClick={() => navigate('/games')}
-              className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link mt-6"
-            >
-              <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-              Back to Games
-            </button>
+            <div className="flex flex-col gap-6">
+              <Button
+                variant="accent"
+                size="md"
+                className="w-full h-16 text-xl uppercase tracking-widest font-black border border-white/20"
+                onClick={() => navigate('/auth?redirect=/premium')}
+              >
+                Sign In <ArrowRight size={20} />
+              </Button>
+              <p className="text-white/50 text-xs">
+                Don't have an account?{' '}
+                <Link to="/auth?mode=signup&redirect=/premium" className="text-sky-light hover:text-white underline underline-offset-2 transition-colors">
+                  Create one for free
+                </Link>.
+              </p>
+              <button
+                onClick={() => navigate('/games')}
+                className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
+              >
+                <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
+                Back to Games
+              </button>
+            </div>
           </div>
         </div>
       </div>
