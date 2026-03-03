@@ -564,6 +564,42 @@
           min-height: 0 !important;
           font-size: 0.9rem !important;
         }
+
+        /* Capital Connection — shrink tiles to fit viewport */
+        .game-tile-grid {
+          gap: 6px !important;
+        }
+        .game-tile-grid button {
+          min-height: 0 !important;
+          padding: 4px !important;
+        }
+        .game-tile-grid button img {
+          width: 28px !important;
+        }
+        .game-tile-grid button span {
+          font-size: 8px !important;
+        }
+
+        /* Know Your Neighbor — compact layout to fit viewport */
+        .game-neighbor-inner {
+          height: auto !important;
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          justify-content: flex-start !important;
+        }
+        .game-neighbor-inner > .flex-1 {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+        }
+        .game-neighbor-grid {
+          flex-shrink: 1 !important;
+          padding-bottom: 2px !important;
+        }
+        .game-neighbor-grid button {
+          min-height: 0 !important;
+          padding-top: 5px !important;
+          padding-bottom: 5px !important;
+        }
       }
 
       /* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */

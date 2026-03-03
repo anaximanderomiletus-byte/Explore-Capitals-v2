@@ -268,7 +268,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
       <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -292,9 +292,9 @@ export default function CapitalConnection() {
          <div className="game-back-spacer w-[42px] shrink-0" />
       </div>
 
-      <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-y-auto overflow-x-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-2 sm:p-3 md:p-6">
+      <div className="game-card flex-1 max-w-3xl mx-auto w-full flex flex-col overflow-y-auto overflow-x-hidden relative z-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-2 sm:p-3 md:p-6">
           {/* Points and Timer - Responsive layout for all screen sizes */}
-          <div className="flex items-center justify-between gap-2 mb-3 sm:mb-4 relative z-20 shrink-0">
+          <div className="game-score-bar flex items-center justify-between gap-2 mb-3 sm:mb-4 relative z-20 shrink-0">
              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-warning/15 border border-warning/30 shrink-0">
                 <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning" />
                 <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums">{score}</span>
@@ -305,7 +305,7 @@ export default function CapitalConnection() {
              </div>
           </div>
 
-          <div className="flex-1 grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 auto-rows-fr content-center relative z-10">
+          <div className="game-tile-grid flex-1 grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 auto-rows-fr content-center relative z-10">
             {cards.map(card => (
               <Card 
                 key={card.id} 

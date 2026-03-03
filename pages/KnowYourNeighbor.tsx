@@ -184,7 +184,7 @@ export default function KnowYourNeighbor() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-3 overflow-y-auto overflow-x-hidden"
           >
       <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
       
@@ -210,7 +210,7 @@ export default function KnowYourNeighbor() {
          <div className="game-back-spacer w-[42px] shrink-0" />
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-1.5 sm:p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
+      <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-1.5 sm:p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
          
          {/* Points and Timer - Responsive layout for all screen sizes */}
          <div className="flex items-center justify-between gap-2 mb-1 sm:mb-2 md:mb-2 relative z-20 shrink-0">
@@ -232,7 +232,7 @@ export default function KnowYourNeighbor() {
                    exit={{ opacity: 0, x: -20 }}
                    transition={{ duration: 0.3 }}
                    style={{ willChange: 'transform, opacity' }}
-                   className="h-full flex flex-col justify-between relative z-10"
+                   className="game-neighbor-inner h-full flex flex-col justify-between relative z-10"
                  >
             {/* Country Prompt - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center min-h-0">
@@ -249,7 +249,7 @@ export default function KnowYourNeighbor() {
             </div>
               
             {/* Selections Grid - At Bottom */}
-            <div className="shrink-0 px-1 pb-2">
+            <div className="game-neighbor-grid shrink-0 px-1 pb-2">
               <div className="grid grid-cols-3 gap-1.5 md:gap-2 w-full">
               {options.map((countryName) => {
                 const isSelected = selectedOptions.includes(countryName);
