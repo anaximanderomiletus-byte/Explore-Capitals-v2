@@ -337,7 +337,7 @@ export default function MapDash() {
                 <span className="font-display font-black text-xs sm:text-sm md:text-base text-white tabular-nums relative z-10 drop-shadow-md">{score}</span>
               </div>
               
-              <div className={`rounded-xl shadow-inner h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border border-white/20'}`}>
+              <div className={`rounded-xl shadow-inner h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border-2 border-white/20'}`}>
                 <Timer size={14} className={`sm:w-4 sm:h-4 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-sky"}`} />
                 <span className={`font-display font-black text-xs sm:text-sm md:text-base tabular-nums min-w-[32px] sm:min-w-[36px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? "text-error" : "text-white"}`}>
                   {formatTime(timeLeft)}

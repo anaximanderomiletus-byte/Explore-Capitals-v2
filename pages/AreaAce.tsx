@@ -266,7 +266,7 @@ export default function AreaAce() {
                   <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning" />
                   <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums">{score}</span>
                 </div>
-                <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl transition-all ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border border-white/30'}`}>
+                <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl transition-all ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
                   <Timer size={14} className={`sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`} />
                   <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                 </div>
