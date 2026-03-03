@@ -1,5 +1,5 @@
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 // framer-motion animations handled per-page via whileInView
 import Navigation from './components/Navigation';
@@ -84,23 +84,88 @@ const ScrollToTop: React.FC = () => {
 };
 
 /**
+ * NavigationCursor
+ * Shows cursor:progress while a lazy-loaded page chunk is being fetched.
+ * Uses cursor:progress (arrow + spinning circle on Mac) — NOT cursor:wait
+ * (spinning beach ball of death).
+ *
+ * Flow:
+ *  1. Route changes → set cursor to progress immediately
+ *  2. If page chunk is cached → auto-clear after 100ms (imperceptible)
+ *  3. If Suspense kicks in → PageLoadFallback sets isPageLoading=true,
+ *     which cancels the auto-clear and keeps the cursor until the chunk loads
+ */
+const NavigationCursor: React.FC = () => {
+  const { pathname } = useLocation();
+  const { isPageLoading } = useLayout();
+  const isFirstRender = useRef(true);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // On route change, show progress cursor immediately
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    document.documentElement.style.cursor = 'progress';
+
+    // Auto-clear for instant navigations (cached chunks)
+    // PageLoadFallback will cancel this if Suspense is active
+    timeoutRef.current = setTimeout(() => {
+      document.documentElement.style.cursor = '';
+    }, 100);
+
+    return () => clearTimeout(timeoutRef.current);
+  }, [pathname]);
+
+  // When Suspense is active (isPageLoading=true), keep cursor as progress
+  // When Suspense resolves (isPageLoading=false), clear it
+  useEffect(() => {
+    if (isPageLoading) {
+      clearTimeout(timeoutRef.current);
+      document.documentElement.style.cursor = 'progress';
+    } else {
+      document.documentElement.style.cursor = '';
+    }
+  }, [isPageLoading]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
+  return null;
+};
+
+/**
  * PageLoadFallback
  * Full-screen minimal spinner shown while a lazy chunk is loading.
  * Matches the app background so there's no flash of white/empty content.
  * Skips showing its own spinner while the HTML initial-loader is still visible
  * to avoid two spinners on screen at once.
+ * Also signals loading state to NavigationCursor via LayoutContext.
  */
 const PageLoadFallback: React.FC = () => {
+  const { setPageLoading } = useLayout();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    // Signal that a lazy chunk is loading (keeps progress cursor active)
+    setPageLoading(true);
+
     // If the HTML splash-screen loader is still present, don't show a second spinner
     const htmlLoader = document.getElementById('initial-loader');
-    if (htmlLoader) return;
+    if (htmlLoader) {
+      return () => setPageLoading(false);
+    }
 
     const timer = setTimeout(() => setShow(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      setPageLoading(false);
+    };
+  }, [setPageLoading]);
 
   return (
     <div className="flex-grow flex flex-col w-full min-h-[60vh] items-center justify-center bg-[#0F172A]">
@@ -196,6 +261,7 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen flex flex-col relative">
       <PersistentBackground />
       <ScrollToTop />
+      <NavigationCursor />
       <Navigation />
       <CookieConsent />
       <div className="flex-grow flex flex-col relative z-[1] w-full">

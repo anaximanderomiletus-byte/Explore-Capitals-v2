@@ -92,8 +92,8 @@ const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
         </div>
         <span className="text-white/80 text-sm leading-relaxed">
           I have read and agree to the{' '}
-          <span className="text-sky-light">Terms of Service</span> and{' '}
-          <span className="text-sky-light">Privacy Policy</span>
+          <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-sky-light hover:underline" onClick={(e) => e.stopPropagation()}>Terms of Service</Link> and{' '}
+          <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="text-sky-light hover:underline" onClick={(e) => e.stopPropagation()}>Privacy Policy</Link>
         </span>
       </label>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, AlertTriangle, Mail, FileText, Shield, Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, AlertTriangle, Mail, FileText, Shield, Check, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Button from './Button';
 import type { PaymentEligibility } from '../types';
 
@@ -174,6 +175,10 @@ You Can:
                     {termsContent}
                   </pre>
                 </div>
+                <Link to="/terms" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-2 text-sky text-xs font-medium hover:text-sky-light transition-colors">
+                  <span>Read full Terms of Service</span>
+                  <ExternalLink size={12} />
+                </Link>
               </div>
             )}
           </div>
@@ -213,6 +218,10 @@ You Can:
                     {privacyContent}
                   </pre>
                 </div>
+                <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-2 text-sky text-xs font-medium hover:text-sky-light transition-colors">
+                  <span>Read full Privacy Policy</span>
+                  <ExternalLink size={12} />
+                </Link>
               </div>
             )}
           </div>

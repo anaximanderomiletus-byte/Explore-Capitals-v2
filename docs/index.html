@@ -265,6 +265,20 @@
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
       }
+
+      /* ===== CURSOR NORMALIZATION ===== */
+      /* Ensure text-type inputs always show the text cursor (I-beam) */
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="search"],
+      input[type="tel"],
+      input[type="url"],
+      input[type="number"],
+      input:not([type]),
+      textarea {
+        cursor: text;
+      }
       
       /* Font smoothing for all browsers */
       body {
@@ -921,7 +935,7 @@
         backface-visibility: hidden;
       }
     </style>
-  <script type="module" crossorigin src="/assets/index-Nc3pglQL.js"></script>
+  <script type="module" crossorigin src="/assets/index-__sanajp.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-C_5uncE5.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Cv7hdDM7.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-three-D6JuY1Y5.js">

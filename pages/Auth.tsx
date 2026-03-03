@@ -868,7 +868,7 @@ const Auth: React.FC = () => {
               <div ref={recaptchaRef} id="recaptcha-container" />
               
               <p className="mt-12 text-center text-[9px] text-white/30 font-bold uppercase tracking-[0.3em]">
-                By signing in, you agree to our <Link to="/terms" className="text-sky hover:underline">Terms of Service</Link>.
+                By signing in, you agree to our <Link to="/terms" className="text-sky hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-sky hover:underline">Privacy Policy</Link>.
               </p>
             </div>
           </div>
@@ -928,7 +928,7 @@ const PremiumInput: React.FC<{
           {icon}
         </div>
         <input
-          className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/20'} rounded-2xl pl-14 ${isPassword ? 'pr-12' : 'pr-5'} py-3.5 focus:ring-4 ${error ? 'focus:ring-red-500/10 focus:border-red-500' : 'focus:ring-sky/10 focus:border-sky/40'} outline-none transition-all duration-300 font-black text-[11px] text-white placeholder:text-white/10 tracking-wider shadow-inner`}
+          className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/20'} rounded-2xl pl-14 ${isPassword ? 'pr-12' : 'pr-5'} py-3.5 focus:ring-4 ${error ? 'focus:ring-red-500/10 focus:border-red-500' : 'focus:ring-sky/10 focus:border-sky/40'} outline-none transition-all duration-300 font-black text-[11px] text-white placeholder:text-white/10 tracking-wider shadow-inner cursor-text`}
           value={value}
           type={inputType}
           placeholder={placeholder}
