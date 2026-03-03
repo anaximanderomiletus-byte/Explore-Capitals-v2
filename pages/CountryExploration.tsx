@@ -234,7 +234,6 @@ const CountryExploration: React.FC = () => {
     if (!country) return;
     
     const fetchContent = async () => {
-      console.log("[Expedition] Fetching content for:", country.name);
       // Global Safety Timeout: If data isn't ready in 8 seconds, force a fail-safe state
       const globalTimeout = setTimeout(() => {
         if (!dataLoaded) {
@@ -248,7 +247,6 @@ const CountryExploration: React.FC = () => {
         const data = await getCountryTour(country.name);
 
         if (data) {
-          console.log("[Expedition] Tour data received");
           const shuffledStops = data.stops.map(stop => ({
             ...stop,
             options: [...stop.options].sort(() => Math.random() - 0.5)
@@ -281,7 +279,6 @@ const CountryExploration: React.FC = () => {
           clearTimeout(globalTimeout);
           setDataLoaded(true);
           setLoadingProgress(100);
-          console.log("[Expedition] Loading complete");
         } else {
           clearTimeout(globalTimeout);
           console.error("[Expedition] No tour data returned");

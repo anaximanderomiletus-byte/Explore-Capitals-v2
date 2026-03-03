@@ -160,7 +160,7 @@ const Settings: React.FC = () => {
         { 
           'size': 'normal',
           'callback': () => {
-            console.log('reCAPTCHA solved');
+            // reCAPTCHA solved
           },
           'expired-callback': () => {
             if (verifierRef.current) {

@@ -16,8 +16,6 @@ export default defineConfig({
           'vendor-motion': ['framer-motion'],
           // Firebase — only needed after user interaction
           'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/functions', 'firebase/storage'],
-          // 3D — only needed by pages that use Three.js
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
         },
       },
     },

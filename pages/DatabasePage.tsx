@@ -11,6 +11,7 @@ import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
 import { BannerAd } from '../components/AdSense';
+import { useDebounce } from '../hooks';
 
 type SortKey = 'name' | 'capital' | 'region' | 'population' | 'area';
 type SortDirection = 'asc' | 'desc';
@@ -20,21 +21,6 @@ type SortDirection = 'asc' | 'desc';
 const PRESORTED_COUNTRIES = MOCK_COUNTRIES;
 const PRESORTED_TERRITORIES = TERRITORIES;
 const PRESORTED_DEFACTO = DE_FACTO_COUNTRIES;
-
-// Debounce hook for search input
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 interface SortHeaderProps {
   label: string;
