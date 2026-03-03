@@ -495,6 +495,16 @@
       
       /* ===== MOBILE GAME LAYOUT ===== */
       @media (max-width: 767px) {
+        /* Take over the full viewport during gameplay */
+        body:has(.game-playing) {
+          overflow: hidden !important;
+          height: 100svh !important;
+        }
+        body:has(.game-playing) nav,
+        body:has(.game-playing) footer {
+          display: none !important;
+        }
+
         /* Back button — center the arrow icon */
         .game-back-btn {
           display: inline-flex !important;
@@ -503,38 +513,60 @@
           padding: 0 !important;
         }
 
-        /* Tighten game container padding */
+        /* Game container — fill viewport with small top/bottom padding */
         .game-playing {
-          padding-top: 3rem !important;
+          height: 100svh !important;
+          overflow: hidden !important;
+          padding-top: 0.5rem !important;
           padding-bottom: 0.25rem !important;
+        }
+
+        /* Card fills remaining space, no overflow */
+        .game-card {
+          overflow: hidden !important;
+        }
+
+        /* Score bar — tighter bottom margin */
+        .game-score-bar {
+          margin-bottom: 0 !important;
+        }
+
+        /* Content area — compact, only as tall as its content */
+        .game-content {
+          flex: 0 0 auto !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+          justify-content: flex-start !important;
+          padding-top: 0.25rem !important;
+          padding-bottom: 0.5rem !important;
+          gap: 0.25rem !important;
+        }
+
+        /* Prevent inner wrappers from stretching (e.g. flag container) */
+        .game-content > div {
+          flex: 0 0 auto !important;
         }
 
         /* Constrain flag images for consistency */
         .game-flag {
-          max-height: 15vh !important;
+          max-height: 14svh !important;
           width: auto !important;
           object-fit: contain !important;
         }
 
-        /* Reduce spacing in top bar and score row */
-        .game-top-bar {
-          margin-bottom: 0.25rem !important;
+        /* Answer grid — takes bottom ~50% of card */
+        .game-options-grid {
+          flex: 0 0 50% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 5px !important;
         }
 
-        .game-score-bar {
-          margin-bottom: 0.25rem !important;
-        }
-
-        /* Content area — let it shrink so buttons have room */
-        .game-content {
+        /* Answer buttons — fill grid equally, slightly larger text */
+        .game-option {
           flex: 1 1 0% !important;
           min-height: 0 !important;
-          overflow: hidden !important;
-        }
-
-        /* Answer grid — grow modestly to fill ~40-50% of card */
-        .game-options-grid {
-          flex: 0.3 0 auto !important;
+          font-size: 0.95rem !important;
         }
       }
 
