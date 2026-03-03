@@ -493,6 +493,88 @@
         }
       }
       
+      /* ===== MOBILE GAME LAYOUT ===== */
+      @media (max-width: 767px) {
+        /* Lock body scroll when a game is in playing state */
+        body:has(.game-playing) {
+          overflow: hidden !important;
+          height: 100svh !important;
+        }
+
+        /* Hide nav & footer during gameplay, elevate game container */
+        body:has(.game-playing) nav,
+        body:has(.game-playing) footer {
+          display: none !important;
+        }
+
+        /* Back button — perfect centering with explicit flex */
+        .game-back-btn {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 34px !important;
+          height: 34px !important;
+          padding: 0 !important;
+        }
+
+        /* Spacer matches back button width */
+        .game-back-spacer {
+          width: 34px !important;
+        }
+
+        /* Game containers — prevent scrolling on mobile, force fit */
+        .game-playing {
+          overflow: hidden !important;
+          height: 100svh !important;
+          padding-top: 0.75rem !important;
+          padding-bottom: 2px !important;
+        }
+
+        .game-card {
+          overflow: hidden !important;
+        }
+
+        /* Content area — shrinks to give answer buttons space */
+        .game-content {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /* Consistent flag height across all games */
+        .game-flag {
+          max-height: 18svh !important;
+          width: auto !important;
+          object-fit: contain !important;
+        }
+
+        /* Answer grid — flex column, takes ~40-50% of card */
+        .game-options-grid {
+          display: flex !important;
+          flex-direction: column !important;
+          flex: 0 0 45% !important;
+          gap: 5px !important;
+          padding-bottom: 2px !important;
+        }
+
+        /* Answer buttons — fixed height for consistent 40-50% of card */
+        .game-option {
+          flex: 1 1 0% !important;
+          min-height: 0 !important;
+        }
+
+        /* Top bar — tighter spacing */
+        .game-top-bar {
+          margin-bottom: 0.25rem !important;
+          padding: 6px !important;
+        }
+
+        /* Score/timer row — tighter spacing */
+        .game-score-bar {
+          margin-bottom: 0.25rem !important;
+        }
+      }
+
       /* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */
       /* Unified viewport height with proper fallbacks for all iOS versions */
       .h-screen {

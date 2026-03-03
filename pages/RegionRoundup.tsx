@@ -180,7 +180,7 @@ export default function RegionRoundup() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Region Roundup - Games" description="Sort countries by continent. Test if you know which countries belong to Africa, Asia, Europe, and other regions of the world." />
             
@@ -191,8 +191,8 @@ export default function RegionRoundup() {
             </div>
 
             {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-               <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+            <div className="game-top-bar max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+               <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
 
@@ -203,13 +203,13 @@ export default function RegionRoundup() {
                </div>
 
                {/* Spacer to balance the back button */}
-               <div className="w-[42px] shrink-0" />
+               <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
-               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+               <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                   <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
                      <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
                      <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
@@ -230,7 +230,7 @@ export default function RegionRoundup() {
                    style={{ willChange: 'transform, opacity' }}
                    className="flex-1 flex flex-col min-h-0"
                  >
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
+                   <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
                       <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80 shrink-0">IDENTIFY REGION</p>
                       <h3 className="text-xl md:text-4xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] mb-2 md:mb-4 shrink-0">
                         {currentCountry.name}
@@ -238,12 +238,12 @@ export default function RegionRoundup() {
                       <img
                         src={getFlagUrl(currentCountry.flag)}
                         alt={`${currentCountry.name} Flag`}
-                        className="max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                        className="game-flag max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                    </div>
 
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                   <div className="game-options-grid grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {regionOptions.map((region) => {
                         const isSelected = selectedAnswer === region;
                         const isCorrect = region === currentCountry.region;

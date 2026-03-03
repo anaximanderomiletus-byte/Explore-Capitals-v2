@@ -196,7 +196,7 @@ export default function KnowYourNeighbor() {
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
       <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-2 bg-white/10 backdrop-blur-2xl p-2 md:p-2.5 rounded-2xl border border-white/20 z-10">
-         <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+         <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
 
@@ -207,7 +207,7 @@ export default function KnowYourNeighbor() {
          </div>
 
          {/* Spacer to balance the back button */}
-         <div className="w-[42px] shrink-0" />
+         <div className="game-back-spacer w-[42px] shrink-0" />
       </div>
 
       <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-1.5 sm:p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">

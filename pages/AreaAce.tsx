@@ -239,7 +239,7 @@ export default function AreaAce() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Area Ace - Playing" description="Which country is larger? Compare land areas in this geography game." />
             
@@ -248,18 +248,18 @@ export default function AreaAce() {
               <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
             </div>
 
-            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-              <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all border border-white/10 shrink-0">
+            <div className="game-top-bar max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+              <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all border border-white/10 shrink-0">
                 <ArrowLeft size={18} />
               </Link>
               <div className="flex-1 flex flex-col items-center justify-center min-w-0">
                 <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] truncate">Area Ace</h1>
                 <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
               </div>
-              <div className="w-[42px] shrink-0" />
+              <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
+            <div className="game-card flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
               
               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                 <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40">

@@ -256,7 +256,7 @@ export default function TerritoryTitans() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Territory Titans - Playing" description="Test your knowledge of world territories and dependencies." />
             
@@ -267,21 +267,21 @@ export default function TerritoryTitans() {
             </div>
 
             {/* Top Bar */}
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-              <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+            <div className="game-top-bar max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+              <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                 <ArrowLeft size={18} className="transition-transform" />
               </Link>
               <div className="flex-1 flex flex-col items-center justify-center min-w-0">
                 <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Territory Titans</h1>
                 <div className="h-0.5 w-6 bg-accent/40 rounded-full mt-1" />
               </div>
-              <div className="w-[42px] shrink-0" />
+              <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
               
               {/* Points and Timer */}
-              <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+              <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                 <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
                   <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
                   <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
@@ -302,7 +302,7 @@ export default function TerritoryTitans() {
                   style={{ willChange: 'transform, opacity' }}
                   className="flex-1 flex flex-col min-h-0"
                 >
-                  <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
+                  <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
                     <p className="text-accent font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80 shrink-0">
                       {currentQuestion.type === 'sovereignty' ? 'IDENTIFY SOVEREIGNTY' : 'IDENTIFY CAPITAL'}
                     </p>
@@ -312,12 +312,12 @@ export default function TerritoryTitans() {
                     <img
                       src={getFlagUrl(currentQuestion.territory.flag)}
                       alt={`${currentQuestion.territory.name} Flag`}
-                      className="max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                      className="game-flag max-h-[12vh] md:max-h-[20vh] w-auto min-h-0 shrink drop-shadow-2xl object-contain"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                  <div className="game-options-grid grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                     {currentQuestion.options.map((option, idx) => {
                       const correctAnswer = currentQuestion.type === 'sovereignty' 
                         ? currentQuestion.territory.sovereignty 

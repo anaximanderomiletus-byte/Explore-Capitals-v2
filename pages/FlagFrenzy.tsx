@@ -187,7 +187,7 @@ export default function FlagFrenzy() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Flag Frenzy - Games" description="Identify country flags in 60 seconds. Test how many world flags you can recognize in this fast-paced quiz game." />
             
@@ -198,8 +198,8 @@ export default function FlagFrenzy() {
             </div>
 
             {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-               <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+            <div className="game-top-bar max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+               <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
 
@@ -210,13 +210,13 @@ export default function FlagFrenzy() {
                </div>
 
                {/* Spacer to balance the back button */}
-               <div className="w-[42px] shrink-0" />
+               <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-8 overflow-y-auto overflow-x-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
-               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+               <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                   <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
                      <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
                      <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
@@ -237,26 +237,26 @@ export default function FlagFrenzy() {
                    style={{ willChange: 'transform, opacity' }}
                    className="flex-1 flex flex-col min-h-0"
                  >
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 pt-4 sm:pt-6 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
+                   <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 pt-4 sm:pt-6 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
                       <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-3 md:mb-4 font-sans shrink-0">IDENTIFY FLAG</p>
                       <div className="flex-1 flex items-center justify-center w-full min-h-0 relative px-4 sm:px-6">
                         {!imgError ? (
                           <img
                             src={`/flags/${currentCountryCode}.png`}
                             alt="Target Flag"
-                            className="max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
+                            className="game-flag max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
                             onError={() => setImgError(true)}
                           />
                         ) : (
                           <img
                             src={getFlagUrl(currentQuestion.country.flag)}
                             alt="Target Flag Fallback"
-                            className="max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
+                            className="game-flag max-w-[75%] max-h-[85%] object-contain drop-shadow-2xl"
                           />
                         )}
                       </div>
                    </div>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                   <div className="game-options-grid grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {currentQuestion.options.map((option) => {
                         const isSelected = selectedAnswer === option.name;
                         const isCorrect = option.name === currentQuestion.country.name;

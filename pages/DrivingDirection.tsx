@@ -211,7 +211,7 @@ export default function DrivingDirection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Driving Direction - Playing" description="Which side of the road do they drive on?" />
             
@@ -222,8 +222,8 @@ export default function DrivingDirection() {
             </div>
 
             {/* Top Bar */}
-            <div className="max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-              <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+            <div className="game-top-bar max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+              <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                 <ArrowLeft size={18} className="transition-transform" />
               </Link>
 
@@ -232,10 +232,10 @@ export default function DrivingDirection() {
                 <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
               </div>
 
-              <div className="w-[42px] shrink-0" />
+              <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
+            <div className="game-card flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 overflow-y-auto overflow-x-hidden relative z-10 p-2 sm:p-3 md:p-6">
               
               {/* Points and Timer */}
               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">

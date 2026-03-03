@@ -324,7 +324,7 @@ export default function MapDash() {
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
               <Link to="/games">
-                <button className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all border border-white/20 group active:scale-95">
+                <button className="game-back-btn w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all border border-white/20 group active:scale-95">
                   <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
                 </button>
               </Link>

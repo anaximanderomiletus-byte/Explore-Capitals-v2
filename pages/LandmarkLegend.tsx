@@ -239,7 +239,7 @@ export default function LandmarkLegend() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
@@ -250,8 +250,8 @@ export default function LandmarkLegend() {
             </div>
 
             {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-            <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-               <Link to="/games" className="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+            <div className="game-top-bar max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
+               <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                  <ArrowLeft size={18} className="transition-transform" />
                </Link>
 
@@ -262,13 +262,13 @@ export default function LandmarkLegend() {
                </div>
 
                {/* Spacer to balance the back button */}
-               <div className="w-[42px] shrink-0" />
+               <div className="game-back-spacer w-[42px] shrink-0" />
             </div>
 
-            <div className="flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-6 overflow-y-auto overflow-x-hidden relative z-10">
+            <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/30 p-2 sm:p-3 md:p-6 overflow-y-auto overflow-x-hidden relative z-10">
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
-               <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+               <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
                   <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
                      <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
                      <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
@@ -290,7 +290,7 @@ export default function LandmarkLegend() {
                    className="flex-1 flex flex-col min-h-0"
                  >
                    {/* Centered image area */}
-                   <div className="flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 relative z-10">
+                   <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 relative z-10">
                       <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY MISSION TARGET</p>
                       <div 
                        className="relative w-full max-w-sm md:max-w-md h-auto max-h-60 md:max-h-96 min-h-0 shrink rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
@@ -316,7 +316,7 @@ export default function LandmarkLegend() {
                    </div>
 
                    {/* Grid of options at bottom */}
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
+                   <div className="game-options-grid grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 shrink-0 pb-2 md:pb-4 relative z-10">
                       {currentQuestion.options.map((option) => {
                         const isSelected = selectedAnswerId === option.id;
                         const isCorrect = option.id === currentQuestion.country.id;
