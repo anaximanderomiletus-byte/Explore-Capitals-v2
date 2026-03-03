@@ -44,7 +44,7 @@ const Home: React.FC = () => {
     (window as any).__dismissLoader?.();
   }, [setPageLoading]);
 
-  // Fact of the Day — seeded by today's date so it changes daily
+  // Stop of the Day — seeded by today's date so it changes daily
   const factOfTheDay = useMemo(() => {
     const today = new Date();
     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
@@ -235,13 +235,13 @@ const Home: React.FC = () => {
         </div>
       </Section>
 
-      {/* ═══════════════ FACT OF THE DAY ═══════════════ */}
+      {/* ═══════════════ STOP OF THE DAY ═══════════════ */}
       <Section className="py-12 sm:py-16 md:py-24">
         <RevealSection className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] glow-badge">
               <Zap size={10} fill="currentColor" className="text-sky" />
-              <span>Fact of the Day</span>
+              <span>Stop of the Day</span>
             </div>
           </div>
 
