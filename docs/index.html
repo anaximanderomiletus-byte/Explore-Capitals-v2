@@ -565,40 +565,57 @@
           font-size: 0.9rem !important;
         }
 
-        /* Capital Connection — shrink tiles to fit viewport */
+        /* Capital Connection — square tiles with spacing from score bar */
         .game-tile-grid {
           gap: 6px !important;
+          flex: 0 1 auto !important;
+          align-content: center !important;
         }
         .game-tile-grid button {
           min-height: 0 !important;
-          padding: 4px !important;
+          max-height: 18vw !important;
+          padding: 4px 2px !important;
+          aspect-ratio: 1 / 1 !important;
+        }
+        .game-tile-grid button > div {
+          margin-bottom: 2px !important;
         }
         .game-tile-grid button img {
-          width: 28px !important;
+          width: 24px !important;
         }
         .game-tile-grid button span {
-          font-size: 8px !important;
+          font-size: 7px !important;
         }
 
-        /* Know Your Neighbor — compact layout to fit viewport */
+        /* Know Your Neighbor — large selections, compact question area */
         .game-neighbor-inner {
           height: auto !important;
           flex: 1 1 0% !important;
           min-height: 0 !important;
           justify-content: flex-start !important;
+          gap: 0 !important;
         }
         .game-neighbor-inner > .flex-1 {
-          flex: 1 1 0% !important;
+          flex: 0 0 auto !important;
           min-height: 0 !important;
+          padding-top: 0.25rem !important;
+          padding-bottom: 0.25rem !important;
+        }
+        .game-neighbor-inner > .flex-1 img {
+          max-height: 6svh !important;
         }
         .game-neighbor-grid {
-          flex-shrink: 1 !important;
+          flex: 1 1 0% !important;
           padding-bottom: 2px !important;
+        }
+        .game-neighbor-grid .grid {
+          height: 100% !important;
+          grid-auto-rows: 1fr !important;
         }
         .game-neighbor-grid button {
           min-height: 0 !important;
-          padding-top: 5px !important;
-          padding-bottom: 5px !important;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
         }
       }
 
