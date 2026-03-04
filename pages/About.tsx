@@ -101,7 +101,7 @@ const About: React.FC = () => {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="relative"
           >
@@ -128,7 +128,7 @@ const About: React.FC = () => {
             {/* Story Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="space-y-5"
             >
@@ -151,7 +151,7 @@ const About: React.FC = () => {
             {/* Four Pillars - Fun Cards */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6"
             >
@@ -164,7 +164,7 @@ const About: React.FC = () => {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
                   className={`bg-gradient-to-br ${item.color} p-6 md:p-8 rounded-2xl md:rounded-3xl border-2 border-white/20 hover:border-white/40 hover:-translate-y-1 relative overflow-hidden flex flex-col h-full transition-all duration-150 group cursor-default`}
                 >
@@ -182,7 +182,7 @@ const About: React.FC = () => {
           {/* Supporting Text - Mobile/Tablet Only */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:hidden mt-8 max-w-3xl"
           >
@@ -194,7 +194,7 @@ const About: React.FC = () => {
           {/* Decorative Section Divider */}
           <motion.div
             initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ scaleX: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="h-1 w-full bg-gradient-to-r from-transparent via-sky/30 to-transparent mt-10 md:mt-12 mb-0 origin-left"
           ></motion.div>
@@ -204,7 +204,7 @@ const About: React.FC = () => {
         <motion.section
           id="support"
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="scroll-mt-32 relative"
         >
@@ -301,7 +301,7 @@ const About: React.FC = () => {
         {/* Decorative Section Divider */}
         <motion.div
           initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ scaleX: 1 }}
           transition={{ duration: 0.8 }}
           className="h-1 w-full bg-gradient-to-r from-transparent via-accent/30 to-transparent origin-left"
         ></motion.div>
@@ -310,7 +310,7 @@ const About: React.FC = () => {
         <motion.section
           id="contact"
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="scroll-mt-32 relative"
         >
@@ -344,7 +344,7 @@ const About: React.FC = () => {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ y: -4 }}
                 className={`group bg-gradient-to-br ${item.color} p-8 md:p-10 rounded-3xl border-2 border-white/20 hover:border-white/40 transition-all duration-300 flex flex-col items-start gap-6 relative overflow-hidden`}
@@ -367,7 +367,7 @@ const About: React.FC = () => {
         {/* Bottom Banner - Call to Action */}
         <motion.section
           initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="bg-gradient-to-br from-sky/20 via-accent/10 to-transparent p-10 md:p-16 text-center rounded-3xl border-2 border-white/20 relative overflow-hidden group/banner"
         >
@@ -381,7 +381,7 @@ const About: React.FC = () => {
           <div className="relative z-10 max-w-3xl mx-auto">
             <motion.h2
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               className="text-4xl md:text-7xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg"
             >

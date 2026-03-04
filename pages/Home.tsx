@@ -120,7 +120,7 @@ const Home: React.FC = () => {
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left lg:col-start-1"
           >
@@ -133,7 +133,7 @@ const Home: React.FC = () => {
           {/* Heading */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-center lg:text-left lg:col-start-1"
           >
@@ -148,7 +148,7 @@ const Home: React.FC = () => {
           {/* Globe */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
@@ -210,7 +210,7 @@ const Home: React.FC = () => {
           {/* Description */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4"
           >
@@ -222,7 +222,7 @@ const Home: React.FC = () => {
           {/* Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0"
           >
@@ -395,7 +395,7 @@ const Home: React.FC = () => {
                       <div className="h-2.5 sm:h-3 md:h-4 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/5">
                         <motion.div
                           initial={{ width: 0 }}
-                          whileInView={{ width: "75%" }}
+                          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ width: "75%" }}
                           transition={{ duration: 1.5, ease: "easeOut" }}
                           className="h-full bg-frutiger-gradient rounded-full relative"
                         >
