@@ -495,6 +495,11 @@
       
       /* ===== MOBILE GAME LAYOUT ===== */
       @media (max-width: 767px) {
+        /* Lobby card — consistent height across all games */
+        .game-lobby-card {
+          min-height: 450px !important;
+        }
+
         /* Prevent page scroll when a game is active */
         body:has(.game-playing) {
           overflow: hidden !important;
@@ -572,26 +577,28 @@
           font-size: 0.9rem !important;
         }
 
-        /* Capital Connection — square tiles with spacing from score bar */
+        /* Capital Connection — tight square tiles centered in card */
         .game-tile-grid {
-          gap: 6px !important;
-          flex: 0 1 auto !important;
+          gap: 3px !important;
+          flex: 1 1 0% !important;
           align-content: center !important;
+          grid-auto-rows: auto !important;
         }
         .game-tile-grid button {
           min-height: 0 !important;
-          max-height: 18vw !important;
-          padding: 4px 2px !important;
+          height: auto !important;
           aspect-ratio: 1 / 1 !important;
+          padding: 2px 1px !important;
         }
         .game-tile-grid button > div {
-          margin-bottom: 2px !important;
+          margin-bottom: 1px !important;
         }
         .game-tile-grid button img {
-          width: 24px !important;
+          width: 22px !important;
         }
         .game-tile-grid button span {
           font-size: 7px !important;
+          line-height: 1.1 !important;
         }
 
         /* Know Your Neighbor — balanced question area + selections */
