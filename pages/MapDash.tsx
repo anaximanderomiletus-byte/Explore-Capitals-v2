@@ -407,21 +407,21 @@ export default function MapDash() {
             className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/40 backdrop-blur-xl p-3 sm:p-4"
           >
             <GameSideAds />
-            <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-[calc(100%-24px)] sm:max-w-sm md:max-w-md">
-              <div className="w-full bg-surface-dark/95 backdrop-blur-3xl rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center border-2 border-white/20">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl mx-auto mb-5 sm:mb-6 md:mb-8 border border-white/30 relative overflow-hidden">
+            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+                <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-1.5 sm:mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
-                <p className="text-white/60 text-[9px] sm:text-[10px] mb-4 sm:mb-5 md:mb-6 font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
-                <div className="mb-4 sm:mb-5 md:mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
-                <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
-                  <Button onClick={startGame} size="md" className="w-full h-12 sm:h-14 md:h-16 text-base sm:text-lg md:text-xl uppercase tracking-wider sm:tracking-widest font-black">PLAY <Play size={18} className="sm:w-5 sm:h-5" fill="currentColor" /></Button>
+                <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
+                <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
+                <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
+                <div className="flex flex-col gap-6">
+                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                   <button
                     onClick={() => navigate('/games')}
-                    className="inline-flex items-center justify-center gap-2 text-white/40 hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group relative z-20 pointer-events-auto py-2"
+                    className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto"
                   >
-                    <ArrowLeft size={12} className="sm:w-3.5 sm:h-3.5 transition-transform" />
+                    <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
                     Back to Games
                   </button>
                 </div>

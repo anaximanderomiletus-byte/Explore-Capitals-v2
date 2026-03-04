@@ -213,7 +213,10 @@ export default function AreaAce() {
               <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <Crown size={10} /> Premium
               </div>
-              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter mt-4">Area Ace</h1>
+              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+                <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
+              </div>
+              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Area Ace</h1>
               <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Choose the larger country.</p>
               <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6">
