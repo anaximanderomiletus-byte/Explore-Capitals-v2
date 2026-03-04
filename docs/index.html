@@ -597,6 +597,19 @@
           line-height: 1.1 !important;
         }
 
+        /* Landmark image — remove 3D perspective on mobile (causes iOS Safari
+           rendering artifacts with overflow-hidden + border-radius) */
+        .game-landmark {
+          transform: none !important;
+          max-height: 30svh !important;
+        }
+
+        /* Footer — push down on game pages so it doesn't peek through
+           the gap between 100svh and the actual visible viewport */
+        body:has(.game-playing) footer {
+          padding-top: 8rem !important;
+        }
+
         /* Know Your Neighbor — balanced question area + selections */
         .game-neighbor-inner {
           height: auto !important;
@@ -1066,7 +1079,7 @@
         backface-visibility: hidden;
       }
     </style>
-  <script type="module" crossorigin src="/assets/index-F4_4zkV7.js"></script>
+  <script type="module" crossorigin src="/assets/index-BUeaL3b-.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-C_5uncE5.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-motion-Cv7hdDM7.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-ppgmmP_S.js">
