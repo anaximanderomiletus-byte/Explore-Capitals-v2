@@ -587,35 +587,30 @@
           font-size: 7px !important;
         }
 
-        /* Know Your Neighbor — large selections, compact question area */
+        /* Know Your Neighbor — balanced question area + selections */
         .game-neighbor-inner {
           height: auto !important;
           flex: 1 1 0% !important;
           min-height: 0 !important;
-          justify-content: flex-start !important;
-          gap: 0 !important;
         }
         .game-neighbor-inner > .flex-1 {
-          flex: 0 0 auto !important;
+          flex: 1 1 0% !important;
           min-height: 0 !important;
-          padding-top: 0.25rem !important;
-          padding-bottom: 0.25rem !important;
         }
         .game-neighbor-inner > .flex-1 img {
-          max-height: 6svh !important;
+          max-height: 8svh !important;
         }
         .game-neighbor-grid {
           flex: 1 1 0% !important;
           padding-bottom: 2px !important;
         }
-        .game-neighbor-grid .grid {
+        .game-neighbor-grid > div {
           height: 100% !important;
-          grid-auto-rows: 1fr !important;
         }
         .game-neighbor-grid button {
           min-height: 0 !important;
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
+          padding-top: 4px !important;
+          padding-bottom: 4px !important;
         }
       }
 
