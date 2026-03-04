@@ -501,12 +501,19 @@
           height: 100svh !important;
         }
 
-        /* Back button — center the arrow icon */
+        /* Back button — fixed size, centered arrow */
         .game-back-btn {
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
+          width: 34px !important;
+          height: 34px !important;
           padding: 0 !important;
+        }
+
+        /* Spacer matches back button width so title stays centered */
+        .game-back-spacer {
+          width: 34px !important;
         }
 
         /* Game container — fit within viewport below navbar */
