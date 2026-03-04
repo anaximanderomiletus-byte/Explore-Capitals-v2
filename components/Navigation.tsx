@@ -387,19 +387,21 @@ const Navigation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Hidden completely when closed to prevent click blocking */}
+      {/* Mobile Menu Overlay - Smooth fade in/out */}
       <div
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden will-change-[transform,opacity] ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen
-            ? 'translate-x-0 opacity-100 visible'
-            : 'translate-x-full opacity-0 invisible pointer-events-none'
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
         }`}
         style={{
-          transition: 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease',
+          transition: isMobileMenuOpen
+            ? 'opacity 0.25s ease-out'
+            : 'opacity 0.2s ease-in',
           WebkitOverflowScrolling: 'touch',
           touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
-          height: 'var(--viewport-height, 100vh)',
-          minHeight: 'var(--viewport-height, 100vh)',
+          height: 'var(--viewport-height, 100dvh)',
+          minHeight: 'var(--viewport-height, 100dvh)',
           paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)'
         }}
         aria-hidden={!isMobileMenuOpen}
@@ -415,9 +417,11 @@ const Navigation: React.FC = () => {
                 to={link.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 style={{
-                  transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
-                  transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s, opacity 0.4s ease ${index * 0.06}s`,
+                  transition: isMobileMenuOpen
+                    ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.05}s, opacity 0.3s ease-out ${index * 0.05}s`
+                    : 'transform 0.15s ease-in, opacity 0.12s ease-in',
                   WebkitTapHighlightColor: 'transparent',
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
@@ -430,11 +434,13 @@ const Navigation: React.FC = () => {
           })}
           
           {/* Account Panel - right after nav links */}
-          <div 
+          <div
             style={{
-              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
               opacity: isMobileMenuOpen ? 1 : 0,
-              transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.06}s, opacity 0.4s ease ${navLinks.length * 0.06}s`,
+              transition: isMobileMenuOpen
+                ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.05}s, opacity 0.3s ease-out ${navLinks.length * 0.05}s`
+                : 'transform 0.15s ease-in, opacity 0.12s ease-in',
             }}
           >
             {isAuthenticated ? (
@@ -454,11 +460,13 @@ const Navigation: React.FC = () => {
           </div>
           
           {/* Play Now button - right after account */}
-          <div 
+          <div
             style={{
-              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100px)',
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
               opacity: isMobileMenuOpen ? 1 : 0,
-              transition: `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.06}s, opacity 0.4s ease ${(navLinks.length + 1) * 0.06}s`,
+              transition: isMobileMenuOpen
+                ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.05}s, opacity 0.3s ease-out ${(navLinks.length + 1) * 0.05}s`
+                : 'transform 0.15s ease-in, opacity 0.12s ease-in',
             }}
             className="mt-6"
           >
