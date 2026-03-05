@@ -178,13 +178,16 @@ const PageLoadFallback: React.FC = () => {
 
 /**
  * PageWrapper
- * Simple wrapper that provides Suspense boundary for lazy-loaded pages.
- * No motion animation — pages handle their own entry animations via whileInView.
- * This avoids stacking animations and keeps navigation instant.
+ * Provides a Suspense boundary + a lightweight CSS fade-in on route changes.
+ * The `key` is the current pathname so React unmounts/remounts on navigation,
+ * triggering the page-enter animation.  The animation is GPU-friendly
+ * (opacity + translateY only) and very fast (250ms) so it masks the instant
+ * swap without feeling sluggish.
  */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { pathname } = useLocation();
   return (
-    <div className="flex-grow flex flex-col w-full">
+    <div key={pathname} className="flex-grow flex flex-col w-full page-enter">
       <Suspense fallback={<PageLoadFallback />}>
         {children}
       </Suspense>

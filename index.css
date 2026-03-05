@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 /* ==========================================================================
+   PAGE TRANSITION — lightweight fade-in on every route change
+   ========================================================================== */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ==========================================================================
    CROSS-BROWSER NORMALIZATION & PLATFORM FIXES
    Loaded AFTER Tailwind so these overrides take precedence.
    ========================================================================== */
@@ -260,6 +278,15 @@ body::before {
 
 /* ===== MOBILE GAME LAYOUT ===== */
 @media (max-width: 767px) {
+  /* Better vertical centering on lobby screens:
+     The fixed navbar eats into the top of the viewport, so we use
+     asymmetric padding (more top, less bottom) to center the card
+     in the visible area below the nav instead of the full viewport. */
+  .overflow-y-auto:has(.game-lobby-card) {
+    padding-top: 6rem !important;   /* 96px — nav clearance */
+    padding-bottom: 1rem !important; /* 16px */
+  }
+
   .game-lobby-card {
     min-height: 450px !important;
   }
@@ -353,8 +380,13 @@ body::before {
     max-height: 30svh !important;
   }
 
+  /* Hide footer entirely on game lobby and push it away during gameplay
+     so it never peeks below the iOS Safari URL bar */
+  body:has(.game-lobby-card) footer {
+    display: none !important;
+  }
   body:has(.game-playing) footer {
-    padding-top: 8rem !important;
+    display: none !important;
   }
 
   .game-neighbor-inner {

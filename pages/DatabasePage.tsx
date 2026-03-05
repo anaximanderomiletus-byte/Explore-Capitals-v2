@@ -223,9 +223,9 @@ const SimpleTable: React.FC<SimpleTableProps> = memo(({
   headerBgClass = 'bg-surface-dark'
 }) => {
   return (
-    <div className="overflow-auto rounded-3xl border border-white/20 bg-white/10">
+    <div className="overflow-hidden rounded-3xl border border-white/20 bg-white/10">
       <table className="w-full text-left border-collapse table-fixed">
-        <thead className="sticky top-0 z-20">
+        <thead className="z-20">
           <tr className={`${headerBgClass} border-b border-white/15 backdrop-blur-md`}>
             <th className="w-[30%]">
               <SortHeader label={showSovereignty ? "Territory" : "Country"} field="name" sortConfig={sortConfig} onSort={onSort} />
