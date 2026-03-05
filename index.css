@@ -1,0 +1,768 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   CROSS-BROWSER NORMALIZATION & PLATFORM FIXES
+   Loaded AFTER Tailwind so these overrides take precedence.
+   ========================================================================== */
+
+/* Define viewport height CSS variable for iOS consistency */
+:root {
+  --vh: 1vh;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Inter (Variable) Enhancements */
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter', sans-serif; }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background-color: #0F172A;
+  /* Unified height handling for iOS */
+  height: 100%;
+  height: 100dvh;
+  height: -webkit-fill-available;
+  margin: 0;
+  padding: 0;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  /* Prevent horizontal overflow */
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Consistent box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== CURSOR NORMALIZATION ===== */
+/* Ensure text-type inputs always show the text cursor (I-beam) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+input:not([type]),
+textarea {
+  cursor: text;
+}
+
+/* Font smoothing for all browsers */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+  background-color: #0F172A;
+  /* Unified min-height for iOS - use dvh with fallbacks */
+  min-height: 100%;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  /* Safe area support for notched iPhones - all sides */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* iOS overscroll bounce: extend dark background into bounce region. */
+body::before {
+  content: '';
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  right: 0;
+  bottom: -100vh;
+  background-color: #0F172A;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Root container - allow natural scrolling */
+#root {
+  width: 100%;
+  min-height: 100%;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  /* Prevent horizontal overflow but allow vertical scroll */
+  overflow-x: hidden;
+}
+
+/* ===== TOUCH DEVICE: disable sticky hover ===== */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"], [tabindex], tr, label, input, select {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+}
+
+/* Frutiger Aero Glossy Highlights */
+.frutiger-gloss {
+  position: relative;
+  overflow: hidden;
+}
+.frutiger-gloss::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+/* Better Leaflet Popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 2.5rem !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+}
+.leaflet-popup-content { margin: 0 !important; width: auto !important; }
+.leaflet-container { font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important; }
+.leaflet-popup-tip-container {
+  margin-top: -1px;
+  z-index: 20;
+}
+
+/* Ensure Leaflet popups render ABOVE the mobile UI overlays (z-1000) */
+#map .leaflet-popup-pane {
+  z-index: 1500 !important;
+}
+
+/* Specific fix for Map Page popups to hide the join line */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: #0F172A !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 1.5rem !important;
+  padding: 0 !important;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
+  border: none !important;
+  width: 320px !important;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0 !important;
+  padding: 24px !important;
+  width: 320px !important;
+  box-sizing: border-box !important;
+}
+
+.custom-popup .leaflet-popup-tip-container {
+  margin-top: -2px !important;
+  z-index: 1;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: #0F172A !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.leaflet-popup-tip {
+  background: #0F172A !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Hide scrollbars while maintaining scroll functionality */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Visible scrollbar style for database tables */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  -ms-overflow-style: auto;
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+  background-clip: content-box;
+}
+
+/* Ensure scroll containers still work with touch */
+[class*="overflow-"] {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Selection */
+::selection {
+  background-color: #00C2FF;
+  color: white;
+}
+
+/* ===== BACKDROP FILTER CROSS-BROWSER & PERFORMANCE ===== */
+.backdrop-blur-sm { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.backdrop-blur-md { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.backdrop-blur-lg { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.backdrop-blur-xl { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.backdrop-blur-2xl { -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
+.backdrop-blur-3xl { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
+
+/* Disable heavy blurs on low-power/mobile devices if they struggle */
+@media screen and (max-width: 768px) {
+  .backdrop-blur-2xl, .backdrop-blur-3xl {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+/* ===== MOBILE GAME LAYOUT ===== */
+@media (max-width: 767px) {
+  .game-lobby-card {
+    min-height: 450px !important;
+  }
+
+  .game-back-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+  }
+
+  .game-back-spacer {
+    width: 34px !important;
+  }
+
+  .game-playing {
+    height: 100svh !important;
+    overflow: hidden !important;
+    padding-top: 4.75rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .game-card {
+    overflow: hidden !important;
+  }
+
+  .game-score-bar {
+    margin-bottom: 0.125rem !important;
+  }
+
+  .game-content {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    justify-content: center !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 0.375rem !important;
+  }
+
+  .game-content > div {
+    flex: 0 1 auto !important;
+  }
+
+  .game-flag {
+    max-height: 12svh !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  .game-options-grid {
+    flex: 1 0 0% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .game-option {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    font-size: 0.9rem !important;
+  }
+
+  .game-tile-grid {
+    gap: 3px !important;
+    flex: 1 1 0% !important;
+    align-content: center !important;
+    grid-auto-rows: auto !important;
+  }
+  .game-tile-grid button {
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 2px 1px !important;
+  }
+  .game-tile-grid button > div {
+    margin-bottom: 1px !important;
+  }
+  .game-tile-grid button img {
+    width: 22px !important;
+  }
+  .game-tile-grid button span {
+    font-size: 7px !important;
+    line-height: 1.1 !important;
+  }
+
+  .game-landmark {
+    transform: none !important;
+    max-height: 30svh !important;
+  }
+
+  body:has(.game-playing) footer {
+    padding-top: 8rem !important;
+  }
+
+  .game-neighbor-inner {
+    height: auto !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+  }
+  .game-neighbor-inner > .flex-1 {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+  }
+  .game-neighbor-inner > .flex-1 img {
+    max-height: 8svh !important;
+  }
+  .game-neighbor-grid {
+    flex: 1 1 0% !important;
+    padding-bottom: 2px !important;
+  }
+  .game-neighbor-grid > div {
+    height: 100% !important;
+  }
+  .game-neighbor-grid button {
+    min-height: 0 !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+}
+
+/* ===== VIEWPORT HEIGHT FIX FOR iOS ===== */
+/* Use 100dvh (dynamic viewport height) to account for iOS Safari URL bar.
+   Do NOT use -webkit-fill-available here — it resolves to the parent's
+   available space (CSS "stretch"), not the viewport height, which breaks
+   min-h-screen when the parent hasn't got an explicit height. */
+.h-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+.min-h-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.h-\[100dvh\], .h-\[100svh\] {
+  height: 100vh;
+  height: 100dvh;
+}
+.min-h-\[100dvh\], .min-h-\[100svh\] {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+/* Safe area aware full height */
+.h-screen-safe {
+  height: calc(100vh - var(--safe-top) - var(--safe-bottom));
+  height: calc(100dvh - var(--safe-top) - var(--safe-bottom));
+}
+
+/* ===== TRANSFORM/ANIMATION CROSS-BROWSER ===== */
+.transform-gpu {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* ===== FLEXBOX SAFARI FIXES ===== */
+.flex-col {
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+.shrink-0 {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+/* ===== GRADIENT TEXT CROSS-BROWSER ===== */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.bg-clip-text,
+[class*="[-webkit-text-fill-color:transparent]"] {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+@supports not (-webkit-background-clip: text) {
+  .bg-clip-text {
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    color: #00C2FF;
+  }
+}
+
+/* ===== SELECTION COLOR ===== */
+::selection {
+  background-color: #77B6EA;
+  color: white;
+}
+::-moz-selection {
+  background-color: #77B6EA;
+  color: white;
+}
+
+/* ===== TOUCH DEVICE & SAFARI FIXES ===== */
+
+@media (hover: none) and (pointer: coarse) {
+  .hover\:brightness-110:hover,
+  .hover\:bg-white\/20:hover,
+  .hover\:shadow-premium-hover:hover {
+    filter: none !important;
+    box-shadow: inherit !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* Standard hover styles allowed here */
+}
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible,
+[role="button"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button, a, [role="button"], input, select, textarea {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none !important;
+}
+
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  touch-action: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  touch-action: auto;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.overflow-y-auto, .overflow-y-scroll, .overflow-auto, .overflow-scroll {
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+.overflow-x-auto, .overflow-x-scroll {
+  touch-action: pan-x pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+button, a, [role="button"], input, select, textarea, .cursor-pointer {
+  touch-action: manipulation;
+}
+
+/* Updated Marker Styles for Performance */
+.custom-map-marker {
+  background: transparent;
+  border: none;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto !important;
+  -webkit-tap-highlight-color: transparent;
+  overflow: visible !important;
+}
+
+.mapdash-marker {
+  touch-action: auto;
+}
+
+.marker-pin {
+  width: 10px;
+  height: 10px;
+  background: #00C2FF;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.marker-pin.territory { background: #22c55e; }
+.marker-pin.defacto { background: #EAB308; }
+
+.custom-map-marker:hover .marker-pin {
+  transform: scale(1.4);
+  background: #5ba4e5;
+  box-shadow: 0 4px 12px rgba(119, 182, 234, 0.5);
+}
+
+.custom-map-marker:hover .marker-pin.territory {
+  background: #16a34a;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
+}
+
+.custom-map-marker:hover .marker-pin.defacto {
+  background: #d97706;
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.5);
+}
+
+.marker-active .marker-pin {
+  transform: scale(1.4);
+  background: #5ba4e5;
+  z-index: 1000;
+}
+
+.marker-active .marker-pin.territory { background: #16a34a; }
+.marker-active .marker-pin.defacto { background: #EAB308; }
+
+@-webkit-keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
+@keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
+@-webkit-keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
+@keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
+@-webkit-keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
+@keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
+
+.marker-active::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #00C2FF; -webkit-animation: marker-ripple 1.5s infinite; animation: marker-ripple 1.5s infinite; pointer-events: none; }
+.territory-marker.marker-active::after { background: #22c55e; -webkit-animation: marker-ripple-green 1.5s infinite; animation: marker-ripple-green 1.5s infinite; }
+.defacto-marker.marker-active::after { background: #EAB308; -webkit-animation: marker-ripple-yellow 1.5s infinite; animation: marker-ripple-yellow 1.5s infinite; }
+
+/* ===== ADDITIONAL SAFARI/iOS FIXES ===== */
+
+.bg-gradient-to-r, .bg-gradient-to-t, .bg-gradient-to-b, .bg-gradient-to-l {
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+.fixed {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.pointer-events-none {
+  touch-action: none;
+}
+
+a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"]), .cursor-pointer {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a[href], button:not(:disabled) {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+body.no-pull-refresh {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: auto;
+}
+
+@media (forced-colors: active) {
+  .marker-pin {
+    forced-color-adjust: none;
+  }
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/* ===== PREVENT iOS ZOOM ON INPUT FOCUS ===== */
+@media screen and (max-width: 1024px) {
+  input,
+  select,
+  textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="week"],
+  input[type="time"] {
+    font-size: 16px !important;
+  }
+}
+
+/* Ensure consistent line-height across browsers */
+.leading-none { line-height: 1; }
+.leading-tight { line-height: 1.25; }
+.leading-snug { line-height: 1.375; }
+.leading-normal { line-height: 1.5; }
+.leading-relaxed { line-height: 1.625; }
+.leading-loose { line-height: 2; }
+
+/* ===== SAFARI/iOS PERFORMANCE OPTIMIZATIONS ===== */
+.reduce-effects .backdrop-blur-sm,
+.reduce-effects .backdrop-blur-md,
+.reduce-effects .backdrop-blur-lg,
+.reduce-effects .backdrop-blur-xl,
+.reduce-effects .backdrop-blur-2xl,
+.reduce-effects .backdrop-blur-3xl {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.is-touch button:active,
+.is-touch a:active,
+.is-touch [role="button"]:active {
+  opacity: 0.8;
+}
+
+/* ===== MINIMUM TOUCH TARGET SIZES (Apple HIG: 44x44px) ===== */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  .cursor-pointer {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  p a, li a, span a {
+    min-height: auto;
+    min-width: auto;
+    padding: 8px 4px;
+    margin: -8px -4px;
+  }
+
+  nav a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* ===== MOBILE-FIRST RESPONSIVE IMPROVEMENTS ===== */
+@media (max-width: 640px) {
+  .px-6 { padding-left: 1rem; padding-right: 1rem; }
+  .px-8 { padding-left: 1.25rem; padding-right: 1.25rem; }
+
+  .text-\[8px\] { font-size: 9px; }
+  .text-\[9px\] { font-size: 10px; }
+  .text-\[10px\] { font-size: 11px; }
+
+  .tracking-\[0\.3em\] { letter-spacing: 0.2em; }
+  .tracking-\[0\.4em\] { letter-spacing: 0.25em; }
+
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* ===== iOS NOTCH/DYNAMIC ISLAND SAFE AREAS ===== */
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(env(safe-area-inset-top), 20px);
+  }
+  .safe-area-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 20px);
+  }
+  .safe-area-x {
+    padding-left: max(env(safe-area-inset-left), 16px);
+    padding-right: max(env(safe-area-inset-right), 16px);
+  }
+}
+
+/* ===== FIX iOS MOMENTUM SCROLLING ===== */
+.overflow-y-auto,
+.overflow-auto,
+.overflow-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* ===== PREVENT CONTENT SHIFT ON iOS ===== */
+.fixed {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
