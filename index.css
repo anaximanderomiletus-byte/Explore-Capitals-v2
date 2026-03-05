@@ -720,10 +720,30 @@ button::-moz-focus-inner {
   backdrop-filter: none !important;
 }
 
-.is-touch button:active,
-.is-touch a:active,
-.is-touch [role="button"]:active {
-  opacity: 0.8;
+/* ===== MOBILE TAP FEEDBACK (replaces broken .is-touch approach) ===== */
+/* iOS Safari now fires :active thanks to the global touchstart listener in index.tsx */
+@media (hover: none) and (pointer: coarse) {
+  /* Buttons: quick scale-down + brightness dip */
+  button:active:not(:disabled),
+  [role="button"]:active {
+    transform: scale(0.97) !important;
+    filter: brightness(0.92);
+    transition: transform 0.08s ease-out, filter 0.08s ease-out !important;
+  }
+
+  /* Links: subtle brightness dip (no scale, avoids layout shift on text) */
+  a:active {
+    filter: brightness(0.85);
+    transition: filter 0.08s ease-out !important;
+  }
+
+  /* Card-like tappable surfaces */
+  .cursor-pointer:active,
+  [onclick]:active {
+    transform: scale(0.98) !important;
+    filter: brightness(0.93);
+    transition: transform 0.08s ease-out, filter 0.08s ease-out !important;
+  }
 }
 
 /* ===== MINIMUM TOUCH TARGET SIZES (Apple HIG: 44x44px) ===== */

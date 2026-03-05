@@ -73,10 +73,9 @@ const MobileProfileLinkSignedIn: React.FC<{
   return (
     <div className="space-y-1">
       {/* Profile Link */}
-      <Link
-        to="/profile"
+      <button
         onClick={onClose}
-        className="flex items-center gap-4 py-4 border-b border-white/5 group"
+        className="flex items-center gap-4 py-4 border-b border-white/5 group w-full text-left"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         {/* Avatar */}
@@ -102,8 +101,8 @@ const MobileProfileLinkSignedIn: React.FC<{
         </div>
 
         <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
-      </Link>
-      
+      </button>
+
       {/* Sign Out */}
       <button
         onClick={onSignOut}
@@ -119,14 +118,11 @@ const MobileProfileLinkSignedIn: React.FC<{
 // Mobile Profile Link for Signed Out Users
 const MobileProfileLinkSignedOut: React.FC<{
   onClose: () => void;
-  location: any;
-}> = ({ onClose, location }) => {
+}> = ({ onClose }) => {
   return (
-    <Link
-      to="/auth"
-      state={{ from: location }}
+    <button
       onClick={onClose}
-      className="flex items-center gap-4 py-4 border-b border-white/5 group"
+      className="flex items-center gap-4 py-4 border-b border-white/5 group w-full text-left"
       style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       {/* Icon */}
@@ -146,7 +142,7 @@ const MobileProfileLinkSignedOut: React.FC<{
       </div>
 
       <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
-    </Link>
+    </button>
   );
 };
 
@@ -177,6 +173,35 @@ const Navigation: React.FC = () => {
   const isMapPage = location.pathname === '/map';
   const isMapDash = location.pathname.includes('/map-dash');
   const isOverMap = isMapPage || isMapDash;
+
+  // Delayed navigation: close mobile menu first, then navigate after animation completes.
+  // This prevents the close animation and route change from competing for the main thread.
+  const pendingNav = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMobileNavClick = useCallback((e: React.MouseEvent, path: string) => {
+    // If already on this page, just close the menu
+    if (location.pathname === path) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
+
+    e.preventDefault(); // Don't navigate immediately
+    setIsMobileMenuOpen(false); // Start close animation
+
+    // Navigate after menu close animation finishes (~200ms)
+    if (pendingNav.current) clearTimeout(pendingNav.current);
+    pendingNav.current = setTimeout(() => {
+      navigate(path);
+      pendingNav.current = null;
+    }, 200);
+  }, [location.pathname, navigate]);
+
+  // Cleanup pending navigation on unmount
+  useEffect(() => {
+    return () => {
+      if (pendingNav.current) clearTimeout(pendingNav.current);
+    };
+  }, []);
 
   useEffect(() => {
     let rafId = 0;
@@ -396,13 +421,16 @@ const Navigation: React.FC = () => {
         }`}
         style={{
           transition: isMobileMenuOpen
-            ? 'opacity 0.25s ease-out'
-            : 'opacity 0.2s ease-in',
+            ? 'opacity 0.2s ease-out'
+            : 'opacity 0.15s ease-in',
           WebkitOverflowScrolling: 'touch',
           touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
           height: 'var(--viewport-height, 100dvh)',
           minHeight: 'var(--viewport-height, 100dvh)',
-          paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)'
+          paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)',
+          willChange: 'opacity',
+          transform: 'translateZ(0)', // Force GPU compositing layer
+          WebkitBackfaceVisibility: 'hidden',
         }}
         aria-hidden={!isMobileMenuOpen}
       >
@@ -415,7 +443,7 @@ const Navigation: React.FC = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => handleMobileNavClick(e, link.path)}
                 style={{
                   transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
@@ -423,6 +451,7 @@ const Navigation: React.FC = () => {
                     ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.05}s, opacity 0.3s ease-out ${index * 0.05}s`
                     : 'transform 0.15s ease-in, opacity 0.12s ease-in',
                   WebkitTapHighlightColor: 'transparent',
+                  willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
                   isActive(link.path) ? 'text-primary' : 'text-white/60 active:text-white'
@@ -441,24 +470,32 @@ const Navigation: React.FC = () => {
               transition: isMobileMenuOpen
                 ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.05}s, opacity 0.3s ease-out ${navLinks.length * 0.05}s`
                 : 'transform 0.15s ease-in, opacity 0.12s ease-in',
+              willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
           >
             {isAuthenticated ? (
-              <MobileProfileLinkSignedIn 
+              <MobileProfileLinkSignedIn
                 authUser={authUser}
                 user={user}
                 avatar={avatar}
-                onClose={() => setIsMobileMenuOpen(false)}
+                onClose={() => {
+                  setIsMobileMenuOpen(false);
+                  if (pendingNav.current) clearTimeout(pendingNav.current);
+                  pendingNav.current = setTimeout(() => navigate('/profile'), 200);
+                }}
                 onSignOut={() => setShowSignOutModal(true)}
               />
             ) : (
-              <MobileProfileLinkSignedOut 
-                onClose={() => setIsMobileMenuOpen(false)}
-                location={location}
+              <MobileProfileLinkSignedOut
+                onClose={() => {
+                  setIsMobileMenuOpen(false);
+                  if (pendingNav.current) clearTimeout(pendingNav.current);
+                  pendingNav.current = setTimeout(() => navigate('/auth', { state: { from: location } }), 200);
+                }}
               />
             )}
           </div>
-          
+
           {/* Play Now button - right after account */}
           <div
             style={{
@@ -467,10 +504,11 @@ const Navigation: React.FC = () => {
               transition: isMobileMenuOpen
                 ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.05}s, opacity 0.3s ease-out ${(navLinks.length + 1) * 0.05}s`
                 : 'transform 0.15s ease-in, opacity 0.12s ease-in',
+              willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
             className="mt-6"
           >
-            <Link to="/games">
+            <Link to="/games" onClick={(e) => handleMobileNavClick(e, '/games')}>
               <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg font-black uppercase tracking-widest">
                 Play Now
               </Button>
