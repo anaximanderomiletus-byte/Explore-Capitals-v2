@@ -443,13 +443,12 @@ const Navigation: React.FC = () => {
                 to={link.path}
                 onClick={(e) => handleMobileNavClick(e, link.path)}
                 style={{
-                  transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
+                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
                   transition: isMobileMenuOpen
-                    ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.06}s, opacity 0.3s ease-out ${index * 0.06}s`
+                    ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${index * 0.04}s, opacity 0.25s ease-out ${index * 0.04}s`
                     : 'transform 0.12s ease-in, opacity 0.1s ease-in',
                   WebkitTapHighlightColor: 'transparent',
-                  willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
                 }}
                 className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
                   isActive(link.path) ? 'text-primary' : 'text-white/60 active:text-white'
@@ -463,12 +462,11 @@ const Navigation: React.FC = () => {
           {/* Account Panel - right after nav links */}
           <div
             style={{
-              transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
               opacity: isMobileMenuOpen ? 1 : 0,
               transition: isMobileMenuOpen
-                ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${navLinks.length * 0.06}s, opacity 0.3s ease-out ${navLinks.length * 0.06}s`
+                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${navLinks.length * 0.04}s, opacity 0.25s ease-out ${navLinks.length * 0.04}s`
                 : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-              willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
           >
             {isAuthenticated ? (
@@ -497,12 +495,11 @@ const Navigation: React.FC = () => {
           {/* Play Now button - right after account */}
           <div
             style={{
-              transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
               opacity: isMobileMenuOpen ? 1 : 0,
               transition: isMobileMenuOpen
-                ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${(navLinks.length + 1) * 0.06}s, opacity 0.3s ease-out ${(navLinks.length + 1) * 0.06}s`
+                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 1) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 1) * 0.04}s`
                 : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-              willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
             className="mt-6"
           >
