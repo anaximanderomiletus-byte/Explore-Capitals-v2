@@ -274,28 +274,21 @@ export default function MapDash() {
       <SEO title="Map Dash - Games" description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out." />
       
       <style>{`
-        .marker-pin { transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease !important; }
-        
-        .marker-correct .marker-pin { 
-          background-color: #34C759 !important; 
-          border: 2px solid rgba(255,255,255,0.8) !important; 
-          transform: scale(1.5);
-          box-shadow: 0 0 20px rgba(52, 199, 89, 0.6), 0 4px 12px rgba(0,0,0,0.3) !important;
+        .mapdash-marker .marker-pin {
+          transform-origin: center center;
+          transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
         }
 
-        .marker-incorrect .marker-pin { 
-          background-color: #FF3B30 !important; 
-          border: 2px solid rgba(255,255,255,0.8) !important; 
-          transform: scale(1.2);
-          box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 4px 12px rgba(0,0,0,0.3) !important;
-          animation: marker-shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        .marker-correct .marker-pin {
+          background-color: #34C759 !important;
+          border-color: rgba(255,255,255,0.8) !important;
+          box-shadow: 0 0 12px rgba(52, 199, 89, 0.5) !important;
         }
 
-        @keyframes marker-shake {
-          10%, 90% { transform: scale(1.2) translate3d(-1px, 0, 0); }
-          20%, 80% { transform: scale(1.2) translate3d(2px, 0, 0); }
-          30%, 50%, 70% { transform: scale(1.2) translate3d(-4px, 0, 0); }
-          40%, 60% { transform: scale(1.2) translate3d(4px, 0, 0); }
+        .marker-incorrect .marker-pin {
+          background-color: #FF3B30 !important;
+          border-color: rgba(255,255,255,0.8) !important;
+          box-shadow: 0 0 12px rgba(239, 68, 68, 0.5) !important;
         }
 
         @keyframes card-shake {
@@ -404,11 +397,11 @@ export default function MapDash() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/40 backdrop-blur-xl p-3 sm:p-4"
+            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark p-3 sm:p-4"
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+              <div className="game-lobby-card w-full bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
@@ -447,11 +440,11 @@ export default function MapDash() {
               ease: "easeOut"
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
-            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark/60 backdrop-blur-2xl p-3 sm:p-4"
+            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark p-3 sm:p-4"
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+              <div className="w-full bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden group">
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>

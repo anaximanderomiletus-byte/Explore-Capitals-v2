@@ -174,35 +174,9 @@ const Navigation: React.FC = () => {
   const isMapDash = location.pathname.includes('/map-dash');
   const isOverMap = isMapPage || isMapDash;
 
-  // Delayed navigation: close mobile menu first, then navigate after animation completes.
-  // This prevents the close animation and route change from competing for the main thread.
-  const pendingNav = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleMobileNavClick = useCallback((e: React.MouseEvent, path: string) => {
-    // If already on this page, just close the menu
-    if (location.pathname === path) {
-      setIsMobileMenuOpen(false);
-      return;
-    }
-
-    e.preventDefault(); // Don't navigate immediately
-    setIsMobileMenuOpen(false); // Start close animation
-
-    // Navigate after menu overlay fades out (~120ms)
-    // Navbar page chunks are prefetched so navigation is near-instant
-    if (pendingNav.current) clearTimeout(pendingNav.current);
-    pendingNav.current = setTimeout(() => {
-      navigate(path);
-      pendingNav.current = null;
-    }, 120);
-  }, [location.pathname, navigate]);
-
-  // Cleanup pending navigation on unmount
-  useEffect(() => {
-    return () => {
-      if (pendingNav.current) clearTimeout(pendingNav.current);
-    };
-  }, []);
+  // Navigation is now instant: Link navigates immediately, and the
+  // useEffect watching `location` closes the menu automatically.
+  // No delayed navigation — no risk of "cancel" behavior on iOS.
 
   useEffect(() => {
     let rafId = 0;
@@ -239,31 +213,25 @@ const Navigation: React.FC = () => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  // Lock body scroll when mobile menu is open to prevent background scrolling
+  // Lock body scroll when mobile menu is open to prevent background scrolling.
+  // Captures scrollY in a closure so cleanup always restores the exact position.
   useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
     const scrollY = window.scrollY;
-    
-    if (isMobileMenuOpen) {
-      // Store scroll position and lock body
-      document.documentElement.style.setProperty('--scroll-y', `${scrollY}px`);
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-      document.body.style.overflow = 'hidden';
-    }
-    
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
+
     return () => {
-      // Restore scroll position when menu closes or component unmounts
-      const storedScrollY = document.documentElement.style.getPropertyValue('--scroll-y');
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
       document.body.style.overflow = '';
-      if (storedScrollY) {
-        window.scrollTo(0, parseInt(storedScrollY));
-      }
+      window.scrollTo(0, scrollY);
     };
   }, [isMobileMenuOpen]);
 
@@ -447,7 +415,6 @@ const Navigation: React.FC = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                onClick={(e) => handleMobileNavClick(e, link.path)}
                 style={{
                   transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
                   opacity: isMobileMenuOpen ? 1 : 0,
@@ -480,20 +447,12 @@ const Navigation: React.FC = () => {
                 authUser={authUser}
                 user={user}
                 avatar={avatar}
-                onClose={() => {
-                  setIsMobileMenuOpen(false);
-                  if (pendingNav.current) clearTimeout(pendingNav.current);
-                  pendingNav.current = setTimeout(() => navigate('/profile'), 120);
-                }}
+                onClose={() => navigate('/profile')}
                 onSignOut={() => setShowSignOutModal(true)}
               />
             ) : (
               <MobileProfileLinkSignedOut
-                onClose={() => {
-                  setIsMobileMenuOpen(false);
-                  if (pendingNav.current) clearTimeout(pendingNav.current);
-                  pendingNav.current = setTimeout(() => navigate('/auth', { state: { from: location } }), 120);
-                }}
+                onClose={() => navigate('/auth', { state: { from: location } })}
               />
             )}
           </div>
@@ -509,7 +468,7 @@ const Navigation: React.FC = () => {
             }}
             className="mt-6"
           >
-            <Link to="/games" onClick={(e) => handleMobileNavClick(e, '/games')}>
+            <Link to="/games">
               <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
                 Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5" fill="currentColor" />
               </Button>
