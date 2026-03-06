@@ -237,28 +237,25 @@ const PersistentBackground: React.FC = () => {
       {/* Base dark layer — always present */}
       <div className="absolute inset-0 bg-[#0F172A]" />
 
-      {/* Home-style subtle gradients */}
+      {/* Home-style subtle gradients — hidden on mobile to save GPU.
+          Each blur-[120px] element creates a massive GPU texture (~1MB+).
+          On mobile the base #0F172A dark is the background. */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+        className="absolute inset-0 transition-opacity duration-700 ease-in-out hidden md:block"
         style={{ opacity: showHome ? 1 : 0 }}
       >
         <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.03)_0%,transparent_70%)] blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[110%] h-[110%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_70%)] blur-[100px]" />
       </div>
 
-      {/* Ambient lighting for Games / Database / About */}
+      {/* Ambient glow orbs — hidden on mobile for performance */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+        className="absolute inset-0 transition-opacity duration-700 ease-in-out hidden md:block"
         style={{ opacity: showGlow ? 1 : 0 }}
       >
-        {/* Sky orb — starts top-right, drifts across */}
-        <div className="absolute top-[-10%] right-[0%] w-[55%] h-[55%] rounded-full blur-[120px] bg-sky/[0.14] animate-ambient-drift-1" />
-
-        {/* Purple orb — starts bottom-left, drifts opposite */}
-        <div className="absolute bottom-[0%] left-[-5%] w-[50%] h-[50%] rounded-full blur-[120px] bg-secondary/[0.10] animate-ambient-drift-2" />
-
-        {/* Green orb — starts center-left, roams */}
-        <div className="absolute top-[20%] left-[10%] w-[45%] h-[45%] rounded-full blur-[120px] bg-accent/[0.08] animate-ambient-drift-3" />
+        <div className="absolute top-[-10%] right-[0%] w-[55%] h-[55%] rounded-full blur-[120px] bg-sky/[0.14]" />
+        <div className="absolute bottom-[0%] left-[-5%] w-[50%] h-[50%] rounded-full blur-[120px] bg-secondary/[0.10]" />
+        <div className="absolute top-[20%] left-[10%] w-[45%] h-[45%] rounded-full blur-[120px] bg-accent/[0.08]" />
       </div>
     </div>
   );

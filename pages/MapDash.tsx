@@ -162,6 +162,10 @@ export default function MapDash() {
       preferCanvas: false,
       // Tighter tap tolerance so panning doesn't accidentally trigger marker clicks
       tapTolerance: 10,
+      // Disable marker animation during zoom to prevent "floating" on iOS Safari.
+      // Without this, Leaflet applies CSS transforms to markers during the zoom
+      // transition which desync from tile positions, making dots drift.
+      markerZoomAnimation: false,
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(map);
@@ -394,14 +398,14 @@ export default function MapDash() {
       {gameState === 'start' && (
           <motion.div
             key="start"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark p-3 sm:p-4"
+            initial={false}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="absolute inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4"
+            style={{ background: '#0F172A' }}
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <div className="game-lobby-card w-full bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden">
+              <div className="game-lobby-card w-full rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
@@ -440,11 +444,12 @@ export default function MapDash() {
               ease: "easeOut"
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
-            className="absolute inset-0 z-[2000] flex items-center justify-center bg-surface-dark p-3 sm:p-4"
+            className="absolute inset-0 z-[2000] flex items-center justify-center p-3 sm:p-4"
+            style={{ background: '#0F172A' }}
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <div className="w-full bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden group">
+              <div className="w-full rounded-3xl p-5 sm:p-8 text-center border-2 border-white/10 overflow-hidden group" style={{ background: 'rgba(255,255,255,0.05)' }}>
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>

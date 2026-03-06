@@ -258,31 +258,32 @@ const Navigation: React.FC = () => {
   // 2. Adaptive text color based on background (Map = Light background = Dark text)
   // 3. Subtle backdrop blur on scroll for legibility
   
-  let navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
+  // Transition is on the <nav> element — navClasses only need visual state.
+  let navClasses = "bg-transparent py-4";
   let textColorClass = "text-white";
 
   if (isOverMap) {
     textColorClass = "text-[#1A1C1E]"; // Deep dark color for light background
 
     if (isScrolled) {
-      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl py-2.5 shadow-sm transition-[background-color,padding,box-shadow] duration-200";
+      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
     } else {
-      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
+      navClasses = "bg-transparent py-4";
     }
   } else {
     // Default Mode (Dark Background Pages)
     textColorClass = "text-white";
 
     if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg transition-[background-color,padding,box-shadow] duration-200";
+      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
     } else {
-      navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
+      navClasses = "bg-transparent py-4";
     }
   }
 
   // Mobile menu open overrides - keep nav transparent, only override text color
   if (isMobileMenuOpen) {
-    navClasses = "bg-transparent py-4 transition-[background-color,padding,box-shadow] duration-200";
+    navClasses = "bg-transparent py-4";
     textColorClass = "text-white";
   }
 
@@ -292,7 +293,7 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav 
-        className={`fixed w-full z-[2000] transition-all duration-500 ease-out ${
+        className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
         } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
       >
@@ -406,8 +407,8 @@ const Navigation: React.FC = () => {
         }}
         aria-hidden={!isMobileMenuOpen}
       >
-        {/* Background blobs for mobile menu */}
-        <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
+        {/* Subtle ambient glow — uses radial-gradient instead of blur filter for performance */}
+        <div className="absolute top-0 right-0 w-full h-[40%] bg-[radial-gradient(ellipse_at_top_right,rgba(0,122,255,0.08)_0%,transparent_70%)] pointer-events-none" />
         
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
