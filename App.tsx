@@ -140,18 +140,16 @@ const NavigationCursor: React.FC = () => {
 
 /**
  * PageLoadFallback
- * Full-screen minimal spinner shown while a lazy chunk is loading.
- * Matches the app background so there's no flash of white/empty content.
- * Skips showing its own spinner while the HTML initial-loader is still visible
- * to avoid two spinners on screen at once.
- * Also signals loading state to NavigationCursor via LayoutContext.
+ * Invisible placeholder while a lazy chunk is loading.
+ * Matches the dark background so there's no flash — the PersistentBackground
+ * shows through seamlessly.  Only shows a spinner after 600ms for slow loads.
+ * Signals loading state to NavigationCursor via LayoutContext.
  */
 const PageLoadFallback: React.FC = () => {
   const { setPageLoading } = useLayout();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Signal that a lazy chunk is loading (keeps progress cursor active)
     setPageLoading(true);
 
     // If the HTML splash-screen loader is still present, don't show a second spinner
@@ -160,7 +158,8 @@ const PageLoadFallback: React.FC = () => {
       return () => setPageLoading(false);
     }
 
-    const timer = setTimeout(() => setShow(true), 300);
+    // Only show spinner for genuinely slow loads (600ms+)
+    const timer = setTimeout(() => setShow(true), 600);
     return () => {
       clearTimeout(timer);
       setPageLoading(false);
@@ -168,28 +167,44 @@ const PageLoadFallback: React.FC = () => {
   }, [setPageLoading]);
 
   return (
-    <div className="flex-grow flex flex-col w-full min-h-[60vh] items-center justify-center bg-[#0F172A]">
+    <div className="flex-grow flex flex-col w-full min-h-[40vh]">
       {show && (
-        <div className="w-8 h-8 border-[2.5px] border-white/10 border-t-sky rounded-full animate-spin" />
+        <div className="flex items-center justify-center flex-grow">
+          <div className="w-7 h-7 border-2 border-white/10 border-t-sky rounded-full animate-spin" />
+        </div>
       )}
     </div>
   );
 };
 
 /**
+ * PageTransition
+ * Plays the page-enter animation WHEN content is ready (inside Suspense).
+ * This is the key fix: the animation triggers after the lazy chunk loads,
+ * not before. Children cascade in with staggered delays.
+ */
+const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <div className="flex-grow flex flex-col w-full page-enter">
+      {children}
+    </div>
+  );
+};
+
+/**
  * PageWrapper
- * Provides a Suspense boundary + a lightweight CSS fade-in on route changes.
- * The `key` is the current pathname so React unmounts/remounts on navigation,
- * triggering the page-enter animation.  The animation is GPU-friendly
- * (opacity + translateY only) and very fast (250ms) so it masks the instant
- * swap without feeling sluggish.
+ * Provides a Suspense boundary around each route.
+ * The `key` on PageTransition (inside Suspense) ensures the animation
+ * triggers after the content has loaded, not during loading.
  */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useLocation();
   return (
-    <div key={pathname} className="flex-grow flex flex-col w-full page-enter">
+    <div className="flex-grow flex flex-col w-full">
       <Suspense fallback={<PageLoadFallback />}>
-        {children}
+        <PageTransition key={pathname}>
+          {children}
+        </PageTransition>
       </Suspense>
     </div>
   );

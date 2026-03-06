@@ -188,12 +188,13 @@ const Navigation: React.FC = () => {
     e.preventDefault(); // Don't navigate immediately
     setIsMobileMenuOpen(false); // Start close animation
 
-    // Navigate after menu close animation finishes (~200ms)
+    // Navigate after menu overlay fades out (~120ms)
+    // Navbar page chunks are prefetched so navigation is near-instant
     if (pendingNav.current) clearTimeout(pendingNav.current);
     pendingNav.current = setTimeout(() => {
       navigate(path);
       pendingNav.current = null;
-    }, 200);
+    }, 120);
   }, [location.pathname, navigate]);
 
   // Cleanup pending navigation on unmount
@@ -482,7 +483,7 @@ const Navigation: React.FC = () => {
                 onClose={() => {
                   setIsMobileMenuOpen(false);
                   if (pendingNav.current) clearTimeout(pendingNav.current);
-                  pendingNav.current = setTimeout(() => navigate('/profile'), 200);
+                  pendingNav.current = setTimeout(() => navigate('/profile'), 120);
                 }}
                 onSignOut={() => setShowSignOutModal(true)}
               />
@@ -491,7 +492,7 @@ const Navigation: React.FC = () => {
                 onClose={() => {
                   setIsMobileMenuOpen(false);
                   if (pendingNav.current) clearTimeout(pendingNav.current);
-                  pendingNav.current = setTimeout(() => navigate('/auth', { state: { from: location } }), 200);
+                  pendingNav.current = setTimeout(() => navigate('/auth', { state: { from: location } }), 120);
                 }}
               />
             )}
