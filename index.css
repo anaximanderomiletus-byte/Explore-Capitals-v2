@@ -3,21 +3,60 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   PAGE TRANSITION — lightweight fade-in on every route change
+   PAGE TRANSITION — bouncy spring entrance on every route change.
+   Feels like landing on a new destination, not loading a spreadsheet.
    ========================================================================== */
 @keyframes page-enter {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(28px) scale(0.98);
   }
-  to {
+  60% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-4px) scale(1.005);
+  }
+  80% {
+    transform: translateY(2px) scale(0.999);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
 .page-enter {
-  animation: page-enter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: page-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ==========================================================================
+   SCROLL-REVEAL — springy entrance for content sections.
+   Elements rise up and bounce slightly into place.
+   ========================================================================== */
+@keyframes reveal-spring {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.97);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.003);
+  }
+  75% {
+    transform: translateY(1px) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(36px) scale(0.97);
+}
+
+.reveal-visible {
+  animation: reveal-spring 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ==========================================================================

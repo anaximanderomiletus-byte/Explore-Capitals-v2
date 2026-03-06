@@ -73,11 +73,9 @@ const RevealSection: React.FC<{
   return (
     <div
       ref={ref}
-      className={className}
+      className={`${className} ${visible ? 'reveal-visible' : 'reveal-hidden'}`}
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: `opacity 0.4s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.4s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
+        transitionDelay: `${delay}s`,
         willChange: visible ? 'auto' : 'opacity, transform',
       }}
     >

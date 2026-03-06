@@ -392,18 +392,16 @@ const Navigation: React.FC = () => {
             >
               <div className="relative w-5 h-4 flex flex-col justify-between pointer-events-none">
                 <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen 
-                    ? 'bg-sky-light rotate-45 translate-y-[7px]' 
+                  isMobileMenuOpen
+                    ? 'bg-sky-light rotate-45 translate-y-[7px]'
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
                 <span className={`block h-[2px] rounded-full transition-all duration-150 ${
-                  isMobileMenuOpen 
-                    ? 'opacity-0 scale-0' 
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
+                  isOverMap && !isMobileMenuOpen ? 'bg-[#1A1C1E]' : 'bg-white'
+                } ${isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />
                 <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen 
-                    ? 'bg-sky-light -rotate-45 -translate-y-[7px]' 
+                  isMobileMenuOpen
+                    ? 'bg-sky-light -rotate-45 -translate-y-[7px]'
                     : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
                 }`} />
               </div>
@@ -445,11 +443,11 @@ const Navigation: React.FC = () => {
                 to={link.path}
                 onClick={(e) => handleMobileNavClick(e, link.path)}
                 style={{
-                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
+                  transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
                   opacity: isMobileMenuOpen ? 1 : 0,
                   transition: isMobileMenuOpen
-                    ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.05}s, opacity 0.3s ease-out ${index * 0.05}s`
-                    : 'transform 0.15s ease-in, opacity 0.12s ease-in',
+                    ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.06}s, opacity 0.3s ease-out ${index * 0.06}s`
+                    : 'transform 0.12s ease-in, opacity 0.1s ease-in',
                   WebkitTapHighlightColor: 'transparent',
                   willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
                 }}
@@ -465,11 +463,11 @@ const Navigation: React.FC = () => {
           {/* Account Panel - right after nav links */}
           <div
             style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
+              transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
               opacity: isMobileMenuOpen ? 1 : 0,
               transition: isMobileMenuOpen
-                ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.05}s, opacity 0.3s ease-out ${navLinks.length * 0.05}s`
-                : 'transform 0.15s ease-in, opacity 0.12s ease-in',
+                ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${navLinks.length * 0.06}s, opacity 0.3s ease-out ${navLinks.length * 0.06}s`
+                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
               willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
           >
@@ -499,11 +497,11 @@ const Navigation: React.FC = () => {
           {/* Play Now button - right after account */}
           <div
             style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(12px)',
+              transform: isMobileMenuOpen ? 'translateY(0) scale(1)' : 'translateY(18px) scale(0.95)',
               opacity: isMobileMenuOpen ? 1 : 0,
               transition: isMobileMenuOpen
-                ? `transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${(navLinks.length + 1) * 0.05}s, opacity 0.3s ease-out ${(navLinks.length + 1) * 0.05}s`
-                : 'transform 0.15s ease-in, opacity 0.12s ease-in',
+                ? `transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) ${(navLinks.length + 1) * 0.06}s, opacity 0.3s ease-out ${(navLinks.length + 1) * 0.06}s`
+                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
               willChange: isMobileMenuOpen ? 'transform, opacity' : 'auto',
             }}
             className="mt-6"
