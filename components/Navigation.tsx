@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User as UserIcon, LogOut, ChevronRight } from 'lucide-react';
+import { User as UserIcon, LogOut, ChevronRight, Play } from 'lucide-react';
 import Button from './Button';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
@@ -507,8 +507,8 @@ const Navigation: React.FC = () => {
             className="mt-6"
           >
             <Link to="/games" onClick={(e) => handleMobileNavClick(e, '/games')}>
-              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg font-black uppercase tracking-widest">
-                Play Now
+              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
+                Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5" fill="currentColor" />
               </Button>
             </Link>
           </div>
