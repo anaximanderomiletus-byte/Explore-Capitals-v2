@@ -373,7 +373,12 @@ const Navigation: React.FC = () => {
             {/* Sliding active indicator */}
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
-            <div className="flex items-center shrink-0 border-l border-white/10 pl-5">
+            <div className="flex items-center shrink-0 border-l border-white/10 pl-5 gap-4">
+              <Link to="/games">
+                <Button variant="primary" size="sm" className="group uppercase text-xs tracking-widest">
+                  Play Now <Play className="ml-1.5 transition-transform group-hover:translate-x-0.5 w-3.5 h-3.5" fill="currentColor" />
+                </Button>
+              </Link>
               <AccountMenu />
             </div>
           </div>
