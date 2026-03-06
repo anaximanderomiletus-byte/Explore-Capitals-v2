@@ -101,8 +101,38 @@ const Home: React.FC = () => {
       `}</style>
       <SEO
         title="EXPLORECAPITALS.COM"
-        description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database."
+        description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database for 195+ nations."
         isHomePage={true}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'WebSite',
+              name: 'ExploreCapitals',
+              url: 'https://explorecapitals.com',
+              description: 'Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database for 195+ nations.',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: 'https://explorecapitals.com/database?search={search_term_string}',
+                'query-input': 'required name=search_term_string',
+              },
+            },
+            {
+              '@type': 'Organization',
+              name: 'ExploreCapitals',
+              url: 'https://explorecapitals.com',
+              logo: 'https://explorecapitals.com/png/STYLE/explorecapitals-globe-favicon.png',
+              sameAs: ['https://twitter.com/explorecapitals'],
+            },
+            {
+              '@type': 'EducationalOrganization',
+              name: 'ExploreCapitals',
+              url: 'https://explorecapitals.com',
+              description: 'Free interactive geography education platform featuring quizzes, games, maps, and a comprehensive country database.',
+              knowsAbout: ['Geography', 'World Capitals', 'Country Flags', 'World Maps', 'Nations'],
+            },
+          ],
+        }}
       />
 
       {/* ═══════════════ HERO ═══════════════ */}

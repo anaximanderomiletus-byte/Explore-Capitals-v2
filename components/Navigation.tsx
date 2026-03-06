@@ -259,43 +259,49 @@ const Navigation: React.FC = () => {
   // 3. Subtle backdrop blur on scroll for legibility
   
   // Transition is on the <nav> element — navClasses only need visual state.
-  let navClasses = "bg-transparent py-4";
+  // Top padding uses pb-X (bottom only); paddingTop is set via inline style
+  // so the nav extends its background into the iOS safe-area at the top.
+  let navClasses = "bg-transparent pb-4";
   let textColorClass = "text-white";
 
   if (isOverMap) {
     textColorClass = "text-[#1A1C1E]"; // Deep dark color for light background
 
     if (isScrolled) {
-      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl py-2.5 shadow-sm";
+      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl pb-2.5 shadow-sm";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent pb-4";
     }
   } else {
     // Default Mode (Dark Background Pages)
     textColorClass = "text-white";
 
     if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl py-2.5 shadow-lg";
+      navClasses = "bg-surface-dark/30 backdrop-blur-xl pb-2.5 shadow-lg";
     } else {
-      navClasses = "bg-transparent py-4";
+      navClasses = "bg-transparent pb-4";
     }
   }
 
   // Mobile menu open overrides - keep nav transparent, only override text color
   if (isMobileMenuOpen) {
-    navClasses = "bg-transparent py-4";
+    navClasses = "bg-transparent pb-4";
     textColorClass = "text-white";
   }
+
+  // Compute nav top padding: safe-area-inset-top + visual padding
+  const navVisualPaddingTop = isScrolled && !isMobileMenuOpen ? '0.625rem' : '1rem';
 
   // Logic to hide header on Map Page in Landscape mode
   const hideOnMapLandscape = isMapPage && !isMobileMenuOpen;
 
   return (
     <>
-      <nav 
+      <nav
         className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
         } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
+        style={{ paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})` }}
       >
         <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
           {/* Logo */}
@@ -387,7 +393,7 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay - Smooth fade in/out */}
       <div
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pt-20 pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
@@ -400,6 +406,7 @@ const Navigation: React.FC = () => {
           touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
           height: 'var(--viewport-height, 100dvh)',
           minHeight: 'var(--viewport-height, 100dvh)',
+          paddingTop: 'calc(env(safe-area-inset-top, 0px) + 5rem)',
           paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)',
           willChange: 'opacity',
           transform: 'translateZ(0)', // Force GPU compositing layer

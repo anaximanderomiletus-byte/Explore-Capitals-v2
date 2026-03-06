@@ -147,9 +147,27 @@ const Games: React.FC = () => {
 
   return (
     <div className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
-      <SEO 
+      <SEO
         title="Geography Games"
-        description="Play free geography games online. Test your knowledge of world capitals, flags, maps, borders, and populations with fun interactive quizzes."
+        description="Play free geography games online. Test your knowledge of world capitals, flags, maps, borders, and populations with fun interactive quizzes and timed challenges."
+        keywords="geography games, capital quiz, flag quiz, map game, country quiz, free geography games online, world capitals game, interactive map game"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Geography Games',
+          description: 'Play free geography games online. Test your knowledge of world capitals, flags, maps, borders, and populations with fun interactive quizzes and timed challenges.',
+          url: 'https://explorecapitals.com/games',
+          isPartOf: { '@type': 'WebSite', name: 'ExploreCapitals', url: 'https://explorecapitals.com' },
+          about: { '@type': 'Thing', name: 'Geography Education' },
+          hasPart: [
+            { '@type': 'VideoGame', name: 'Capital Quiz', description: 'Identify world capitals against the clock.', url: 'https://explorecapitals.com/games/capital-quiz', genre: 'Educational', gamePlatform: 'Web Browser' },
+            { '@type': 'VideoGame', name: 'Map Dash', description: 'Find nations on the interactive world map.', url: 'https://explorecapitals.com/games/map-dash', genre: 'Educational', gamePlatform: 'Web Browser' },
+            { '@type': 'VideoGame', name: 'Flag Frenzy', description: 'Match flags to their countries.', url: 'https://explorecapitals.com/games/flag-frenzy', genre: 'Educational', gamePlatform: 'Web Browser' },
+            { '@type': 'VideoGame', name: 'Know Your Neighbor', description: 'Identify every bordering country.', url: 'https://explorecapitals.com/games/know-your-neighbor', genre: 'Educational', gamePlatform: 'Web Browser' },
+            { '@type': 'VideoGame', name: 'Population Pursuit', description: 'Compare country populations.', url: 'https://explorecapitals.com/games/population-pursuit', genre: 'Educational', gamePlatform: 'Web Browser' },
+            { '@type': 'VideoGame', name: 'Global Detective', description: 'Identify the hidden country from clues.', url: 'https://explorecapitals.com/games/global-detective', genre: 'Educational', gamePlatform: 'Web Browser' },
+          ],
+        }}
       />
 
       <div className="max-w-7xl mx-auto relative z-10">

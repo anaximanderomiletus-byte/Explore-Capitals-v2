@@ -403,6 +403,11 @@ export default function MapDash() {
             className="absolute inset-0 z-[2000] flex px-3 sm:px-4 py-16 overflow-y-auto"
             style={{ background: '#0F172A' }}
           >
+            {/* Blurred game thumbnail — matches every other game lobby */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+            </div>
+
             {/* Background Decor — matches other game lobbies */}
             <div className="fixed inset-0 z-0 pointer-events-none">
               <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] opacity-80 animate-pulse-slow" />
@@ -453,6 +458,17 @@ export default function MapDash() {
             className="absolute inset-0 z-[2000] flex px-3 sm:px-4 py-16 overflow-y-auto"
             style={{ background: '#0F172A' }}
           >
+            {/* Blurred game thumbnail — matches every other game lobby */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+            </div>
+
+            {/* Background Decor */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] opacity-80 animate-pulse-slow" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
+            </div>
+
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
               <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">

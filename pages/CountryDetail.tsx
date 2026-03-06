@@ -188,11 +188,45 @@ const CountryDetail: React.FC = () => {
     { label: 'Driving Side', value: `${country.driveSide || 'Right'}-hand`, icon: Car },
   ];
 
+  // Build structured data for Google / rich results
+  const countryType = isTerritory ? 'Territory' : isDeFacto ? 'State' : 'Country';
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Country',
+    name: country.name,
+    alternateName: OFFICIAL_NAMES[country.name] || undefined,
+    description: country.description,
+    url: `https://explorecapitals.com/country/${toSlug(country.name)}`,
+    capital: country.capital ? { '@type': 'City', name: country.capital } : undefined,
+    containedInPlace: { '@type': 'Place', name: country.region },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: country.lat,
+      longitude: country.lng,
+    },
+    additionalProperty: [
+      { '@type': 'PropertyValue', name: 'Population', value: country.population },
+      { '@type': 'PropertyValue', name: 'Area', value: `${country.area} km²` },
+      { '@type': 'PropertyValue', name: 'Currency', value: country.currency },
+      ...(country.gdp ? [{ '@type': 'PropertyValue', name: 'GDP', value: country.gdp }] : []),
+      ...(country.timeZone ? [{ '@type': 'PropertyValue', name: 'Time Zone', value: country.timeZone }] : []),
+      ...(country.callingCode ? [{ '@type': 'PropertyValue', name: 'Calling Code', value: country.callingCode }] : []),
+      ...(country.languages?.length ? [{ '@type': 'PropertyValue', name: 'Languages', value: country.languages.join(', ') }] : []),
+    ],
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'ExploreCapitals',
+      url: 'https://explorecapitals.com',
+    },
+  };
+
   return (
     <main className="min-h-screen bg-surface-dark pt-24 pb-12 relative overflow-hidden text-white">
-      <SEO 
-        title={`${country.name} - ${isTerritory ? 'Territory' : isDeFacto ? 'State' : 'Country'} Profile`} 
-        description={`${country.name} country profile: capital ${country.capital}, population, area, region, and key facts. Explore detailed geography data.`} 
+      <SEO
+        title={`${country.name} - ${countryType} Profile`}
+        description={`${country.name} country profile: capital ${country.capital}, population ${country.population}, area ${country.area} km², currency ${country.currency}. ${country.description?.slice(0, 120)}...`}
+        keywords={`${country.name}, ${country.capital}, ${country.region}, ${country.name} facts, ${country.name} capital, ${country.name} population, geography`}
+        structuredData={structuredData}
       />
 
       {/* ══════════ HERO BANNER ══════════ */}

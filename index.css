@@ -108,9 +108,8 @@ body {
   width: 100%;
   position: relative;
   overflow-x: hidden;
-  /* Safe area support for notched iPhones - all sides */
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Safe area: handled per-component (nav, footer, full-bleed pages).
+     body stays flush so backgrounds extend to physical screen edges on iOS. */
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
 }
@@ -294,14 +293,23 @@ body::before {
   /* Better vertical centering on lobby screens:
      The fixed navbar eats into the top of the viewport, so we use
      asymmetric padding (more top, less bottom) to center the card
-     in the visible area below the nav instead of the full viewport. */
+     in the visible area below the nav instead of the full viewport.
+     Includes safe-area-inset-top because body no longer adds it. */
   .overflow-y-auto:has(.game-lobby-card) {
-    padding-top: 6rem !important;   /* 96px — nav clearance */
+    padding-top: calc(env(safe-area-inset-top, 0px) + 6rem) !important;
     padding-bottom: 1rem !important; /* 16px */
   }
 
   .game-lobby-card {
     min-height: 450px !important;
+  }
+
+  /* Lock description height so cards are identical regardless of 1-line vs 2-line text */
+  .game-lobby-card h1 + p {
+    min-height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .game-back-btn {
