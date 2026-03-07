@@ -1,6 +1,0 @@
-import{c,C as l}from"./index-1JwqyaIw.js";import{j as t}from"./vendor-motion-BMnVHHDA.js";import{R as n,L as o}from"./vendor-react-D04We-al.js";/**
- * @license lucide-react v0.554.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const i=[["path",{d:"M12 6v6l4 2",key:"mmk7yg"}],["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}]],x=c("clock",i),d=({items:a})=>{const r={"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:a.map((e,s)=>({"@type":"ListItem",position:s+1,name:e.label,...e.href?{item:`https://explorecapitals.com${e.href}`}:{}}))};return t.jsxs(t.Fragment,{children:[t.jsx("script",{type:"application/ld+json",dangerouslySetInnerHTML:{__html:JSON.stringify(r)}}),t.jsx("nav",{"aria-label":"Breadcrumb",className:"flex items-center gap-1 text-xs text-white/40 mb-4 flex-wrap",children:a.map((e,s)=>t.jsxs(n.Fragment,{children:[s>0&&t.jsx(l,{size:12,className:"text-white/20 flex-shrink-0"}),e.href&&s<a.length-1?t.jsx(o,{to:e.href,className:"hover:text-white/70 transition-colors",children:e.label}):t.jsx("span",{className:"text-white/60",children:e.label})]},s))})]})};export{d as B,x as C};

@@ -100,7 +100,7 @@ const Home: React.FC = () => {
         }
       `}</style>
       <SEO
-        title="ExploreCapitals — Free Geography Games, World Capitals Quiz & Interactive Map"
+        title="ExploreCapitals | Free Geography Games, World Capitals Quiz & Interactive Map"
         description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database for 195+ nations."
         isHomePage={true}
         structuredData={{
