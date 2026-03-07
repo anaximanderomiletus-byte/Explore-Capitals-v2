@@ -460,9 +460,9 @@ const DatabasePage: React.FC = () => {
         title="Country Database"
         description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."
       />
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database' }]} />
 
       <div className="max-w-7xl mx-auto relative z-10">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database' }]} />
         <RevealSection className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">

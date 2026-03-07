@@ -145,7 +145,6 @@ export default function GlobalDetective() {
         <img src={`${import.meta.env.BASE_URL}png/GAMES/global-detective.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <SEO title="Global Detective - Games" description="Can you guess the mystery country from clues? Use deduction skills to identify nations based on hints about their geography and culture." />
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Global Detective' }]} />
 
       <div className="absolute inset-0 -z-10">
         <img src={gameImage} alt="" className="w-full h-full object-cover scale-105" />
@@ -163,6 +162,7 @@ export default function GlobalDetective() {
           >
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Global Detective' }]} />
               <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/global-detective.png`} alt="Global Detective" className="w-full h-full object-cover" />

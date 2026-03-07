@@ -145,7 +145,6 @@ export default function CapitalQuiz() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Capital Quiz - Games" description="Test your knowledge of world capitals in this fast-paced 60-second quiz. How many capital cities can you name?" />
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Quiz' }]} />
 
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -155,6 +154,7 @@ export default function CapitalQuiz() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Quiz' }]} />
             <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-quiz.png`} alt="Capital Quiz" className="w-full h-full object-cover" />

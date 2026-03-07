@@ -79,7 +79,6 @@ const About: React.FC = () => {
         description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."
         structuredData={structuredData}
       />
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
 
       {/* Vertical Sidebar Ads - Large screens only */}
       <VerticalSidebarAd slot="9489406693" position="left" />
@@ -92,6 +91,7 @@ const About: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto space-y-12 md:space-y-16 relative z-10">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
         {/* Mission & Hero Section */}
         <section className="relative">
           {/* Animated background accent */}

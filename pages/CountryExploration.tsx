@@ -751,20 +751,20 @@ const CountryExploration: React.FC = () => {
       return (
         <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-20 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
-            title={`Explore ${country.name} - Virtual Tour`}
+            title={`${country.name} Virtual Tour`}
             description={`Take a virtual tour of ${country.name}. Discover landmarks, culture, and geography through an interactive expedition with quizzes.`}
             image={introImage || undefined}
             imageAlt={`Scenery of ${country.name}`}
           />
-          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database', href: '/database' }, { label: country.name, href: `/country/${toSlug(country.name)}` }, { label: 'Expedition' }]} />
 
           {/* Immersive Aurora Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
             <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-[160px] opacity-80 animate-pulse-slow" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
           </div>
-          
+
           <div className={`relative z-10 w-full max-w-6xl flex flex-col transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database', href: '/database' }, { label: country.name, href: `/country/${toSlug(country.name)}` }, { label: 'Expedition' }]} />
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 lg:gap-x-16 lg:gap-y-1 items-center lg:items-start">
               
               {/* 1. Text Block: Top-Left on Desktop */}

@@ -236,7 +236,6 @@ export default function CapitalConnection() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Connection' }]} />
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
@@ -244,6 +243,7 @@ export default function CapitalConnection() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Connection' }]} />
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />

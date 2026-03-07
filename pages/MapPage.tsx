@@ -982,7 +982,7 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* Desktop Bottom Bar - Hide UI, Random Search, Zoom Controls aligned horizontally */}
-      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
+      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-[272px] right-0 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
         {/* Hide UI Button */}
         <button 
           onClick={() => setShowUI(false)}

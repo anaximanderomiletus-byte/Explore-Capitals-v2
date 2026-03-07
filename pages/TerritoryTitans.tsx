@@ -170,14 +170,15 @@ export default function TerritoryTitans() {
           <img src={`${import.meta.env.BASE_URL}png/GAMES/territory-titan.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
         <SEO title="Territory Titans - Premium Game" description="Master autonomous regions and dependencies worldwide. A premium geography game." />
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Territory Titans' }]} />
 
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
         </div>
 
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
+        <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Territory Titans' }]} />
+          <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/territory-titan.png`} alt="Territory Titans" className="w-full h-full object-cover" />
           </div>
@@ -196,6 +197,7 @@ export default function TerritoryTitans() {
               Back to Games
             </button>
           </div>
+        </div>
         </div>
       </div>
     );

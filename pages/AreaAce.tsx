@@ -157,31 +157,33 @@ export default function AreaAce() {
           <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
         <SEO title="Area Ace - Premium Game" description="Which country is larger? Test your geographic size knowledge." />
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Area Ace' }]} />
 
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
         </div>
 
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30 relative z-10">
-          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
-            <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
-          </div>
-          <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Area Ace</h1>
-          <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
-          <p className="text-white/60 text-sm mb-8">Unlock this game and 3 more with Premium membership.</p>
-          <div className="flex flex-col gap-4">
-            <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
-              <Crown size={18} /> UNLOCK WITH PREMIUM
-            </Button>
-            <button 
-              onClick={() => navigate('/games')}
-              className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group"
-            >
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
-              Back to Games
-            </button>
+        <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Area Ace' }]} />
+          <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30">
+            <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
+              <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
+            </div>
+            <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Area Ace</h1>
+            <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
+            <p className="text-white/60 text-sm mb-8">Unlock this game and 3 more with Premium membership.</p>
+            <div className="flex flex-col gap-4">
+              <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
+                <Crown size={18} /> UNLOCK WITH PREMIUM
+              </Button>
+              <button
+                onClick={() => navigate('/games')}
+                className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group"
+              >
+                <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Games
+              </button>
+            </div>
           </div>
         </div>
       </div>

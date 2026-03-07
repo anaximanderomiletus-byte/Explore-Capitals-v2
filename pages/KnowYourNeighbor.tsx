@@ -147,7 +147,6 @@ export default function KnowYourNeighbor() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Know Your Neighbor - Games" description="Can you name all the bordering countries? Test your knowledge of world geography and country borders in this quiz." />
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Know Your Neighbor' }]} />
 
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -157,6 +156,7 @@ export default function KnowYourNeighbor() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Know Your Neighbor' }]} />
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/know-your-neighbor.png`} alt="Know Your Neighbor" className="w-full h-full object-cover" />

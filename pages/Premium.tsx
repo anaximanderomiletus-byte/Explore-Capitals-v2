@@ -182,9 +182,9 @@ const Premium: React.FC = () => {
         title="Premium - Unlimited Access"
         description="Upgrade to ExploreCapitals Premium for unlimited games, ad-free experience, advanced analytics, and exclusive features."
       />
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Premium' }]} />
 
       <div className="max-w-5xl mx-auto relative z-10">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Premium' }]} />
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-500/30 border border-amber-500/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-amber-300 mb-6 relative overflow-hidden">

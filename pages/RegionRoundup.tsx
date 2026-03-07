@@ -143,7 +143,6 @@ export default function RegionRoundup() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <SEO title="Region Roundup - Games" description="Sort countries by continent. Test if you know which countries belong to Africa, Asia, Europe, and other regions of the world." />
-            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Region Roundup' }]} />
 
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -153,6 +152,7 @@ export default function RegionRoundup() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Region Roundup' }]} />
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
               <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                 <img src={`${import.meta.env.BASE_URL}png/GAMES/region-roundup.png`} alt="Region Roundup" className="w-full h-full object-cover" />

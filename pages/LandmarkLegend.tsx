@@ -186,7 +186,6 @@ export default function LandmarkLegend() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
-            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Landmark Legend' }]} />
 
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -196,6 +195,7 @@ export default function LandmarkLegend() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Landmark Legend' }]} />
               <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/landmark-legend.png`} alt="Landmark Legend" className="w-full h-full object-cover" />
