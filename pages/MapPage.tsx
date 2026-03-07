@@ -982,7 +982,7 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* Desktop Bottom Bar - Hide UI, Random Search, Zoom Controls aligned horizontally */}
-      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
+      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-[calc(50%+132px)] -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
         {/* Hide UI Button */}
         <button 
           onClick={() => setShowUI(false)}
@@ -1018,7 +1018,7 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* --- MOBILE UI --- */}
-      <div className={`md:hidden fixed bottom-0 left-0 w-full z-[1000] flex flex-col items-center pointer-events-none transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'} [@media(max-height:620px)]:hidden`}>
+      <div className={`md:hidden fixed bottom-0 left-0 w-full z-[1000] flex flex-col items-center pointer-events-none transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
           {/* Action Row */}
           <div className="w-full px-4 pb-4 flex items-end justify-between pointer-events-none">
             <button 
