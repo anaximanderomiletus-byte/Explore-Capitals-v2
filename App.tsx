@@ -43,6 +43,7 @@ const Loyalty = React.lazy(() => import('./pages/Loyalty'));
 const Terms = React.lazy(() => import('./pages/Terms'));
 const Privacy = React.lazy(() => import('./pages/Privacy'));
 const Premium = React.lazy(() => import('./pages/Premium'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 
 /**
@@ -316,6 +317,7 @@ const AppContent: React.FC = () => {
                 <Route path="/premium" element={<Premium />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </PageWrapper>
       </div>

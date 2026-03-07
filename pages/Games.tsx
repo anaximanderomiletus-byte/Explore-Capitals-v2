@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import RevealSection from '../components/RevealSection';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { BannerAd } from '../components/AdSense';
 import { useGameLimit } from '../hooks/useGameLimit';
@@ -171,6 +172,10 @@ const Games: React.FC = () => {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Games' },
+        ]} />
         <RevealSection className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-12">
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky/30 border border-white/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6 relative overflow-hidden group">

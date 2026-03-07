@@ -17,6 +17,7 @@ import { OFFICIAL_NAMES } from '../data/officialNames';
 
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 
 const FALLBACK_SCENES = [
@@ -264,6 +265,11 @@ const CountryDetail: React.FC = () => {
 
       {/* ══════════ CONTENT ══════════ */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-20 sm:-mt-20">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Database', href: '/database' },
+          { label: country.name },
+        ]} />
 
         {/* Country Identity — stacked on mobile, side-by-side on desktop */}
         {/* Desktop: Flag left + text right */}

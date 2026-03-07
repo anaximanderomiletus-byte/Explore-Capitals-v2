@@ -785,7 +785,7 @@ const MapPage: React.FC = () => {
     <div className="fixed inset-0 z-40 bg-surface-dark animate-[fadeIn_0.3s_ease-out_both]"
     >
       <SEO
-        title="MAP"
+        title="Interactive World Map"
         description="Explore an interactive world map with all 195 countries. Click to view capitals, flags, populations, and start guided country expeditions."
       />
       
@@ -907,7 +907,7 @@ const MapPage: React.FC = () => {
                 <MapIcon size={18} />
               </div>
               <div>
-                <h2 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter drop-shadow-sm">Atlas</h2>
+                <h1 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter drop-shadow-sm">Atlas</h1>
                 <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{MOCK_COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Nodes</p>
               </div>
             </div>

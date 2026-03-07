@@ -38,8 +38,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@explorecapitals" />
 
-    <!-- Structured Data (static — available before JS executes) -->
-    <script type="application/ld+json">
+    <!-- Structured Data (static fallback — replaced by SEO component once JS loads) -->
+    <script id="json-ld-seo" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -91,11 +91,11 @@
     <!-- Load fonts directly -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet CSS — deferred so it doesn't block first paint on non-map pages -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" media="print" onload="this.media='all'" />
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet JS — defer so it doesn't block HTML parsing -->
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
       /* Critical Styles for Splash Screen */
       #initial-loader {
@@ -123,19 +123,6 @@
         to { transform: rotate(360deg); }
       }
     </style>
-
-    <!-- GitHub Pages SPA redirect handler -->
-    <script>
-      // Restores the correct URL after 404.html redirect (GitHub Pages SPA workaround)
-      (function(l) {
-        if (l.search[1] === '/') {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&');
-          }).join('?');
-          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
-        }
-      }(window.location));
-    </script>
 
     <!-- Google AdSense - MUST load directly for crawler verification -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997" crossorigin="anonymous"></script>

@@ -10,6 +10,8 @@ interface SEOProps {
   structuredData?: object;
   /** If true, uses title exactly as provided without appending site name */
   isHomePage?: boolean;
+  /** If true, adds noindex/nofollow to prevent search engine indexing */
+  noIndex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -20,7 +22,8 @@ const SEO: React.FC<SEOProps> = ({
   imageAlt = "ExploreCapitals - Interactive Geography Learning Platform",
   type = "website",
   structuredData,
-  isHomePage = false
+  isHomePage = false,
+  noIndex = false
 }) => {
   const siteName = "ExploreCapitals";
   const siteDomain = "ExploreCapitals.com";
@@ -41,8 +44,8 @@ const SEO: React.FC<SEOProps> = ({
       })();
 
   useEffect(() => {
-    // 1. Update Title (all caps for browser tab)
-    document.title = browserTitle.toUpperCase();
+    // 1. Update Title
+    document.title = browserTitle;
 
     // 2. Helper to update or create meta tags
     const setMeta = (name: string, content: string) => {
@@ -68,7 +71,7 @@ const SEO: React.FC<SEOProps> = ({
     // 3. Standard Meta Tags
     setMeta('description', description);
     setMeta('keywords', keywords);
-    setMeta('robots', 'index, follow');
+    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
     setMeta('author', 'ExploreCapitals');
 
     // Build canonical URL: always use production domain with clean path
@@ -112,7 +115,7 @@ const SEO: React.FC<SEOProps> = ({
       scriptJSONLD.textContent = JSON.stringify(structuredData);
       document.head.appendChild(scriptJSONLD);
     }
-  }, [fullTitle, description, keywords, image, imageAlt, type, structuredData]);
+  }, [fullTitle, description, keywords, image, imageAlt, type, structuredData, noIndex]);
 
   return null;
 };
