@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
@@ -750,11 +751,12 @@ const CountryExploration: React.FC = () => {
       return (
         <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-20 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
-            title={`Explore ${country.name} - Virtual Tour`} 
+            title={`Explore ${country.name} - Virtual Tour`}
             description={`Take a virtual tour of ${country.name}. Discover landmarks, culture, and geography through an interactive expedition with quizzes.`}
             image={introImage || undefined}
             imageAlt={`Scenery of ${country.name}`}
           />
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database', href: '/database' }, { label: country.name, href: `/country/${toSlug(country.name)}` }, { label: 'Expedition' }]} />
 
           {/* Immersive Aurora Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
@@ -772,9 +774,9 @@ const CountryExploration: React.FC = () => {
                     <Compass size={12} className="text-sky-light" /> 
                     <span className="relative z-10 uppercase">Virtual Tour</span>
                   </div>
-                  <h1 className="text-2xl md:text-4xl lg:text-6xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
+                  <h2 className="text-2xl md:text-4xl lg:text-6xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
                     {tourData.tourTitle}
-                  </h1>
+                  </h2>
                   <p className="text-xs md:text-sm lg:text-base text-white/70 font-bold italic leading-relaxed drop-shadow-sm max-w-2xl">
                     {tourData.introText}
                   </p>
@@ -1180,7 +1182,7 @@ const CountryExploration: React.FC = () => {
                   </div>
                 
                   <div className="text-center md:text-left">
-                     <h1 className="text-xl md:text-2xl font-display font-black text-white uppercase tracking-tighter drop-shadow-md leading-tight mb-0.5">Expedition Complete</h1>
+                     <h2 className="text-xl md:text-2xl font-display font-black text-white uppercase tracking-tighter drop-shadow-md leading-tight mb-0.5">Expedition Complete</h2>
                      <div className="flex items-center justify-center md:justify-start gap-3">
                         <span className="text-[8px] font-black text-white/30 uppercase tracking-[0.4em]">Knowledge Check</span>
                         <div className="h-px w-6 bg-white/10" />

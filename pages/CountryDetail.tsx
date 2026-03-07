@@ -311,9 +311,9 @@ const CountryDetail: React.FC = () => {
               <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain" />
             </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+          <h2 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tighter leading-[0.9] drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
             {country.name}
-          </h1>
+          </h2>
           {officialName !== country.name && (
             <p className="text-xs sm:text-sm text-white/40 font-display font-bold italic mt-1 truncate">{officialName}</p>
           )}

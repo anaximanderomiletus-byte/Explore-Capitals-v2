@@ -4,6 +4,7 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { VerticalSidebarAd } from '../components/AdSense';
@@ -78,6 +79,7 @@ const About: React.FC = () => {
         description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."
         structuredData={structuredData}
       />
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
 
       {/* Vertical Sidebar Ads - Large screens only */}
       <VerticalSidebarAd slot="9489406693" position="left" />

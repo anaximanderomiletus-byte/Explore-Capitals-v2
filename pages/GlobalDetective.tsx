@@ -12,6 +12,7 @@ import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -144,7 +145,8 @@ export default function GlobalDetective() {
         <img src={`${import.meta.env.BASE_URL}png/GAMES/global-detective.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <SEO title="Global Detective - Games" description="Can you guess the mystery country from clues? Use deduction skills to identify nations based on hints about their geography and culture." />
-      
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Global Detective' }]} />
+
       <div className="absolute inset-0 -z-10">
         <img src={gameImage} alt="" className="w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-surface-dark/80 backdrop-blur-xl" />
@@ -207,7 +209,7 @@ export default function GlobalDetective() {
           <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-          <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+          <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
           <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
           <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
           <div className="flex flex-col gap-6">
@@ -242,7 +244,7 @@ export default function GlobalDetective() {
 
              {/* Game title - flexbox centered, will shrink if needed */}
              <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Global Detective</h1>
+                <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Global Detective</h2>
                 <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
              </div>
 

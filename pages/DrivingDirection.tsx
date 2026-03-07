@@ -13,6 +13,7 @@ import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function DrivingDirection() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
@@ -125,6 +126,7 @@ export default function DrivingDirection() {
           <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
         </div>
         <SEO title="Driving Direction - Premium Game" description="Guess which side of the road countries drive on! A premium geography game." />
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Driving Direction' }]} />
 
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
@@ -185,7 +187,7 @@ export default function DrivingDirection() {
               <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                 <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
               </div>
-              <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h1>
+              <h2 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h2>
               <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
               <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6">
@@ -228,7 +230,7 @@ export default function DrivingDirection() {
               </Link>
 
               <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Driving Direction</h1>
+                <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Driving Direction</h2>
                 <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
               </div>
 
@@ -364,7 +366,7 @@ export default function DrivingDirection() {
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+              <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
               <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">

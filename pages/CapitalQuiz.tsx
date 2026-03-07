@@ -13,6 +13,7 @@ import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -144,7 +145,8 @@ export default function CapitalQuiz() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Capital Quiz - Games" description="Test your knowledge of world capitals in this fast-paced 60-second quiz. How many capital cities can you name?" />
-        
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Quiz' }]} />
+
         {/* Background Decor */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] opacity-80 animate-pulse-slow" />
@@ -202,7 +204,7 @@ export default function CapitalQuiz() {
 
          {/* Game title - flexbox centered, will shrink if needed */}
          <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-            <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Quiz</h1>
+            <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Quiz</h2>
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
@@ -306,7 +308,7 @@ export default function CapitalQuiz() {
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+              <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
               <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">

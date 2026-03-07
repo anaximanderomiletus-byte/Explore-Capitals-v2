@@ -9,6 +9,7 @@ import { getStaticImages } from '../data/images';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
@@ -185,7 +186,8 @@ export default function LandmarkLegend() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
-            
+            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Landmark Legend' }]} />
+
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
               <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
@@ -257,7 +259,7 @@ export default function LandmarkLegend() {
 
                {/* Game title - flexbox centered, will shrink if needed */}
                <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                  <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Landmark Legend</h1>
+                  <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Landmark Legend</h2>
                   <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
                </div>
 
@@ -300,9 +302,9 @@ export default function LandmarkLegend() {
                      >
                           {/* Subtle shine overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none z-10" />
-                          <img 
-                              src={currentQuestion.imageUrl} 
-                              alt="Landmark" 
+                          <img
+                              src={currentQuestion.imageUrl}
+                              alt={`${currentQuestion.landmarkName} landmark`}
                               className="w-full h-full object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 pointer-events-none" />
@@ -376,7 +378,7 @@ export default function LandmarkLegend() {
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>
-                <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+                <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
                 <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
                 <div className="flex flex-col gap-6">

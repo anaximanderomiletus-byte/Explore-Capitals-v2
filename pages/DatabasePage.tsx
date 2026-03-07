@@ -7,6 +7,7 @@ import { Country, Territory } from '../types';
 import { getCountryCode } from '../utils/flags';
 import { toSlug } from '../utils/slug';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
@@ -459,6 +460,7 @@ const DatabasePage: React.FC = () => {
         title="Country Database"
         description="Explore detailed profiles of 195+ countries. Search by name, region, population, or area. Free geography reference with capitals, flags, and key facts."
       />
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database' }]} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <RevealSection className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">

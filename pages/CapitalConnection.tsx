@@ -6,6 +6,7 @@ import { MOCK_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
@@ -235,6 +236,7 @@ export default function CapitalConnection() {
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
         <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Capital Connection' }]} />
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-[120px] opacity-40 animate-pulse-slow" />
@@ -284,7 +286,7 @@ export default function CapitalConnection() {
 
          {/* Game title - flexbox centered, will shrink if needed */}
          <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-            <h1 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Connection</h1>
+            <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Connection</h2>
             <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
          </div>
 
@@ -343,7 +345,7 @@ export default function CapitalConnection() {
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+              <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
               <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
@@ -391,7 +393,7 @@ const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => voi
         {card.type === 'country' ? (
           <img
             src={`/flags/${card.flagCode}.png`}
-            alt="Flag"
+            alt={`Flag of ${card.label}`}
             className="w-10 h-auto md:w-12 select-none object-contain"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />

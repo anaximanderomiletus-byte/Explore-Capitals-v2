@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 import TermsCheckbox from '../components/TermsCheckbox';
 import PaymentBlockedModal from '../components/PaymentBlockedModal';
 import { useLayout } from '../context/LayoutContext';
@@ -181,6 +182,7 @@ const Premium: React.FC = () => {
         title="Premium - Unlimited Access"
         description="Upgrade to ExploreCapitals Premium for unlimited games, ad-free experience, advanced analytics, and exclusive features."
       />
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Premium' }]} />
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
@@ -189,9 +191,9 @@ const Premium: React.FC = () => {
             <Crown size={12} className="text-amber-400" />
             <span>Premium</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">
             Go Premium
-          </h1>
+          </h2>
           <p className="text-white/70 text-lg max-w-xl mx-auto">
             Unlock unlimited games, remove ads, and access advanced analytics to master world geography.
           </p>

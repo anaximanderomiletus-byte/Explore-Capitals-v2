@@ -12,6 +12,7 @@ import { useLayout } from '../context/LayoutContext';
 import { getCountryCode, getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function MapDash() {
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
@@ -276,7 +277,8 @@ export default function MapDash() {
         <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
       <SEO title="Map Dash - Games" description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out." />
-      
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Map Dash' }]} />
+
       <style>{`
         .mapdash-marker .marker-pin {
           transform-origin: center center;
@@ -475,7 +477,7 @@ export default function MapDash() {
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>
-                <h1 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h1>
+                <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
                 <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
                 <div className="flex flex-col gap-6">
