@@ -982,7 +982,7 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* Desktop Bottom Bar - Hide UI, Random Search, Zoom Controls aligned horizontally */}
-      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-[calc(50%+132px)] -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
+      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
         {/* Hide UI Button */}
         <button 
           onClick={() => setShowUI(false)}
@@ -996,7 +996,7 @@ const MapPage: React.FC = () => {
         <button 
           onClick={flyToRandom}
           disabled={isLoadingRandom}
-          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl  border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60"
+          className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl  border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60 whitespace-nowrap"
         >
           <div className="relative z-10 flex items-center gap-3 drop-shadow-sm">
             <Compass size={24} className={`transition-transform duration-1000 ${isLoadingRandom || !mapReady ? 'animate-spin text-primary' : 'text-primary'}`} />
