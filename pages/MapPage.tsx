@@ -982,9 +982,10 @@ const MapPage: React.FC = () => {
       </div>
 
       {/* Desktop Bottom Bar - Hide UI, Random Search, Zoom Controls aligned horizontally */}
-      <div className={`hidden md:flex items-center justify-center gap-4 fixed bottom-10 left-1/2 -translate-x-1/2 z-[1001] pointer-events-auto transition-all duration-700 ease-out transform ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
+      <div className={`hidden md:flex fixed bottom-10 left-0 right-0 justify-center z-[1001] pointer-events-none transition-all duration-700 ease-out ${showUI ? 'translate-y-0 opacity-100' : 'translate-y-40 opacity-0'}`}>
+        <div className="flex items-center gap-4 pointer-events-auto">
         {/* Hide UI Button */}
-        <button 
+        <button
           onClick={() => setShowUI(false)}
           className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
           title="Hide UI"
@@ -993,7 +994,7 @@ const MapPage: React.FC = () => {
         </button>
 
         {/* Random Search Button */}
-        <button 
+        <button
           onClick={flyToRandom}
           disabled={isLoadingRandom}
           className="flex items-center gap-4 px-10 h-14 text-lg rounded-full bg-white/40 backdrop-blur-3xl  border border-black/20 uppercase tracking-[0.15em] group relative overflow-hidden transition-all duration-500 text-[#1A1C1E] font-display font-black disabled:opacity-40 disabled:cursor-not-allowed disabled:saturate-50 hover:bg-white/60 whitespace-nowrap"
@@ -1006,14 +1007,15 @@ const MapPage: React.FC = () => {
 
         {/* Zoom Controls */}
         <div className="hidden lg:flex items-center gap-2">
-          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-            <Minus size={22} className="relative z-10 drop-shadow-sm" />
-          </button>
           <button onClick={handleZoomIn} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
             <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
             <Plus size={22} className="relative z-10 drop-shadow-sm" />
           </button>
+          <button onClick={handleZoomOut} className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  group relative overflow-hidden">
+            <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
+            <Minus size={22} className="relative z-10 drop-shadow-sm" />
+          </button>
+        </div>
         </div>
       </div>
 

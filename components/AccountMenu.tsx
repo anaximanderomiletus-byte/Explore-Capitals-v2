@@ -6,7 +6,7 @@ import { useUser } from '../context/UserContext';
 import { getAvatarById } from '../constants/avatars';
 import ConfirmationModal from './ConfirmationModal';
 
-const AccountMenu: React.FC = () => {
+const AccountMenu: React.FC<{ isOverMap?: boolean }> = ({ isOverMap = false }) => {
   const { user: authUser, signOut, loading: authLoading } = useAuth();
   const { user, isAuthenticated, isLoading: userLoading, isSyncing } = useUser();
   const location = useLocation();
@@ -31,10 +31,12 @@ const AccountMenu: React.FC = () => {
   if (loading && !isAuthenticated) {
     return (
       <div
-        className="w-9 h-9 rounded-full bg-white/5 border-2 border-white/40 flex items-center justify-center overflow-hidden relative"
+        className={`w-9 h-9 rounded-full border-2 flex items-center justify-center overflow-hidden relative ${
+          isOverMap ? 'bg-black/5 border-[#1A1C1E]/30' : 'bg-white/5 border-white/40'
+        }`}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-        <UserIcon size={16} className="text-white/30" />
+        <UserIcon size={16} className={isOverMap ? 'text-[#1A1C1E]/30' : 'text-white/30'} />
       </div>
     );
   }
@@ -45,7 +47,11 @@ const AccountMenu: React.FC = () => {
       <Link
         to="/auth"
         state={{ from: location }}
-        className="shing-btn group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/10 backdrop-blur-xl border-2 border-white/60 text-white/50 hover:text-sky-light hover:border-sky/50 transition-all overflow-hidden"
+        className={`shing-btn group relative flex items-center justify-center w-9 h-9 rounded-full backdrop-blur-xl border-2 transition-all overflow-hidden ${
+          isOverMap
+            ? 'bg-black/5 border-[#1A1C1E]/50 text-[#1A1C1E]/60 hover:text-primary hover:border-primary/50'
+            : 'bg-white/10 border-white/60 text-white/50 hover:text-sky-light hover:border-sky/50'
+        }`}
         aria-label="Sign in"
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 group-hover:opacity-40 transition-opacity" />
@@ -74,8 +80,12 @@ const AccountMenu: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`shing-btn relative flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all overflow-hidden ${
-          isOpen ? 'border-sky-light' : 'border-white/60 hover:border-sky/40'
-        } bg-transparent text-white font-display font-bold`}
+          isOpen
+            ? 'border-sky-light'
+            : isOverMap
+              ? 'border-[#1A1C1E]/50 hover:border-primary/40'
+              : 'border-white/60 hover:border-sky/40'
+        } bg-transparent ${isOverMap ? 'text-[#1A1C1E]' : 'text-white'} font-display font-bold`}
       >
         {avatar ? (
           <div className="relative z-10">{React.cloneElement(avatar.icon as React.ReactElement, { size: 18 })}</div>

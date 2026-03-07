@@ -1,8 +1,36 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, Component } from 'react';
 
 declare global {
   interface Window {
     adsbygoogle: any[];
+  }
+}
+
+/**
+ * AdErrorBoundary
+ * Catches any errors thrown by ad components (e.g. adblocker interference)
+ * so they never crash the rest of the page. Renders nothing on failure.
+ */
+class AdErrorBoundary extends Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    // Silently swallow — ad failures should never be visible to users
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
   }
 }
 
@@ -23,15 +51,16 @@ interface AdSenseProps {
 
 /**
  * AdSense Component
- * 
+ *
  * Displays Google AdSense ads with proper compliance and UX considerations.
+ * Gracefully degrades when an adblocker is active — never crashes the page.
  * Following AdSense policies:
  * - Ads are clearly distinguishable from content
  * - Not placed near navigation elements
  * - Not interfering with content consumption
  * - Appropriate spacing from interactive elements
  */
-const AdSense: React.FC<AdSenseProps> = ({
+const AdSenseInner: React.FC<AdSenseProps> = ({
   slot,
   format = 'auto',
   responsive = true,
@@ -41,21 +70,30 @@ const AdSense: React.FC<AdSenseProps> = ({
 }) => {
   const adRef = useRef<HTMLModElement>(null);
   const isAdLoaded = useRef(false);
+  const [adBlocked, setAdBlocked] = useState(false);
 
   useEffect(() => {
     // Only load ad once to prevent multiple ad requests
     if (isAdLoaded.current) return;
-    
+
     try {
-      // Check if adsbygoogle is available
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        window.adsbygoogle.push({});
+      // Check if adsbygoogle is available (not blocked)
+      const adsbyGoogle = (window as any).adsbygoogle;
+      if (adsbyGoogle && typeof adsbyGoogle.push === 'function') {
+        adsbyGoogle.push({});
         isAdLoaded.current = true;
+      } else {
+        // Script was blocked — hide the ad container silently
+        setAdBlocked(true);
       }
-    } catch (error) {
-      console.error('AdSense error:', error);
+    } catch {
+      // Any error (blocked, modified, etc.) — hide silently
+      setAdBlocked(true);
     }
   }, []);
+
+  // If adblocker prevented the script from loading, render nothing
+  if (adBlocked) return null;
 
   // Container styles based on variant
   const containerStyles = {
@@ -81,7 +119,7 @@ const AdSense: React.FC<AdSenseProps> = ({
   };
 
   return (
-    <div 
+    <div
       className={`ad-container ${containerStyles[variant]} ${className}`}
       role="complementary"
       aria-label="Advertisement"
@@ -92,7 +130,7 @@ const AdSense: React.FC<AdSenseProps> = ({
           Advertisement
         </div>
       )}
-      
+
       <ins
         ref={adRef}
         className="adsbygoogle"
@@ -107,18 +145,25 @@ const AdSense: React.FC<AdSenseProps> = ({
   );
 };
 
+/** Wrapped AdSense — error boundary ensures ad failures never crash the page */
+const AdSense: React.FC<AdSenseProps> = (props) => (
+  <AdErrorBoundary>
+    <AdSenseInner {...props} />
+  </AdErrorBoundary>
+);
+
 /**
  * In-Article Ad Component
  * Best for placing within article/content flow
  */
-export const InArticleAd: React.FC<{ slot: string; className?: string }> = ({ 
-  slot, 
-  className = '' 
+export const InArticleAd: React.FC<{ slot: string; className?: string }> = ({
+  slot,
+  className = ''
 }) => (
   <div className={`my-8 ${className}`}>
-    <AdSense 
-      slot={slot} 
-      layout="in-article" 
+    <AdSense
+      slot={slot}
+      layout="in-article"
       format="fluid"
       variant="subtle"
     />
@@ -129,13 +174,13 @@ export const InArticleAd: React.FC<{ slot: string; className?: string }> = ({
  * Sidebar Ad Component
  * Best for sidebar placements on desktop
  */
-export const SidebarAd: React.FC<{ slot: string; className?: string }> = ({ 
-  slot, 
-  className = '' 
+export const SidebarAd: React.FC<{ slot: string; className?: string }> = ({
+  slot,
+  className = ''
 }) => (
   <div className={`hidden lg:block sticky top-32 ${className}`}>
-    <AdSense 
-      slot={slot} 
+    <AdSense
+      slot={slot}
       format="rectangle"
       variant="card"
     />
@@ -146,13 +191,13 @@ export const SidebarAd: React.FC<{ slot: string; className?: string }> = ({
  * Banner Ad Component
  * Best for between sections or at page bottom
  */
-export const BannerAd: React.FC<{ slot: string; className?: string }> = ({ 
-  slot, 
-  className = '' 
+export const BannerAd: React.FC<{ slot: string; className?: string }> = ({
+  slot,
+  className = ''
 }) => (
   <div className={`w-full max-w-4xl mx-auto my-8 ${className}`}>
-    <AdSense 
-      slot={slot} 
+    <AdSense
+      slot={slot}
       format="horizontal"
       responsive={true}
       variant="default"
@@ -164,13 +209,13 @@ export const BannerAd: React.FC<{ slot: string; className?: string }> = ({
  * Responsive Ad Component
  * Auto-adjusts to container size - best for flexible layouts
  */
-export const ResponsiveAd: React.FC<{ slot: string; className?: string }> = ({ 
-  slot, 
-  className = '' 
+export const ResponsiveAd: React.FC<{ slot: string; className?: string }> = ({
+  slot,
+  className = ''
 }) => (
   <div className={`w-full ${className}`}>
-    <AdSense 
-      slot={slot} 
+    <AdSense
+      slot={slot}
       format="auto"
       responsive={true}
       variant="default"
@@ -183,13 +228,13 @@ export const ResponsiveAd: React.FC<{ slot: string; className?: string }> = ({
  * Fixed position vertical ads for page sidebars on large screens (1536px+)
  * Hidden on smaller screens to avoid layout issues
  */
-export const VerticalSidebarAd: React.FC<{ slot: string; position: 'left' | 'right' }> = ({ 
-  slot, 
-  position 
+export const VerticalSidebarAd: React.FC<{ slot: string; position: 'left' | 'right' }> = ({
+  slot,
+  position
 }) => (
   <div className={`fixed top-32 ${position === 'left' ? 'left-4' : 'right-4'} hidden 2xl:block z-40`}>
-    <AdSense 
-      slot={slot} 
+    <AdSense
+      slot={slot}
       format="vertical"
       responsive={false}
       variant="subtle"

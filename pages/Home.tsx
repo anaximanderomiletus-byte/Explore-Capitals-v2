@@ -101,7 +101,7 @@ const Home: React.FC = () => {
       `}</style>
       <SEO
         title="ExploreCapitals | Free Geography Games, World Capitals Quiz & Interactive Map"
-        description="Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database for 195+ nations."
+        description="Master world capitals, flags, and maps through fun geography games. A free educational platform with quizzes, an interactive atlas, and a country database for 195+ nations."
         isHomePage={true}
         structuredData={{
           '@context': 'https://schema.org',
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
               '@type': 'WebSite',
               name: 'ExploreCapitals',
               url: 'https://explorecapitals.com',
-              description: 'Master world capitals, flags, and maps through fun geography games. Free educational platform with quizzes, an interactive atlas, and country database for 195+ nations.',
+              description: 'Master world capitals, flags, and maps through fun geography games. A free educational platform with quizzes, an interactive atlas, and a country database for 195+ nations.',
               potentialAction: {
                 '@type': 'SearchAction',
                 target: 'https://explorecapitals.com/database?search={search_term_string}',

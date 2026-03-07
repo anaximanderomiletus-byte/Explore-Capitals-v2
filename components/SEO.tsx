@@ -18,8 +18,8 @@ const SEO: React.FC<SEOProps> = ({
   title,
   description,
   keywords = "geography games, world capitals quiz, interactive world map, country flags, learn geography, educational games, atlas, country database",
-  image = "https://explorecapitals.com/logo.png",
-  imageAlt = "ExploreCapitals - Interactive Geography Learning Platform",
+  image = "",
+  imageAlt = "",
   type = "website",
   structuredData,
   isHomePage = false,
@@ -71,7 +71,7 @@ const SEO: React.FC<SEOProps> = ({
     // 3. Standard Meta Tags
     setMeta('description', description);
     setMeta('keywords', keywords);
-    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
+    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:none, max-snippet:-1, max-video-preview:-1');
     setMeta('author', 'ExploreCapitals');
 
     // Build canonical URL: always use production domain with clean path
@@ -82,8 +82,14 @@ const SEO: React.FC<SEOProps> = ({
     setProperty('og:description', description);
     setProperty('og:type', type);
     setProperty('og:url', canonicalUrl);
-    setProperty('og:image', image);
-    setProperty('og:image:alt', imageAlt);
+    if (image) {
+      setProperty('og:image', image);
+      setProperty('og:image:alt', imageAlt);
+    } else {
+      // Remove og:image if none provided — prevents favicon/globe from being used
+      document.querySelector('meta[property="og:image"]')?.remove();
+      document.querySelector('meta[property="og:image:alt"]')?.remove();
+    }
     setProperty('og:site_name', siteName);
     setProperty('og:locale', 'en_US');
 
@@ -91,8 +97,13 @@ const SEO: React.FC<SEOProps> = ({
     setMeta('twitter:card', 'summary_large_image');
     setMeta('twitter:title', fullTitle);
     setMeta('twitter:description', description);
-    setMeta('twitter:image', image);
-    setMeta('twitter:image:alt', imageAlt);
+    if (image) {
+      setMeta('twitter:image', image);
+      setMeta('twitter:image:alt', imageAlt);
+    } else {
+      document.querySelector('meta[name="twitter:image"]')?.remove();
+      document.querySelector('meta[name="twitter:image:alt"]')?.remove();
+    }
     setMeta('twitter:site', '@explorecapitals');
 
     // 6. Canonical Link
