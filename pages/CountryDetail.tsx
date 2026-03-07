@@ -231,7 +231,7 @@ const CountryDetail: React.FC = () => {
       />
 
       {/* ══════════ HERO BANNER ══════════ */}
-      <section className="relative w-full h-[240px] sm:h-[300px] lg:h-[380px] overflow-hidden -mt-24 pt-24">
+      <section className="relative w-full h-[240px] sm:h-[300px] lg:h-[320px] overflow-hidden -mt-24 pt-24">
         {/* Scenic Background */}
         {scenicData?.image ? (
           <img
@@ -264,7 +264,7 @@ const CountryDetail: React.FC = () => {
       </section>
 
       {/* ══════════ CONTENT ══════════ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-20 sm:-mt-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 -mt-20 sm:-mt-20 lg:-mt-24">
         <Breadcrumbs items={[
           { label: 'Home', href: '/' },
           { label: 'Database', href: '/database' },
@@ -273,7 +273,7 @@ const CountryDetail: React.FC = () => {
 
         {/* Country Identity — stacked on mobile, side-by-side on desktop */}
         {/* Desktop: Flag left + text right */}
-        <section className="hidden md:flex items-center gap-5 mb-10">
+        <section className="hidden md:flex items-center gap-5 mb-6">
           <div className="w-[88px] h-[88px] lg:w-[104px] lg:h-[104px] shrink-0 flex items-center justify-center">
             <img src={`/flags/${countryCode}.png`} alt={`${country.name} Flag`} className="w-full h-full object-contain" />
           </div>
@@ -344,7 +344,7 @@ const CountryDetail: React.FC = () => {
         </section>
 
         {/* Gradient divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8 sm:my-10" />
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6 sm:my-8" />
 
         {/* All Stats */}
         <section className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 sm:gap-x-8 gap-y-6 sm:gap-y-8">
