@@ -91,9 +91,9 @@ const About: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto space-y-12 md:space-y-16 relative z-10">
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
         {/* Mission & Hero Section */}
         <section className="relative">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
           {/* Animated background accent */}
           <motion.div
             animate={{ rotate: 360 }}
@@ -103,8 +103,8 @@ const About: React.FC = () => {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="relative"
           >
             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky/20 to-accent/10 border-2 border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 relative overflow-hidden group/badge hover:border-white/60 transition-all duration-300">
