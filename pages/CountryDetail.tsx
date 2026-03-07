@@ -224,7 +224,7 @@ const CountryDetail: React.FC = () => {
   return (
     <main className="min-h-screen bg-surface-dark pt-24 pb-12 relative overflow-hidden text-white">
       <SEO
-        title={`${country.name} - ${countryType} Profile`}
+        title={country.name}
         description={`${country.name} country profile: capital ${country.capital}, population ${country.population}, area ${country.area} km², currency ${country.currency}. ${country.description?.slice(0, 120)}...`}
         keywords={`${country.name}, ${country.capital}, ${country.region}, ${country.name} facts, ${country.name} capital, ${country.name} population, geography`}
         structuredData={structuredData}
