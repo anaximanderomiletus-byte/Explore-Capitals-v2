@@ -1093,14 +1093,16 @@ const CountryExploration: React.FC = () => {
               </div>
            </div>
 
-           {/* Feedback Overlay Backdrop - Subtle tint, no interaction blocking */}
-           <div 
-             className={`fixed inset-0 z-[90] bg-black/40 transition-opacity duration-500 pointer-events-none ${selectedOption ? 'opacity-100' : 'opacity-0'}`}
+           {/* Feedback Overlay Backdrop + Bottom Panel - Only render after answering */}
+           {selectedOption && (
+           <>
+           <div
+             className="fixed inset-0 z-[90] bg-black/40 pointer-events-none animate-in fade-in duration-500"
            />
 
            {/* Feedback Bottom Panel - Static Mission Report (Non-scrollable overlay) */}
-           <div 
-             className={`fixed bottom-0 left-0 right-0 z-[100] bg-surface-dark flex flex-col justify-center transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) select-none pointer-events-auto touch-none overflow-hidden ${selectedOption ? 'translate-y-0' : 'translate-y-full'}`}
+           <div
+             className="fixed bottom-0 left-0 right-0 z-[100] bg-surface-dark flex flex-col justify-center select-none pointer-events-auto touch-none overflow-hidden animate-in slide-in-from-bottom duration-500"
              style={{ height: 'max-content', minHeight: '32vh' }}
            >
               {/* Internal Aero Gloss - Edge to Edge */}
@@ -1154,6 +1156,8 @@ const CountryExploration: React.FC = () => {
                   </div>
               </div>
            </div>
+           </>
+           )}
         </Container>
       );
     }
