@@ -368,7 +368,7 @@ export default function MapDash() {
                 <div
                   className={`pointer-events-auto backdrop-blur-2xl rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
                     ${lastResult === 'correct' ? 'bg-accent border-2 border-white shadow-[0_8px_32px_rgba(52,199,89,0.4)]' :
-                      lastResult === 'incorrect' ? 'bg-error border-2 border-white shadow-[0_8px_32px_rgba(255,59,48,0.4)]' :
+                      lastResult === 'incorrect' ? 'bg-error border-2 border-error shadow-[0_8px_32px_rgba(255,59,48,0.4)]' :
                       'bg-surface-dark/90 border-2 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'}`}
                 >
                   {/* Glossy top edge */}
@@ -504,7 +504,7 @@ export default function MapDash() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-[7.5rem] sm:top-[8rem] md:top-[8.5rem] left-1/2 -translate-x-1/2 z-[9999] pointer-events-none"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] pointer-events-none"
           >
             <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border-2 backdrop-blur-xl shadow-lg ${
               lastResult === 'correct'

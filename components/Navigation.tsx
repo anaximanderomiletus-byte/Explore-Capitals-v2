@@ -292,8 +292,8 @@ const Navigation: React.FC = () => {
   // Compute nav top padding: safe-area-inset-top + visual padding
   const navVisualPaddingTop = isScrolled && !isMobileMenuOpen ? '0.625rem' : '1rem';
 
-  // Logic to hide header on Map Page in Landscape mode
-  const hideOnMapLandscape = isMapPage && !isMobileMenuOpen;
+  // Map page no longer hides the navbar on short viewports
+  const hideOnMapLandscape = false;
 
   return (
     <>
