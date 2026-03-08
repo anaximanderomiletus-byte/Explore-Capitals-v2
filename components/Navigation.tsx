@@ -315,8 +315,8 @@ const Navigation: React.FC = () => {
 
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-4">
-            <div className="flex items-center gap-8 relative">
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="flex items-center gap-8 relative mr-2">
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
@@ -349,8 +349,8 @@ const Navigation: React.FC = () => {
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
             <Link to="/games">
-              <Button variant="primary" size="sm" className="group uppercase text-xs tracking-widest">
-                Play <Play className="ml-1.5 w-3.5 h-3.5" fill="currentColor" />
+              <Button variant="primary" size="sm" className="group uppercase text-sm tracking-widest px-6 py-2.5">
+                Play <Play className="ml-1.5 w-4 h-4" fill="currentColor" />
               </Button>
             </Link>
             <div className={`flex items-center shrink-0 border-l pl-4 ${isOverMap ? 'border-[#1A1C1E]/20' : 'border-white/10'}`}>
