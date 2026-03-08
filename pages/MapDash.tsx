@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Timer, Trophy, ArrowLeft, Map as MapIcon, Check, X, Plus, Minus, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,6 +23,7 @@ export default function MapDash() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [lastResult, setLastResult] = useState<'correct' | 'incorrect' | null>(null);
   const [wrongSelectionData, setWrongSelectionData] = useState<{ name: string, flagCode: string } | null>(null);
+  const [clickPoint, setClickPoint] = useState<{ x: number, y: number } | null>(null);
   const [correctCountries, setCorrectCountries] = useState<string[]>([]);
   const [incorrectCountries, setIncorrectCountries] = useState<string[]>([]);
   const [hasReported, setHasReported] = useState(false);
@@ -56,7 +57,8 @@ export default function MapDash() {
   const markersLayerRef = useRef<any>(null);
   const markerInstancesRef = useRef<Map<string, any>>(new Map());
   const feedbackTimeoutRef = useRef<any>(null);
-  
+  const feedbackRef = useRef<HTMLDivElement>(null);
+
   const gameStateRef = useRef(gameState);
   const targetCountryRef = useRef(targetCountry);
   const isTransitioningRef = useRef(isTransitioning);
@@ -66,6 +68,30 @@ export default function MapDash() {
   useEffect(() => { targetCountryRef.current = targetCountry; }, [targetCountry]);
   useEffect(() => { isTransitioningRef.current = isTransitioning; }, [isTransitioning]);
   useEffect(() => { lastResultRef.current = lastResult; }, [lastResult]);
+
+  // Clamp feedback toast so it never overflows the screen edges
+  useLayoutEffect(() => {
+    const el = feedbackRef.current;
+    if (!el || !clickPoint || !lastResult) return;
+
+    const parentEl = el.offsetParent as HTMLElement;
+    if (!parentEl) return;
+
+    const parentW = parentEl.clientWidth;
+    const parentH = parentEl.clientHeight;
+    const elW = el.offsetWidth;
+    const elH = el.offsetHeight;
+    const pad = 12;
+
+    let left = clickPoint.x - elW / 2;
+    let top = clickPoint.y - 60;
+
+    left = Math.max(pad, Math.min(left, parentW - elW - pad));
+    top = Math.max(pad, Math.min(top, parentH - elH - pad));
+
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+  }, [clickPoint, feedbackKey, lastResult]);
 
   useEffect(() => {
     let timer: any;
@@ -214,6 +240,9 @@ export default function MapDash() {
         const clickId = performance.now();
         setFeedbackKey(clickId);
         
+        const containerPt = e.containerPoint || { x: 0, y: 0 };
+        setClickPoint({ x: containerPt.x, y: containerPt.y });
+
         if (isCorrect) {
           setLastResult('correct');
           setWrongSelectionData(null);
@@ -221,17 +250,17 @@ export default function MapDash() {
           setCorrectCountries(prev => [...prev, country.id]);
           setIsTransitioning(true);
           if (el) el.classList.add('marker-correct');
-          
-          feedbackTimeoutRef.current = setTimeout(() => { 
-            generateTarget(); 
-            setIsTransitioning(false); 
+
+          feedbackTimeoutRef.current = setTimeout(() => {
+            generateTarget();
+            setIsTransitioning(false);
             feedbackTimeoutRef.current = null;
           }, 700);
         } else {
           setLastResult('incorrect');
-          setWrongSelectionData({ 
-            name: country.name, 
-            flagCode: getCountryCode(country.flag) 
+          setWrongSelectionData({
+            name: country.name,
+            flagCode: getCountryCode(country.flag),
           });
           setScore(s => Math.max(0, s - 10));
           setIncorrectCountries(prev => [...prev, country.id]);
@@ -367,7 +396,7 @@ export default function MapDash() {
               >
                 <div
                   className={`pointer-events-auto backdrop-blur-2xl rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
-                    ${lastResult === 'correct' ? 'bg-accent border-2 border-white shadow-[0_8px_32px_rgba(52,199,89,0.4)]' :
+                    ${lastResult === 'correct' ? 'bg-accent border-2 border-accent shadow-[0_8px_32px_rgba(52,199,89,0.4)]' :
                       lastResult === 'incorrect' ? 'bg-error border-2 border-error shadow-[0_8px_32px_rgba(255,59,48,0.4)]' :
                       'bg-surface-dark/90 border-2 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'}`}
                 >
@@ -499,12 +528,16 @@ export default function MapDash() {
       <AnimatePresence>
         {lastResult && gameState === 'playing' && (
           <motion.div
+            ref={feedbackRef}
             key={`feedback-${feedbackKey}`}
             initial={{ opacity: 0, y: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] pointer-events-none"
+            className="absolute z-[9999] pointer-events-none"
+            style={clickPoint
+              ? { left: `${clickPoint.x}px`, top: `${Math.max(10, clickPoint.y - 60)}px` }
+              : { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
           >
             <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border-2 backdrop-blur-xl shadow-lg ${
               lastResult === 'correct'

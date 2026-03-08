@@ -236,8 +236,8 @@ export default function KnowYourNeighbor() {
                    style={{ willChange: 'transform, opacity' }}
                    className="game-neighbor-inner h-full flex flex-col justify-between relative z-10"
                  >
-            {/* Country Prompt - Centered */}
-            <div className="flex-1 flex flex-col items-center justify-center min-h-0">
+            {/* Country Prompt - Compact */}
+            <div className="shrink-0 flex flex-col items-center justify-center py-2 sm:py-3">
               <div className="text-center">
                  <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1.5 font-sans opacity-80 shrink-0">SELECT ALL NEIGHBORS</p>
                  <h3 className="text-lg md:text-2xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg mb-1 md:mb-1.5">{targetCountry.name}</h3>
@@ -250,9 +250,9 @@ export default function KnowYourNeighbor() {
               </div>
             </div>
               
-            {/* Selections Grid - At Bottom */}
-            <div className="game-neighbor-grid shrink-0 px-1 pb-2">
-              <div className="grid grid-cols-3 gap-1.5 md:gap-2 w-full">
+            {/* Selections Grid - Fills remaining space */}
+            <div className="game-neighbor-grid flex-1 min-h-0 px-1 pb-2">
+              <div className="grid grid-cols-3 gap-1.5 md:gap-2 w-full h-full" style={{ gridAutoRows: '1fr' }}>
               {options.map((countryName) => {
                 const isSelected = selectedOptions.includes(countryName);
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
@@ -282,10 +282,10 @@ export default function KnowYourNeighbor() {
                     key={countryName}
                     onClick={() => toggleOption(countryName)}
                     disabled={!!roundResult}
-                    className={`relative p-2 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center min-h-[36px] sm:min-h-[40px] md:min-h-[48px] text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
+                    className={`relative p-1.5 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group h-full ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    <span className="leading-tight line-clamp-2 relative z-10 drop-shadow-md">{countryName}</span>
+                    <span className="leading-tight relative z-10 drop-shadow-md">{countryName}</span>
                   </button>
                 );
               })}

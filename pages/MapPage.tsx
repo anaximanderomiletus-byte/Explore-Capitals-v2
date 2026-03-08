@@ -793,7 +793,7 @@ const MapPage: React.FC = () => {
         id="map" 
         ref={mapRef} 
         className="w-full h-full outline-none focus:outline-none relative"
-        style={{ background: '#0F172A', height: '100dvh', width: '100%' }} 
+        style={{ background: '#0F172A', height: '100%', width: '100%' }}
       >
         {!mapReady && (
           <div className="absolute inset-0 flex items-center justify-center text-white/20 font-display font-black uppercase tracking-widest pointer-events-none">
@@ -1065,7 +1065,7 @@ const MapPage: React.FC = () => {
 
 
           {/* Combined Bottom Panel */}
-          <div className="w-full pointer-events-auto bg-white/80 backdrop-blur-3xl border-t border-x border-black/10 shadow-xl rounded-t-3xl p-4 pb-4 flex flex-col gap-3 relative overflow-hidden">
+          <div className="w-full pointer-events-auto bg-white/80 backdrop-blur-3xl border-t border-x border-black/10 shadow-xl rounded-t-3xl p-4 flex flex-col gap-3 relative overflow-hidden" style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 1rem))' }}>
 
               
               {/* Search Section */}
@@ -1076,7 +1076,7 @@ const MapPage: React.FC = () => {
                       </div>
                       <input 
                           type="text" 
-                          placeholder="Search country or capital..." 
+                          placeholder="Search..."
                           className="block w-full pl-12 pr-12 py-3 bg-transparent text-[#1A1C1E] text-xs font-black uppercase tracking-widest placeholder:text-black/30 outline-none rounded-xl"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}

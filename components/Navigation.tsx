@@ -351,7 +351,7 @@ const Navigation: React.FC = () => {
             </div>
             <Link to="/games">
               <Button variant="primary" size="sm" className="group uppercase text-xs tracking-widest">
-                Play Now <Play className="ml-1.5 w-3.5 h-3.5" fill="currentColor" />
+                Play <Play className="ml-1.5 w-3.5 h-3.5" fill="currentColor" />
               </Button>
             </Link>
             <div className={`flex items-center shrink-0 border-l pl-4 ${isOverMap ? 'border-[#1A1C1E]/20' : 'border-white/10'}`}>
@@ -465,7 +465,7 @@ const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* Play Now button - right after account */}
+          {/* Play button - right after account */}
           <div
             style={{
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
@@ -478,7 +478,7 @@ const Navigation: React.FC = () => {
           >
             <Link to="/games">
               <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
-                Play Now <Play className="ml-2 w-5 h-5" fill="currentColor" />
+                Play <Play className="ml-2 w-5 h-5" fill="currentColor" />
               </Button>
             </Link>
           </div>

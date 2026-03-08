@@ -137,7 +137,7 @@ const Home: React.FC = () => {
 
       {/* ═══════════════ HERO ═══════════════ */}
       <Section
-        className="min-h-screen flex items-center justify-center"
+        className="min-h-screen flex items-center"
         background={
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.08)_0%,transparent_50%)]" />
@@ -146,7 +146,7 @@ const Home: React.FC = () => {
           </div>
         }
       >
-        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-10 lg:gap-y-3 xl:gap-x-16 xl:gap-y-4 items-center pt-20 sm:pt-24 md:pt-28 lg:pt-28 pb-12 sm:pb-16 md:pb-20">
+        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-10 lg:gap-y-3 xl:gap-x-16 xl:gap-y-4 items-center pt-20 sm:pt-24 md:pt-[12vh] lg:pt-[12vh] pb-12 sm:pb-16 md:pb-[6vh]">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -167,8 +167,8 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-center lg:text-left lg:col-start-1"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[7rem] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
-              Play Your <br />
+            <h1 className="text-6xl sm:text-7xl md:text-7xl lg:text-[clamp(6rem,9vw,8rem)] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
+              Play <br className="hidden lg:block" />Your <br />
               <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible" style={{ paddingBottom: '0.15em', paddingRight: '0.1em', display: 'inline-block' }}>
                 Atlas.
               </span>
@@ -183,19 +183,19 @@ const Home: React.FC = () => {
             className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
           >
             <motion.div
-              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[580px] lg:h-[580px] xl:w-[880px] xl:h-[880px] rounded-full pointer-events-none"
+              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[clamp(580px,58vw,880px)] lg:h-[clamp(580px,58vw,880px)] rounded-full pointer-events-none"
               animate={{ opacity: [0.3, 0.5, 0.3], scale: [0.97, 1.03, 0.97] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
             />
             <motion.div
-              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[480px] lg:h-[480px] xl:w-[720px] xl:h-[720px] rounded-full pointer-events-none"
+              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[clamp(480px,48vw,720px)] lg:h-[clamp(480px,48vw,720px)] rounded-full pointer-events-none"
               animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.05, 0.95] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
             />
 
-            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[380px] lg:h-[380px] xl:w-[600px] xl:h-[600px] flex-shrink-0 pointer-events-none">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[clamp(380px,40vw,600px)] lg:h-[clamp(380px,40vw,600px)] flex-shrink-0 pointer-events-none">
               <motion.div
                 className="w-full h-full"
                 animate={{ scale: [1, 1.03, 1] }}
@@ -244,7 +244,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4"
           >
-            <p className="text-base sm:text-lg md:text-xl lg:text-lg xl:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
+            <p className="text-base sm:text-lg md:text-xl lg:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
               Master world capitals, identify flags, and conquer the map. High-fidelity geography games designed to build global intuition.
             </p>
           </motion.div>
@@ -257,8 +257,8 @@ const Home: React.FC = () => {
             className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0"
           >
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-80 xl:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-[4.5rem] xl:h-20 text-2xl sm:text-3xl md:text-3xl lg:text-2xl xl:text-3xl group uppercase">
-                Play Now <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-6 lg:h-6 xl:w-8 xl:h-8" size={24} fill="currentColor" />
+              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-20 text-2xl sm:text-3xl md:text-3xl lg:text-3xl group uppercase">
+                Play <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
               </Button>
             </Link>
           </motion.div>
@@ -573,7 +573,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
             <Link to="/games" className="group/btn w-full sm:w-auto">
               <Button variant="primary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
-                Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
+                Play <Play className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
               </Button>
             </Link>
             {!isAuthenticated && !loading && (

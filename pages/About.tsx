@@ -398,7 +398,7 @@ const About: React.FC = () => {
                     size="lg"
                     className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase border-2 border-white/30 transition-all group font-black"
                   >
-                    Play Now <Play className="ml-2 transition-transform group-hover:translate-x-1 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
+                    Play <Play className="ml-2 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
                   </Button>
                 </Link>
               </motion.div>
