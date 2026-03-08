@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { Play, Clock, Lock, Shuffle, Crown, Sparkles, X } from 'lucide-react';
 import Button from '../components/Button';
@@ -15,6 +16,16 @@ const Games: React.FC = () => {
   const navigate = useNavigate();
   const { isPremium } = useGameLimit();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Lock body scroll when upgrade modal is open
+  useEffect(() => {
+    if (showUpgradeModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showUpgradeModal]);
 
   // Separate free and premium games
   const freeGames = useMemo(() => GAMES.filter(g => !g.premium), []);
@@ -233,14 +244,14 @@ const Games: React.FC = () => {
         </RevealSection>
       </div>
 
-      {/* Upgrade Modal */}
-      {showUpgradeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
+      {/* Upgrade Modal - Portal to body so fixed positioning always works */}
+      {showUpgradeModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setShowUpgradeModal(false)}
           />
-          <div className="relative bg-surface-dark border-2 border-amber-500/30 rounded-3xl p-6 w-full max-w-md shadow-2xl">
+          <div className="relative bg-surface-dark border-2 border-amber-500/30 rounded-3xl p-6 w-full max-w-md shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="text-center">
               <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Crown size={32} className="text-amber-400" />
@@ -287,7 +298,8 @@ const Games: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
