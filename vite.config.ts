@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: '/', // Absolute paths required for BrowserRouter (custom domain via CNAME)
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     rollupOptions: {
       output: {
         // Split heavy dependencies into separate cached chunks
