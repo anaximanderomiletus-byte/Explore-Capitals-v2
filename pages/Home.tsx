@@ -257,7 +257,7 @@ const Home: React.FC = () => {
             className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0"
           >
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-20 text-2xl sm:text-3xl md:text-3xl lg:text-3xl group uppercase">
+              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-20 text-2xl sm:text-2xl md:text-3xl lg:text-3xl group uppercase">
                 Play <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
               </Button>
             </Link>

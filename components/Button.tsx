@@ -66,6 +66,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   // Check if a text color is already provided in className to avoid conflicts
   const hasTextColor = className.includes('text-');
+  // Check if a custom text size is provided so we don't override it with the default
+  const hasTextSize = /(?:^|\s)(?:sm:|md:|lg:|xl:|2xl:)?!?text-(?:xs|sm|base|lg|xl|[2-9]xl|\[)/.test(className);
 
   // Cross-browser compatible base styles with smooth hover transition (300ms)
   // Added active states and touch-manipulation for better mobile touch feedback
@@ -88,10 +90,11 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   // Sizes with minimum touch targets (44px) for mobile
+  // Text sizes are only applied if no custom text size is provided via className
   const sizes = {
-    sm: "px-5 py-2 text-sm min-h-[44px]",
-    md: "px-6 sm:px-8 py-3 text-sm sm:text-base min-h-[44px]",
-    lg: "px-8 sm:px-10 py-3.5 sm:py-4 text-base sm:text-lg min-h-[48px]",
+    sm: `px-5 py-2 ${hasTextSize ? '' : 'text-sm'} min-h-[44px]`,
+    md: `px-6 sm:px-8 py-3 ${hasTextSize ? '' : 'text-sm sm:text-base'} min-h-[44px]`,
+    lg: `px-8 sm:px-10 py-3.5 sm:py-4 ${hasTextSize ? '' : 'text-base sm:text-lg'} min-h-[48px]`,
   };
 
   const showShing = variant === 'primary' && !isFlat;
