@@ -435,33 +435,61 @@ const CountryExploration: React.FC = () => {
     }
   };
 
-  const nextQuestion = () => {
-    if (!tourData) return;
-    setSelectedOption(null);
-    setIsCorrect(null);
-    if (stepIndex < tourData.stops.length - 1) {
-      setStepIndex(prev => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      setTransitionDirection('forward');
-      setIsTransitioning(true);
-      setContentVisible(false);
-      
-      // Delay view switch to ensure wipe is covering the screen (750ms into 1.4s)
-      setTimeout(() => {
-         setView('summary');
-         window.scrollTo({ top: 0, behavior: 'instant' });
-         
-         // Smoothly fade in content AFTER DOM update
-         setTimeout(() => {
-           setContentVisible(true);
-         }, 100);
-      }, 750);
+  const [isExitingFeedback, setIsExitingFeedback] = useState(false);
 
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 1600); // More generous buffer for the wipe to clear
+  // Lock body scroll when feedback panel is visible
+  useEffect(() => {
+    if (selectedOption) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedOption]);
+
+  const nextQuestion = () => {
+    if (!tourData || isExitingFeedback) return;
+
+    // Start the exit animation for the feedback panel
+    setIsExitingFeedback(true);
+
+    // After the panel slides out, transition the content
+    setTimeout(() => {
+      setSelectedOption(null);
+      setIsCorrect(null);
+      setIsExitingFeedback(false);
+
+      if (stepIndex < tourData.stops.length - 1) {
+        setContentVisible(false);
+
+        // Small delay to let the old content fade, then swap
+        setTimeout(() => {
+          setStepIndex(prev => prev + 1);
+          window.scrollTo({ top: 0, behavior: 'instant' });
+          // Fade in the new content
+          setTimeout(() => setContentVisible(true), 50);
+        }, 300);
+      } else {
+        setTransitionDirection('forward');
+        setIsTransitioning(true);
+        setContentVisible(false);
+
+        // Delay view switch to ensure wipe is covering the screen (750ms into 1.4s)
+        setTimeout(() => {
+           setView('summary');
+           window.scrollTo({ top: 0, behavior: 'instant' });
+
+           // Smoothly fade in content AFTER DOM update
+           setTimeout(() => {
+             setContentVisible(true);
+           }, 100);
+        }, 750);
+
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 1600);
+      }
+    }, 400); // Wait for feedback panel slide-out animation
   };
 
   const restartTour = () => {
@@ -1000,7 +1028,8 @@ const CountryExploration: React.FC = () => {
       const currentImage = stopImages[stepIndex];
 
       return (
-        <Container className={`w-full min-h-screen bg-surface-dark flex flex-col items-center pt-20 md:pt-24 px-3 sm:px-4 md:px-6 relative overflow-x-hidden transition-all duration-700 ${selectedOption ? 'pb-[35vh] md:pb-[30vh]' : 'pb-12 md:pb-16'}`}>
+        <>
+        <Container className="w-full min-h-screen bg-surface-dark flex flex-col items-center pt-20 md:pt-24 px-3 sm:px-4 md:px-6 pb-12 md:pb-16 relative overflow-x-hidden">
            <SEO title={`${country.name} Quiz - Expedition`} description={`Test your knowledge about ${country.name}. Answer questions about landmarks, culture, and geography.`} />
            
            {/* Immersive Aurora Background */}
@@ -1015,7 +1044,7 @@ const CountryExploration: React.FC = () => {
              className={`flex-1 flex flex-col max-w-5xl mx-auto w-full min-h-0 py-2 relative z-10 transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'} justify-center`}
            >
               {/* Progress Header */}
-              <div className="text-center mb-6 md:mb-8 shrink-0 animate-in fade-in slide-in-from-top-4 duration-1000">
+              <div className="text-center mb-6 md:mb-8 shrink-0">
                  <div className="inline-flex items-center gap-3 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-sky animate-pulse" />
                     <h2 className="text-[9px] font-black text-white uppercase tracking-[0.5em]">Knowledge Check</h2>
@@ -1032,7 +1061,7 @@ const CountryExploration: React.FC = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-center flex-1 min-h-0">
                  {/* Left: Physical Photo */}
-                 <div className="lg:col-span-5 flex flex-col justify-center animate-in fade-in slide-in-from-left-8 duration-1000">
+                 <div className="lg:col-span-5 flex flex-col justify-center">
                     <PhotoPrint 
                       src={currentImage} 
                       alt={currentQuestion.stopName} 
@@ -1045,7 +1074,7 @@ const CountryExploration: React.FC = () => {
                  </div>
 
                  {/* Right: Glassy Quiz Panel */}
-                 <div className="lg:col-span-7 flex flex-col animate-in fade-in slide-in-from-right-8 duration-1000 h-full justify-center overflow-hidden">
+                 <div className="lg:col-span-7 flex flex-col h-full justify-center overflow-hidden">
                     <div className="bg-white/10 backdrop-blur-3xl p-4 sm:p-5 md:p-8 rounded-2xl sm:rounded-3xl border border-white/40 flex flex-col relative overflow-hidden group">
                        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
                        <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
@@ -1093,72 +1122,96 @@ const CountryExploration: React.FC = () => {
               </div>
            </div>
 
-           {/* Feedback Overlay Backdrop + Bottom Panel - Only render after answering */}
-           {selectedOption && (
-           <>
-           <div
-             className="fixed inset-0 z-[90] bg-black/40 pointer-events-none animate-in fade-in duration-500"
-           />
+        </Container>
 
-           {/* Feedback Bottom Panel - Static Mission Report (Non-scrollable overlay) */}
-           <div
-             className="fixed bottom-0 left-0 right-0 z-[100] bg-surface-dark flex flex-col justify-center select-none pointer-events-auto touch-none overflow-hidden animate-in slide-in-from-bottom duration-500"
-             style={{ height: 'max-content', minHeight: '32vh' }}
-           >
-              {/* Internal Aero Gloss - Edge to Edge */}
-              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-              
-              <div className="max-w-7xl mx-auto w-full p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-                  <div className="flex-1 text-left min-h-0">
-                      {selectedOption && (
-                        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        {/* Feedback Overlay — portaled to body, covers everything */}
+        {createPortal(
+          <AnimatePresence>
+          {selectedOption && (
+            <motion.div
+              key="feedback-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-[9999] flex flex-col"
+              style={{ pointerEvents: 'auto' }}
+            >
+              {/* Dark backdrop — fills everything, blocks all interaction */}
+              <div className="absolute inset-0 bg-black/50" />
+
+              {/* Spacer pushes panel to bottom */}
+              <div className="flex-1" />
+
+              {/* Bottom Panel */}
+              <motion.div
+                key="feedback-panel"
+                initial={{ y: '100%' }}
+                animate={{ y: isExitingFeedback ? '100%' : 0 }}
+                exit={{ y: '100%' }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative bg-surface-dark select-none overflow-hidden border-t border-white/10"
+              >
+                {/* Internal Aero Gloss */}
+                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+
+                <div className="max-w-7xl mx-auto w-full p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                    <div className="flex-1 text-left min-h-0">
+                        <motion.div
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.12, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                          className="space-y-6"
+                        >
                           <div className="flex items-center justify-start gap-6">
                               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 border-white/40 relative overflow-hidden ${isCorrect ? 'bg-accent/60 text-white' : 'bg-red-500/60 text-white'}`}>
                                    <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
                                    {isCorrect ? <Trophy size={32} className="relative z-10" /> : <ImageOff size={32} className="relative z-10" />}
-                                  </div>
+                              </div>
                               <div>
                                  <h3 className="font-display font-black text-4xl md:text-5xl uppercase tracking-tighter drop-shadow-lg text-white leading-none mb-1">
                                      {isCorrect ? 'Correct' : 'Incorrect'}
-                              </h3>
+                                 </h3>
                                  <p className={`text-[10px] font-black uppercase tracking-[0.4em] drop-shadow-sm ${isCorrect ? 'text-accent' : 'text-red-400'}`}>Mission Explanation</p>
-                          </div>
+                              </div>
                           </div>
                           <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8 text-left">
                               {feedbackMessage || ''}
                           </p>
-                        </div>
-                      )}
-                  </div>
-                  <div className="w-full md:w-auto shrink-0 animate-in fade-in zoom-in duration-700 delay-200">
-                       <button 
-                         onClick={nextQuestion} 
-                         disabled={!selectedOption}
-                         className="group relative w-full md:min-w-[300px] h-16 rounded-2xl overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                       >
-                         {/* Gradient background */}
-                         <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
-                         
-                         {/* Subtle inner border */}
-                         <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
-                         
-                         {/* Content */}
-                         <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                           <span className="text-sm font-black uppercase tracking-[0.2em] text-white/90">
-                             {isLastQuestion ? 'Finish Tour' : 'Next Stop'}
-                           </span>
-                           <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                             <ChevronRight size={18} className="text-white/80 transition-all" />
+                        </motion.div>
+                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="w-full md:w-auto shrink-0"
+                    >
+                         <button
+                           onClick={nextQuestion}
+                           disabled={!selectedOption || isExitingFeedback}
+                           className="group relative w-full md:min-w-[300px] h-16 rounded-2xl overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                         >
+                           <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
+                           <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                           <div className="relative z-10 flex items-center justify-center gap-3 h-full">
+                             <span className="text-sm font-black uppercase tracking-[0.2em] text-white/90">
+                               {isLastQuestion ? 'Finish Tour' : 'Next Stop'}
+                             </span>
+                             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                               <ChevronRight size={18} className="text-white/80 transition-all" />
+                             </div>
                            </div>
-                         </div>
-                       </button>
-                  </div>
-              </div>
-           </div>
-           </>
-           )}
-        </Container>
+                         </button>
+                    </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+          </AnimatePresence>,
+          document.body
+        )}
+        </>
       );
     }
 
