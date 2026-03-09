@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, AlertTriangle, Mail, FileText, Shield, Check, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
@@ -25,7 +26,18 @@ const PaymentBlockedModal: React.FC<PaymentBlockedModalProps> = ({
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [expandedSection, setExpandedSection] = useState<'terms' | 'privacy' | null>(null);
 
-  if (!isOpen || !eligibility || eligibility.allowed) return null;
+  // Lock body scroll when modal is open
+  const shouldShow = isOpen && eligibility && !eligibility.allowed;
+  useEffect(() => {
+    if (shouldShow) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [shouldShow]);
+
+  if (!shouldShow) return null;
 
   const getIcon = () => {
     if (eligibility.requiresEmailVerification) return Mail;
@@ -246,10 +258,10 @@ You Can:
     );
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
@@ -294,7 +306,8 @@ You Can:
         {/* Action */}
         {getAction()}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
