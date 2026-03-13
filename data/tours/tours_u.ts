@@ -519,7 +519,7 @@ export const toursU: Record<string, TourData> = {
           "The Swallow."
         ],
         answer: "The Hornero (Ovenbird).",
-        explanation: "The mud nests of these birds inspired the organic, hand-sculpted shapes of the building."
+        explanation: "The mud nests of horneros inspired the organic, hand-sculpted shapes of the building."
       },
       {
         stopName: "Colonia del Sacramento",

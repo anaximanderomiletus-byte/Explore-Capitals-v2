@@ -54,7 +54,8 @@ const Premium: React.FC = () => {
       return;
     }
 
-    // Show loading immediately
+    // Track which plan is loading and show spinner on the correct button
+    setSelectedPlan(plan);
     setIsCheckingOut(true);
     setCheckoutError(null);
 

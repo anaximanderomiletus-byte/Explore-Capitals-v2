@@ -267,7 +267,7 @@ export const toursN: Record<string, TourData> = {
           "The Javan Rhino."
         ],
         answer: "The Greater One-Horned Rhinoceros.",
-        explanation: "Nepal has achieved great success in bringing this species back from the brink of extinction."
+        explanation: "Nepal has achieved great success in bringing greater one-horned rhinoceros back from the brink of extinction."
       },
       {
         stopName: "Lumbini",
