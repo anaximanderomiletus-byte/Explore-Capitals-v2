@@ -9,7 +9,7 @@ import {
   TrendingUp, Languages, Building2, AlertTriangle,
   MapPin
 } from 'lucide-react';
-import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
+import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
 import { getStaticImages } from '../data/images';
 import { staticTours } from '../data/staticTours';
@@ -43,7 +43,7 @@ const CountryDetail: React.FC = () => {
 
   const country = useMemo(() => {
     // Match by numeric id first, then by name slug
-    return MOCK_COUNTRIES.find(c => c.id === id || toSlug(c.name) === id)
+    return COUNTRIES.find(c => c.id === id || toSlug(c.name) === id)
       || TERRITORIES.find(t => t.id === id || toSlug(t.name) === id)
       || DE_FACTO_COUNTRIES.find(d => d.id === id || toSlug(d.name) === id);
   }, [id]);
@@ -144,7 +144,7 @@ const CountryDetail: React.FC = () => {
   }
 
   const handleNeighborClick = (neighborName: string) => {
-    const exists = MOCK_COUNTRIES.some(c => c.name.toLowerCase() === neighborName.toLowerCase())
+    const exists = COUNTRIES.some(c => c.name.toLowerCase() === neighborName.toLowerCase())
       || DE_FACTO_COUNTRIES.some(d => d.name.toLowerCase() === neighborName.toLowerCase());
     if (exists) {
       setTransitionStyle('cartographic');
@@ -163,7 +163,7 @@ const CountryDetail: React.FC = () => {
   const handleSovereigntyClick = (sovereigntyName: string) => {
     if (sovereigntyName === 'Disputed' || sovereigntyName === 'Limited Recognition') return;
 
-    const exists = MOCK_COUNTRIES.some(c => c.name.toLowerCase() === sovereigntyName.toLowerCase())
+    const exists = COUNTRIES.some(c => c.name.toLowerCase() === sovereigntyName.toLowerCase())
       || DE_FACTO_COUNTRIES.some(d => d.name.toLowerCase() === sovereigntyName.toLowerCase());
     if (exists) {
       setTransitionStyle('cartographic');

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Building2, Network, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
@@ -87,7 +87,7 @@ export default function CapitalConnection() {
   }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const generateBoard = useCallback(() => {
-    const roundCountries = shuffleArray(MOCK_COUNTRIES).slice(0, 6);
+    const roundCountries = shuffleArray(COUNTRIES).slice(0, 6);
     const newCards: GameCard[] = [];
     
     roundCountries.forEach(country => {

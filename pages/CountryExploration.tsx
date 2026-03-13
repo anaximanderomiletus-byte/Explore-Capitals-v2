@@ -9,7 +9,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
-import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
+import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { getCountryTour, getGeneratedImage } from '../services/geminiService';
 import { TourData } from '../types';
 import { getFlagUrl } from '../utils/flags';
@@ -124,7 +124,7 @@ const CountryExploration: React.FC = () => {
   const navigate = useNavigate();
   
   const country = useMemo(() =>
-    MOCK_COUNTRIES.find(c => c.id === id || toSlug(c.name) === id) ||
+    COUNTRIES.find(c => c.id === id || toSlug(c.name) === id) ||
     TERRITORIES.find(t => t.id === id || toSlug(t.name) === id) ||
     DE_FACTO_COUNTRIES.find(d => d.id === id || toSlug(d.name) === id)
   , [id]);

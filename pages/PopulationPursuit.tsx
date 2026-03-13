@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Users, Check, X, TrendingUp, TrendingDown, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -45,7 +45,7 @@ export default function PopulationPursuit() {
 
   // Pre-calculate numeric values for all countries to avoid lag
   const countriesWithNumericPop = useMemo(() => {
-    return MOCK_COUNTRIES.map(c => ({
+    return COUNTRIES.map(c => ({
       ...c,
       numericPop: getNumericValue(c.population)
     }));

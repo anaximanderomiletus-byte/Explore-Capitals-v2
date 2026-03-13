@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { Filter, Compass, Map as MapIcon, Search, X, Plus, Minus, Globe, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
+import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -333,7 +333,7 @@ const MapPage: React.FC = () => {
                 });
             };
 
-            createMarkers(MOCK_COUNTRIES, 'sovereign');
+            createMarkers(COUNTRIES, 'sovereign');
             createMarkers(TERRITORIES, 'territory');
             createMarkers(DE_FACTO_COUNTRIES, 'defacto');
         }
@@ -675,7 +675,7 @@ const MapPage: React.FC = () => {
   const filteredSearchResults = useMemo(() => {
       if (searchQuery.length === 0) return [];
       const query = normalizeText(searchQuery);
-      return [...MOCK_COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES].filter(c => 
+      return [...COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES].filter(c => 
         normalizeText(c.name).includes(query) || 
         normalizeText(c.capital).includes(query)
       ).slice(0, 20);
@@ -908,7 +908,7 @@ const MapPage: React.FC = () => {
               </div>
               <div>
                 <h1 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter drop-shadow-sm">Atlas</h1>
-                <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{MOCK_COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Countries</p>
+                <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Countries</p>
               </div>
             </div>
 

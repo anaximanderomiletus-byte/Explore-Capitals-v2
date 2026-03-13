@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Play, Lock, Crown, Maximize2 } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -43,7 +43,7 @@ export default function AreaAce() {
   const { setPageLoading } = useLayout();
 
   const countriesWithNumericArea = useMemo(() => {
-    return MOCK_COUNTRIES.map(c => ({
+    return COUNTRIES.map(c => ({
       ...c,
       numericArea: getNumericValue(c.area)
     }));

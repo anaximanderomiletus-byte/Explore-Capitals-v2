@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Globe, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import { getFlagUrl } from '../utils/flags';
@@ -96,7 +96,7 @@ export default function RegionRoundup() {
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
-    const queue = shuffle([...MOCK_COUNTRIES]);
+    const queue = shuffle([...COUNTRIES]);
     setShuffledCountries(queue);
     setQuestionIndex(0);
     if (queue.length > 0) {

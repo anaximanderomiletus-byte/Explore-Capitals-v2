@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Car, Play, Lock, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -34,7 +34,7 @@ export default function DrivingDirection() {
 
   // Filter countries that have driveSide data
   const countriesWithDriveSide = useMemo(() => {
-    return MOCK_COUNTRIES.filter(c => c.driveSide === 'Left' || c.driveSide === 'Right');
+    return COUNTRIES.filter(c => c.driveSide === 'Left' || c.driveSide === 'Right');
   }, []);
 
   useEffect(() => {

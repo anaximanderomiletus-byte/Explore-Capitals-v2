@@ -5,7 +5,7 @@ import {
   TrendingUp, Activity, BarChart,   ChevronDown, ChevronUp,
   Globe, MapPin, Gamepad2, Brain, Flame, Medal, Heart
 } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import { useUser } from '../context/UserContext';
 import { useLayout } from '../context/LayoutContext';
 import Button from '../components/Button';
@@ -151,7 +151,7 @@ const Profile: React.FC = () => {
 
   const countryLookup = useMemo(() => {
     const map = new Map<string, string>();
-    MOCK_COUNTRIES.forEach((c) => map.set(c.id, c.name));
+    COUNTRIES.forEach((c) => map.set(c.id, c.name));
     return map;
   }, []);
 

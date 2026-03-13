@@ -3,7 +3,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from
 import { Link, useNavigate } from 'react-router-dom';
 import { Timer, Trophy, ArrowLeft, Map as MapIcon, Check, X, Plus, Minus, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -127,7 +127,7 @@ export default function MapDash() {
   }, []);
 
   const generateTarget = useCallback(() => {
-    const random = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+    const random = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
     setTargetCountry(random);
     setLastResult(null);
     setWrongSelectionData(null);
@@ -200,7 +200,7 @@ export default function MapDash() {
     markersLayerRef.current = L.layerGroup().addTo(map);
     mapInstanceRef.current = map;
 
-    MOCK_COUNTRIES.forEach(country => {
+    COUNTRIES.forEach(country => {
       const icon = L.divIcon({
         className: 'custom-map-marker mapdash-marker',
         html: `<div class="marker-pin"></div>`,

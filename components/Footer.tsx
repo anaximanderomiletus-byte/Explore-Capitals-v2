@@ -64,7 +64,7 @@ const Footer: React.FC = () => (
 
       <div className="pt-10 border-t-2 border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
-          © 2026 ExploreCapitals
+          © {new Date().getFullYear()} ExploreCapitals
         </div>
       </div>
     </div>

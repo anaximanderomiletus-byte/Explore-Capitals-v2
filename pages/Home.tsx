@@ -9,7 +9,7 @@ import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
 import { ResponsiveAd } from '../components/AdSense';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
 import { toSlug } from '../utils/slug';
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
     };
 
     // Pick a country that has tour data
-    const countriesWithTours = MOCK_COUNTRIES.filter(c => staticTours[c.name]?.stops?.length > 0);
+    const countriesWithTours = COUNTRIES.filter(c => staticTours[c.name]?.stops?.length > 0);
     const countryIndex = Math.floor(seededRandom(seed) * countriesWithTours.length);
     const country = countriesWithTours[countryIndex];
     const tour = staticTours[country.name];

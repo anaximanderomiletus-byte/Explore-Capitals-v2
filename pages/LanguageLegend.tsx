@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Languages, Play, Lock, Crown } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import { getFlagUrl } from '../utils/flags';
@@ -38,7 +38,7 @@ export default function LanguageLegend() {
   // Get all unique languages
   const allLanguages = useMemo(() => {
     const languageSet = new Set<string>();
-    MOCK_COUNTRIES.forEach(c => {
+    COUNTRIES.forEach(c => {
       c.languages.forEach(lang => languageSet.add(lang));
     });
     return Array.from(languageSet);
@@ -83,8 +83,8 @@ export default function LanguageLegend() {
 
     // Filter out the previous country to avoid back-to-back duplicates
     const availableCountries = previousCountryId 
-      ? MOCK_COUNTRIES.filter(c => c.id !== previousCountryId)
-      : MOCK_COUNTRIES;
+      ? COUNTRIES.filter(c => c.id !== previousCountryId)
+      : COUNTRIES;
     
     const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
     setPreviousCountryId(country.id);

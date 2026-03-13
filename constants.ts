@@ -258,7 +258,7 @@ const RAW_COUNTRIES: Country[] = [
 ];
 
 // Map aliases to the raw data to produce the final export
-export const MOCK_COUNTRIES: Country[] = RAW_COUNTRIES.map(country => ({
+export const COUNTRIES: Country[] = RAW_COUNTRIES.map(country => ({
   ...country,
   alsoKnownAs: COUNTRY_ALIASES[country.id]
 }));

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Search, EyeOff, Play } from 'lucide-react';
-import { MOCK_COUNTRIES, GAMES } from '../constants';
+import { COUNTRIES, GAMES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -95,7 +95,7 @@ export default function GlobalDetective() {
     setRoundResult(null);
     setIsCapitalRevealed(false);
     
-    const target = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+    const target = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
     setTargetCountry(target);
 
     // Generate 3 random clues from available pool
@@ -106,7 +106,7 @@ export default function GlobalDetective() {
 
     const distractors: Country[] = [];
     while (distractors.length < 3) {
-      const c = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+      const c = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
       if (c.id !== target.id && !distractors.find(d => d.id === c.id)) distractors.push(c);
     }
     setOptions(shuffle([target, ...distractors]));

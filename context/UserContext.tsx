@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import {
   Achievement,
   GameResultPayload,
@@ -392,7 +392,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const countryLookup = useMemo(() => {
     const map = new Map<string, string>();
-    MOCK_COUNTRIES.forEach((c) => map.set(c.id, c.region));
+    COUNTRIES.forEach((c) => map.set(c.id, c.region));
     return map;
   }, []);
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Camera, Check, X, MapPin, Loader2, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import { staticTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
 import Button from '../components/Button';
@@ -83,7 +83,7 @@ export default function LandmarkLegend() {
   // Generate a finite list of questions for this session (Limit to 15 for faster loading)
   const getQuestionsList = useCallback(async (): Promise<Question[]> => {
     const IMAGES = await getStaticImages();
-    const validCountries = MOCK_COUNTRIES.filter(c => staticTours[c.name]);
+    const validCountries = COUNTRIES.filter(c => staticTours[c.name]);
     const shuffledValid = shuffle(validCountries).slice(0, 15); // Limit to 15 questions per game
 
     return shuffledValid.map(country => {
@@ -94,7 +94,7 @@ export default function LandmarkLegend() {
         
         const distractors: Country[] = [];
         while (distractors.length < 3) {
-            const c = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+            const c = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
             if (c.id !== country.id && !distractors.find(d => d.id === c.id)) {
                 distractors.push(c);
             }

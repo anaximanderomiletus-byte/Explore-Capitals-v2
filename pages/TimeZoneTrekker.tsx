@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Clock, Play, Lock, Crown } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -37,13 +37,13 @@ export default function TimeZoneTrekker() {
 
   // Get unique time zones for distractors
   const uniqueTimeZones = useMemo(() => {
-    const timeZones = new Set(MOCK_COUNTRIES.filter(c => c.timeZone).map(c => c.timeZone!));
+    const timeZones = new Set(COUNTRIES.filter(c => c.timeZone).map(c => c.timeZone!));
     return Array.from(timeZones);
   }, []);
 
   // Filter countries that have time zone data
   const countriesWithTimeZone = useMemo(() => {
-    return MOCK_COUNTRIES.filter(c => c.timeZone);
+    return COUNTRIES.filter(c => c.timeZone);
   }, []);
 
   useEffect(() => {

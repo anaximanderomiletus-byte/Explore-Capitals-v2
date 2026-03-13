@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, RefreshCw, Globe2, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
@@ -62,7 +62,7 @@ export default function CapitalQuiz() {
   const setupQuestion = (target: Country) => {
     const distractors: Country[] = [];
     while (distractors.length < 3) {
-      const c = MOCK_COUNTRIES[Math.floor(Math.random() * MOCK_COUNTRIES.length)];
+      const c = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
       if (c.id !== target.id && !distractors.find(d => d.id === c.id)) {
         distractors.push(c);
       }
@@ -81,7 +81,7 @@ export default function CapitalQuiz() {
     setTimeLeft(gameDuration);
     setFeedback(null);
     setFeedbackKey(0);
-    const queue = shuffle([...MOCK_COUNTRIES]);
+    const queue = shuffle([...COUNTRIES]);
     setShuffledCountries(queue);
     setQuestionIndex(0);
     setCorrectCountries([]);

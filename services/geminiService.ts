@@ -1,7 +1,7 @@
 import { TourData } from "../types";
 import { staticTours } from "../data/staticTours";
 import { getStaticImages } from "../data/images";
-import { MOCK_COUNTRIES } from "../constants";
+import { COUNTRIES } from "../constants";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -90,7 +90,7 @@ export const getCountryTour = async (countryName: string): Promise<TourData | nu
 
   // 2. Procedural Fallback Generator
   // This ensures EVERY country works immediately without manual writing for 195 nations.
-  const country = MOCK_COUNTRIES.find(c => c.name === countryName);
+  const country = COUNTRIES.find(c => c.name === countryName);
   if (!country) return null;
 
   await delay(800); // Simulate processing

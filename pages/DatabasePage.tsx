@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect, useCallback, memo, startTransition } from 'react';
 import { Search, ArrowUp, ArrowDown, ArrowUpDown, ChevronRight, Maximize2, Languages, Globe, AlertTriangle, Shuffle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
+import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { Country, Territory } from '../types';
 import { getCountryCode } from '../utils/flags';
 import { toSlug } from '../utils/slug';
@@ -19,7 +19,7 @@ type SortDirection = 'asc' | 'desc';
 
 // Pre-sorted data for instant initial render (sorted by name ascending)
 // We use a simple sort here, but in a real app these would be pre-calculated
-const PRESORTED_COUNTRIES = MOCK_COUNTRIES;
+const PRESORTED_COUNTRIES = COUNTRIES;
 const PRESORTED_TERRITORIES = TERRITORIES;
 const PRESORTED_DEFACTO = DE_FACTO_COUNTRIES;
 
@@ -421,7 +421,7 @@ const DatabasePage: React.FC = () => {
   }, [navigate]);
 
   const handleRandomSearch = useCallback(() => {
-    const allItems = [...MOCK_COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES];
+    const allItems = [...COUNTRIES, ...TERRITORIES, ...DE_FACTO_COUNTRIES];
     if (allItems.length === 0) return;
     const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
     navigate(`/country/${toSlug(randomItem.name)}`);
@@ -432,7 +432,7 @@ const DatabasePage: React.FC = () => {
     if (!debouncedSearch && sortConfig?.key === 'name' && sortConfig?.direction === 'asc') {
       return PRESORTED_COUNTRIES;
     }
-    return sortAndFilter(MOCK_COUNTRIES, debouncedSearch, sortConfig);
+    return sortAndFilter(COUNTRIES, debouncedSearch, sortConfig);
   }, [debouncedSearch, sortConfig]);
   
   const processedTerritories = useMemo(() => {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, RefreshCw, Network, AlertCircle, Play } from 'lucide-react';
-import { MOCK_COUNTRIES } from '../constants';
+import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import { getFlagUrl } from '../utils/flags';
@@ -41,7 +41,7 @@ export default function KnowYourNeighbor() {
   }, [setPageLoading]);
 
   useEffect(() => {
-    const valid = MOCK_COUNTRIES.filter(c => c.borders && c.borders.length > 0);
+    const valid = COUNTRIES.filter(c => c.borders && c.borders.length > 0);
     setValidCountries(valid);
   }, []);
 
@@ -83,7 +83,7 @@ export default function KnowYourNeighbor() {
     setFeedback(null);
 
     const neighbors = target.borders || [];
-    const potentialDistractors = MOCK_COUNTRIES.filter(c => 
+    const potentialDistractors = COUNTRIES.filter(c => 
       c.name !== target.name && !neighbors.includes(c.name)
     ).map(c => c.name);
     const shuffledDistractors = shuffle(potentialDistractors);
