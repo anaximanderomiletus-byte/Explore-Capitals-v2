@@ -193,11 +193,52 @@ export const COUNTRY_ALIASES: Record<string, string[]> = {
   '193': ['YEM'], // Yemen
   '194': ['ZMB'], // Zambia
   '195': ['ZWE'], // Zimbabwe
+  // === De Facto States ===
   'DF-1': ['TW', 'TWN', 'Republic of China', 'ROC'], // Taiwan
   'DF-2': ['XK', 'XKX'], // Kosovo
-  'T-3': ['HK', 'HKG'], // Hong Kong
-  'T-9': ['MO', 'MAC'], // Macau
-  'T-2': ['GL', 'GRL'], // Greenland
+  'DF-3': ['ESH', 'SADR'], // Western Sahara
+
+  // === Territories ===
   'T-1': ['PR', 'PRI'], // Puerto Rico
+  'T-2': ['GL', 'GRL'], // Greenland
+  'T-3': ['HK', 'HKG'], // Hong Kong
+  'T-4': ['GF', 'GUF'], // French Guiana
+  'T-5': ['RE', 'REU'], // Réunion
+  'T-6': ['GU', 'GUM'], // Guam
+  'T-7': ['BM', 'BMU'], // Bermuda
+  'T-8': ['NC', 'NCL', 'New Cal'], // New Caledonia
+  'T-9': ['MO', 'MAC'], // Macau
+  'T-10': ['FO', 'FRO'], // Faroe Islands
+  'T-11': ['PF', 'PYF', 'Tahiti'], // French Polynesia
+  'T-12': ['KY', 'CYM', 'Cayman'], // Cayman Islands
   'T-13': ['GI', 'GIB'], // Gibraltar
+  'T-14': ['AW', 'ABW'], // Aruba
+  'T-15': ['AS', 'ASM'], // American Samoa
+  'T-16': ['AI', 'AIA'], // Anguilla
+  'T-17': ['VG', 'VGB', 'BVI'], // British Virgin Islands
+  'T-18': ['CK', 'COK'], // Cook Islands
+  'T-19': ['CW', 'CUW'], // Curaçao
+  'T-20': ['FK', 'FLK', 'Falklands', 'Malvinas'], // Falkland Islands
+  'T-21': ['GP', 'GLP'], // Guadeloupe
+  'T-22': ['GG', 'GGY'], // Guernsey
+  'T-23': ['IM', 'IMN', 'IoM'], // Isle of Man
+  'T-24': ['JE', 'JEY'], // Jersey
+  'T-25': ['MQ', 'MTQ'], // Martinique
+  'T-26': ['YT', 'MYT'], // Mayotte
+  'T-27': ['MS', 'MSR'], // Montserrat
+  'T-28': ['NU', 'NIU'], // Niue
+  'T-29': ['NF', 'NFK'], // Norfolk Island
+  'T-30': ['MP', 'MNP', 'CNMI', 'Saipan'], // Northern Mariana Islands
+  'T-31': ['PN', 'PCN'], // Pitcairn Islands
+  'T-32': ['BL', 'BLM', 'St Barts'], // Saint Barthélemy
+  'T-33': ['SH', 'SHN', 'St Helena'], // Saint Helena
+  'T-34': ['MF', 'MAF', 'St Martin'], // Saint Martin
+  'T-35': ['PM', 'SPM', 'St Pierre'], // Saint Pierre and Miquelon
+  'T-36': ['SX', 'SXM'], // Sint Maarten
+  'T-37': ['SJ', 'SJM'], // Svalbard
+  'T-38': ['TK', 'TKL'], // Tokelau
+  'T-39': ['TC', 'TCA', 'TCI', 'Turks and Caicos'], // Turks and Caicos Islands
+  'T-40': ['VI', 'VIR', 'USVI'], // US Virgin Islands
+  'T-41': ['WF', 'WLF'], // Wallis and Futuna
+  'T-43': ['AX', 'ALA', 'Aland'], // Åland Islands
 };
