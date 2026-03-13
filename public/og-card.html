@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OG Image Card — Screenshot at 1200×630</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0F172A;
+    color: white;
+  }
+
+  .card {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ── Background layers ── */
+
+  /* Large soft gradient orbs */
+  .bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .bg-orb.cyan {
+    width: 500px;
+    height: 500px;
+    top: -120px;
+    right: 80px;
+    background: radial-gradient(circle, rgba(0,194,255,0.18) 0%, transparent 70%);
+  }
+
+  .bg-orb.green {
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    left: 60px;
+    background: radial-gradient(circle, rgba(52,199,89,0.12) 0%, transparent 70%);
+  }
+
+  .bg-orb.blue {
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0,122,255,0.08) 0%, transparent 70%);
+  }
+
+  /* Dot grid overlay for texture */
+  .dot-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+
+  /* Subtle vignette */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.4) 100%);
+    pointer-events: none;
+  }
+
+  /* ── Content ── */
+  .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* Globe logo with glassy card effect */
+  .logo-wrapper {
+    width: 160px;
+    height: 160px;
+    border-radius: 36px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    padding: 12px;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.3),
+      0 0 60px rgba(0,194,255,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+  }
+
+  .logo-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+  }
+
+  /* Site name */
+  .site-name {
+    font-size: 76px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: white;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+
+  .site-name .capitals {
+    background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Tagline */
+  .tagline {
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(0,194,255,0.6) 50%, rgba(255,255,255,0.5) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Domain */
+  .domain {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    color: rgba(255,255,255,0.2);
+    margin-top: 4px;
+  }
+
+  /* Top and bottom accent lines */
+  .accent-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, #00C2FF 20%, #007AFF 50%, #34C759 80%, transparent 100%);
+  }
+
+  .accent-bar.top { top: 0; }
+  .accent-bar.bottom { bottom: 0; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <!-- Background layers -->
+    <div class="bg-orb cyan"></div>
+    <div class="bg-orb green"></div>
+    <div class="bg-orb blue"></div>
+    <div class="dot-grid"></div>
+    <div class="vignette"></div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="logo-wrapper">
+        <img src="png/STYLE/ExploreCapitalsAppIcon.png" alt="ExploreCapitals" />
+      </div>
+      <div class="site-name">EXPLORE<span class="capitals">CAPITALS</span></div>
+      <div class="tagline">Learn World Geography Through Games</div>
+      <div class="domain">explorecapitals.com</div>
+    </div>
+
+    <!-- Accent bars -->
+    <div class="accent-bar top"></div>
+    <div class="accent-bar bottom"></div>
+  </div>
+</body>
+</html>
