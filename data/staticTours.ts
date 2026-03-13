@@ -1,58 +1,70 @@
 import { TourData } from "../types";
-import { toursA } from "./tours/tours_a";
-import { toursB } from "./tours/tours_b";
-import { toursC } from "./tours/tours_c";
-import { toursD } from "./tours/tours_d";
-import { toursE } from "./tours/tours_e";
-import { toursF } from "./tours/tours_f";
-import { toursG } from "./tours/tours_g";
-import { toursH } from "./tours/tours_h";
-import { toursI } from "./tours/tours_i";
-import { toursJ } from "./tours/tours_j";
-import { toursK } from "./tours/tours_k";
-import { toursL } from "./tours/tours_l";
-import { toursM } from "./tours/tours_m";
-import { toursN } from "./tours/tours_n";
-import { toursO } from "./tours/tours_o";
-import { toursP } from "./tours/tours_p";
-import { toursQR } from "./tours/tours_q_r";
-import { toursS } from "./tours/tours_s";
-import { toursT } from "./tours/tours_t";
-import { toursU } from "./tours/tours_u";
-import { toursV } from "./tours/tours_v";
-import { toursY } from "./tours/tours_y";
-import { toursZ } from "./tours/tours_z";
-import { toursTerritoriesAG } from "./tours/tours_territories_ag";
-import { toursTerritoriesHN } from "./tours/tours_territories_hn";
-import { toursTerritoriesPZ } from "./tours/tours_territories_pz";
-import { toursDeFacto } from "./tours/tours_defacto";
 
-export const staticTours: Record<string, TourData> = {
-  ...toursA,
-  ...toursB,
-  ...toursC,
-  ...toursD,
-  ...toursE,
-  ...toursF,
-  ...toursG,
-  ...toursH,
-  ...toursI,
-  ...toursJ,
-  ...toursK,
-  ...toursL,
-  ...toursM,
-  ...toursN,
-  ...toursO,
-  ...toursP,
-  ...toursQR,
-  ...toursS,
-  ...toursT,
-  ...toursU,
-  ...toursV,
-  ...toursY,
-  ...toursZ,
-  ...toursTerritoriesAG,
-  ...toursTerritoriesHN,
-  ...toursTerritoriesPZ,
-  ...toursDeFacto
-};
+let cache: Record<string, TourData> | null = null;
+
+export async function loadTours(): Promise<Record<string, TourData>> {
+  if (cache) return cache;
+
+  const modules = await Promise.all([
+    import("./tours/tours_a"),
+    import("./tours/tours_b"),
+    import("./tours/tours_c"),
+    import("./tours/tours_d"),
+    import("./tours/tours_e"),
+    import("./tours/tours_f"),
+    import("./tours/tours_g"),
+    import("./tours/tours_h"),
+    import("./tours/tours_i"),
+    import("./tours/tours_j"),
+    import("./tours/tours_k"),
+    import("./tours/tours_l"),
+    import("./tours/tours_m"),
+    import("./tours/tours_n"),
+    import("./tours/tours_o"),
+    import("./tours/tours_p"),
+    import("./tours/tours_q_r"),
+    import("./tours/tours_s"),
+    import("./tours/tours_t"),
+    import("./tours/tours_u"),
+    import("./tours/tours_v"),
+    import("./tours/tours_y"),
+    import("./tours/tours_z"),
+    import("./tours/tours_territories_ag"),
+    import("./tours/tours_territories_hn"),
+    import("./tours/tours_territories_pz"),
+    import("./tours/tours_defacto"),
+  ]);
+
+  cache = Object.assign(
+    {},
+    modules[0].toursA,
+    modules[1].toursB,
+    modules[2].toursC,
+    modules[3].toursD,
+    modules[4].toursE,
+    modules[5].toursF,
+    modules[6].toursG,
+    modules[7].toursH,
+    modules[8].toursI,
+    modules[9].toursJ,
+    modules[10].toursK,
+    modules[11].toursL,
+    modules[12].toursM,
+    modules[13].toursN,
+    modules[14].toursO,
+    modules[15].toursP,
+    modules[16].toursQR,
+    modules[17].toursS,
+    modules[18].toursT,
+    modules[19].toursU,
+    modules[20].toursV,
+    modules[21].toursY,
+    modules[22].toursZ,
+    modules[23].toursTerritoriesAG,
+    modules[24].toursTerritoriesHN,
+    modules[25].toursTerritoriesPZ,
+    modules[26].toursDeFacto,
+  );
+
+  return cache;
+}

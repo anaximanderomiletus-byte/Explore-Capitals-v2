@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Camera, Check, X, MapPin, Loader2, Play } from 'lucide-react';
 import { COUNTRIES } from '../constants';
-import { staticTours } from '../data/staticTours';
+import { loadTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -82,12 +82,12 @@ export default function LandmarkLegend() {
 
   // Generate a finite list of questions for this session (Limit to 15 for faster loading)
   const getQuestionsList = useCallback(async (): Promise<Question[]> => {
-    const IMAGES = await getStaticImages();
-    const validCountries = COUNTRIES.filter(c => staticTours[c.name]);
+    const [IMAGES, tours] = await Promise.all([getStaticImages(), loadTours()]);
+    const validCountries = COUNTRIES.filter(c => tours[c.name]);
     const shuffledValid = shuffle(validCountries).slice(0, 15); // Limit to 15 questions per game
 
     return shuffledValid.map(country => {
-        const tour = staticTours[country.name];
+        const tour = tours[country.name];
         const stop = tour.stops[Math.floor(Math.random() * tour.stops.length)];
         const landmarkName = stop.stopName;
         const imageUrl = IMAGES[stop.imageKeyword || landmarkName] || IMAGES[country.name];

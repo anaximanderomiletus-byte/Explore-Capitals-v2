@@ -1,5 +1,5 @@
 import { TourData } from "../types";
-import { staticTours } from "../data/staticTours";
+import { loadTours } from "../data/staticTours";
 import { getStaticImages } from "../data/images";
 import { COUNTRIES } from "../constants";
 import { db } from "../firebase";
@@ -83,9 +83,10 @@ export const getGeneratedImage = async (keyword: string, type: 'landscape' | 'la
 
 export const getCountryTour = async (countryName: string): Promise<TourData | null> => {
   // 1. Check for Static Handcrafted Data
-  if (staticTours[countryName]) {
+  const tours = await loadTours();
+  if (tours[countryName]) {
     await delay(600); // Simulate "loading" a rich experience
-    return staticTours[countryName];
+    return tours[countryName];
   }
 
   // 2. Procedural Fallback Generator

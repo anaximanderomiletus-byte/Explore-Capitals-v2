@@ -9,13 +9,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Split heavy dependencies into separate cached chunks
-        manualChunks: {
-          // React core — shared across all chunks
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          // Animation library — used by many pages
-          'vendor-motion': ['framer-motion'],
-          // Firebase — only needed after user interaction
-          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/functions', 'firebase/storage'],
+        manualChunks(id) {
+          if (id.includes('react-dom') || id.includes('react-router-dom') || (id.includes('/react/') && !id.includes('react-dom'))) return 'vendor-react';
+          if (id.includes('framer-motion')) return 'vendor-motion';
+          if (id.includes('firebase/')) return 'vendor-firebase';
+          if (id.includes('/data/tours/')) return 'data-tours';
         },
       },
     },

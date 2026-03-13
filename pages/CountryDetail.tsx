@@ -12,7 +12,8 @@ import {
 import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
 import { getStaticImages } from '../data/images';
-import { staticTours } from '../data/staticTours';
+import { loadTours } from '../data/staticTours';
+import { TourData } from '../types';
 import { OFFICIAL_NAMES } from '../data/officialNames';
 
 import Button from '../components/Button';
@@ -33,13 +34,15 @@ const CountryDetail: React.FC = () => {
   const { setPageLoading, setTransitionStyle } = useLayout();
 
   const [images, setImages] = useState<Record<string, string>>({});
+  const [tours, setTours] = useState<Record<string, TourData>>({});
 
   useEffect(() => {
     setPageLoading(false);
     getStaticImages().then(setImages);
+    loadTours().then(setTours);
   }, [setPageLoading]);
 
-  const dataLoaded = Object.keys(images).length > 0;
+  const dataLoaded = Object.keys(images).length > 0 && Object.keys(tours).length > 0;
 
   const country = useMemo(() => {
     // Match by numeric id first, then by name slug
@@ -65,7 +68,7 @@ const CountryDetail: React.FC = () => {
       }
 
       // 2. Try Tour Stop Image
-      const tourData = staticTours[country.name];
+      const tourData = tours[country.name];
       if (tourData && tourData.stops.length > 0) {
           const stop = tourData.stops[0];
           const img = images[stop.imageKeyword || stop.stopName];
@@ -88,7 +91,7 @@ const CountryDetail: React.FC = () => {
     }
     
     // Pull from tour stops for variety
-    const tourData = staticTours[country.name];
+    const tourData = tours[country.name];
     if (tourData?.stops) {
       for (const stop of tourData.stops) {
         if (photos.length >= 2) break;
@@ -484,7 +487,7 @@ const CountryDetail: React.FC = () => {
               </div>
 
               {/* Expedition CTA — show for all entries that have tour data */}
-              {staticTours[country.name]?.stops?.length > 0 && (
+              {tours[country.name]?.stops?.length > 0 && (
                 <Link to={`/expedition/${toSlug(country.name)}`} className="w-full sm:w-auto">
                   <Button variant="primary" size="md" className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-14 text-sm sm:text-base text-white border border-white/20 rounded-full">
                     <span className="flex items-center gap-3">

@@ -10,9 +10,10 @@ import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
 import { ResponsiveAd } from '../components/AdSense';
 import { COUNTRIES } from '../constants';
-import { staticTours } from '../data/staticTours';
+import { loadTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
 import { toSlug } from '../utils/slug';
+import { TourData } from '../types';
 
 const Section: React.FC<{
   children: React.ReactNode;
@@ -38,47 +39,49 @@ const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { isAuthenticated, isLoading: loading } = useUser();
   const [factImage, setFactImage] = useState('');
+  const [factOfTheDay, setFactOfTheDay] = useState<{ country: typeof COUNTRIES[0]; stop: TourData['stops'][0]; fact: string } | null>(null);
+
   useEffect(() => {
     setPageLoading(false);
     // Dismiss the HTML splash-screen loader (prevents double-spinner)
     (window as any).__dismissLoader?.();
   }, [setPageLoading]);
 
-  // Stop of the Day — seeded by today's date so it changes daily
-  const factOfTheDay = useMemo(() => {
-    const today = new Date();
-    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-
-    // Simple seeded pseudo-random
-    const seededRandom = (s: number) => {
-      const x = Math.sin(s) * 10000;
-      return x - Math.floor(x);
-    };
-
-    // Pick a country that has tour data
-    const countriesWithTours = COUNTRIES.filter(c => staticTours[c.name]?.stops?.length > 0);
-    const countryIndex = Math.floor(seededRandom(seed) * countriesWithTours.length);
-    const country = countriesWithTours[countryIndex];
-    const tour = staticTours[country.name];
-
-    // Pick a random stop from that country's tour
-    const stopIndex = Math.floor(seededRandom(seed + 1) * tour.stops.length);
-    const stop = tour.stops[stopIndex];
-
-    // Pick a fun fact paragraph from the stop's description
-    const factIndex = Math.floor(seededRandom(seed + 2) * stop.description.length);
-    const fact = stop.description[factIndex];
-
-    return { country, stop, fact };
-  }, []);
-
-  // Load STATIC_IMAGES asynchronously — does not block initial paint
+  // Stop of the Day — load tours async, then pick seeded random fact
   useEffect(() => {
-    getStaticImages().then(images => {
-      const img = images[factOfTheDay.stop.imageKeyword] || images[factOfTheDay.country.name] || '';
-      setFactImage(img);
+    loadTours().then(tours => {
+      const today = new Date();
+      const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+      // Simple seeded pseudo-random
+      const seededRandom = (s: number) => {
+        const x = Math.sin(s) * 10000;
+        return x - Math.floor(x);
+      };
+
+      // Pick a country that has tour data
+      const countriesWithTours = COUNTRIES.filter(c => tours[c.name]?.stops?.length > 0);
+      const countryIndex = Math.floor(seededRandom(seed) * countriesWithTours.length);
+      const country = countriesWithTours[countryIndex];
+      const tour = tours[country.name];
+
+      // Pick a random stop from that country's tour
+      const stopIndex = Math.floor(seededRandom(seed + 1) * tour.stops.length);
+      const stop = tour.stops[stopIndex];
+
+      // Pick a fun fact paragraph from the stop's description
+      const factIndex = Math.floor(seededRandom(seed + 2) * stop.description.length);
+      const fact = stop.description[factIndex];
+
+      setFactOfTheDay({ country, stop, fact });
+
+      // Load image for the selected fact
+      getStaticImages().then(images => {
+        const img = images[stop.imageKeyword] || images[country.name] || '';
+        setFactImage(img);
+      });
     });
-  }, [factOfTheDay]);
+  }, []);
 
   return (
     <main className="relative flex-grow bg-[#0F172A] w-full home-glow">
@@ -266,6 +269,7 @@ const Home: React.FC = () => {
       </Section>
 
       {/* ═══════════════ STOP OF THE DAY ═══════════════ */}
+      {factOfTheDay && (
       <Section className="py-12 sm:py-16 md:py-24">
         <RevealSection className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
@@ -330,6 +334,7 @@ const Home: React.FC = () => {
           </div>
         </RevealSection>
       </Section>
+      )}
 
       {/* ═══════════════ GAMES ═══════════════ */}
       <Section className="py-12 sm:py-16 md:py-24">
