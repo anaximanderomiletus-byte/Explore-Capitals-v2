@@ -62,7 +62,7 @@ const Profile: React.FC = () => {
   }, [setPageLoading]);
 
   if (!userContext || !authContext) {
-    return <div className="pt-32 text-center text-white font-black uppercase">Critical System Error: Context Missing</div>;
+    return <div className="pt-32 text-center text-white font-black uppercase">Something went wrong. Please try refreshing the page.</div>;
   }
 
   const { 

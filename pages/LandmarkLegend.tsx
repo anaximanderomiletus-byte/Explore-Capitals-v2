@@ -293,7 +293,7 @@ export default function LandmarkLegend() {
                  >
                    {/* Centered image area */}
                    <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 relative z-10">
-                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY MISSION TARGET</p>
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY THE LANDMARK</p>
                       <div
                        className="game-landmark relative w-full max-w-sm md:max-w-md h-auto max-h-60 md:max-h-96 min-h-0 shrink rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
                        style={{

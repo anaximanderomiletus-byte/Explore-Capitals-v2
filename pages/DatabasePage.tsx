@@ -473,23 +473,23 @@ const DatabasePage: React.FC = () => {
             <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">Detailed data for 195 sovereign states.</p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto min-w-0">
             <button
               onClick={handleRandomSearch}
-              className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[58px]"
+              className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[58px] shrink-0"
               title="Random Search"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
               <span className="font-bold uppercase text-[11px] tracking-[0.2em]">Random</span>
             </button>
 
-            <div className="relative w-full md:w-[400px] group">
+            <div className="relative w-full md:w-[400px] md:max-w-full min-w-0 group">
               <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-white/40 group-focus-within:text-sky-light transition-colors duration-300" />
               </div>
               <input
                 type="text"
-                placeholder="SEARCH COUNTRIES..."
+                placeholder="SEARCH..."
                 className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-4 focus:ring-sky/20 focus:border-white/60 focus:bg-white/20 transition-all duration-300 h-[58px]"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
@@ -592,7 +592,7 @@ const DatabasePage: React.FC = () => {
                  <Search className="w-8 h-8 text-white/10" />
               </div>
               <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">No results found</h3>
-              <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">Protocol failed to match "{debouncedSearch}" within current dataset.</p>
+              <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">No countries matched "{debouncedSearch}". Try a different search term.</p>
             </div>
           </RevealSection>
         )}

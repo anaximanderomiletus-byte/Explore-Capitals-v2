@@ -285,7 +285,7 @@ export const toursD: Record<string, TourData> = {
           "Bamboo forests."
         ],
         answer: "Mangrove forests.",
-        explanation: "These trees are adapted to live in saline coastal conditions, with roots that stick out of the water."
+        explanation: "Mangrove forests are adapted to live in saline coastal conditions, with roots that stick out of the water."
       }
     ]
   },

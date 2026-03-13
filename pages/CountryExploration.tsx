@@ -162,12 +162,12 @@ const CountryExploration: React.FC = () => {
 
   const loadingMessages = [
     "Locating Destination...",
-    "Securing Flight Path...",
+    "Planning Your Route...",
     "Preparing Itinerary...",
-    "Synchronizing Maps...",
-    "Finalizing Briefing...",
-    "Optimizing Stop Scan...",
-    "Initiating Uplink...",
+    "Loading Maps...",
+    "Gathering Facts...",
+    "Finding Points of Interest...",
+    "Almost Ready...",
   ];
 
   // Configure Layout based on View
@@ -597,7 +597,7 @@ const CountryExploration: React.FC = () => {
     };
   }, [view, tourData]);
 
-  if (!country) return <div className="p-10 text-center text-white font-black uppercase tracking-widest">Target not found.</div>;
+  if (!country) return <div className="p-10 text-center text-white font-black uppercase tracking-widest">Country not found.</div>;
 
   const renderContent = () => {
     try {
@@ -687,7 +687,7 @@ const CountryExploration: React.FC = () => {
                     {/* Label & Percentage */}
                     <div className="flex justify-between items-end mb-3 px-1">
                       <div className="flex flex-col items-start">
-                        <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">System Load</span>
+                        <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Loading</span>
                         <div className="h-0.5 w-8 bg-sky/40 rounded-full mt-1" />
                       </div>
                       <div className="flex items-baseline gap-1">
@@ -1150,7 +1150,7 @@ const CountryExploration: React.FC = () => {
                 animate={{ y: isExitingFeedback ? '100%' : 0 }}
                 exit={{ y: '100%' }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="relative bg-surface-dark select-none overflow-hidden border-t border-white/10"
+                className="relative bg-surface-dark overflow-hidden border-t border-white/10"
               >
                 {/* Internal Aero Gloss */}
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
@@ -1176,7 +1176,8 @@ const CountryExploration: React.FC = () => {
                                  <p className={`text-[10px] font-black uppercase tracking-[0.4em] drop-shadow-sm ${isCorrect ? 'text-accent' : 'text-red-400'}`}>Mission Explanation</p>
                               </div>
                           </div>
-                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8 text-left">
+                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8 text-left select-text">
+                              {!isCorrect && currentQuestion && <><span className="text-white">The correct answer is {currentQuestion.answer}</span>{' '}</>}
                               {feedbackMessage || ''}
                           </p>
                         </motion.div>

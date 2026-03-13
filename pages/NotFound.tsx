@@ -36,14 +36,14 @@ const NotFound: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             to="/"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-xl transition-colors"
           >
             <ArrowLeft size={16} />
             Back to Home
           </Link>
           <Link
             to="/database"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/80 font-semibold rounded-xl border border-white/10 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/80 font-black text-[11px] uppercase tracking-[0.2em] rounded-xl border border-white/10 transition-colors"
           >
             <Search size={16} />
             Browse Countries

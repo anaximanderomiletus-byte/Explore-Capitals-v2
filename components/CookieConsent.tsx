@@ -118,8 +118,8 @@ const CookieConsent: React.FC = () => {
                       Cookie Notice
                     </h3>
                     <p className="text-white/50 text-xs font-bold uppercase tracking-wide leading-relaxed">
-                      We use cookies to enhance your experience, analyze site traffic, and serve relevant advertisements. 
-                      By clicking "Accept All," you consent to our use of cookies.{' '}
+                      We use cookies to enhance your experience, analyze site traffic, and serve relevant advertisements.
+                      You can accept all cookies or choose essential cookies only.{' '}
                       <Link to="/privacy" className="text-sky hover:text-sky-light transition-colors">
                         Learn more
                       </Link>

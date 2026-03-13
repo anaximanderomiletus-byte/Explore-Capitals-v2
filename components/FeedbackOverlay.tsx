@@ -141,7 +141,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                             <img
                               src={`/flags/${incorrectFlagCode}.png`}
                               className="w-8 h-5 sm:w-10 sm:h-7 md:w-12 md:h-8 object-contain relative z-10"
-                              alt=""
+                              alt={`${subText} flag`}
                             />
                           </div>
                         )}

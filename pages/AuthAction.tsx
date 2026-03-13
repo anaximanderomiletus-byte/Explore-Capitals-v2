@@ -150,7 +150,7 @@ const AuthAction: React.FC = () => {
           <div className="p-10 sm:p-16 text-center">
             <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/30 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-white mb-10 border-2 border-white/40">
               <Compass size={14} className="animate-spin-slow text-sky-light" />
-              <span>SECURITY PORTAL</span>
+              <span>ACCOUNT VERIFICATION</span>
             </div>
 
             {status === 'loading' && mode === 'verifyEmail' && (
@@ -250,7 +250,7 @@ const AuthAction: React.FC = () => {
                 <p className="text-[10px] text-white/40 font-black uppercase tracking-widest leading-relaxed max-w-[250px] mx-auto">
                   {errorMessage}
                 </p>
-                <Button onClick={() => navigate('/auth')} className="w-full h-14 mt-4 uppercase tracking-widest font-black">BACK TO SAFETY</Button>
+                <Button onClick={() => navigate('/auth')} className="w-full h-14 mt-4 uppercase tracking-widest font-black">BACK TO SIGN IN</Button>
               </div>
             )}
           </div>

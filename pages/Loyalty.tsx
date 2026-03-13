@@ -70,7 +70,7 @@ const Loyalty: React.FC = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-light to-white">Explorer Ranks</span>
           </h1>
           <p className="text-white/60 text-base md:text-lg leading-relaxed font-bold max-w-2xl uppercase tracking-wide">
-            Every correct answer in the Atlas earns you experience points. Master the globe to unlock exclusive badges, themes, and legendary status.
+            Every correct answer in the Atlas earns you points. Master the globe to unlock exclusive badges, themes, and legendary status.
           </p>
         </header>
 
@@ -144,7 +144,7 @@ const Loyalty: React.FC = () => {
                   <div className={`text-[10px] font-black uppercase tracking-[0.4em] text-center ${
                     isCurrent || isCompleted ? 'text-sky-light' : 'text-white/30'
                   }`}>
-                    {t.minPoints.toLocaleString()} XP
+                    {t.minPoints.toLocaleString()} Points
                   </div>
                 </div>
 

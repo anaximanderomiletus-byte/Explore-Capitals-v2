@@ -11,7 +11,7 @@ export const toursE: Record<string, TourData> = {
         description: [
           "Located 1,000 kilometers off the coast, this isolated archipelago is a living museum of evolution. Because the animals here evolved without natural predators, they show almost no fear of humans, allowing visitors to walk right up to blue-footed boobies and marine iguanas.",
           "The islands are famous for inspiring Charles Darwin's Theory of Natural Selection. Darwin noticed that finches on different islands had developed different beak shapes to eat specific types of food, proving that species adapt to their environment over time.",
-          "The giant tortoises found here are the largest living turtles in the world, weighing up to 417 kg (919 lbs). They can live for over 100 years, and historically, sailors used them as a fresh meat source because they could survive in a ship's hold for a year without food or water."
+          "The giant tortoises found here are the largest living tortoises in the world, weighing up to 417 kg (919 lbs). They can live for over 100 years, and historically, sailors used them as a fresh meat source because they could survive in a ship's hold for a year without food or water."
         ],
         question: "Which scientist developed a famous theory after visiting the Galapagos?",
         options: [

@@ -43,7 +43,7 @@ const Contact: React.FC = () => {
              Get in <span className="text-sky">Touch.</span>
            </h1>
            <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-bold uppercase tracking-widest drop-shadow-md">
-             Our architecture team is dedicated to building the most precise geography platform on the web.
+             Our team is dedicated to building the most accurate geography platform on the web.
            </p>
         </header>
 
@@ -53,7 +53,7 @@ const Contact: React.FC = () => {
            <div className="p-8 bg-black/20 rounded-3xl border-2 border-white/10 shadow-inner relative overflow-hidden group">
              <div className="absolute inset-0 bg-glossy-gradient opacity-5" />
              <p className="text-white/80 text-xl md:text-2xl leading-relaxed font-medium italic relative z-10">
-               Feel free to dispatch an inquiry to <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky font-black whitespace-nowrap hover:text-white transition-all underline decoration-sky/40 underline-offset-8">anaximanderomiletus@gmail.com</a>
+               Send us an email at <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky font-black whitespace-nowrap hover:text-white transition-all underline decoration-sky/40 underline-offset-8">anaximanderomiletus@gmail.com</a>
              </p>
            </div>
         </section>
@@ -61,9 +61,9 @@ const Contact: React.FC = () => {
         {/* Categories Section */}
         <section className="mt-16 grid sm:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
            {[
-             { title: "Collaborations", icon: <Globe size={24} />, text: "Educational institutions seeking precision integration." },
-             { title: "Technical Support", icon: <Compass size={24} />, text: "Reporting interface anomalies or cartographic errors." },
-             { title: "Media & Press", icon: <MessageSquare size={24} />, text: "Interviews or project documentation requests." },
+             { title: "Collaborations", icon: <Globe size={24} />, text: "Educational institutions seeking to partner or integrate." },
+             { title: "Technical Support", icon: <Compass size={24} />, text: "Report bugs or map errors." },
+             { title: "Media & Press", icon: <MessageSquare size={24} />, text: "Interviews or press inquiries." },
            ].map((cat, i) => (
              <div key={i} className="p-8 bg-white/5 backdrop-blur-xl rounded-3xl border-2 border-white/10 hover:bg-white/10 hover:border-sky/30 transition-all duration-500 group relative overflow-hidden">
                 <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />

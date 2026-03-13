@@ -213,7 +213,7 @@ const About: React.FC = () => {
           <div className="mb-12">
             <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Support the Mission</h2>
             <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
-              ExploreCapitals remains free and ad-free. Your contribution covers infrastructure costs and funds ongoing map improvements.
+              ExploreCapitals remains free to use. Your contribution covers infrastructure costs and funds ongoing map improvements.
             </p>
           </div>
 
@@ -337,7 +337,7 @@ const About: React.FC = () => {
               {
                 icon: <Zap size={28} />,
                 title: "Response Commitment",
-                text: "We respond to all inquiries within 24-48 business hours.",
+                text: "We respond to all inquiries within 24-48 hours.",
                 color: "from-accent/30 to-accent/10",
                 iconBg: "bg-accent/20",
                 textColor: "text-accent"

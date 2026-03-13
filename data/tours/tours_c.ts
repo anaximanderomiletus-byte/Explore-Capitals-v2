@@ -393,7 +393,7 @@ export const toursC: Record<string, TourData> = {
         stopName: "Dzanga-Sangha Special Reserve",
         imageKeyword: "Dzanga-Sangha Special Reserve",
         description: [
-          "This reserve is part of the massive Sangha Trinational protected area, a UNESCO World Heritage site shared with Cameroon and Congo. It is one of the last true wildernesses on Earth, covered in ancient, dense tropical rainforests that have been logged.",
+          "This reserve is part of the massive Sangha Trinational protected area, a UNESCO World Heritage site shared with Cameroon and Congo. It is one of the last true wildernesses on Earth, covered in ancient, dense tropical rainforests that have largely escaped logging.",
           "The park is world-famous for the Dzanga Bai, a large sandy clearing in the middle of the jungle. It is known as the \"Village of Elephants\" because hundreds of shy forest elephants gather here daily to drink mineral-rich water and socialize in the open.",
           "It is also one of the few places in the world where you can track Western Lowland Gorillas. Unlike their mountain cousins, these gorillas live in the thick, steamy lowlands and are known for being more elusive and smaller in size."
         ],

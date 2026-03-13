@@ -96,7 +96,7 @@ const MapPage: React.FC = () => {
             data-country-slug="${toSlug(country.name)}"
             class="learn-more-btn ${linkClass} ${linkGlow} w-full h-12 bg-white/10 border-2 border-white/40 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all outline-none"
           >
-            Launch Profile
+            View Country
           </button>
         </div>
       </div>
@@ -908,7 +908,7 @@ const MapPage: React.FC = () => {
               </div>
               <div>
                 <h1 className="font-display font-black text-[#1A1C1E] leading-none text-base uppercase tracking-tighter drop-shadow-sm">Atlas</h1>
-                <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{MOCK_COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Nodes</p>
+                <p className="text-[8px] text-black/40 font-black uppercase tracking-[0.2em] mt-1">{MOCK_COUNTRIES.length + TERRITORIES.length + DE_FACTO_COUNTRIES.length} Countries</p>
               </div>
             </div>
 

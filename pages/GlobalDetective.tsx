@@ -278,7 +278,7 @@ export default function GlobalDetective() {
                       >
                     <div className="game-content flex flex-col flex-1 justify-center">
                         <h2 className="text-sky font-black uppercase tracking-[0.4em] text-[9px] mb-1.5 sm:mb-2 md:mb-3 flex items-center gap-2 font-sans">
-                          <Search size={12} /> Geographic Intelligence
+                          <Search size={12} /> Country Clues
                         </h2>
                         
                         <div className="grid grid-cols-1 gap-1.5 md:gap-2.5 mb-1.5 md:mb-4">
@@ -299,14 +299,14 @@ export default function GlobalDetective() {
                                   <span className="font-display font-black text-white text-sm md:text-lg uppercase tracking-tight relative z-10 drop-shadow-md">{targetCountry.capital}</span>
                                 ) : (
                                   <div className="flex items-center gap-3 relative z-10">
-                                    <span className="text-[9px] font-black text-white/10 tracking-[0.4em] hidden sm:block">ENCRYPTED</span>
+                                    <span className="text-[9px] font-black text-white/10 tracking-[0.4em] hidden sm:block">HIDDEN</span>
                                     <EyeOff size={14} className="text-white/20" />
                                   </div>
                                 )}
                                 
                                 {!isCapitalRevealed && (
                                   <div className="absolute inset-0 flex items-center justify-center bg-sky/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
-                                    <span className="text-white text-[9px] font-black uppercase tracking-[0.3em] drop-shadow-md">Decrypt (-5 pts)</span>
+                                    <span className="text-white text-[9px] font-black uppercase tracking-[0.3em] drop-shadow-md">Reveal (-5 pts)</span>
                                   </div>
                                 )}
                             </div>

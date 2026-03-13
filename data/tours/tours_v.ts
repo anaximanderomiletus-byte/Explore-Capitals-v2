@@ -352,7 +352,7 @@ export const toursV: Record<string, TourData> = {
         imageKeyword: "Son Doong Cave",
         description: [
           "This is the largest cave in the world by cross-section. It is so huge that a Boeing 747 could fly through its largest cavern, and it has its own localized weather system, including clouds and rain.",
-          "The cave contains a jungle. The roof of the cave collapsed in two places (dolines), allowing sunlight to enter and creating a lush rainforest (\"Garden of Edam\") inside the cave, 200 meters underground.",
+          "The cave contains a jungle. The roof of the cave collapsed in two places (dolines), allowing sunlight to enter and creating a lush rainforest (\"Garden of Eden\") inside the cave, 200 meters underground.",
           "It was only fully explored in 2009. It contains the world's tallest stalagmites, some reaching up to 80 meters high."
         ],
         question: "What makes Son Doong Cave unique in terms of weather?",

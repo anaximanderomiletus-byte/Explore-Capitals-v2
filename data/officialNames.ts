@@ -207,7 +207,7 @@ export const OFFICIAL_NAMES: Record<string, string> = {
   "Curaçao": "Country of Curaçao",
   "Falkland Islands": "Falkland Islands",
   "Faroe Islands": "Faroe Islands",
-  "French Guiana": "Guiana",
+  "French Guiana": "Guyane",
   "French Polynesia": "Overseas Country of French Polynesia",
   "Gibraltar": "Gibraltar",
   "Greenland": "Greenland",

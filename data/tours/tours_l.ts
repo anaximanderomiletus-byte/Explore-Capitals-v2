@@ -117,7 +117,7 @@ export const toursL: Record<string, TourData> = {
           "All of it."
         ],
         answer: "One-third.",
-        explanation: "The density of these buildings is higher here than in any other city in the world."
+        explanation: "The density of Art Nouveau buildings is higher here than in any other city in the world."
       },
       {
         stopName: "Rundāle Palace",

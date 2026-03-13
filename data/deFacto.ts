@@ -42,7 +42,7 @@ export const DE_FACTO_COUNTRIES: Territory[] = [
     driveSide: 'Right' 
   },
   { 
-    id: 'T-42', 
+    id: 'DF-3',
     name: 'Western Sahara', 
     sovereignty: 'Disputed', 
     capital: 'Laayoune', 

@@ -531,8 +531,8 @@ const Auth: React.FC = () => {
                   <div className="text-[9px] text-white/50 uppercase font-black tracking-widest mt-0.5">Nations</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-display font-black text-white tracking-tighter drop-shadow-md">50k+</div>
-                  <div className="text-[9px] text-white/50 uppercase font-black tracking-widest mt-0.5">Explorers</div>
+                  <div className="text-2xl font-display font-black text-white tracking-tighter drop-shadow-md">15</div>
+                  <div className="text-[9px] text-white/50 uppercase font-black tracking-widest mt-0.5">Games</div>
                 </div>
               </div>
               
@@ -544,7 +544,7 @@ const Auth: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-xs font-black text-white uppercase tracking-tight drop-shadow-md">Secure Account</div>
-                  <div className="text-[9px] text-white/60 font-black uppercase tracking-widest mt-0.5">Encrypted Progress</div>
+                  <div className="text-[9px] text-white/60 font-black uppercase tracking-widest mt-0.5">Saved Progress</div>
                 </div>
               </div>
             </div>

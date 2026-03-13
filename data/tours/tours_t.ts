@@ -423,7 +423,7 @@ export const toursT: Record<string, TourData> = {
           "Pagodas."
         ],
         answer: "Takienta.",
-        explanation: "These structures serve as both homes and defensive forts."
+        explanation: "Takientas serve as both homes and defensive forts."
       },
       {
         stopName: "Lake Togo",

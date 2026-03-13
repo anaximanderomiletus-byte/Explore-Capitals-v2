@@ -94,7 +94,7 @@ const SEO: React.FC<SEOProps> = ({
     setProperty('og:locale', 'en_US');
 
     // 5. Twitter Card
-    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:card', image ? 'summary_large_image' : 'summary');
     setMeta('twitter:title', fullTitle);
     setMeta('twitter:description', description);
     if (image) {

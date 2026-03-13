@@ -171,7 +171,7 @@ export default function AreaAce() {
             </div>
             <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Area Ace</h1>
             <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
-            <p className="text-white/60 text-sm mb-8">Unlock this game and 3 more with Premium membership.</p>
+            <p className="text-white/60 text-sm mb-8">Unlock this game and more with Premium membership.</p>
             <div className="flex flex-col gap-4">
               <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
                 <Crown size={18} /> UNLOCK WITH PREMIUM

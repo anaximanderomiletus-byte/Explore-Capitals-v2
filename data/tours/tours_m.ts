@@ -267,13 +267,13 @@ export const toursM: Record<string, TourData> = {
           "Orchids."
         ],
         answer: "Pitcher plants (Nepenthes).",
-        explanation: "These plants trap insects and small animals in their fluid-filled cups to get nutrients."
+        explanation: "Pitcher plants trap insects and small animals in their fluid-filled cups to get nutrients."
       },
       {
         stopName: "Taman Negara",
         imageKeyword: "Taman Negara",
         description: [
-          "The name literally means \"National Park\" in Malay. This rainforest is estimated to be 130 million years old, making it one of the oldest deciduous rainforests in the world—older than the Amazon or the Congo.",
+          "The name literally means \"National Park\" in Malay. This rainforest is estimated to be 130 million years old, making it one of the oldest tropical rainforests in the world—older than the Amazon or the Congo.",
           "It features the world's longest canopy walkway. The bridge stretches for 530 meters, suspended 40 meters above the ground, allowing visitors to walk among the treetops without damaging the ecosystem.",
           "The forest is home to the elusive Malayan Tapir. These black-and-white animals look like a mix between a pig and an anteater and are mostly active at night, foraging for leaves in the dense undergrowth."
         ],
@@ -1557,7 +1557,7 @@ export const toursM: Record<string, TourData> = {
           "The Sea Otter."
         ],
         answer: "The Dugong.",
-        explanation: "It hosts the largest remaining population of these animals in East Africa."
+        explanation: "The Bazaruto Archipelago hosts the largest remaining population of dugongs in East Africa."
       },
       {
         stopName: "Island of Mozambique",
@@ -1629,7 +1629,7 @@ export const toursM: Record<string, TourData> = {
           "Swordfish."
         ],
         answer: "Whale Sharks.",
-        explanation: "It is one of the few places in the world where these animals are residents rather than seasonal visitors."
+        explanation: "Tofo Beach is one of the few places in the world where whale sharks are residents rather than seasonal visitors."
       }
     ]
   },

@@ -81,7 +81,7 @@ export const toursK: Record<string, TourData> = {
         stopName: "Khan Shatyr",
         imageKeyword: "Khan Shatyr",
         description: [
-          "The capital city, Astana (formerly Nur-Sultan), is a futuristic city built from scratch on the northern steppe. Its skyline is filled with wild, experimental architecture, including the Khan Shatyr Entertainment Center.",
+          "The capital city, Astana, is a futuristic city built from scratch on the northern steppe. Its skyline is filled with wild, experimental architecture, including the Khan Shatyr Entertainment Center.",
           "Designed by Norman Foster, Khan Shatyr is the largest tent in the world. It is 150 meters high and made of a transparent plastic material that absorbs heat, maintaining a tropical temperature inside even when it is -40°C outside.",
           "Inside the tent is a beach resort with sand imported from the Maldives. Residents of the freezing capital can swim in warm water and play volleyball on white sand in the middle of winter, protected by the giant plastic canopy."
         ],

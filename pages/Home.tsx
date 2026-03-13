@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User } from 'lucide-react';
+import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User, Star, Flame } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import RevealSection from '../components/RevealSection';
@@ -353,7 +353,7 @@ const Home: React.FC = () => {
               icon={<GraduationCap size={28} />}
               color="bg-gel-blue"
               link="/games/capital-quiz"
-              stats="12.4k Played"
+              stats="Play Now"
               image="./png/GAMES/capital-quiz.png"
             />
             <GameCard
@@ -362,7 +362,7 @@ const Home: React.FC = () => {
               icon={<Globe2 size={28} />}
               color="bg-sky"
               link="/games/map-dash"
-              stats="8.1k Played"
+              stats="Play Now"
               image="./png/GAMES/map-dash.png"
             />
             <GameCard
@@ -371,7 +371,7 @@ const Home: React.FC = () => {
               icon={<Trophy size={28} />}
               color="bg-accent"
               link="/games/flag-frenzy"
-              stats="15.2k Played"
+              stats="Play Now"
               image="./png/GAMES/flag-frenzy.png"
             />
           </div>
@@ -436,12 +436,12 @@ const Home: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                       <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
-                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2">1,240</div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Total Pts</div>
+                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Star size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
+                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Earn Points</div>
                       </div>
                       <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
-                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2">12</div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Day Streak</div>
+                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Flame size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
+                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Build Streaks</div>
                       </div>
                     </div>
                   </div>
