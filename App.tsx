@@ -1,6 +1,6 @@
 
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 // framer-motion animations handled per-page via whileInView
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -264,6 +264,16 @@ const PersistentBackground: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Handle SPA redirect from 404.html fallback
+  useEffect(() => {
+    const redirectPath = sessionStorage.getItem('spa_redirect');
+    if (redirectPath) {
+      sessionStorage.removeItem('spa_redirect');
+      navigate(redirectPath, { replace: true });
+    }
+  }, [navigate]);
 
   // Prefetch navbar page chunks once after initial mount
   useEffect(() => {
