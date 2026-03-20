@@ -59,12 +59,12 @@ try {
       } else if (import.meta.env.DEV) {
         console.warn("App Check Site Key is missing. Requests will fail if Enforcement is enabled in Firebase.");
       }
-    } catch (appCheckError) {
-      console.warn("App Check initialization failed (non-critical):", appCheckError);
+    } catch {
+      // App Check init failed — non-critical, silently continue
     }
   }
-} catch (error) {
-  console.error("Firebase initialization failed:", error);
+} catch {
+  // Firebase initialization failed — app will run in offline/degraded mode
 }
 
 export { app, auth, db, storage, functions, analytics };

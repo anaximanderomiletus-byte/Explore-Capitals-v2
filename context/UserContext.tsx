@@ -263,7 +263,7 @@ const getLocalGuest = (): UserProfile => {
       id: 'guest' // Ensure ID is always guest for local storage
     } as UserProfile;
   } catch (e) {
-    console.warn('Failed to load guest data:', e);
+    // Failed to load guest data — use fallback
     return fallback;
   }
 };
@@ -364,7 +364,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setProfile(newUser);
           }
         } catch (err) {
-          console.error('Failed to sync user profile:', err);
+          if (import.meta.env.DEV) console.error('Failed to sync user profile:', err);
         } finally {
           if (isMounted) {
             setLoading(false);
@@ -445,7 +445,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (authUser && db) {
           setDoc(doc(db, 'users', authUser.uid), next, { merge: true })
-            .catch(err => console.error('[UserContext] Failed to persist:', err));
+            .catch(() => { /* persist failed — will retry on next action */ });
         }
 
         return next;
@@ -463,7 +463,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           lastSessionAt: nowIso()
         });
       } catch (err) {
-        console.error('[UserContext] Failed to update stats:', err);
+        if (import.meta.env.DEV) console.error('[UserContext] Failed to update stats:', err);
       }
     }
   }, [authUser]);
@@ -477,7 +477,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           lastSessionAt: nowIso()
         });
       } catch (err) {
-        console.error('[UserContext] Failed to update profile:', err);
+        if (import.meta.env.DEV) console.error('[UserContext] Failed to update profile:', err);
       }
     }
   }, [authUser]);

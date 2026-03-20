@@ -24,8 +24,8 @@ const CookieConsent: React.FC = () => {
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true,
-    analytics: true,
-    advertising: true,
+    analytics: false,
+    advertising: false,
   });
 
   useEffect(() => {
@@ -64,19 +64,19 @@ const CookieConsent: React.FC = () => {
   };
 
   const applyPreferences = (prefs: CookiePreferences) => {
-    // If user opts out of analytics, we would disable GA here
-    // For AdSense, users can opt out via Google's ad settings
+    // If user opts out of analytics, disable GA tracking
     if (!prefs.analytics) {
-      // Disable Google Analytics tracking
       (window as any)['ga-disable-G-8NEFW5WL3V'] = true;
     }
 
-    // For advertising preferences, inform AdSense about consent
+    // If user opts out of advertising, signal non-personalized ads
     if (!prefs.advertising) {
-      // This signals to AdSense to show non-personalized ads
       (window as any).adsbygoogle = (window as any).adsbygoogle || [];
       (window as any).adsbygoogle.requestNonPersonalizedAds = 1;
     }
+
+    // Notify the inline script in index.html to load consented services
+    window.dispatchEvent(new Event('cookie-consent-updated'));
   };
 
   const acceptAll = () => {

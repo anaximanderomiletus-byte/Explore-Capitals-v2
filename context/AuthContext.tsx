@@ -121,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Safety timeout: increased to 3 seconds for slower connections
     const timeout = setTimeout(() => {
       if (loading) {
-        console.warn("Auth initialization timed out. Proceeding with limited state.");
+        if (import.meta.env.DEV) console.warn("Auth initialization timed out.");
         clearInterval(checkAuth);
         setLoading(false);
       }
@@ -156,7 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await sendEmailVerification(creds.user);
     } catch (e) {
-      console.warn('Initial email verification failed, user can resend from UI:', e);
+      // Email verification send failed — user can resend from UI
     }
   }, []);
 
@@ -291,8 +291,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         await deleteDoc(doc(db, 'users', uid));
       } catch (err) {
-        console.error('Failed to delete Firestore document:', err);
-        // Continue with Auth deletion anyway
+        // Firestore cleanup failed — continue with Auth deletion anyway
       }
     }
     

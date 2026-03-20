@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="ExploreCapitals" />
 
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://www.gstatic.com https://apis.google.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https: http:; connect-src 'self' ws://localhost:* https://*.firebaseio.com https://*.googleapis.com https://*.cloudfunctions.net https://*.firebaseapp.com https://*.firebasestorage.app https://*.google-analytics.com https://*.analytics.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.google.com https://*.doubleclick.net wss://*.firebaseio.com; frame-src 'self' https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; object-src 'none'; base-uri 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://www.gstatic.com https://apis.google.com https://adservice.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.cloudfunctions.net https://*.firebaseapp.com https://*.firebasestorage.app https://*.google-analytics.com https://*.analytics.google.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.google.com https://*.doubleclick.net wss://*.firebaseio.com; frame-src 'self' https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; object-src 'none'; base-uri 'self';" />
 
     <!-- Allow browser caching for faster repeat visits -->
     <!-- Assets use content-hashed filenames so stale cache is not an issue -->
@@ -138,13 +138,23 @@
       }
     </style>
 
-    <!-- Google AdSense - MUST load directly for crawler verification -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997" crossorigin="anonymous"></script>
-
-    <!-- Google Analytics - Deferred for performance (not needed by AdSense crawler) -->
+    <!-- Google AdSense - loaded only after cookie consent -->
+    <!-- Google Analytics - loaded only after cookie consent -->
     <script>
       var analyticsLoaded = false;
-      function triggerAnalytics() {
+      var adsenseLoaded = false;
+
+      function loadAdSense() {
+        if (adsenseLoaded) return;
+        adsenseLoaded = true;
+        var s = document.createElement('script');
+        s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8144074549309997';
+        s.async = true;
+        s.crossOrigin = 'anonymous';
+        document.head.appendChild(s);
+      }
+
+      function loadAnalytics() {
         if (analyticsLoaded) return;
         analyticsLoaded = true;
         var gtag = document.createElement('script');
@@ -157,10 +167,26 @@
         gtagFn('js', new Date());
         gtagFn('config', 'G-8NEFW5WL3V');
       }
-      ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
-        document.addEventListener(evt, triggerAnalytics, { once: true, passive: true });
-      });
-      setTimeout(triggerAnalytics, 5000);
+
+      // Check if user has already consented (from a prior visit)
+      function checkConsentAndLoad() {
+        try {
+          var consent = localStorage.getItem('ec_cookie_consent');
+          if (!consent) return; // No consent yet — don't load anything
+
+          var prefs = localStorage.getItem('ec_cookie_preferences');
+          var parsed = prefs ? JSON.parse(prefs) : { analytics: true, advertising: true };
+
+          if (parsed.analytics) loadAnalytics();
+          if (parsed.advertising) loadAdSense();
+        } catch(e) {}
+      }
+
+      // On page load, only load if previously consented
+      checkConsentAndLoad();
+
+      // Listen for consent being granted (dispatched by CookieConsent component)
+      window.addEventListener('cookie-consent-updated', checkConsentAndLoad);
     </script>
 
 </head>

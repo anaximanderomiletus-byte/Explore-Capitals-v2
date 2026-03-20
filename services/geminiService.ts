@@ -18,7 +18,7 @@ const getCachedImage = (keyword: string): string | null => {
       return cached;
     }
   } catch (e) {
-    console.warn("Error reading from image cache", e);
+    // image cache read failed
   }
   return null;
 };
@@ -27,7 +27,7 @@ const saveToCache = (keyword: string, dataUrl: string) => {
   try {
     localStorage.setItem(`${CACHE_PREFIX}${keyword}`, dataUrl);
   } catch (e) {
-    console.warn("Local storage full or disabled, could not cache image for:", keyword);
+    // localStorage full or disabled
   }
 };
 
@@ -41,7 +41,7 @@ const getFirestoreImage = async (keyword: string): Promise<string | null> => {
       return data.url || null;
     }
   } catch (e) {
-    console.warn("Error reading from Firestore image store:", e);
+    // Firestore image store read failed
   }
   return null;
 };
@@ -75,7 +75,7 @@ export const getGeneratedImage = async (keyword: string, type: 'landscape' | 'la
       return firestoreImage;
     }
   } catch (e) {
-    console.error("Error in getGeneratedImage:", e);
+    // getGeneratedImage failed
   }
 
   return null;
