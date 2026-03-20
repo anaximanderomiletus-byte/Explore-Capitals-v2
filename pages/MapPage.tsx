@@ -219,16 +219,19 @@ const MapPage: React.FC = () => {
         markersLayerRef.current = L.layerGroup().addTo(map);
         mapInstanceRef.current = map;
         
-        // CRITICAL: Ensure map is correctly sized before we allow any interactions
-        // We use a slightly faster timeout and wait for it to finish before setting mapReady
+        // CRITICAL: Ensure map is correctly sized before we allow any interactions.
+        // Wait for the page-enter animation (250ms) to finish so the container
+        // has its final dimensions before Leaflet measures it.
         setTimeout(() => {
           if (mapInstanceRef.current) {
             mapInstanceRef.current.invalidateSize();
             window.dispatchEvent(new Event('resize'));
             setMapReady(true);
             setPageLoading(false);
+            // Second invalidateSize as insurance after layout settles
+            setTimeout(() => mapInstanceRef.current?.invalidateSize(), 200);
           }
-        }, 100);
+        }, 350);
 
         if (allMarkersRef.current.length === 0) {
             // Use larger touch targets on touch devices for reliable tapping (Apple HIG: 44px min)
@@ -356,7 +359,7 @@ const MapPage: React.FC = () => {
             mapInstanceRef.current.invalidateSize();
             window.dispatchEvent(new Event('resize'));
         }
-      }, 300);
+      }, 400);
     }
 
     const handlePopupClick = (e: MouseEvent) => {
