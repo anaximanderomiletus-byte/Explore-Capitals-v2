@@ -4,7 +4,7 @@ import { getFirestore, Firestore } from 'firebase/firestore';
 import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getFunctions, Functions } from 'firebase/functions';
 import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -53,7 +53,7 @@ try {
 
       if (appCheckSiteKey) {
         initializeAppCheck(app, {
-          provider: new ReCaptchaV3Provider(appCheckSiteKey),
+          provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
           isTokenAutoRefreshEnabled: true
         });
       } else if (import.meta.env.DEV) {
