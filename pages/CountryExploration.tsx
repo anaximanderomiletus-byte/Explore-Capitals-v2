@@ -628,9 +628,9 @@ const CountryExploration: React.FC = () => {
 
               {/* Immersive Aurora Background */}
               <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/20 rounded-full blur-[160px] opacity-80 animate-pulse-slow" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
-                <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[100px] animate-float" />
+                <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/20 rounded-full blur-3xl opacity-80" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-3xl opacity-60" />
+                <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 rounded-full blur-3xl" />
               </div>
               
               <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
@@ -787,8 +787,8 @@ const CountryExploration: React.FC = () => {
 
           {/* Immersive Aurora Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-[160px] opacity-80 animate-pulse-slow" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
+            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-3xl opacity-60" />
           </div>
 
           <div className={`relative z-10 w-full max-w-6xl flex flex-col transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
@@ -932,8 +932,8 @@ const CountryExploration: React.FC = () => {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
               
               {/* Dynamic Atmospheric Glows */}
-              <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky/10 rounded-full blur-[120px] animate-pulse-slow" />
-              <div className="absolute bottom-[-5%] right-[-5%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[100px] animate-pulse-slow delay-1000" />
+              <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-[-5%] right-[-5%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-3xl" />
                   </div>
 
            {/* Navigation Controls */}
@@ -1034,9 +1034,9 @@ const CountryExploration: React.FC = () => {
            
            {/* Immersive Aurora Background */}
            <div className="fixed inset-0 z-0 pointer-events-none">
-             <div className="absolute top-[10%] right-[10%] w-[70%] h-[70%] bg-sky/10 rounded-full blur-[120px] opacity-80 animate-pulse-slow" />
-             <div className="absolute bottom-[10%] left-[10%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[100px] opacity-60 animate-pulse-slow delay-700" />
-             <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[80px]" />
+             <div className="absolute top-[10%] right-[10%] w-[70%] h-[70%] bg-sky/10 rounded-full blur-3xl opacity-80" />
+             <div className="absolute bottom-[10%] left-[10%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-3xl opacity-60" />
+             <div className="absolute top-[30%] left-[20%] w-[40%] h-[40%] bg-white/5 rounded-full blur-3xl" />
            </div>
 
            <div 
@@ -1222,8 +1222,8 @@ const CountryExploration: React.FC = () => {
         <Container className="w-full h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-6 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           {/* Immersive Aurora Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-[160px] opacity-80 animate-pulse-slow" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/7.5 rounded-full blur-[140px] opacity-60 animate-pulse-slow" />
+            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/7.5 rounded-full blur-3xl opacity-60" />
           </div>
 
           <div className={`flex items-center justify-center relative z-10 w-full max-w-3xl transition-all duration-700 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
@@ -1486,8 +1486,8 @@ const CountryExploration: React.FC = () => {
           <div className="absolute inset-0 bg-surface-dark">
              {/* Immersive Aurora Blobs */}
              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky/15 rounded-full blur-[120px] animate-pulse-slow" />
-                <div className="absolute bottom-[-5%] right-[-5%] w-[60%] h-[60%] bg-accent/10 rounded-full blur-[100px] animate-pulse-slow delay-1000" />
+                <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky/15 rounded-full blur-3xl" />
+                <div className="absolute bottom-[-5%] right-[-5%] w-[60%] h-[60%] bg-accent/10 rounded-full blur-3xl" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-white/[0.02] backdrop-blur-3xl" />
              </div>
              

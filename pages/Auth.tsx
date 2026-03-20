@@ -494,8 +494,8 @@ const Auth: React.FC = () => {
       />
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[150px] animate-pulse-slow opacity-80" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-[120px] animate-pulse-slow opacity-50" />
+        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-3xl opacity-50" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.12] pointer-events-none">
           <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="Globe" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] object-contain animate-spin-slow" />
         </div>

@@ -159,8 +159,8 @@ export default function AreaAce() {
         <SEO title="Area Ace - Premium Game" description="Which country is larger? Test your geographic size knowledge." />
 
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-[150px] opacity-60" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-[120px] opacity-40" />
+          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-3xl opacity-60" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-3xl opacity-40" />
         </div>
 
         <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
@@ -207,8 +207,8 @@ export default function AreaAce() {
             <SEO title="Area Ace - Premium Game" description="Which country is larger? Test your geographic size knowledge." />
             
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-500/10 rounded-full blur-[120px] opacity-40" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-500/10 rounded-full blur-3xl opacity-40" />
             </div>
 
             <GameSideAds />
@@ -251,8 +251,8 @@ export default function AreaAce() {
             <SEO title="Area Ace - Playing" description="Which country is larger? Compare land areas in this geography game." />
             
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-[100px]" />
-              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[80px]" />
+              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-3xl" />
             </div>
 
             <div className="game-top-bar max-w-5xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">

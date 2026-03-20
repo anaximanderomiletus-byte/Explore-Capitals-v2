@@ -440,8 +440,8 @@ export default function MapDash() {
 
             {/* Background Decor — matches other game lobbies */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] opacity-80 animate-pulse-slow" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-3xl opacity-60" />
             </div>
 
             <GameSideAds />
@@ -496,8 +496,8 @@ export default function MapDash() {
 
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-[180px] opacity-80 animate-pulse-slow" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-3xl opacity-60" />
             </div>
 
             <GameSideAds />

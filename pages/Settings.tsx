@@ -685,7 +685,7 @@ const Settings: React.FC = () => {
     return (
       <div className="pt-32 pb-16 px-6 bg-surface-dark min-h-screen flex items-center justify-center relative overflow-hidden">
         <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/10 rounded-full blur-[180px] opacity-60" />
+          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/10 rounded-full blur-3xl opacity-60" />
         </div>
         
         <div className="bg-white/[0.03] backdrop-blur-3xl p-12 rounded-3xl border border-white/10 max-w-md text-center relative z-10">
@@ -713,8 +713,8 @@ const Settings: React.FC = () => {
       />
       {/* Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-sky/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-sky/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-3xl" />
       </div>
           
       {/* Status Toast */}

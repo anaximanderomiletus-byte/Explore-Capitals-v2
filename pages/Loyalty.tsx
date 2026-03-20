@@ -46,8 +46,8 @@ const Loyalty: React.FC = () => {
       />
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
+        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-3xl" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-3xl delay-700" />
       </div>
 
       <div className="max-w-5xl mx-auto relative z-10">

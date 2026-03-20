@@ -141,8 +141,8 @@ const AuthAction: React.FC = () => {
   return (
     <div className="min-h-screen bg-surface-dark flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-[150px] animate-pulse-slow opacity-80" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-[120px] animate-pulse-slow opacity-50" />
+        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-3xl opacity-80" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-3xl opacity-50" />
       </div>
 
       <div className="relative z-10 flex-grow flex items-center justify-center px-6 py-24">

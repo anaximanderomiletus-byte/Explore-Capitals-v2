@@ -243,7 +243,7 @@ const Profile: React.FC = () => {
               opacity: [0.15, 0.25, 0.15]
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[-30%] left-[-20%] w-[140%] h-[140%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.15)_0%,transparent_50%)] blur-[100px]" 
+            className="absolute top-[-30%] left-[-20%] w-[140%] h-[140%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.15)_0%,transparent_50%)] blur-3xl" 
           />
           <motion.div 
             animate={{ 
@@ -251,7 +251,7 @@ const Profile: React.FC = () => {
               opacity: [0.1, 0.2, 0.1]
             }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-[-20%] right-[-20%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.1)_0%,transparent_50%)] blur-[80px]" 
+            className="absolute bottom-[-20%] right-[-20%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.1)_0%,transparent_50%)] blur-3xl" 
           />
           <motion.div 
             animate={{ 
@@ -443,8 +443,8 @@ const Profile: React.FC = () => {
         description="View your ExploreCapitals profile, achievements, game statistics, and progress. Track your geography learning journey."
       />
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface-dark">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-[120px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-[100px] animate-pulse-slow delay-700" />
+        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.12)_0%,transparent_70%)] blur-3xl" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.06)_0%,transparent_60%)] blur-3xl delay-700" />
       </div>
 
       <div className="max-w-5xl mx-auto space-y-8 relative z-10">

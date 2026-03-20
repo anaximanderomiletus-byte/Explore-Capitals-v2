@@ -8,8 +8,8 @@ const Footer: React.FC = () => (
     <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     
     {/* Decorative Background Glows */}
-    <div className="absolute top-0 right-0 w-[40%] h-full bg-sky/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow" />
-    <div className="absolute bottom-0 left-0 w-[30%] h-full bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
+    <div className="absolute top-0 right-0 w-[40%] h-full bg-sky/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute bottom-0 left-0 w-[30%] h-full bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-20 mb-16">

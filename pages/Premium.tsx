@@ -122,8 +122,8 @@ const Premium: React.FC = () => {
             ))}
           </div>
           <div className="absolute inset-0 bg-surface-dark/85 backdrop-blur-sm" />
-          <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
+          <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-3xl opacity-50" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-3xl opacity-40" />
         </div>
 
         <SEO
@@ -175,8 +175,8 @@ const Premium: React.FC = () => {
     <div className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-surface-dark min-h-screen relative overflow-hidden">
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-[180px] animate-pulse-slow opacity-50" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-[150px] animate-pulse-slow opacity-40" />
+        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-amber-500/5 rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-sky/3 rounded-full blur-3xl opacity-40" />
       </div>
 
       <SEO 

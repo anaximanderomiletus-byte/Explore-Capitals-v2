@@ -126,7 +126,7 @@ const CountryDetail: React.FC = () => {
       <div className="pt-32 pb-20 px-6 bg-surface-dark min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden">
         {/* Background Decor */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-[150px] opacity-60 animate-pulse-slow" />
+          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
         </div>
 
         <div className="bg-white/5 backdrop-blur-3xl p-12 rounded-[3rem] border border-white/10 relative z-10 max-w-md">
