@@ -51,18 +51,13 @@ try {
         }
       }
 
-      if (appCheckSiteKey && !import.meta.env.DEV) {
-        // TODO: Re-enable once reCAPTCHA Enterprise token exchange is verified working.
-        // The ReCaptchaEnterpriseProvider generates tokens that Firebase currently
-        // rejects with auth/firebase-app-check-token-is-invalid. Disabling App Check
-        // temporarily so Auth is not blocked. App Check is defense-in-depth; Firestore
-        // rules and Auth itself still protect data.
-        //
-        // To re-enable, uncomment the block below and verify sign-in works:
-        // initializeAppCheck(app, {
-        //   provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
-        //   isTokenAutoRefreshEnabled: true
-        // });
+      if (appCheckSiteKey) {
+        initializeAppCheck(app, {
+          provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+      } else if (import.meta.env.DEV) {
+        console.warn("App Check Site Key is missing. Requests will fail if Enforcement is enabled in Firebase.");
       }
     } catch {
       // App Check init failed — non-critical, silently continue
