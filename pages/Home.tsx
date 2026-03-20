@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User, Star, Flame } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
@@ -151,60 +150,37 @@ const Home: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-10 lg:gap-y-3 xl:gap-x-16 xl:gap-y-4 items-center pt-20 sm:pt-24 md:pt-[12vh] lg:pt-[12vh] pb-12 sm:pb-16 md:pb-[6vh]">
           {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center lg:text-left lg:col-start-1"
-          >
+          <div className="text-center lg:text-left lg:col-start-1">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-xl border-2 border-white/30 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white shadow-premium transition-all hover:bg-white/10 cursor-default glow-badge">
               <Zap size={10} fill="currentColor" className="animate-pulse text-sky sm:w-3 sm:h-3" />
               <span>Free Global Education</span>
             </div>
-          </motion.div>
+          </div>
 
           {/* Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-center lg:text-left lg:col-start-1"
-          >
+          <div className="text-center lg:text-left lg:col-start-1">
             <h1 className="text-6xl sm:text-7xl md:text-7xl lg:text-[clamp(6rem,9vw,8rem)] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
               Play <br className="hidden lg:block" />Your <br />
               <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible" style={{ paddingBottom: '0.15em', paddingRight: '0.1em', display: 'inline-block' }}>
                 Atlas.
               </span>
             </h1>
-          </motion.div>
+          </div>
 
           {/* Globe */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0"
-          >
-            <motion.div
+          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0">
+            {/* Static glow rings */}
+            <div
               className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[clamp(580px,58vw,880px)] lg:h-[clamp(580px,58vw,880px)] rounded-full pointer-events-none"
-              animate={{ opacity: [0.3, 0.5, 0.3], scale: [0.97, 1.03, 0.97] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
             />
-            <motion.div
+            <div
               className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[clamp(480px,48vw,720px)] lg:h-[clamp(480px,48vw,720px)] rounded-full pointer-events-none"
-              animate={{ opacity: [0.6, 1, 0.6], scale: [0.95, 1.05, 0.95] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
             />
 
             <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[clamp(380px,40vw,600px)] lg:h-[clamp(380px,40vw,600px)] flex-shrink-0 pointer-events-none">
-              <motion.div
-                className="w-full h-full"
-                animate={{ scale: [1, 1.03, 1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                style={{ willChange: 'transform', transform: 'translateZ(0)' }}
-              >
+              <div className="w-full h-full" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                 <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img
                     src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
@@ -216,55 +192,37 @@ const Home: React.FC = () => {
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
                   <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
                 </Link>
-              </motion.div>
+              </div>
 
-              {/* Decorative floating bubbles */}
-              <motion.div
-                animate={{ y: [0, -6, 2, -4, 1, -7, 0], x: [0, 3, -2, 5, -1, 2, 0], rotate: [0, 2, -1, 3, -2, 1, 0] }}
-                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none"
-              >
+              {/* Decorative bubbles — static */}
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-28 xl:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-11 lg:h-11 xl:w-14 xl:h-14" />
                 </div>
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 4, -3, 6, -2, 5, -4, 0], x: [0, -4, 2, -3, 4, -1, 3, 0], rotate: [0, -2, 3, -1, 2, -3, 1, 0] }}
-                transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none"
-              >
+              </div>
+              <div className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-36 xl:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-[80px] xl:h-[80px]" />
                 </div>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Description */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4"
-          >
+          <div className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4">
             <p className="text-base sm:text-lg md:text-xl lg:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
               Master world capitals, identify flags, and conquer the map. High-fidelity geography games designed to build global intuition.
             </p>
-          </motion.div>
+          </div>
 
           {/* Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0"
-          >
+          <div className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0">
             <Link to="/games">
               <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-20 text-2xl sm:text-2xl md:text-3xl lg:text-3xl group uppercase">
                 Play <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
               </Button>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </Section>
 
@@ -428,14 +386,12 @@ const Home: React.FC = () => {
                         <span className="text-base sm:text-lg md:text-xl font-black text-sky">75%</span>
                       </div>
                       <div className="h-2.5 sm:h-3 md:h-4 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          viewport={{ once: true, margin: "0px 0px 300px 0px" }} whileInView={{ width: "75%" }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
+                        <div
                           className="h-full bg-frutiger-gradient rounded-full relative"
+                          style={{ width: '75%' }}
                         >
                           <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
-                        </motion.div>
+                        </div>
                       </div>
                     </div>
 
