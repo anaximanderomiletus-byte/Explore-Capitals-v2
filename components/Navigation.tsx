@@ -171,7 +171,7 @@ const Navigation: React.FC = () => {
   };
   const isHeroMode = navbarMode === 'hero';
   const isMapPage = location.pathname === '/map';
-  const isOverMap = isMapPage; // Only the map page has a light background
+  const isOverMap = isMapPage || location.pathname === '/games/map-dash'; // Pages with light backgrounds
 
   // Navigation is now instant: Link navigates immediately, and the
   // useEffect watching `location` closes the menu automatically.
