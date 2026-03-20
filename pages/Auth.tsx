@@ -583,11 +583,11 @@ const Auth: React.FC = () => {
 
               {step === 1 && mode !== 'forgotpassword' && !mfaResolver && (
                 <div className="space-y-6 mb-8">
-                  <div className="flex bg-black/20 p-1 rounded-full border border-white/20 shadow-inner relative overflow-hidden">
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-                    <TabButton active={mode === 'signin'} layoutId="mode-toggle" onClick={() => handleModeChange('signin')}>SIGN IN</TabButton>
-                    <TabButton active={mode === 'signup'} layoutId="mode-toggle" onClick={() => handleModeChange('signup')}>SIGN UP</TabButton>
-                  </div>
+                  <TabGroup
+                    activeIndex={mode === 'signin' ? 0 : 1}
+                    labels={['SIGN IN', 'SIGN UP']}
+                    onSelect={(i) => handleModeChange(i === 0 ? 'signin' : 'signup')}
+                  />
                 </div>
               )}
 
@@ -745,23 +745,11 @@ const Auth: React.FC = () => {
                     transition={{ duration: 0.15, ease: "easeOut" }}
                     className="space-y-6"
                   >
-                    <div className="flex bg-black/20 p-1 rounded-full border border-white/20 shadow-inner relative overflow-hidden">
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-                      <TabButton 
-                        active={authMethod === 'email'} 
-                        layoutId="auth-method" 
-                        onClick={() => { setAuthMethod('email'); setError(null); }}
-                      >
-                        Email
-                      </TabButton>
-                      <TabButton 
-                        active={authMethod === 'phone'} 
-                        layoutId="auth-method" 
-                        onClick={() => { setAuthMethod('phone'); setError(null); }}
-                      >
-                        Phone
-                      </TabButton>
-                    </div>
+                    <TabGroup
+                      activeIndex={authMethod === 'email' ? 0 : 1}
+                      labels={['EMAIL', 'PHONE']}
+                      onSelect={(i) => { setAuthMethod(i === 0 ? 'email' : 'phone'); setError(null); }}
+                    />
 
                     <AnimatePresence>
                       <motion.div
@@ -885,25 +873,32 @@ const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label
   </div>
 );
 
-  const TabButton: React.FC<{ active: boolean; onClick: () => void; children: React.ReactNode; layoutId: string; className?: string }> = ({ active, onClick, children, layoutId, className = "" }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-colors duration-300 relative z-10 ${
-      active ? 'text-sky' : 'text-white/40 hover:text-white'
-    } ${className}`}
-  >
-    <span className="relative z-10">{children}</span>
-    {active && (
-      <motion.div
-        layoutId={layoutId}
-        className="absolute inset-0 bg-white rounded-full overflow-hidden"
-        transition={{ type: 'spring', bounce: 0.15, duration: 0.6 }}
+  const TabGroup: React.FC<{ activeIndex: number; labels: string[]; onSelect: (i: number) => void }> = ({ activeIndex, labels, onSelect }) => (
+  <div className="flex bg-black/20 p-1 rounded-full border border-white/20 shadow-inner relative overflow-hidden">
+    <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
+    {/* Sliding bubble — horizontal only via translateX */}
+    <div
+      className="absolute top-1 bottom-1 rounded-full bg-white overflow-hidden transition-transform duration-300 ease-out pointer-events-none"
+      style={{
+        width: `${100 / labels.length}%`,
+        transform: `translateX(${activeIndex * 100}%)`,
+      }}
+    >
+      <div className="absolute inset-0 bg-glossy-gradient opacity-40 pointer-events-none" />
+    </div>
+    {labels.map((label, i) => (
+      <button
+        key={label}
+        type="button"
+        onClick={() => onSelect(i)}
+        className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-colors duration-300 relative z-10 ${
+          activeIndex === i ? 'text-sky' : 'text-white/40 hover:text-white'
+        }`}
       >
-        <div className="absolute inset-0 bg-glossy-gradient opacity-40 pointer-events-none" />
-      </motion.div>
-    )}
-  </button>
+        <span className="relative z-10">{label}</span>
+      </button>
+    ))}
+  </div>
 );
 
 const PremiumInput: React.FC<{
