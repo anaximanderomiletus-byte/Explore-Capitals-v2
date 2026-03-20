@@ -41,17 +41,20 @@ const PhotoPrint: React.FC<{
   return (
     <div className={`relative group max-w-full ${className}`}>
       {/* Liquid Glass Container - TV Style */}
-      <div className={`p-1.5 sm:p-2 bg-[#141414] rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass shadow-2xl shadow-black/50`}>
+      <div className={`p-1.5 sm:p-2 bg-[#141414] rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass shadow-[0_8px_32px_rgba(0,0,0,0.5)]`}>
         {/* Bezel Gloss */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
         <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
           {currentSrc ? (
-            <img 
-              src={currentSrc} 
-              alt={alt} 
+            <img
+              src={currentSrc}
+              alt={alt}
               onError={handleImgError}
-              className="w-full h-full object-cover brightness-[1.05] contrast-[1.05] transition-all duration-1000" 
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-full object-cover brightness-[1.05] contrast-[1.05] transition-all duration-1000"
             />
           ) : (
             <div className="flex flex-col items-center justify-center text-white/20 w-full h-full bg-[#0A0A0A] p-6 text-center">
@@ -255,31 +258,29 @@ const CountryExploration: React.FC = () => {
           const shuffledData = { ...data, stops: shuffledStops };
 
           setTourData(shuffledData);
-          
-          // Step 1: Generate/Check Intro Image
-          const introImgPromise = getGeneratedImage(country.name, 'landscape');
 
-          // Step 2: Generate/Check Stop Images in parallel for speed
-          const stopImagePromises = shuffledData.stops.map(stop => 
-            getGeneratedImage(stop.imageKeyword || stop.stopName, 'landmark')
-          );
-
-          // Wait for all image metadata checks to complete
-          const [introImg, ...stopImgs] = await Promise.all([introImgPromise, ...stopImagePromises]);
-          
+          // Step 1: Get intro image — show the page as soon as this resolves
+          const introImg = await getGeneratedImage(country.name, 'landscape');
           setIntroImage(introImg);
-          
-          const newStopImages: Record<number, string | null> = {};
-          stopImgs.forEach((img, i) => {
-            newStopImages[i] = img;
-          });
-          setStopImages(newStopImages);
           setLoadingProgress(95);
 
-          // Mark data as loaded immediately - don't wait for full preloading which can hang
+          // Mark data as loaded immediately — don't block on stop images
           clearTimeout(globalTimeout);
           setDataLoaded(true);
           setLoadingProgress(100);
+
+          // Step 2: Load stop images in the background while user sees the intro
+          Promise.all(
+            shuffledData.stops.map(stop =>
+              getGeneratedImage(stop.imageKeyword || stop.stopName, 'landmark')
+            )
+          ).then(stopImgs => {
+            const newStopImages: Record<number, string | null> = {};
+            stopImgs.forEach((img, i) => {
+              newStopImages[i] = img;
+            });
+            setStopImages(newStopImages);
+          });
         } else {
           clearTimeout(globalTimeout);
           console.error("[Expedition] No tour data returned");

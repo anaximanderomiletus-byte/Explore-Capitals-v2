@@ -242,8 +242,9 @@ const CountryDetail: React.FC = () => {
             alt=""
             className="absolute inset-0 w-full h-full object-cover scale-[1.02]"
             aria-hidden="true"
-            loading="lazy"
+            loading="eager"
             decoding="async"
+            fetchPriority="high"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-sky/20 via-surface-dark to-surface-dark" />
