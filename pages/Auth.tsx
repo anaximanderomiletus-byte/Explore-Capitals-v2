@@ -873,23 +873,18 @@ const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label
   </div>
 );
 
-  const TabGroup: React.FC<{ activeIndex: number; labels: string[]; onSelect: (i: number) => void }> = ({ activeIndex, labels, onSelect }) => {
-  const count = labels.length;
-  // Bubble width = (container - 2 × padding) / count
-  // Bubble left  = padding + index × bubbleWidth
-  const pad = 4; // p-1 = 4px
-  return (
+  const TabGroup: React.FC<{ activeIndex: number; labels: string[]; onSelect: (i: number) => void }> = ({ activeIndex, labels, onSelect }) => (
     <div className="flex bg-black/20 p-1 rounded-full border border-white/20 shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] relative overflow-hidden">
       <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-      {/* Sliding bubble — horizontal only */}
+      {/* Sliding bubble — horizontal only via translateX, locked top/bottom */}
       <div
-        className="absolute top-1 bottom-1 rounded-full overflow-hidden pointer-events-none transition-[left] duration-300 ease-out"
+        className="absolute top-1 bottom-1 left-1 rounded-full overflow-hidden pointer-events-none transition-transform duration-300 ease-out"
         style={{
-          width: `calc((100% - ${pad * 2}px) / ${count})`,
-          left: `calc(${pad}px + ${activeIndex} * (100% - ${pad * 2}px) / ${count})`,
+          width: `calc(50% - 4px)`,
+          transform: `translateX(${activeIndex === 0 ? '0%' : 'calc(100% + 8px)'})`,
         }}
       >
-        {/* 3D raised look: white base + glossy top highlight + subtle shadow */}
+        {/* 3D raised look */}
         <div className="absolute inset-0 bg-white rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.25)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-white/10 rounded-full" />
         <div className="absolute inset-x-2 top-[3px] h-[40%] bg-white/50 rounded-full blur-[1px]" />
@@ -908,7 +903,6 @@ const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label
       ))}
     </div>
   );
-};
 
 const PremiumInput: React.FC<{
   label: string;
