@@ -129,8 +129,8 @@ const Games: React.FC = () => {
             {isActive ? (
               isLocked ? (
                 <Button
-                  variant="secondary"
-                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xs sm:text-sm border-2 border-amber-500/30 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 whitespace-nowrap"
+                  variant="premium"
+                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xs sm:text-sm whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
                   <Lock size={16} className="mr-2 shrink-0" /> UNLOCK WITH PREMIUM
@@ -280,8 +280,8 @@ const Games: React.FC = () => {
 
               <div className="space-y-2">
                 <Button
-                  variant="accent"
-                  className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0"
+                  variant="premium"
+                  className="w-full h-14"
                   onClick={() => {
                     setShowUpgradeModal(false);
                     navigate('/premium');

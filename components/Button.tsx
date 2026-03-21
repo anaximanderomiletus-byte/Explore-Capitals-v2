@@ -2,7 +2,7 @@
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'accent' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'accent' | 'danger' | 'premium';
   size?: 'sm' | 'md' | 'lg';
   isFlat?: boolean;
 }
@@ -87,6 +87,9 @@ const Button: React.FC<ButtonProps> = ({
       ? `bg-white/10 backdrop-blur-xl border-2 border-white/20 hover:bg-white/20 hover:brightness-110 ${hasTextColor ? '' : 'text-white'}`
       : `bg-white/20 backdrop-blur-2xl border-2 border-white/80 hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
     outline: `bg-white/20 backdrop-blur-3xl border-4 border-white hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-glossy-gradient before:opacity-40 before:z-0 ${hasTextColor ? '' : 'text-white'} after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
+    premium: isFlat
+      ? `bg-amber-500 hover:brightness-110 active:brightness-95 text-white`
+      : `bg-gel-gold backdrop-blur-2xl hover:brightness-110 hover:shadow-[0_12px_28px_rgba(217,119,6,0.3)] before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-amber-300/60`,
   };
 
   // Sizes with minimum touch targets (44px) for mobile
@@ -97,7 +100,7 @@ const Button: React.FC<ButtonProps> = ({
     lg: `px-8 sm:px-10 py-3.5 sm:py-4 ${hasTextSize ? '' : 'text-base sm:text-lg'} min-h-[48px]`,
   };
 
-  const showShing = variant === 'primary' && !isFlat;
+  const showShing = (variant === 'primary' || variant === 'premium') && !isFlat;
   const shingClass = showShing ? 'shing-btn' : '';
 
   return (

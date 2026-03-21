@@ -51,6 +51,7 @@ export default {
         'aurora': 'radial-gradient(circle at 50% -20%, #00C2FF, transparent), radial-gradient(circle at -20% 50%, #34C759, transparent)',
         'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)',
         'gel-blue': 'linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%)',
+        'gel-gold': 'linear-gradient(180deg, #FDE68A 0%, #F59E0B 48%, #D97706 52%, #F59E0B 100%)',
         'sky-gradient': 'linear-gradient(180deg, #00C2FF 0%, #BFE6FF 100%)',
       },
       animation: {

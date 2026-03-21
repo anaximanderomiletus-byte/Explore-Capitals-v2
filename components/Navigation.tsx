@@ -6,6 +6,7 @@ import Button from './Button';
 import { useLayout } from '../context/LayoutContext';
 import { useAuth } from '../context/AuthContext';
 import { useUser } from '../context/UserContext';
+import { isPremiumUser } from '../services/subscription';
 import { getAvatarById } from '../constants/avatars';
 import AccountMenu from './AccountMenu';
 import ConfirmationModal from './ConfirmationModal';
@@ -157,7 +158,8 @@ const Navigation: React.FC = () => {
   
   // Auth context for mobile account panel
   const { user: authUser, signOut, loading: authLoading } = useAuth();
-  const { user, isAuthenticated, isLoading: userLoading } = useUser();
+  const { user, userProfile, isAuthenticated, isLoading: userLoading } = useUser();
+  const isPremium = isPremiumUser(userProfile?.subscriptionStatus, userProfile?.subscriptionPlan);
   const avatar = getAvatarById(authUser?.photoURL || user?.photoURL);
   
   // Use Context for determining navbar mode and threshold
@@ -349,7 +351,7 @@ const Navigation: React.FC = () => {
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
             <Link to="/games">
-              <Button variant="primary" size="sm" className="group uppercase text-sm tracking-widest px-8 py-2.5">
+              <Button variant={isPremium ? 'premium' : 'primary'} size="sm" className="group uppercase text-sm tracking-widest px-8 py-2.5">
                 Play Now <Play className="ml-1.5 w-4 h-4" fill="currentColor" />
               </Button>
             </Link>
@@ -476,7 +478,7 @@ const Navigation: React.FC = () => {
             className="mt-6"
           >
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
+              <Button variant={isPremium ? 'premium' : 'primary'} size="lg" className="w-full justify-center h-14 text-lg group uppercase">
                 Play <Play className="ml-2 w-5 h-5" fill="currentColor" />
               </Button>
             </Link>

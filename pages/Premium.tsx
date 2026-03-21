@@ -144,9 +144,9 @@ const Premium: React.FC = () => {
             </p>
             <div className="flex flex-col gap-6">
               <Button
-                variant="accent"
+                variant="premium"
                 size="md"
-                className="w-full h-16 text-xl uppercase tracking-widest font-black border border-white/20"
+                className="w-full h-16 text-xl uppercase tracking-widest font-black"
                 onClick={() => navigate('/auth?redirect=/premium')}
               >
                 Sign In <ArrowRight size={20} />
@@ -277,7 +277,7 @@ const Premium: React.FC = () => {
               <p className="text-amber-400 text-xs font-bold h-5">{plans.annual.savings}</p>
               <p className="text-white/60 text-sm flex-1">{plans.annual.description}</p>
               <Button 
-                variant={selectedPlan === 'annual' ? 'accent' : 'secondary'}
+                variant={selectedPlan === 'annual' ? 'premium' : 'secondary'}
                 className="w-full mt-4 h-12"
                 onClick={(e) => {
                   e.stopPropagation();
