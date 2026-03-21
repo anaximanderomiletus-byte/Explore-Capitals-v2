@@ -130,7 +130,7 @@ const Games: React.FC = () => {
               isLocked ? (
                 <Button
                   variant="premium"
-                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xs sm:text-sm whitespace-nowrap"
+                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
                   <Lock size={16} className="mr-2 shrink-0" /> UNLOCK
