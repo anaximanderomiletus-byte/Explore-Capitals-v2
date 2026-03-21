@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Mail, Phone, ShieldCheck, User, Lock, ArrowRight, CheckCircle2, AlertCircle, Globe2, Compass, Eye, EyeOff } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/Button';
 import PhoneInput from '../components/PhoneInput';
 import { useAuth } from '../context/AuthContext';
@@ -608,16 +607,9 @@ const Auth: React.FC = () => {
               )}
 
               <div className="space-y-6">
-                <AnimatePresence initial={false}>
                 {mfaResolver ? (
-                  <motion.div
-                    key="mfa"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="space-y-6"
-                  >
+                  <div className="space-y-6 animate-in fade-in duration-200">
+
                     {mfaStep === 1 ? (
                       <div className="space-y-6">
                         <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-center relative overflow-hidden">
@@ -654,18 +646,12 @@ const Auth: React.FC = () => {
                         <button onClick={() => { setMfaStep(1); setBusy(false); setError(null); }} className="w-full text-[9px] font-black text-white/40 hover:text-sky uppercase tracking-[0.3em] py-2">Go Back</button>
                       </form>
                     )}
-                  </motion.div>
+                  </div>
                 ) : (
                   <>
                 {mode === 'signup' && (
-                  <motion.div
-                    key={`signup-step-${step}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4 animate-in fade-in duration-200">
+
                     {step === 1 && (
                       <form className="space-y-4" onSubmit={handleSignUp} noValidate>
                         <PremiumInput icon={<User size={16} />} label="Name" value={name} onChange={(v) => { setName(v); setFieldErrors({ ...fieldErrors, name: false }); }} placeholder="Your Name" required error={fieldErrors.name} />
@@ -690,22 +676,18 @@ const Auth: React.FC = () => {
 
                     {step === 2 && (
                       <div className="space-y-6">
-                        <AnimatePresence mode="wait">
+
                           {showVerifySuccess ? (
-                            <motion.div
-                              key="success"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              className="py-12 flex flex-col items-center justify-center text-center space-y-4"
-                            >
+                            <div className="py-12 flex flex-col items-center justify-center text-center space-y-4 animate-in fade-in zoom-in-95 duration-300">
+
                               <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 border border-green-500/30">
                                 <CheckCircle2 size={48} />
                               </div>
                               <h3 className="text-xl font-black text-white uppercase tracking-tighter">Verified</h3>
                               <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">Completing registration...</p>
-                            </motion.div>
+                            </div>
                           ) : (
-                            <motion.div key="input" className="space-y-6 text-center">
+                            <div className="space-y-6 text-center">
                               <div className="w-20 h-20 bg-sky/10 rounded-full flex items-center justify-center text-sky-light mx-auto border-2 border-white/20">
                                 <Mail size={32} />
                               </div>
@@ -728,37 +710,23 @@ const Auth: React.FC = () => {
                                   GO BACK
                                 </button>
                               </div>
-                            </motion.div>
+                            </div>
                           )}
-                        </AnimatePresence>
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                 )}
 
                 {mode === 'signin' && (
-                  <motion.div
-                    key="signin"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="space-y-6"
-                  >
+                  <div className="space-y-6 animate-in fade-in duration-200">
+
                     <TabGroup
                       activeIndex={authMethod === 'email' ? 0 : 1}
                       labels={['EMAIL', 'PHONE']}
                       onSelect={(i) => { setAuthMethod(i === 0 ? 'email' : 'phone'); setError(null); }}
                     />
 
-                    <AnimatePresence>
-                      <motion.div
-                        key={authMethod}
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
-                        transition={{ duration: 0.2 }}
-                      >
+                      <div key={authMethod} className="animate-in fade-in duration-200">
                         {authMethod === 'email' ? (
                           <form className="space-y-4" onSubmit={handleSignIn} noValidate>
                             <PremiumInput icon={<Mail size={16} />} label="Email" type="email" value={email} onChange={(v) => { setEmail(v); setFieldErrors({ ...fieldErrors, email: false }); }} placeholder="Email" required error={fieldErrors.email} />
@@ -802,20 +770,13 @@ const Auth: React.FC = () => {
                             )}
                           </div>
                         )}
-                      </motion.div>
-                    </AnimatePresence>
-                  </motion.div>
+                      </div>
+                  </div>
                 )}
 
                 {mode === 'forgotpassword' && (
-                  <motion.div
-                    key={`forgotpassword-step-${step}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4 animate-in fade-in duration-200">
+
                     {step === 1 ? (
                       <form className="space-y-4" onSubmit={handleForgotPassword} noValidate>
                         <PremiumInput icon={<Mail size={16} />} label="Email" type="email" value={email} onChange={(v) => { setEmail(v); setFieldErrors({ ...fieldErrors, email: false }); }} placeholder="Email" required error={fieldErrors.email} />
@@ -846,11 +807,11 @@ const Auth: React.FC = () => {
                         </button>
                       </form>
                     )}
-                  </motion.div>
+                  </div>
                 )}
                   </>
                 )}
-                </AnimatePresence>
+
               </div>
 
               <div ref={recaptchaRef} id="recaptcha-container" />
@@ -873,36 +834,62 @@ const RequirementItem: React.FC<{ met: boolean; label: string }> = ({ met, label
   </div>
 );
 
-  const TabGroup: React.FC<{ activeIndex: number; labels: string[]; onSelect: (i: number) => void }> = ({ activeIndex, labels, onSelect }) => (
-    <div className="flex bg-black/20 p-1 rounded-full border border-white/20 shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] relative overflow-hidden">
-      <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-      {/* Sliding bubble — horizontal only via translateX, locked top/bottom */}
+  const TabGroup: React.FC<{ activeIndex: number; labels: string[]; onSelect: (i: number) => void }> = ({ activeIndex, labels, onSelect }) => {
+    const trackRef = useRef<HTMLDivElement>(null);
+    const dragStartX = useRef(0);
+    const dragging = useRef(false);
+
+    const handlePointerDown = (e: React.PointerEvent) => {
+      dragging.current = true;
+      dragStartX.current = e.clientX;
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    };
+    const handlePointerUp = (e: React.PointerEvent) => {
+      if (!dragging.current) return;
+      dragging.current = false;
+      const dx = e.clientX - dragStartX.current;
+      if (Math.abs(dx) > 20) {
+        onSelect(dx > 0 ? 1 : 0);
+      }
+    };
+
+    return (
       <div
-        className="absolute top-1 bottom-1 left-1 rounded-full overflow-hidden pointer-events-none transition-transform duration-300 ease-out"
-        style={{
-          width: `calc(50% - 4px)`,
-          transform: `translateX(${activeIndex === 0 ? '0%' : 'calc(100% + 8px)'})`,
-        }}
+        ref={trackRef}
+        className="flex bg-black/20 rounded-full border border-white/20 shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] relative cursor-pointer select-none"
+        style={{ padding: '5px' }}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
       >
-        {/* 3D raised look */}
-        <div className="absolute inset-0 bg-white rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.25)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-white/10 rounded-full" />
-        <div className="absolute inset-x-2 top-[3px] h-[40%] bg-white/50 rounded-full blur-[1px]" />
-      </div>
-      {labels.map((label, i) => (
-        <button
-          key={label}
-          type="button"
-          onClick={() => onSelect(i)}
-          className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-colors duration-300 relative z-10 ${
-            activeIndex === i ? 'text-sky-600' : 'text-white/40 hover:text-white/70'
-          }`}
+        {/* Sliding bubble */}
+        <div
+          className="absolute rounded-full pointer-events-none transition-[left] duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
+          style={{
+            top: '5px',
+            bottom: '5px',
+            left: activeIndex === 0 ? '5px' : 'calc(50% + 1px)',
+            right: activeIndex === 0 ? 'calc(50% + 1px)' : '5px',
+          }}
         >
-          <span className="relative z-10">{label}</span>
-        </button>
-      ))}
-    </div>
-  );
+          <div className="absolute inset-0 bg-white rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white/70 rounded-full" />
+          <div className="absolute inset-x-3 top-[4px] h-[35%] bg-white/80 rounded-full blur-[2px]" />
+        </div>
+        {labels.map((label, i) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => onSelect(i)}
+            className={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-colors duration-300 relative z-10 ${
+              activeIndex === i ? 'text-sky-600' : 'text-white/40 hover:text-white/70'
+            }`}
+          >
+            <span className="relative z-10">{label}</span>
+          </button>
+        ))}
+      </div>
+    );
+  };
 
 const PremiumInput: React.FC<{
   label: string;
