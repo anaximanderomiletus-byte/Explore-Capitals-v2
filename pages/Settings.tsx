@@ -1005,7 +1005,7 @@ const Settings: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <h3 className="text-sm font-bold text-white mb-1">UPGRADE TO PREMIUM</h3>
+                      <h3 className="text-sm font-bold text-white mb-1">UPGRADE</h3>
                       <p className="text-xs text-white/60 mb-4 leading-relaxed">
                         Get unlimited games, remove ads, and unlock advanced analytics.
                       </p>

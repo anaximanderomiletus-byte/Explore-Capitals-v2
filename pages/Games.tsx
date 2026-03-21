@@ -287,7 +287,7 @@ const Games: React.FC = () => {
                     navigate('/premium');
                   }}
                 >
-                  <Sparkles size={18} /> UPGRADE TO PREMIUM
+                  <Sparkles size={18} /> UPGRADE
                 </Button>
                 <button
                   onClick={() => setShowUpgradeModal(false)}
