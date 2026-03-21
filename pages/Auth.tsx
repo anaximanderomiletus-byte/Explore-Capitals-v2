@@ -496,7 +496,9 @@ const Auth: React.FC = () => {
         <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-sky/30 rounded-full blur-3xl opacity-80" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/15 rounded-full blur-3xl opacity-50" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.12] pointer-events-none">
-          <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="Globe" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] object-contain animate-spin-slow" />
+          {/* Glow ring behind globe */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-sky/20 blur-3xl animate-[breathe_6s_ease-in-out_infinite]" />
+          <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="Globe" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] object-contain" style={{ animation: 'spin 20s linear infinite, breathe 6s ease-in-out infinite', filter: 'drop-shadow(0 0 60px rgba(56,189,248,0.3))' }} />
         </div>
       </div>
 
@@ -549,7 +551,7 @@ const Auth: React.FC = () => {
             </div>
 
             {/* Background Decorative Logo */}
-            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 -rotate-12 pointer-events-none animate-spin-slow" />
+            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="Globe" className="absolute -bottom-16 -right-16 w-[450px] h-[450px] opacity-15 pointer-events-none" style={{ animation: 'spin 20s linear infinite, breathe 6s ease-in-out infinite', transform: 'rotate(-12deg)', filter: 'drop-shadow(0 0 40px rgba(56,189,248,0.4))' }} />
           </div>
 
           {/* Form Content */}

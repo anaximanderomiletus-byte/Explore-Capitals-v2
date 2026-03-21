@@ -61,6 +61,7 @@ export default {
         'shimmer': 'shimmer 2s linear infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'spin-slow': 'spin 20s linear infinite',
+        'breathe': 'breathe 6s ease-in-out infinite',
         'bounce-slow': 'bounce 3s infinite',
         'aero-wipe-in': 'aero-wipe-in 1s cubic-bezier(0.77, 0, 0.175, 1) forwards',
         'aero-wipe-out': 'aero-wipe-out 1s cubic-bezier(0.77, 0, 0.175, 1) forwards',
@@ -70,6 +71,10 @@ export default {
         'timer-panic': 'timer-panic 0.5s ease-in-out infinite',
       },
       keyframes: {
+        'breathe': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%': { transform: 'scale(1.06)', opacity: '0.85' },
+        },
         'timer-panic': {
           '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 15px rgba(255, 59, 48, 0.4)' },
           '50%': { transform: 'scale(1.08)', boxShadow: '0 0 30px rgba(255, 59, 48, 0.8)' },
