@@ -318,6 +318,102 @@ export const createSubscriptionSession = functions.https.onCall(async (data, con
 });
 
 // ============================================
+// SINGLE-PLAY PURCHASE
+// ============================================
+
+/**
+ * Create a Stripe Checkout Session for a single-play purchase.
+ * Expected data: { gameId: string, successUrl: string, cancelUrl: string }
+ */
+export const createSinglePlaySession = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "The function must be called while authenticated."
+    );
+  }
+
+  const { gameId, successUrl, cancelUrl } = data;
+
+  // Validate gameId
+  if (!gameId || typeof gameId !== 'string') {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid game ID.");
+  }
+
+  // Validate redirect URLs to prevent open redirect attacks
+  if (!validateRedirectUrl(successUrl) || !validateRedirectUrl(cancelUrl)) {
+    throw new functions.https.HttpsError("invalid-argument", "Invalid redirect URL.");
+  }
+
+  const userId = context.auth.uid;
+  const userEmail = context.auth.token.email;
+  const emailVerified = context.auth.token.email_verified || false;
+
+  // Get user data for validation
+  const userDoc = await admin.firestore().collection("users").doc(userId).get();
+  const userData = userDoc.data();
+
+  if (!userData) {
+    throw new functions.https.HttpsError("not-found", "User profile not found.");
+  }
+
+  // Validate payment eligibility
+  const eligibility = validatePaymentEligibility({
+    emailVerified,
+    joinedAt: userData.joinedAt,
+    termsAcceptedAt: userData.termsAcceptedAt,
+    termsVersion: userData.termsVersion,
+    paymentAttempts: userData.paymentAttempts,
+  });
+
+  if (!eligibility.allowed) {
+    await logPaymentAttempt(userId, 0, 'blocked', eligibility.reason);
+    throw new functions.https.HttpsError("failed-precondition", eligibility.reason || "Payment not allowed.");
+  }
+
+  // Log payment attempt
+  await logPaymentAttempt(userId, 0, 'initiated');
+
+  try {
+    // Get or create Stripe customer
+    let customerId = userData.stripeCustomerId;
+
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: userEmail,
+        metadata: { userId },
+      });
+      customerId = customer.id;
+
+      await admin.firestore().collection("users").doc(userId).update({
+        stripeCustomerId: customerId,
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      customer: customerId,
+      line_items: [{ price: STRIPE_PRICES.SINGLE_PLAY, quantity: 1 }],
+      mode: "payment",
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        userId,
+        type: "single_play",
+        gameId,
+      },
+      billing_address_collection: 'required',
+    });
+
+    return { sessionId: session.id, url: session.url };
+  } catch (error: any) {
+    console.error("Stripe error:", error);
+    await logPaymentAttempt(userId, 0, 'failed', error.message);
+    throw new functions.https.HttpsError("internal", "Single play purchase failed. Please try again.");
+  }
+});
+
+// ============================================
 // SUBSCRIPTION MANAGEMENT
 // ============================================
 
@@ -534,6 +630,15 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
             currentPeriodEnd: null, // Lifetime has no end
           });
           console.log(`User ${userId} granted lifetime premium.`);
+        }
+
+        // Handle single play purchase
+        if (session.metadata?.type === "single_play" && session.metadata?.gameId) {
+          const gameId = session.metadata.gameId;
+          await admin.firestore().collection("users").doc(userId).update({
+            [`purchasedPlays.${gameId}`]: admin.firestore.FieldValue.increment(1),
+          });
+          console.log(`User ${userId} purchased 1 play for game ${gameId}.`);
         }
         break;
       }

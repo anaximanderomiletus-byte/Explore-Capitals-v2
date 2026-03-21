@@ -138,6 +138,8 @@ export interface UserProfile {
   termsVersion?: string;
   privacyAcceptedAt?: any;
   paymentAttempts?: PaymentAttempt[];
+  // Single-play purchases (gameId -> plays remaining)
+  purchasedPlays?: Record<string, number>;
   emailVerified?: boolean;
 }
 

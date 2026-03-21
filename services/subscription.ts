@@ -142,6 +142,28 @@ export const requestRefund = async (
 };
 
 /**
+ * Create a single-play checkout session for a specific game
+ */
+export const createSinglePlayCheckout = async (
+  gameId: string
+): Promise<CheckoutSessionResponse> => {
+  const fns = requireFunctions();
+
+  const createSession = httpsCallable<
+    { gameId: string; successUrl: string; cancelUrl: string },
+    CheckoutSessionResponse
+  >(fns, 'createSinglePlaySession');
+
+  const { data } = await createSession({
+    gameId,
+    successUrl: `${window.location.origin}/games?unlocked=${gameId}`,
+    cancelUrl: window.location.href,
+  });
+
+  return data;
+};
+
+/**
  * Check if user has premium access (active subscription or lifetime)
  */
 export const isPremiumUser = (
@@ -169,6 +191,19 @@ export const canPlayGame = (
     allowed: remaining > 0,
     remaining,
   };
+};
+
+/**
+ * Check if user has access to a specific game (premium OR purchased single play)
+ */
+export const hasGameAccess = (
+  gameId: string,
+  subscriptionStatus?: string,
+  subscriptionPlan?: string,
+  purchasedPlays?: Record<string, number>
+): boolean => {
+  if (isPremiumUser(subscriptionStatus, subscriptionPlan)) return true;
+  return (purchasedPlays?.[gameId] ?? 0) > 0;
 };
 
 /**
