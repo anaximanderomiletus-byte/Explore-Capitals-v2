@@ -85,28 +85,48 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     <button
                       onClick={onConfirm}
                       disabled={isLoading}
-                      className="w-full h-13 py-3.5 bg-red-500 hover:bg-red-600 rounded-xl text-white font-bold uppercase tracking-wider text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-500/25 border border-red-400/20"
+                      className="w-full h-13 py-3.5 rounded-2xl text-white font-bold uppercase tracking-wider text-sm transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(239,68,68,0.7) 0%, rgba(185,28,28,0.85) 100%)',
+                        boxShadow: '0 8px 32px rgba(239,68,68,0.3), inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 1px rgba(0,0,0,0.15)',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                      }}
                     >
+                      {/* Liquid glass layers */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
+                      <div className="absolute inset-x-3 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[2px] pointer-events-none" />
+                      <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
+
+                      <span className="relative z-10 flex items-center gap-2">
                       {isLoading ? (
                         <>
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                            className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                          />
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           Signing Out...
                         </>
                       ) : (
                         'Sign Out'
                       )}
+                      </span>
                     </button>
-                    
+
                     <button
                       onClick={() => !isLoading && onClose()}
                       disabled={isLoading}
-                      className="w-full h-12 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/60 hover:text-white font-bold uppercase tracking-wider text-sm transition-all"
+                      className="w-full h-12 rounded-2xl text-white/60 hover:text-white font-bold uppercase tracking-wider text-sm transition-all relative overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)',
+                        boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1), inset 0 -1px 1px rgba(0,0,0,0.1)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                      }}
                     >
-                      Cancel
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent pointer-events-none" style={{ height: '50%' }} />
+                      <div className="absolute inset-x-3 top-[3px] h-[35%] bg-white/8 rounded-xl blur-[2px] pointer-events-none" />
+                      <span className="relative z-10">Cancel</span>
                     </button>
                   </div>
                 </div>

@@ -41,11 +41,22 @@ const PhotoPrint: React.FC<{
   return (
     <div className={`relative group max-w-full ${className}`}>
       {/* Liquid Glass Container - TV Style */}
-      <div className={`p-1.5 sm:p-2 bg-[#141414] rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white/10 transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass shadow-[0_8px_32px_rgba(0,0,0,0.5)]`}>
-        {/* Bezel Gloss */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
-        
-        <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border-2 border-black/40 shadow-inner bg-[#0A0A0A]">
+      <div
+        className={`p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl transform ${rotation} transition-all duration-700 relative overflow-hidden flex flex-col items-center group/glass`}
+        style={{
+          background: 'linear-gradient(145deg, rgba(40,40,45,0.95) 0%, rgba(20,20,22,0.98) 50%, rgba(30,30,35,0.95) 100%)',
+          border: '2px solid rgba(255,255,255,0.12)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.3)',
+        }}
+      >
+        {/* Glass reflection layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-white/[0.03] pointer-events-none rounded-[inherit]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent pointer-events-none rounded-[inherit]" style={{ height: '45%' }} />
+        <div className="absolute inset-x-4 top-[2px] h-[20%] bg-white/[0.04] rounded-full blur-[6px] pointer-events-none" />
+        {/* Bottom edge catch light */}
+        <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+
+        <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border border-black/60 shadow-inner bg-[#0A0A0A]">
           {currentSrc ? (
             <img
               src={currentSrc}
@@ -65,9 +76,12 @@ const PhotoPrint: React.FC<{
             </div>
           )}
           
-          {/* TV Screen Reflection */}
-          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(135deg,rgba(255,255,255,0.15)_0%,transparent_50%,rgba(255,255,255,0.05)_100%)] pointer-events-none" />
-          <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-[inherit] pointer-events-none" />
+          {/* TV Screen Glass - 3D liquid glass overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,transparent_40%,transparent_60%,rgba(255,255,255,0.04)_100%)] pointer-events-none" />
+          <div className="absolute top-0 inset-x-0 h-[30%] bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+          <div className="absolute inset-x-[10%] top-[5%] h-[15%] bg-white/[0.06] rounded-full blur-[8px] pointer-events-none" />
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.08] rounded-[inherit] pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent pointer-events-none" />
         </div>
         
         {/* Label Overlay (Internal) */}
@@ -870,15 +884,22 @@ const CountryExploration: React.FC = () => {
                 {/* Integrated Bottom Actions (Moved under Itinerary) */}
                 <div className="flex flex-col gap-4 w-full items-center mt-3 pt-6 border-t border-white/5">
                   <div className="flex flex-col items-center gap-4 w-full">
-                    <button 
-                      onClick={startTour} 
-                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-2xl overflow-hidden transition-all duration-500 shadow-2xl shadow-sky/20"
+                    <button
+                      onClick={startTour}
+                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-2xl overflow-hidden transition-all duration-500"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
+                        boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        backdropFilter: 'blur(16px)',
+                        WebkitBackdropFilter: 'blur(16px)',
+                      }}
                     >
-                      {/* Gradient background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
-                      
-                      {/* Subtle inner border */}
-                      <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                      {/* Liquid glass layers */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
+                      <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
                       
                       {/* Content */}
                       <div className="relative z-10 flex items-center justify-center gap-3 h-full">
@@ -1193,9 +1214,19 @@ const CountryExploration: React.FC = () => {
                            onClick={nextQuestion}
                            disabled={!selectedOption || isExitingFeedback}
                            className="group relative w-full md:min-w-[300px] h-16 rounded-2xl overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                           style={{
+                             background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
+                             boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
+                             border: '1px solid rgba(255,255,255,0.2)',
+                             backdropFilter: 'blur(16px)',
+                             WebkitBackdropFilter: 'blur(16px)',
+                           }}
                          >
-                           <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
-                           <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                           {/* Liquid glass layers */}
+                           <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
+                           <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+                           <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
                            <div className="relative z-10 flex items-center justify-center gap-3 h-full">
                              <span className="text-sm font-black uppercase tracking-[0.2em] text-white/90">
                                {isLastQuestion ? 'Finish Tour' : 'Next Stop'}
@@ -1432,15 +1463,22 @@ const CountryExploration: React.FC = () => {
 
                 {/* Action Controls: Compact */}
                 <div className="flex flex-col items-center gap-3 relative z-10 border-t border-white/5 pt-4">
-                  <button 
-                    onClick={restartTour} 
+                  <button
+                    onClick={restartTour}
                     className="group relative w-full max-w-[280px] h-12 rounded-2xl overflow-hidden transition-all duration-500"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
+                      boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      backdropFilter: 'blur(16px)',
+                      WebkitBackdropFilter: 'blur(16px)',
+                    }}
                   >
-                    {/* Gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-sky/70 via-sky/80 to-sky/70 group-hover:from-sky/80 group-hover:via-sky/90 group-hover:to-sky/80 transition-all" />
-                    
-                    {/* Inner border */}
-                    <div className="absolute inset-[1px] rounded-2xl border border-white/10" />
+                    {/* Liquid glass layers */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
+                    <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
                     
                     {/* Content */}
                     <div className="relative z-10 flex items-center justify-center gap-3 h-full">
