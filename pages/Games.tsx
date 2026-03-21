@@ -12,7 +12,7 @@ import { BannerAd } from '../components/AdSense';
 import { useGameLimit } from '../hooks/useGameLimit';
 import { useUser } from '../context/UserContext';
 import { useAuth } from '../context/AuthContext';
-import { createSinglePlayCheckout } from '../services/subscription';
+import { createSinglePlayCheckout, verifySinglePlay, addLocalPurchasedPlay, getLocalPurchasedPlays } from '../services/subscription';
 
 const Games: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -23,6 +23,29 @@ const Games: React.FC = () => {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [selectedGame, setSelectedGame] = useState<typeof GAMES[0] | null>(null);
   const [buyingPlay, setBuyingPlay] = useState(false);
+  const [localPlays, setLocalPlays] = useState<Record<string, number>>({});
+
+  // On mount: check for returning from Stripe checkout
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const unlockedGameId = params.get('unlocked');
+
+    if (sessionId && unlockedGameId) {
+      // Verify the purchase server-side, then store locally
+      verifySinglePlay(sessionId).then(result => {
+        if (result.valid && result.gameId) {
+          addLocalPurchasedPlay(result.gameId);
+          setLocalPlays(getLocalPurchasedPlays());
+        }
+      });
+      // Clean up URL
+      window.history.replaceState({}, '', '/games');
+    }
+
+    // Load any existing local plays
+    setLocalPlays(getLocalPurchasedPlays());
+  }, []);
 
   // Lock body scroll when upgrade modal is open
   useEffect(() => {
@@ -75,13 +98,10 @@ const Games: React.FC = () => {
   }, [setPageLoading]);
 
   const handleBuySinglePlay = async (game: typeof GAMES[0]) => {
-    if (!user) {
-      navigate('/auth?redirect=/games');
-      return;
-    }
     setBuyingPlay(true);
     try {
-      const { url } = await createSinglePlayCheckout(game.id);
+      // Pass userId if logged in, otherwise null (guest checkout)
+      const { url } = await createSinglePlayCheckout(game.id, user?.uid);
       if (url) window.location.href = url;
     } catch (err: any) {
       console.error('Single play checkout failed:', err);
@@ -90,7 +110,7 @@ const Games: React.FC = () => {
   };
 
   const renderGameCard = (game: typeof GAMES[0], isPremiumGame: boolean) => {
-    const hasPurchasedPlay = (userProfile?.purchasedPlays?.[game.id] ?? 0) > 0;
+    const hasPurchasedPlay = (userProfile?.purchasedPlays?.[game.id] ?? 0) > 0 || (localPlays[game.id] ?? 0) > 0;
     const isLocked = isPremiumGame && !isPremium && !hasPurchasedPlay;
     const isActive = game.status === 'active';
     

@@ -318,98 +318,87 @@ export const createSubscriptionSession = functions.https.onCall(async (data, con
 });
 
 // ============================================
-// SINGLE-PLAY PURCHASE
+// SINGLE-PLAY PURCHASE (guest-friendly)
 // ============================================
 
 /**
  * Create a Stripe Checkout Session for a single-play purchase.
- * Expected data: { gameId: string, successUrl: string, cancelUrl: string }
+ * No authentication required — Stripe handles payment security.
+ * If user is logged in, ties purchase to their account via userId.
+ * If guest, purchase is tracked by Stripe session ID (stored client-side).
+ *
+ * HTTP endpoint (not onCall) so it works without Firebase Auth.
  */
-export const createSinglePlaySession = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      "unauthenticated",
-      "The function must be called while authenticated."
-    );
+export const createSinglePlaySession = functions.https.onRequest(async (req, res) => {
+  // CORS
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  }
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
   }
 
-  const { gameId, successUrl, cancelUrl } = data;
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  const { gameId, successUrl, cancelUrl, userId } = req.body;
 
   // Validate gameId
   if (!gameId || typeof gameId !== 'string') {
-    throw new functions.https.HttpsError("invalid-argument", "Invalid game ID.");
+    res.status(400).json({ error: 'Invalid game ID.' });
+    return;
   }
 
-  // Validate redirect URLs to prevent open redirect attacks
+  // Validate redirect URLs
   if (!validateRedirectUrl(successUrl) || !validateRedirectUrl(cancelUrl)) {
-    throw new functions.https.HttpsError("invalid-argument", "Invalid redirect URL.");
+    res.status(400).json({ error: 'Invalid redirect URL.' });
+    return;
   }
-
-  const userId = context.auth.uid;
-  const userEmail = context.auth.token.email;
-  const emailVerified = context.auth.token.email_verified || false;
-
-  // Get user data for validation
-  const userDoc = await admin.firestore().collection("users").doc(userId).get();
-  const userData = userDoc.data();
-
-  if (!userData) {
-    throw new functions.https.HttpsError("not-found", "User profile not found.");
-  }
-
-  // Validate payment eligibility
-  const eligibility = validatePaymentEligibility({
-    emailVerified,
-    joinedAt: userData.joinedAt,
-    termsAcceptedAt: userData.termsAcceptedAt,
-    termsVersion: userData.termsVersion,
-    paymentAttempts: userData.paymentAttempts,
-  });
-
-  if (!eligibility.allowed) {
-    await logPaymentAttempt(userId, 0, 'blocked', eligibility.reason);
-    throw new functions.https.HttpsError("failed-precondition", eligibility.reason || "Payment not allowed.");
-  }
-
-  // Log payment attempt
-  await logPaymentAttempt(userId, 0, 'initiated');
 
   try {
-    // Get or create Stripe customer
-    let customerId = userData.stripeCustomerId;
-
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: userEmail,
-        metadata: { userId },
-      });
-      customerId = customer.id;
-
-      await admin.firestore().collection("users").doc(userId).update({
-        stripeCustomerId: customerId,
-      });
-    }
-
-    const session = await stripe.checkout.sessions.create({
+    // Build session config
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
-      customer: customerId,
       line_items: [{ price: STRIPE_PRICES.SINGLE_PLAY, quantity: 1 }],
       mode: "payment",
-      success_url: successUrl,
+      // Append session ID to success URL so client can verify purchase
+      success_url: `${successUrl}${successUrl.includes('?') ? '&' : '?'}session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl,
       metadata: {
-        userId,
         type: "single_play",
         gameId,
       },
-      billing_address_collection: 'required',
-    });
+    };
 
-    return { sessionId: session.id, url: session.url };
+    // If logged-in user, attach to their Stripe customer
+    if (userId && typeof userId === 'string') {
+      const userDoc = await admin.firestore().collection("users").doc(userId).get();
+      const userData = userDoc.data();
+
+      if (userData?.stripeCustomerId) {
+        sessionConfig.customer = userData.stripeCustomerId;
+      }
+
+      sessionConfig.metadata!.userId = userId;
+      await logPaymentAttempt(userId, 99, 'initiated');
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
+
+    res.json({ sessionId: session.id, url: session.url });
   } catch (error: any) {
     console.error("Stripe error:", error);
-    await logPaymentAttempt(userId, 0, 'failed', error.message);
-    throw new functions.https.HttpsError("internal", "Single play purchase failed. Please try again.");
+    if (userId) {
+      await logPaymentAttempt(userId, 99, 'failed', error.message);
+    }
+    res.status(500).json({ error: 'Checkout failed. Please try again.' });
   }
 });
 
@@ -588,18 +577,12 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.userId;
-        
-        if (!userId) {
-          console.error("No userId in session metadata");
-          break;
-        }
 
         // Check if billing country is blocked (OFAC sanctions)
         const billingCountry = session.customer_details?.address?.country;
         if (billingCountry && isCountryBlocked(billingCountry)) {
-          console.error(`Blocked payment from sanctioned country: ${billingCountry} (user: ${userId})`);
-          await logPaymentAttempt(userId, session.amount_total || 0, 'blocked', `Sanctioned country: ${billingCountry}`);
-          // Refund the payment automatically
+          console.error(`Blocked payment from sanctioned country: ${billingCountry}`);
+          if (userId) await logPaymentAttempt(userId, session.amount_total || 0, 'blocked', `Sanctioned country: ${billingCountry}`);
           if (session.payment_intent) {
             try {
               await stripe.refunds.create({ payment_intent: session.payment_intent as string });
@@ -607,6 +590,39 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
               console.error("Failed to auto-refund sanctioned payment:", refundErr);
             }
           }
+          break;
+        }
+
+        // Handle single play purchase (works for both guests and logged-in users)
+        if (session.metadata?.type === "single_play" && session.metadata?.gameId) {
+          const gameId = session.metadata.gameId;
+
+          // If user is logged in, save to their Firestore doc
+          if (userId) {
+            await admin.firestore().collection("users").doc(userId).update({
+              [`purchasedPlays.${gameId}`]: admin.firestore.FieldValue.increment(1),
+            });
+            await logPaymentAttempt(userId, session.amount_total || 0, 'completed');
+            console.log(`User ${userId} purchased 1 play for game ${gameId}.`);
+          }
+
+          // Also store in guestPurchases collection (keyed by session ID)
+          // so the client can verify the purchase without auth
+          await admin.firestore().collection("guestPurchases").doc(session.id).set({
+            gameId,
+            email: session.customer_details?.email || null,
+            userId: userId || null,
+            paidAt: admin.firestore.FieldValue.serverTimestamp(),
+            amount: session.amount_total,
+            sessionId: session.id,
+          });
+          console.log(`Guest purchase recorded: session ${session.id}, game ${gameId}`);
+          break;
+        }
+
+        // Everything below requires a userId
+        if (!userId) {
+          console.error("No userId in session metadata (non-single-play)");
           break;
         }
 
@@ -630,15 +646,6 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
             currentPeriodEnd: null, // Lifetime has no end
           });
           console.log(`User ${userId} granted lifetime premium.`);
-        }
-
-        // Handle single play purchase
-        if (session.metadata?.type === "single_play" && session.metadata?.gameId) {
-          const gameId = session.metadata.gameId;
-          await admin.firestore().collection("users").doc(userId).update({
-            [`purchasedPlays.${gameId}`]: admin.firestore.FieldValue.increment(1),
-          });
-          console.log(`User ${userId} purchased 1 play for game ${gameId}.`);
         }
         break;
       }
@@ -724,6 +731,56 @@ export const handleStripeWebhook = functions.https.onRequest(async (req, res) =>
   }
 
   res.json({ received: true });
+});
+
+// ============================================
+// VERIFY SINGLE-PLAY PURCHASE (guest-friendly)
+// ============================================
+
+/**
+ * Verify a single-play purchase by Stripe session ID.
+ * Called by the client after redirect from Stripe Checkout.
+ * Returns the gameId if payment was successful.
+ */
+export const verifySinglePlay = functions.https.onRequest(async (req, res) => {
+  // CORS
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  }
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') { res.status(204).send(''); return; }
+  if (req.method !== 'POST') { res.status(405).json({ error: 'Method not allowed' }); return; }
+
+  const { sessionId } = req.body;
+  if (!sessionId || typeof sessionId !== 'string') {
+    res.status(400).json({ error: 'Invalid session ID' });
+    return;
+  }
+
+  try {
+    // Check guestPurchases collection first (written by webhook)
+    const purchaseDoc = await admin.firestore().collection("guestPurchases").doc(sessionId).get();
+    if (purchaseDoc.exists) {
+      const data = purchaseDoc.data()!;
+      res.json({ valid: true, gameId: data.gameId });
+      return;
+    }
+
+    // Fallback: check Stripe session directly (webhook may not have fired yet)
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.payment_status === 'paid' && session.metadata?.type === 'single_play') {
+      res.json({ valid: true, gameId: session.metadata.gameId });
+      return;
+    }
+
+    res.json({ valid: false });
+  } catch (error) {
+    console.error('Verify single play error:', error);
+    res.status(500).json({ error: 'Verification failed' });
+  }
 });
 
 // ============================================

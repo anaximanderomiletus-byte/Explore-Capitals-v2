@@ -141,26 +141,77 @@ export const requestRefund = async (
   return data;
 };
 
+// Firebase Functions HTTP endpoint base URL
+const FUNCTIONS_BASE = import.meta.env.DEV
+  ? 'http://localhost:5001/explore-capitals/us-central1'
+  : 'https://us-central1-explore-capitals.cloudfunctions.net';
+
 /**
- * Create a single-play checkout session for a specific game
+ * Create a single-play checkout session — NO AUTH REQUIRED.
+ * Stripe handles payment security; guest users just need email + card.
  */
 export const createSinglePlayCheckout = async (
-  gameId: string
+  gameId: string,
+  userId?: string | null
 ): Promise<CheckoutSessionResponse> => {
-  const fns = requireFunctions();
-
-  const createSession = httpsCallable<
-    { gameId: string; successUrl: string; cancelUrl: string },
-    CheckoutSessionResponse
-  >(fns, 'createSinglePlaySession');
-
-  const { data } = await createSession({
-    gameId,
-    successUrl: `${window.location.origin}/games?unlocked=${gameId}`,
-    cancelUrl: window.location.href,
+  const res = await fetch(`${FUNCTIONS_BASE}/createSinglePlaySession`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      gameId,
+      userId: userId || null,
+      successUrl: `${window.location.origin}/games?unlocked=${gameId}`,
+      cancelUrl: window.location.href,
+    }),
   });
 
-  return data;
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Checkout failed' }));
+    throw new Error(err.error || 'Checkout failed');
+  }
+
+  return res.json();
+};
+
+/**
+ * Verify a single-play purchase after Stripe redirect.
+ * Checks server-side that payment was actually completed.
+ */
+export const verifySinglePlay = async (sessionId: string): Promise<{ valid: boolean; gameId?: string }> => {
+  const res = await fetch(`${FUNCTIONS_BASE}/verifySinglePlay`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sessionId }),
+  });
+
+  if (!res.ok) return { valid: false };
+  return res.json();
+};
+
+// ---- Local storage helpers for guest single-play access ----
+const PURCHASED_PLAYS_KEY = 'ec_purchased_plays';
+
+export const getLocalPurchasedPlays = (): Record<string, number> => {
+  try {
+    return JSON.parse(localStorage.getItem(PURCHASED_PLAYS_KEY) || '{}');
+  } catch { return {}; }
+};
+
+export const addLocalPurchasedPlay = (gameId: string) => {
+  const plays = getLocalPurchasedPlays();
+  plays[gameId] = (plays[gameId] || 0) + 1;
+  localStorage.setItem(PURCHASED_PLAYS_KEY, JSON.stringify(plays));
+};
+
+export const consumeLocalPlay = (gameId: string) => {
+  const plays = getLocalPurchasedPlays();
+  if (plays[gameId] > 0) {
+    plays[gameId]--;
+    if (plays[gameId] <= 0) delete plays[gameId];
+    localStorage.setItem(PURCHASED_PLAYS_KEY, JSON.stringify(plays));
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -194,7 +245,8 @@ export const canPlayGame = (
 };
 
 /**
- * Check if user has access to a specific game (premium OR purchased single play)
+ * Check if user has access to a specific game
+ * Checks: premium subscription → Firestore purchased plays → localStorage (guest)
  */
 export const hasGameAccess = (
   gameId: string,
@@ -203,7 +255,10 @@ export const hasGameAccess = (
   purchasedPlays?: Record<string, number>
 ): boolean => {
   if (isPremiumUser(subscriptionStatus, subscriptionPlan)) return true;
-  return (purchasedPlays?.[gameId] ?? 0) > 0;
+  if ((purchasedPlays?.[gameId] ?? 0) > 0) return true;
+  // Check local storage for guest purchases
+  const localPlays = getLocalPurchasedPlays();
+  return (localPlays[gameId] ?? 0) > 0;
 };
 
 /**
