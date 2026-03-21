@@ -174,7 +174,7 @@ export default function AreaAce() {
             <p className="text-white/60 text-sm mb-8">Unlock this game and more with Premium membership.</p>
             <div className="flex flex-col gap-4">
               <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
-                <Crown size={18} /> UNLOCK WITH PREMIUM
+                <Crown size={18} /> UNLOCK
               </Button>
               <button
                 onClick={() => navigate('/games')}
