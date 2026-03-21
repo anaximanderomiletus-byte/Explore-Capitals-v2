@@ -3,12 +3,11 @@
  */
 
 // Stripe Price IDs
-// TODO: Create a $0.99 one-time product in Stripe Dashboard and paste the price ID here
 export const STRIPE_PRICES = {
   MONTHLY: 'price_1SxeQfACs3ZjmVWFCgYdPRRx',
   ANNUAL: 'price_1SxeR7ACs3ZjmVWFXDnw2dqr',
   LIFETIME: 'price_1SxeRkACs3ZjmVWFf4MaigxI',
-  SINGLE_PLAY: 'price_single_play_TODO', // User needs to create this in Stripe dashboard
+  SINGLE_PLAY: 'price_1TDJflACs3ZjmVWF1kF6EaZA',
 };
 
 // Payment limits
