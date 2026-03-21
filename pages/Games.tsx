@@ -346,7 +346,7 @@ const Games: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-amber-400 font-bold text-sm uppercase tracking-wide">Go Premium</p>
-                      <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider">All {premiumGames.length} games, unlimited plays</p>
+                      <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider">All games, unlimited plays</p>
                     </div>
                   </div>
                   <div className="text-right">
