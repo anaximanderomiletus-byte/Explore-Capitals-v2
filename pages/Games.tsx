@@ -133,7 +133,7 @@ const Games: React.FC = () => {
                   className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl whitespace-nowrap"
                   onClick={() => setShowUpgradeModal(true)}
                 >
-                  <Lock size={16} className="mr-2 shrink-0" /> UNLOCK
+                  <Lock size={24} className="mr-2 shrink-0" /> UNLOCK
                 </Button>
               ) : (
                 <Link to={`/games/${getGamePath(game.id)}`}>
