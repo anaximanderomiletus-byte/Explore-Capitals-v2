@@ -59,8 +59,10 @@ const CookieConsent: React.FC = () => {
     setShowBanner(false);
     setShowPreferences(false);
 
-    // Apply preferences
-    applyPreferences(prefs);
+    // Defer script loading so the banner can exit and scroll is restored first.
+    // Running it synchronously blocks the main thread on the tap frame, causing
+    // a multi-second scroll delay on mobile.
+    setTimeout(() => applyPreferences(prefs), 0);
   };
 
   const applyPreferences = (prefs: CookiePreferences) => {
@@ -93,14 +95,20 @@ const CookieConsent: React.FC = () => {
     saveConsent(preferences);
   };
 
-  if (!showBanner) return null;
-
   return (
+    // AnimatePresence must stay mounted as a persistent wrapper so it can
+    // detect when {showBanner && …} exits and play the exit animation.
+    // The previous pattern (if (!showBanner) return null) unmounted
+    // AnimatePresence itself, so the exit animation never ran and the
+    // fixed element was yanked from the DOM mid-touch — causing iOS to
+    // freeze scroll for several seconds.
     <AnimatePresence>
+      {showBanner && (
       <motion.div
+        key="cookie-banner"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 100, opacity: 0 }}
+        exit={{ y: 100, opacity: 0, transition: { duration: 0.15, ease: 'easeIn' } }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="fixed bottom-0 left-0 right-0 z-[9999] p-4 md:p-6"
       >
@@ -236,6 +244,7 @@ const CookieConsent: React.FC = () => {
           </div>
         </div>
       </motion.div>
+      )}
     </AnimatePresence>
   );
 };
