@@ -3,34 +3,18 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   PAGE TRANSITION — quick fade-rise on route change.
-   Single animation on the wrapper: subtle translateY + opacity.
-   No staggered children — keeps content visible immediately on iOS Safari.
+   PAGE TRANSITION — subtle slide on route change, no opacity fade.
+   Content is always visible (opacity: 1) — avoids pop-in on iOS Safari
+   when off-screen sections are painted lazily during scroll.
    ========================================================================== */
 
 @keyframes page-enter-anim {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(6px); }
+  to   { transform: translateY(0); }
 }
 
 .page-enter {
-  animation: page-enter-anim 0.25s ease-out both;
-}
-
-/* ==========================================================================
-   SCROLL-REVEAL — smooth rise for content sections.
-   translateY + opacity only — no scale, no bounce, no jank on mobile.
-   ========================================================================== */
-.reveal-hidden {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
-              transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: page-enter-anim 0.2s ease-out both;
 }
 
 /* ==========================================================================
