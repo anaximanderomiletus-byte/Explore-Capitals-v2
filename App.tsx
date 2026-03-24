@@ -79,7 +79,16 @@ let prefetchScheduled = false;
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+    // requestAnimationFrame defers until after paint, which is required on
+    // iOS Safari with -webkit-overflow-scrolling:touch — calling scrollTo
+    // synchronously in the effect can be ignored if the native scroll layer
+    // hasn't updated yet. Also set the legacy properties as fallbacks.
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    return () => cancelAnimationFrame(raf);
   }, [pathname]);
   return null;
 };
