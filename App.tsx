@@ -78,6 +78,15 @@ let prefetchScheduled = false;
  */
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
+
+  // Disable the browser's automatic scroll restoration so it doesn't
+  // fight with our manual scrollTo on mobile (especially iOS Safari).
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  }, []);
+
   useEffect(() => {
     // requestAnimationFrame defers until after paint, which is required on
     // iOS Safari with -webkit-overflow-scrolling:touch — calling scrollTo
