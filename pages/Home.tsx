@@ -227,7 +227,6 @@ const Home: React.FC = () => {
       </Section>
 
       {/* ═══════════════ STOP OF THE DAY ═══════════════ */}
-      {factOfTheDay && (
       <Section className="py-12 sm:py-16 md:py-24">
         <RevealSection className="max-w-5xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
@@ -237,6 +236,7 @@ const Home: React.FC = () => {
             </div>
           </div>
 
+          {factOfTheDay ? (
           <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden relative group glow-card">
             {/* Background image */}
             <div className="absolute inset-0 pointer-events-none">
@@ -290,9 +290,26 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
+          ) : (
+          /* Skeleton — same card shape so nothing shifts when data arrives */
+          <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden glow-card">
+            <div className="grid md:grid-cols-[1fr_1.2fr] gap-0">
+              {/* Image placeholder */}
+              <div className="aspect-[16/9] sm:aspect-[2/1] md:min-h-[260px] bg-white/[0.04] animate-pulse" />
+              {/* Text placeholder */}
+              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center gap-3">
+                <div className="h-4 bg-white/[0.07] rounded-full animate-pulse w-2/5" />
+                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-full" />
+                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[90%]" />
+                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[80%]" />
+                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[70%]" />
+                <div className="mt-2 h-9 bg-white/[0.06] rounded-xl animate-pulse w-36" />
+              </div>
+            </div>
+          </div>
+          )}
         </RevealSection>
       </Section>
-      )}
 
       {/* ═══════════════ GAMES ═══════════════ */}
       <Section className="py-12 sm:py-16 md:py-24">

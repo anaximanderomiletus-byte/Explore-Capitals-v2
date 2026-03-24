@@ -182,9 +182,16 @@ const PageLoadFallback: React.FC = () => {
  * PageTransition
  * Plays the page-enter animation WHEN content is ready (inside Suspense).
  * This is the key fix: the animation triggers after the lazy chunk loads,
- * not before. Children cascade in with staggered delays.
+ * not before. Also dismisses the HTML splash-screen for ALL pages — no
+ * individual page needs to call window.__dismissLoader.
  */
 const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useEffect(() => {
+    // Dismiss the HTML splash-screen loader the moment any page is ready.
+    // This runs after Suspense resolves, so all lazy-loaded pages are covered.
+    (window as any).__dismissLoader?.();
+  }, []);
+
   return (
     <div className="flex-grow flex flex-col w-full page-enter">
       {children}
@@ -194,9 +201,16 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 /**
  * PageWrapper
- * Provides a Suspense boundary around each route.
- * The `key` on PageTransition (inside Suspense) ensures the animation
- * triggers after the content has loaded, not during loading.
+ * Provides a stable Suspense boundary around each route.
+ *
+ * The `key` is on PageTransition (INSIDE Suspense), not on Suspense itself.
+ * This is intentional:
+ *  - Suspense boundary stays mounted across navigations (no teardown)
+ *  - PageTransition remounts on pathname change → page-enter animation replays
+ *  - For cached (already-loaded) routes, React.lazy resolves synchronously so
+ *    Suspense never shows the fallback — no spinner flash
+ *  - For uncached routes, Suspense correctly shows the fallback until the
+ *    chunk loads, then renders the new page with its enter animation
  */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { pathname } = useLocation();
@@ -240,7 +254,7 @@ const PersistentBackground: React.FC = () => {
 
       {/* Home-style subtle gradients — hidden on mobile to save GPU */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-in-out hidden md:block will-change-[opacity]"
+        className="absolute inset-0 transition-opacity duration-200 ease-in-out hidden md:block will-change-[opacity]"
         style={{ opacity: showHome ? 1 : 0 }}
       >
         <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.03)_0%,transparent_70%)] blur-3xl" />
@@ -249,7 +263,7 @@ const PersistentBackground: React.FC = () => {
 
       {/* Ambient glow orbs — hidden on mobile for performance */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 ease-in-out hidden md:block will-change-[opacity]"
+        className="absolute inset-0 transition-opacity duration-200 ease-in-out hidden md:block will-change-[opacity]"
         style={{ opacity: showGlow ? 1 : 0 }}
       >
         <div className="absolute top-[-10%] right-[0%] w-[55%] h-[55%] rounded-full blur-3xl bg-sky/[0.14]" />
