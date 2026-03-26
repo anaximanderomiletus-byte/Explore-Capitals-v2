@@ -46,7 +46,7 @@ const PhotoPrint: React.FC<{
         style={{
           background: 'linear-gradient(145deg, rgba(40,40,45,0.95) 0%, rgba(20,20,22,0.98) 50%, rgba(30,30,35,0.95) 100%)',
           border: '2px solid rgba(255,255,255,0.12)',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.3)',
+          boxShadow: '0 12px 48px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.3)',
         }}
       >
         {/* Glass reflection layers */}
