@@ -988,11 +988,11 @@ const CountryExploration: React.FC = () => {
 
                       <div className="space-y-3 sm:space-y-4 lg:text-left">
                          <p className="text-base sm:text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
-                            {currentStop.description[0]?.length > 220 ? currentStop.description[0].slice(0, 220).replace(/\s+\S*$/, '') + '...' : currentStop.description[0]}
+                            {currentStop.description[0]}
                          </p>
                          <div className="w-12 h-1 bg-sky/40 rounded-full hidden lg:block" />
                          <p className="text-sm md:text-base text-white/60 leading-relaxed font-bold">
-                            {currentStop.description[1]?.length > 250 ? currentStop.description[1].slice(0, 250).replace(/\s+\S*$/, '') + '...' : currentStop.description[1]}
+                            {currentStop.description[1]}
                          </p>
            </div>
 
