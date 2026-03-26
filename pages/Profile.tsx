@@ -61,6 +61,7 @@ const Profile: React.FC = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
   const profileLoadingMessages = [
     'Retrieving explorer data...',
@@ -78,9 +79,17 @@ const Profile: React.FC = () => {
     setPageLoading(false);
   }, [setPageLoading]);
 
+  // Minimum display time so the loading screen always shows
+  useEffect(() => {
+    const timer = setTimeout(() => setMinTimeElapsed(true), 2200);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Loading screen progress + messages
   useEffect(() => {
     if (showProfile) return;
+
+    const canFinish = profileReady && minTimeElapsed;
 
     const stepInterval = setInterval(() => {
       setLoadingStep(prev => (prev + 1) % profileLoadingMessages.length);
@@ -88,25 +97,26 @@ const Profile: React.FC = () => {
 
     const progressInterval = setInterval(() => {
       setLoadingProgress(prev => {
-        if (profileReady) {
+        if (canFinish) {
           if (prev >= 100) { clearInterval(progressInterval); return 100; }
-          return Math.min(prev + 6, 100);
+          return Math.min(prev + 4, 100);
         }
-        if (prev >= 40) return prev;
-        return prev + 0.8;
+        // Slow crawl up to 70% while waiting
+        if (prev >= 70) return prev;
+        return prev + 0.6;
       });
     }, 80);
 
     return () => { clearInterval(stepInterval); clearInterval(progressInterval); };
-  }, [profileReady, showProfile]);
+  }, [profileReady, minTimeElapsed, showProfile]);
 
   // Transition to profile once loaded
   useEffect(() => {
-    if (loadingProgress >= 100 && profileReady && !showProfile) {
+    if (loadingProgress >= 100 && profileReady && minTimeElapsed && !showProfile) {
       const timer = setTimeout(() => setShowProfile(true), 600);
       return () => clearTimeout(timer);
     }
-  }, [loadingProgress, profileReady, showProfile]);
+  }, [loadingProgress, profileReady, minTimeElapsed, showProfile]);
 
   if (!userContext || !authContext) {
     return <div className="pt-32 text-center text-white font-black uppercase">Something went wrong. Please try refreshing the page.</div>;
