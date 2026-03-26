@@ -839,8 +839,7 @@ const CountryExploration: React.FC = () => {
                     rotation="rotate-0"
                     className="w-full"
                   />
-                  {/* Decorative Elements for TV */}
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-48 h-1.5 bg-sky/20 blur-2xl rounded-full" />
+                  {/* Decorative Elements for TV - removed sharp shadow */}
                 </div>
               </div>
 
@@ -958,7 +957,7 @@ const CountryExploration: React.FC = () => {
                   </div>
 
            {/* Navigation Controls */}
-           <div className="sticky top-20 z-50 w-full px-4 sm:px-6 flex justify-center items-center pointer-events-none">
+           <div className="sticky top-24 z-50 w-full px-4 sm:px-6 flex justify-center items-center pointer-events-none">
               {/* Progress Header */}
               <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 flex items-center gap-2 sm:gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto max-w-full overflow-hidden">
                  <div className="w-2 h-2 rounded-full bg-sky animate-pulse shrink-0" />
@@ -975,7 +974,7 @@ const CountryExploration: React.FC = () => {
            {/* Narrative Content Scroll */}
            <div 
              key={stepIndex}
-             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-24 pb-20 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-16 pb-20 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
            >
               <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-start w-full">
                 {/* Section 1: Text Content */}
@@ -989,11 +988,11 @@ const CountryExploration: React.FC = () => {
 
                       <div className="space-y-3 sm:space-y-4 lg:text-left">
                          <p className="text-base sm:text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
-                            {currentStop.description[0]}
+                            {currentStop.description[0]?.length > 220 ? currentStop.description[0].slice(0, 220).replace(/\s+\S*$/, '') + '...' : currentStop.description[0]}
                          </p>
                          <div className="w-12 h-1 bg-sky/40 rounded-full hidden lg:block" />
                          <p className="text-sm md:text-base text-white/60 leading-relaxed font-bold">
-                            {currentStop.description[1]}
+                            {currentStop.description[1]?.length > 250 ? currentStop.description[1].slice(0, 250).replace(/\s+\S*$/, '') + '...' : currentStop.description[1]}
                          </p>
            </div>
 
