@@ -1012,7 +1012,7 @@ const CountryExploration: React.FC = () => {
            </div>
 
                       {/* Navigation Controls */}
-                      <div className="flex items-center gap-3 pt-1 justify-start">
+                      <div className="flex items-center gap-3 pt-1 justify-center">
                          <button
                       onClick={prevStop}
                             className="group/prev w-11 h-11 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center hover:bg-white/50 hover:border-white/60 transition-all duration-300"
