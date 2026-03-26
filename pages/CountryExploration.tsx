@@ -882,31 +882,30 @@ const CountryExploration: React.FC = () => {
                 </div>
 
                 {/* Integrated Bottom Actions (Moved under Itinerary) */}
-                <div className="flex flex-col gap-4 w-full items-center mt-3 pt-6 border-t border-white/5">
+                <div className="flex flex-col gap-4 w-full items-center mt-3 pt-6">
                   <div className="flex flex-col items-center gap-4 w-full">
                     <button
                       onClick={startTour}
-                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-2xl overflow-hidden transition-all duration-500"
+                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-[22px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
                       style={{
-                        background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
-                        boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        backdropFilter: 'blur(16px)',
-                        WebkitBackdropFilter: 'blur(16px)',
+                        background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                        border: '1px solid rgba(255,255,255,0.25)',
+                        backdropFilter: 'blur(40px) saturate(1.8)',
+                        WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
                       }}
                     >
-                      {/* Liquid glass layers */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
-                      <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-                      <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
-                      
+                      {/* Liquid Glass specular highlight */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
+                      <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
+
                       {/* Content */}
                       <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                        <span className="text-sm lg:text-base font-black uppercase tracking-[0.2em] text-white">
+                        <span className="text-sm lg:text-base font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
                           Start Tour
                         </span>
-                        <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                        <div className="w-9 h-9 rounded-full bg-white/12 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
                           <ChevronRight size={20} className="text-white transition-all" />
                         </div>
                       </div>
@@ -1000,18 +999,18 @@ const CountryExploration: React.FC = () => {
 
                       {/* Navigation Controls */}
                       <div className="flex items-center gap-3 pt-1 lg:justify-start justify-center">
-                         <button 
-                      onClick={prevStop} 
+                         <button
+                      onClick={prevStop}
                             className="group/prev w-11 h-11 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center hover:bg-white/50 hover:border-white/60 transition-all duration-300"
                          >
                             <ArrowLeft size={17} className="text-white group-hover/prev:text-white group-hover/prev:-translate-x-0.5 transition-all" />
                          </button>
 
-                         <button 
-                    onClick={nextStop} 
+                         <button
+                    onClick={nextStop}
                             className={`group/next h-11 px-5 rounded-full backdrop-blur-xl border flex items-center gap-2 transition-all duration-300 ${
-                              isLastStop 
-                                ? 'bg-accent/70 border-accent/80 hover:bg-accent/80 hover:border-accent' 
+                              isLastStop
+                                ? 'bg-accent/70 border-accent/80 hover:bg-accent/80 hover:border-accent'
                                 : 'bg-sky/70 border-sky/80 hover:bg-sky/80 hover:border-sky'
                             }`}
                          >
@@ -1294,9 +1293,16 @@ const CountryExploration: React.FC = () => {
                    
                    <div className="relative flex items-center">
                       {/* Left Navigation Button */}
-                      <button 
-                        onClick={() => scrollCarousel('left')} 
-                        className="absolute left-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all group/btn"
+                      <button
+                        onClick={() => scrollCarousel('left')}
+                        className="absolute left-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:scale-110 active:scale-95 transition-all group/btn"
+                        style={{
+                          background: 'rgba(0,0,0,0.3)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.2)',
+                          border: '1px solid rgba(255,255,255,0.12)',
+                          backdropFilter: 'blur(40px) saturate(1.8)',
+                          WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
+                        }}
                         aria-label="Scroll Left"
                       >
                          <ChevronLeft size={20} className="text-white/40 group-hover/btn:text-white transition-colors" />
@@ -1447,9 +1453,16 @@ const CountryExploration: React.FC = () => {
                       </div>
 
                       {/* Right Navigation Button */}
-                      <button 
-                        onClick={() => scrollCarousel('right')} 
-                        className="absolute right-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-sky/50 transition-all group/btn"
+                      <button
+                        onClick={() => scrollCarousel('right')}
+                        className="absolute right-2 z-50 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:scale-110 active:scale-95 transition-all group/btn"
+                        style={{
+                          background: 'rgba(0,0,0,0.3)',
+                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.2)',
+                          border: '1px solid rgba(255,255,255,0.12)',
+                          backdropFilter: 'blur(40px) saturate(1.8)',
+                          WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
+                        }}
                         aria-label="Scroll Right"
                       >
                          <ChevronRight size={20} className="text-white/40 group-hover/btn:text-white transition-colors" />
@@ -1462,28 +1475,27 @@ const CountryExploration: React.FC = () => {
                 </div>
 
                 {/* Action Controls: Compact */}
-                <div className="flex flex-col items-center gap-3 relative z-10 border-t border-white/5 pt-4">
+                <div className="flex flex-col items-center gap-3 relative z-10 pt-4">
                   <button
                     onClick={restartTour}
-                    className="group relative w-full max-w-[280px] h-12 rounded-2xl overflow-hidden transition-all duration-500"
+                    className="group relative w-full max-w-[280px] h-12 rounded-[20px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
                     style={{
-                      background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
-                      boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      backdropFilter: 'blur(16px)',
-                      WebkitBackdropFilter: 'blur(16px)',
+                      background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                      border: '1px solid rgba(255,255,255,0.25)',
+                      backdropFilter: 'blur(40px) saturate(1.8)',
+                      WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
                     }}
                   >
-                    {/* Liquid glass layers */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
-                    <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-                    <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
-                    
+                    {/* Liquid Glass specular highlight */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
+                    <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
+
                     {/* Content */}
                     <div className="relative z-10 flex items-center justify-center gap-3 h-full">
                       <RotateCcw size={14} className="text-white/80 group-hover:rotate-[-180deg] transition-transform duration-700" />
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-white/90">
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
                         Restart Tour
                       </span>
                     </div>
