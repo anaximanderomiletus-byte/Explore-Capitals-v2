@@ -974,7 +974,7 @@ const CountryExploration: React.FC = () => {
            {/* Narrative Content Scroll */}
            <div 
              key={stepIndex}
-             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-[130px] pb-12 flex flex-col items-center justify-center min-h-screen transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-[110px] pb-12 flex flex-col items-center justify-center min-h-screen transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
            >
               <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center w-full">
                 {/* Section 1: Text Content */}
