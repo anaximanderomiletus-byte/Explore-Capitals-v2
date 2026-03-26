@@ -536,16 +536,16 @@ const CountryExploration: React.FC = () => {
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (!carouselRef.current) return;
     const container = carouselRef.current;
-    // Card width + gap (w-28 = 112px or w-36 = 144px, plus gap-3 = 12px)
-    const cardWidth = window.innerWidth >= 768 ? 156 : 124;
-    
-    // Calculate current card index based on scroll position
-    const currentScroll = container.scrollLeft;
-    const currentIndex = Math.round(currentScroll / cardWidth);
-    const targetIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
-    
-    // Scroll to the exact card position
-    container.scrollTo({ left: targetIndex * cardWidth, behavior: 'smooth' });
+    const firstCard = container.querySelector('.carousel-card') as HTMLElement | null;
+    if (!firstCard) return;
+    // Measure actual card width + gap from the DOM
+    const style = window.getComputedStyle(container);
+    const gap = parseFloat(style.gap) || 12;
+    const cardWidth = firstCard.offsetWidth + gap;
+
+    // Scroll exactly one card in the given direction
+    const targetScroll = container.scrollLeft + (direction === 'left' ? -cardWidth : cardWidth);
+    container.scrollTo({ left: targetScroll, behavior: 'smooth' });
   };
 
   // Carousel 3D Effect Logic with Infinite Loop
