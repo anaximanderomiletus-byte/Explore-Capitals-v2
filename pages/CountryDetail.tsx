@@ -332,7 +332,7 @@ const CountryDetail: React.FC = () => {
                 <div className="inline-flex items-center gap-3 px-5 py-2 bg-sky/10 rounded-full border border-white/10 mb-2 shadow-inner">
                   <div className="w-2 h-2 rounded-full bg-sky animate-ping" />
                   <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.5em]">
-                    {loadingProgress < 100 ? 'Locating Territory' : 'Territory Found'}
+                    {loadingProgress < 100 ? 'Establishing Link' : 'Connection Secured'}
                   </span>
                 </div>
                 <div className="flex flex-col items-center">
