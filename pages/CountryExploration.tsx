@@ -273,28 +273,28 @@ const CountryExploration: React.FC = () => {
 
           setTourData(shuffledData);
 
-          // Step 1: Get intro image — show the page as soon as this resolves
+          // Step 1: Get intro image
           const introImg = await getGeneratedImage(country.name, 'landscape');
           setIntroImage(introImg);
-          setLoadingProgress(95);
+          setLoadingProgress(60);
 
-          // Mark data as loaded immediately — don't block on stop images
-          clearTimeout(globalTimeout);
-          setDataLoaded(true);
-          setLoadingProgress(100);
-
-          // Step 2: Load stop images in the background while user sees the intro
-          Promise.all(
+          // Step 2: Preload ALL stop images during the loading screen
+          const stopImgs = await Promise.all(
             shuffledData.stops.map(stop =>
               getGeneratedImage(stop.imageKeyword || stop.stopName, 'landmark')
             )
-          ).then(stopImgs => {
-            const newStopImages: Record<number, string | null> = {};
-            stopImgs.forEach((img, i) => {
-              newStopImages[i] = img;
-            });
-            setStopImages(newStopImages);
+          );
+          const newStopImages: Record<number, string | null> = {};
+          stopImgs.forEach((img, i) => {
+            newStopImages[i] = img;
           });
+          setStopImages(newStopImages);
+          setLoadingProgress(95);
+
+          // Mark data as loaded — everything is ready
+          clearTimeout(globalTimeout);
+          setDataLoaded(true);
+          setLoadingProgress(100);
         } else {
           clearTimeout(globalTimeout);
           console.error("[Expedition] No tour data returned");
@@ -625,7 +625,7 @@ const CountryExploration: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Container className="flex items-center justify-center px-4 md:px-6 pt-20 pb-12 overflow-hidden bg-surface-dark relative">
+            <Container className="flex items-center justify-center px-4 md:px-6 pt-28 pb-12 overflow-hidden bg-surface-dark relative">
               <SEO title="Loading Expedition" description="Preparing your geography expedition. Explore countries through guided tours and interactive quizzes." />
               
               {/* Dynamic Tech Grid Background */}
@@ -974,7 +974,7 @@ const CountryExploration: React.FC = () => {
            {/* Narrative Content Scroll */}
            <div 
              key={stepIndex}
-             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-14 flex flex-col items-center justify-center min-h-[calc(100vh-140px)] transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
+             className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-[160px] pb-12 flex flex-col items-center justify-center min-h-screen transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
            >
               <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center w-full">
                 {/* Section 1: Text Content */}
