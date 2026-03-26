@@ -976,28 +976,43 @@ const CountryExploration: React.FC = () => {
              key={stepIndex}
              className={`relative z-10 w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-[110px] pb-12 flex flex-col items-center justify-center min-h-screen transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}
            >
-              <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center w-full">
-                {/* Section 1: Text Content */}
-                <section className="w-full animate-in fade-in slide-in-from-left-8 duration-1000 order-2 lg:order-1 overflow-hidden">
+              <div className="flex flex-col gap-6 sm:gap-8 lg:gap-10 items-center w-full max-w-3xl mx-auto">
+                {/* Section 1: The Visual Encounter (always on top) */}
+                <section className="w-full flex flex-col items-center animate-in fade-in slide-in-from-top-8 duration-1000 overflow-hidden">
+                   <div className="relative group w-full max-w-full">
+                    <PhotoPrint
+                      src={currentImage}
+                      alt={currentStop.stopName}
+                        imageKeyword={currentStop.imageKeyword || currentStop.stopName}
+                        caption={`${currentStop.stopName}, ${country.name}`}
+                        region="Active Stop"
+                        rotation="rotate-0"
+                        className="w-full"
+                    />
+                  </div>
+                </section>
+
+                {/* Section 2: Text Content (always below) */}
+                <section className="w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 overflow-hidden">
                    <div className="space-y-4 sm:space-y-5">
-                      <div className="text-center lg:text-left">
+                      <div className="text-center">
                          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-black text-white leading-none uppercase tracking-tighter drop-shadow-lg mb-4 sm:mb-5">
                             {currentStop.stopName}
                          </h2>
                       </div>
 
-                      <div className="space-y-3 sm:space-y-4 lg:text-left">
+                      <div className="space-y-3 sm:space-y-4 text-center">
                          <p className="text-base sm:text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
                             {currentStop.description[0]}
                          </p>
-                         <div className="w-12 h-1 bg-sky/40 rounded-full hidden lg:block" />
+                         <div className="w-12 h-1 bg-sky/40 rounded-full mx-auto" />
                          <p className="text-sm md:text-base text-white/60 leading-relaxed font-bold">
                             {currentStop.description[1]}
                          </p>
            </div>
 
                       {/* Navigation Controls */}
-                      <div className="flex items-center gap-3 pt-1 lg:justify-start justify-center">
+                      <div className="flex items-center gap-3 pt-1 justify-center">
                          <button
                       onClick={prevStop}
                             className="group/prev w-11 h-11 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center hover:bg-white/50 hover:border-white/60 transition-all duration-300"
@@ -1020,21 +1035,6 @@ const CountryExploration: React.FC = () => {
                          </button>
                       </div>
                    </div>
-                </section>
-
-                {/* Section 2: The Visual Encounter */}
-                <section className="w-full flex flex-col items-center animate-in fade-in slide-in-from-right-8 duration-1000 order-1 lg:order-2 lg:pt-14 overflow-hidden">
-                   <div className="relative group w-full max-w-full">
-                    <PhotoPrint 
-                      src={currentImage} 
-                      alt={currentStop.stopName} 
-                        imageKeyword={currentStop.imageKeyword || currentStop.stopName}
-                        caption={`${currentStop.stopName}, ${country.name}`}
-                        region="Active Stop"
-                        rotation="rotate-0"
-                        className="w-full"
-                    />
-                  </div>
                 </section>
               </div>
            </div>
