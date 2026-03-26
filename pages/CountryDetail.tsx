@@ -1,13 +1,13 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { getCountryCode } from '../utils/flags';
+import { getCountryCode, getFlagUrl } from '../utils/flags';
 import { toSlug } from '../utils/slug';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Map, Compass, Navigation,
   Clock, Phone, Car, Users, Maximize2, Banknote,
   TrendingUp, Languages, Building2, AlertTriangle,
-  MapPin
+  MapPin, Globe
 } from 'lucide-react';
 import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
@@ -20,6 +20,7 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FALLBACK_SCENES = [
   "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80",
@@ -35,6 +36,19 @@ const CountryDetail: React.FC = () => {
 
   const [images, setImages] = useState<Record<string, string>>({});
   const [tours, setTours] = useState<Record<string, TourData>>({});
+  const [showPage, setShowPage] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+
+  const loadingMessages = [
+    'Scanning coordinates...',
+    'Loading terrain data...',
+    'Retrieving imagery...',
+    'Fetching country intel...',
+    'Compiling dossier...',
+    'Preparing briefing...',
+  ];
 
   useEffect(() => {
     setPageLoading(false);
@@ -43,6 +57,43 @@ const CountryDetail: React.FC = () => {
   }, [setPageLoading]);
 
   const dataLoaded = Object.keys(images).length > 0 && Object.keys(tours).length > 0;
+
+  // Minimum display time
+  useEffect(() => {
+    const timer = setTimeout(() => setMinTimeElapsed(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Loading progress + messages
+  useEffect(() => {
+    if (showPage) return;
+    const canFinish = dataLoaded && minTimeElapsed;
+
+    const stepInterval = setInterval(() => {
+      setLoadingStep(prev => (prev + 1) % loadingMessages.length);
+    }, 1100);
+
+    const progressInterval = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (canFinish) {
+          if (prev >= 100) { clearInterval(progressInterval); return 100; }
+          return Math.min(prev + 5, 100);
+        }
+        if (prev >= 65) return prev;
+        return prev + 0.7;
+      });
+    }, 80);
+
+    return () => { clearInterval(stepInterval); clearInterval(progressInterval); };
+  }, [dataLoaded, minTimeElapsed, showPage]);
+
+  // Transition once ready
+  useEffect(() => {
+    if (loadingProgress >= 100 && dataLoaded && minTimeElapsed && !showPage) {
+      const timer = setTimeout(() => setShowPage(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [loadingProgress, dataLoaded, minTimeElapsed, showPage]);
 
   const country = useMemo(() => {
     // Match by numeric id first, then by name slug
@@ -224,8 +275,145 @@ const CountryDetail: React.FC = () => {
     },
   };
 
+  if (!showPage) {
+    return (
+      <motion.div
+        key="country-loading"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="min-h-screen bg-surface-dark relative flex items-center justify-center px-4 pt-28 pb-12 overflow-hidden">
+          <SEO title={`Loading ${country.name}`} description={`Preparing ${country.name} country profile.`} />
+
+          {/* Background effects */}
+          <div className="absolute inset-0 z-0 opacity-20"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)`,
+              backgroundSize: '40px 40px'
+            }}
+          />
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-30">
+            <div className="w-full h-[2px] bg-sky-light/50 blur-sm absolute top-0 left-0 animate-scan-line" />
+          </div>
+          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+            <div className="absolute bottom-[-20%] right-[-10%] w-[100%] h-[100%] bg-accent/8 rounded-full blur-3xl opacity-60" />
+          </div>
+
+          <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
+            <div className="w-full bg-black/40 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 text-center border border-white/10 relative overflow-hidden">
+              {/* Glass Sheen */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
+
+              {/* Corner Brackets */}
+              <div className="absolute top-6 left-6 w-10 h-10 border-t-2 border-l-2 border-sky/30 rounded-tl-2xl" />
+              <div className="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-sky/30 rounded-tr-2xl" />
+              <div className="absolute bottom-6 left-6 w-10 h-10 border-b-2 border-l-2 border-sky/30 rounded-bl-2xl" />
+              <div className="absolute bottom-6 right-6 w-10 h-10 border-b-2 border-r-2 border-sky/30 rounded-br-2xl" />
+
+              {/* Flag with orbitals */}
+              <div className="mb-8 relative pt-4">
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-48 h-4 bg-sky/20 blur-2xl rounded-full animate-pulse" />
+                <div className="relative z-10 w-36 h-auto mx-auto mb-4 animate-float-slow">
+                  <img
+                    src={getFlagUrl(country.flag)}
+                    alt={`${country.name} Flag`}
+                    className="w-full h-auto object-contain relative z-10"
+                  />
+                </div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 border border-sky/10 rounded-full animate-spin-slow opacity-20" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-dashed border-white/5 rounded-full animate-reverse-spin opacity-20" />
+              </div>
+
+              {/* Status Badge */}
+              <div className="space-y-4 mb-10">
+                <div className="inline-flex items-center gap-3 px-5 py-2 bg-sky/10 rounded-full border border-white/10 mb-2 shadow-inner">
+                  <div className="w-2 h-2 rounded-full bg-sky animate-ping" />
+                  <span className="text-[10px] font-black text-sky-light uppercase tracking-[0.5em]">
+                    {loadingProgress < 100 ? 'Locating Territory' : 'Territory Found'}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] text-white/40 tracking-[0.4em] uppercase mb-1 font-black">Destination</span>
+                  <h1 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase leading-tight">
+                    {country.name}
+                  </h1>
+                </div>
+              </div>
+
+              {/* Progress */}
+              <div className="relative w-full mb-10 px-4">
+                <div className="flex justify-between items-end mb-3 px-1">
+                  <div className="flex flex-col items-start">
+                    <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">Loading</span>
+                    <div className="h-0.5 w-8 bg-sky/40 rounded-full mt-1" />
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-display font-black text-white tabular-nums">{Math.round(loadingProgress)}</span>
+                    <span className="text-[10px] font-black text-sky-light tracking-widest">%</span>
+                  </div>
+                </div>
+                <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden border border-white/10 shadow-inner p-0.5 relative">
+                  <div
+                    className="h-full bg-gradient-to-r from-sky via-sky-light to-sky transition-all duration-300 ease-out rounded-full relative"
+                    style={{ width: `${loadingProgress}%` }}
+                  >
+                    <div className="absolute inset-0 w-full h-full animate-shimmer bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent)] bg-[length:200%_100%]" />
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-md opacity-80" />
+                  </div>
+                </div>
+                <div className="flex gap-1.5 mt-4 justify-center">
+                  {[...Array(8)].map((_, i) => (
+                    <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${loadingProgress > (i * 12.5) ? 'bg-sky' : 'bg-white/5 border border-white/5'}`} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Loading Message */}
+              <div className="h-5 mb-2">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={loadingStep}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-[10px] font-bold text-white/30 uppercase tracking-[0.3em]"
+                  >
+                    {loadingMessages[loadingStep]}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Terminal readouts */}
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-1 justify-center opacity-30">
+              <span className="text-[8px] font-mono text-white/60 tracking-wider">
+                LAT: {Math.abs(country.lat).toFixed(4)}{country.lat >= 0 ? 'N' : 'S'}
+              </span>
+              <span className="text-[8px] font-mono text-white/60 tracking-wider">
+                LNG: {Math.abs(country.lng).toFixed(4)}{country.lng >= 0 ? 'E' : 'W'}
+              </span>
+              <span className="text-[8px] font-mono text-white/60 tracking-wider">
+                REGION: {country.region}
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-surface-dark pt-24 pb-12 relative overflow-hidden text-white">
+    <motion.main
+      key="country-content"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-surface-dark pt-24 pb-12 relative overflow-hidden text-white"
+    >
       <SEO
         title={country.name}
         description={`${country.name} country profile: capital ${country.capital}, population ${country.population}, area ${country.area} km², currency ${country.currency}. ${country.description?.slice(0, 120)}...`}
@@ -539,7 +727,7 @@ const CountryDetail: React.FC = () => {
 
 
       </div>
-    </main>
+    </motion.main>
   );
 };
 
