@@ -1015,9 +1015,10 @@ const CountryExploration: React.FC = () => {
                       <div className="flex items-center gap-3 pt-1 justify-center">
                          <button
                       onClick={prevStop}
-                            className="group/prev w-11 h-11 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center hover:bg-white/50 hover:border-white/60 transition-all duration-300"
+                            className="group/prev h-11 px-5 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 hover:border-white/40 transition-all duration-300"
                          >
-                            <ArrowLeft size={17} className="text-white group-hover/prev:text-white group-hover/prev:-translate-x-0.5 transition-all" />
+                            <ChevronLeft size={15} className="text-white transition-all group-hover/prev:-translate-x-0.5" />
+                            <span className="text-[10.5px] font-black uppercase tracking-[0.15em] text-white">Back</span>
                          </button>
 
                          <button
