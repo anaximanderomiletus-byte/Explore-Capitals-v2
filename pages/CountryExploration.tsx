@@ -995,24 +995,24 @@ const CountryExploration: React.FC = () => {
                 {/* Section 2: Text Content (always below) */}
                 <section className="w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 overflow-hidden">
                    <div className="space-y-4 sm:space-y-5">
-                      <div className="text-center">
+                      <div className="text-left">
                          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-black text-white leading-none uppercase tracking-tighter drop-shadow-lg mb-4 sm:mb-5">
                             {currentStop.stopName}
                          </h2>
                       </div>
 
-                      <div className="space-y-3 sm:space-y-4 text-center">
+                      <div className="space-y-3 sm:space-y-4 text-left">
                          <p className="text-base sm:text-lg md:text-xl font-display font-black text-white leading-snug tracking-tight opacity-95">
                             {currentStop.description[0]}
                          </p>
-                         <div className="w-12 h-1 bg-sky/40 rounded-full mx-auto" />
+                         <div className="w-12 h-1 bg-sky/40 rounded-full" />
                          <p className="text-sm md:text-base text-white/60 leading-relaxed font-bold">
                             {currentStop.description[1]}
                          </p>
            </div>
 
                       {/* Navigation Controls */}
-                      <div className="flex items-center gap-3 pt-1 justify-center">
+                      <div className="flex items-center gap-3 pt-1 justify-start">
                          <button
                       onClick={prevStop}
                             className="group/prev w-11 h-11 rounded-full bg-white/40 backdrop-blur-xl border border-white/50 flex items-center justify-center hover:bg-white/50 hover:border-white/60 transition-all duration-300"
