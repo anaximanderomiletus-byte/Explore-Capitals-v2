@@ -7,7 +7,8 @@ import Footer from './components/Footer';
 import CookieConsent from './components/CookieConsent';
 import { LayoutProvider, useLayout } from './context/LayoutContext';
 import { UserProvider } from './context/UserContext';
-import { AuthProvider } from './context/AuthContext';
+import { LocaleProvider } from './context/LocaleContext';
+
 
 // ── Home is eagerly loaded for instant first paint ─────────────────
 import Home from './pages/Home';
@@ -26,7 +27,6 @@ const GlobalDetective = React.lazy(() => import('./pages/GlobalDetective'));
 const CapitalConnection = React.lazy(() => import('./pages/CapitalConnection'));
 const RegionRoundup = React.lazy(() => import('./pages/RegionRoundup'));
 const LandmarkLegend = React.lazy(() => import('./pages/LandmarkLegend'));
-// Premium Games
 const TerritoryTitans = React.lazy(() => import('./pages/TerritoryTitans'));
 const AreaAce = React.lazy(() => import('./pages/AreaAce'));
 const CurrencyCraze = React.lazy(() => import('./pages/CurrencyCraze'));
@@ -35,14 +35,10 @@ const TimeZoneTrekker = React.lazy(() => import('./pages/TimeZoneTrekker'));
 const DrivingDirection = React.lazy(() => import('./pages/DrivingDirection'));
 const CountryExploration = React.lazy(() => import('./pages/CountryExploration'));
 const CountryDetail = React.lazy(() => import('./pages/CountryDetail'));
-const Settings = React.lazy(() => import('./pages/Settings'));
-const Profile = React.lazy(() => import('./pages/Profile'));
-const Auth = React.lazy(() => import('./pages/Auth'));
-const AuthAction = React.lazy(() => import('./pages/AuthAction'));
-const Loyalty = React.lazy(() => import('./pages/Loyalty'));
+const Blog = React.lazy(() => import('./pages/Blog'));
+const BlogPost = React.lazy(() => import('./pages/BlogPost'));
 const Terms = React.lazy(() => import('./pages/Terms'));
 const Privacy = React.lazy(() => import('./pages/Privacy'));
-const Premium = React.lazy(() => import('./pages/Premium'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 
@@ -59,6 +55,7 @@ const prefetchNavbarPages = () => {
     import('./pages/Games');
     import('./pages/DatabasePage');
     import('./pages/About');
+    import('./pages/Blog');
     // MapPage is heavy (Leaflet) — still prefetch but slightly delayed
     setTimeout(() => import('./pages/MapPage'), 200);
   };
@@ -258,9 +255,10 @@ const PersistentBackground: React.FC = () => {
   const isDatabase = pathname === '/database' || pathname.startsWith('/country/');
   const isMap = pathname === '/map';
   const isAbout = pathname === '/about';
+  const isBlog = pathname === '/blog' || pathname.startsWith('/blog/');
 
-  // "Glow" pages: Games, Database, About — brighter orbs
-  const showGlow = isGames || isDatabase || isAbout;
+  // "Glow" pages: Games, Database, About, Blog — brighter orbs
+  const showGlow = isGames || isDatabase || isAbout || isBlog;
   // Home has its own subtle radial gradients
   const showHome = isHome;
   // Map handles its own background (full-screen dark)
@@ -334,7 +332,6 @@ const AppContent: React.FC = () => {
                 <Route path="/games/capital-connection" element={<CapitalConnection />} />
                 <Route path="/games/region-roundup" element={<RegionRoundup />} />
                 <Route path="/games/landmark-legend" element={<LandmarkLegend />} />
-                {/* Premium Games */}
                 <Route path="/games/territory-titans" element={<TerritoryTitans />} />
                 <Route path="/games/area-ace" element={<AreaAce />} />
                 <Route path="/games/currency-craze" element={<CurrencyCraze />} />
@@ -348,13 +345,8 @@ const AppContent: React.FC = () => {
                 <Route path="/about" element={<About />} />
                 <Route path="/expedition/:id" element={<CountryExploration />} />
                 <Route path="/explore/:id" element={<ExploreRedirect />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/auth-action" element={<AuthAction />} />
-                <Route path="/reset-password" element={<AuthAction />} />
-                <Route path="/loyalty" element={<Loyalty />} />
-                <Route path="/premium" element={<Premium />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="*" element={<NotFound />} />
@@ -368,7 +360,7 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    <LocaleProvider>
       <UserProvider>
         <LayoutProvider>
           <Router>
@@ -376,7 +368,7 @@ const App: React.FC = () => {
           </Router>
         </LayoutProvider>
       </UserProvider>
-    </AuthProvider>
+    </LocaleProvider>
   );
 };
 

@@ -806,117 +806,132 @@ const CountryExploration: React.FC = () => {
             <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/10 rounded-full blur-3xl opacity-60" />
           </div>
 
-          <div className={`relative z-10 w-full max-w-6xl flex flex-col transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+          <div className={`relative z-10 w-full max-w-6xl flex flex-col items-center transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
             <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database', href: '/database' }, { label: country.name, href: `/country/${toSlug(country.name)}` }, { label: 'Expedition' }]} />
-            <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 lg:gap-x-16 lg:gap-y-1 items-center lg:items-start">
-              
-              {/* 1. Text Block: Top-Left on Desktop */}
-              <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-3 order-1 w-full">
-                <div className="space-y-3 w-full">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-sky/30 rounded-full border border-white/40 text-[8px] font-black tracking-[0.4em] text-white relative overflow-hidden">
-                    <Compass size={12} className="text-sky-light" /> 
-                    <span className="relative z-10 uppercase">Virtual Tour</span>
-                  </div>
-                  <h2 className="text-2xl md:text-4xl lg:text-6xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
-                    {tourData.tourTitle}
-                  </h2>
-                  <p className="text-xs md:text-sm lg:text-base text-white/70 font-bold italic leading-relaxed drop-shadow-sm max-w-2xl">
-                    {tourData.introText}
-                  </p>
+            <div className="flex flex-col items-center gap-6 lg:gap-8">
+
+              {/* 1. Hero Text — Centered */}
+              <div className="flex flex-col items-center text-center space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-sky/30 rounded-full border border-white/40 text-[8px] font-black tracking-[0.4em] text-white relative overflow-hidden">
+                  <Compass size={12} className="text-sky-light" />
+                  <span className="relative z-10 uppercase">Virtual Tour</span>
                 </div>
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
+                  {tourData.tourTitle}
+                </h2>
+                <p className="text-xs md:text-sm lg:text-base text-white/70 font-bold italic leading-relaxed drop-shadow-sm">
+                  {tourData.introText}
+                </p>
               </div>
 
-              {/* 2. Visual Block (TV): Under Text on Desktop */}
-              <div className="lg:col-span-7 w-full flex flex-col items-center lg:items-start order-2 mt-1 lg:mt-3 mb-4 lg:mb-0">
-                {/* Main Featured Image - TV (Larger) */}
-                <div className="max-w-[280px] md:max-w-md lg:max-w-2xl w-full relative group">
-                  <PhotoPrint 
-                    src={introImage} 
-                    alt={country.name} 
-                    imageKeyword={country.name}
-                    caption={`${country.capital}, ${country.name}`}
-                    region={country.region}
-                    rotation="rotate-0"
-                    className="w-full"
-                  />
-                  {/* Decorative Elements for TV - removed sharp shadow */}
-                </div>
+              {/* 2. Hero Image — Centered PhotoPrint TV */}
+              <div className="max-w-[320px] md:max-w-lg lg:max-w-xl w-full">
+                <PhotoPrint
+                  src={introImage}
+                  alt={country.name}
+                  imageKeyword={country.name}
+                  caption={`${country.capital}, ${country.name}`}
+                  region={country.region}
+                  rotation="rotate-0"
+                  className="w-full"
+                />
               </div>
 
-              {/* 3. Itinerary Block & Actions: Right Side on Desktop */}
-              <div className="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 flex flex-col items-start gap-4 order-3 w-full lg:pl-4 pt-4 lg:pt-16">
-                <div className="flex flex-col items-start gap-1">
-                  <span className="text-[10px] lg:text-[11px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
+              {/* 3. Itinerary Glass Card + Actions */}
+              <div
+                className="w-full max-w-2xl rounded-2xl p-5 sm:p-6 flex flex-col items-center gap-5"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  backdropFilter: 'blur(24px) saturate(1.4)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+                }}
+              >
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
                   <div className="h-0.5 w-12 bg-sky/40 rounded-full" />
                 </div>
-                
-                <div className="relative w-full overflow-visible">
-                  {/* Connecting Line (Vertical for both Mobile & Desktop) */}
-                  <div className="absolute top-4 bottom-4 left-[22px] w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-0" />
-                  
-                  <div className="flex flex-col items-start gap-5 lg:gap-6 relative z-10 w-full">
+
+                {/* Desktop: Horizontal chips / Mobile: Vertical list */}
+                <div className="w-full">
+                  {/* Desktop horizontal layout */}
+                  <div className="hidden md:flex flex-wrap justify-center gap-2.5">
                     {tourData.stops.map((stop, idx) => {
                       const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
-                      
                       return (
-                        <div key={idx} className="flex flex-row items-center gap-4 group/stop w-full">
-                          {/* Icon Container */}
-                          <div className="w-11 h-11 shrink-0 rounded-xl bg-black/60 border border-white/10 overflow-hidden relative shadow-lg group-hover/stop:border-sky/50 transition-all duration-300">
+                        <div key={idx} className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/[0.05] border border-white/10 hover:border-sky/40 transition-all duration-300 group/stop">
+                          <div className="w-8 h-8 shrink-0 rounded-lg bg-black/60 border border-white/10 overflow-hidden relative">
                             <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
                             <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
-                            <div className="absolute top-0 left-0 bg-sky/80 text-white text-[6px] font-black px-1.5 py-0.5 rounded-br-lg">
+                            <div className="absolute top-0 left-0 bg-sky/80 text-white text-[5px] font-black px-1 py-px rounded-br-md">
                               {idx + 1}
                             </div>
                           </div>
-
-                          {/* Label Container */}
-                          <div className="flex flex-col items-start text-left flex-1">
-                            <span className="text-[6px] lg:text-[7px] font-bold text-white/20 uppercase tracking-widest mb-0.5">Waypoint 0{idx + 1}</span>
-                            <span className="text-[13px] lg:text-sm font-black text-white/80 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors">{displayLabel}</span>
-                          </div>
+                          <span className="text-[11px] font-black text-white/70 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors whitespace-nowrap">{displayLabel}</span>
                         </div>
                       );
                     })}
                   </div>
+
+                  {/* Mobile vertical layout */}
+                  <div className="md:hidden relative">
+                    <div className="absolute top-3 bottom-3 left-[18px] w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-0" />
+                    <div className="flex flex-col gap-4 relative z-10">
+                      {tourData.stops.map((stop, idx) => {
+                        const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
+                        return (
+                          <div key={idx} className="flex items-center gap-3 group/stop">
+                            <div className="w-9 h-9 shrink-0 rounded-xl bg-black/60 border border-white/10 overflow-hidden relative shadow-lg group-hover/stop:border-sky/50 transition-all duration-300">
+                              <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
+                              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
+                              <div className="absolute top-0 left-0 bg-sky/80 text-white text-[5px] font-black px-1 py-px rounded-br-md">
+                                {idx + 1}
+                              </div>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[6px] font-bold text-white/20 uppercase tracking-widest mb-0.5">Waypoint 0{idx + 1}</span>
+                              <span className="text-[13px] font-black text-white/80 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors">{displayLabel}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Integrated Bottom Actions (Moved under Itinerary) */}
-                <div className="flex flex-col gap-4 w-full items-center mt-3 pt-6">
-                  <div className="flex flex-col items-center gap-4 w-full">
-                    <button
-                      onClick={startTour}
-                      className="group relative w-full max-w-[360px] h-14 lg:h-16 rounded-[22px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
-                      style={{
-                        background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
-                        border: '1px solid rgba(255,255,255,0.25)',
-                        backdropFilter: 'blur(40px) saturate(1.8)',
-                        WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
-                      }}
-                    >
-                      {/* Liquid Glass specular highlight */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
-                      <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
-
-                      {/* Content */}
-                      <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                        <span className="text-sm lg:text-base font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
-                          Start Tour
-                        </span>
-                        <div className="w-9 h-9 rounded-full bg-white/12 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
-                          <ChevronRight size={20} className="text-white transition-all" />
-                        </div>
+                {/* Actions */}
+                <div className="flex flex-col items-center gap-3 w-full pt-2">
+                  <button
+                    onClick={startTour}
+                    className="group relative w-full max-w-sm h-14 rounded-[22px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
+                    style={{
+                      background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                      border: '1px solid rgba(255,255,255,0.25)',
+                      backdropFilter: 'blur(40px) saturate(1.8)',
+                      WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
+                    <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
+                    <div className="relative z-10 flex items-center justify-center gap-3 h-full">
+                      <span className="text-sm font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
+                        Start Tour
+                      </span>
+                      <div className="w-9 h-9 rounded-full bg-white/12 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
+                        <ChevronRight size={20} className="text-white transition-all" />
                       </div>
-                    </button>
+                    </div>
+                  </button>
 
-                    <button 
-                      onClick={() => navigate(`/country/${toSlug(country.name)}`)}
-                      className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
-                    >
-                      GO BACK
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => navigate(`/country/${toSlug(country.name)}`)}
+                    className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
+                  >
+                    GO BACK
+                  </button>
                 </div>
               </div>
             </div>

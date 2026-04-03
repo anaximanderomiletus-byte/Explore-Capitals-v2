@@ -5,15 +5,18 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
-import { useUser } from '../context/UserContext';
+import { useTranslation } from '../context/LocaleContext';
+
 import { VerticalSidebarAd } from '../components/AdSense';
-import { createCheckoutSession } from '../services/payment';
+// Lazy-load payment service to avoid Firebase init blocking page render
+const loadPayment = () => import('../services/payment').then(m => m.createCheckoutSession);
 
 const About: React.FC = () => {
   const { setPageLoading } = useLayout();
+  const { t } = useTranslation();
   const { hash } = useLocation();
   const [searchParams] = useSearchParams();
-  const { userProfile } = useUser();
+
 
   // Donation state
   const [donationBusy, setDonationBusy] = useState(false);
@@ -25,9 +28,9 @@ const About: React.FC = () => {
 
     // Handle payment success/cancel redirects
     if (searchParams.get('success') === 'true') {
-      setDonationStatus('Thank you for your support! You are now a supporter.');
+      setDonationStatus(t('about.support.thankYou'));
     } else if (searchParams.get('canceled') === 'true') {
-      setDonationError('Payment was canceled.');
+      setDonationError(t('about.support.canceled'));
     }
 
     if (hash === '#contact') {
@@ -52,7 +55,8 @@ const About: React.FC = () => {
     setDonationStatus(null);
     setDonationError(null);
     try {
-      const { url } = await createCheckoutSession(amount * 100); // Convert to cents
+      const checkout = await loadPayment();
+      const { url } = await checkout(amount * 100);
       window.location.href = url;
     } catch (err: any) {
       console.error('Donation failed:', err);
@@ -100,16 +104,16 @@ const About: React.FC = () => {
             <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky/20 to-accent/10 border-2 border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 relative overflow-hidden group/badge hover:border-white/60 transition-all duration-300">
               <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
               <Compass size={14} className="text-sky-light relative z-10" />
-              <span className="relative z-10">Welcome to the Mission</span>
+              <span className="relative z-10">{t('about.badge')}</span>
             </div>
 
             <h1 className="text-5xl md:text-8xl font-display font-black text-white leading-[1.1] mb-6 tracking-tighter uppercase drop-shadow-xl">
-              Master World<br />
-              <span className="bg-clip-text bg-gradient-to-r from-sky-light via-accent to-sky-light [-webkit-text-fill-color:transparent]">Geography</span>
+              {t('about.title1')}<br />
+              <span className="bg-clip-text bg-gradient-to-r from-sky-light via-accent to-sky-light [-webkit-text-fill-color:transparent]">{t('about.title2')}</span>
             </h1>
 
             <p className="text-lg md:text-2xl text-white/70 leading-relaxed font-bold max-w-3xl">
-              High-fidelity maps, precision data, and competitive challenges.
+              {t('about.heroDesc')}
             </p>
           </div>
 
@@ -118,10 +122,10 @@ const About: React.FC = () => {
             {/* Story Section */}
             <div className="space-y-5">
               <div>
-                <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase mb-6 leading-none drop-shadow-md">The Platform</h2>
+                <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase mb-6 leading-none drop-shadow-md">{t('about.platform.title')}</h2>
                 <div className="space-y-5">
                   <div className="text-xl md:text-2xl text-white/80 leading-relaxed font-bold border-l-4 border-sky/60 pl-6 py-2">
-                    Vetted datasets, immersive cartography, and a ranking system that rewards mastery.
+                    {t('about.platform.desc1')}
                   </div>
                   <div className="hidden lg:block text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
                     We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
@@ -136,10 +140,10 @@ const About: React.FC = () => {
             {/* Four Pillars - Fun Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
               {[
-                { icon: <Trophy size={24} />, title: "Competitive", text: "Ranking and mastery tracking", color: "from-accent/30 to-accent/10", iconBg: "bg-accent/20", textColor: "text-accent" },
-                { icon: <MapPin size={24} />, title: "Authoritative", text: "Verified geography data", color: "from-sky/30 to-sky/10", iconBg: "bg-sky/20", textColor: "text-sky" },
-                { icon: <Zap size={24} />, title: "Immersive", text: "High-fidelity cartography", color: "from-warning/30 to-warning/10", iconBg: "bg-warning/20", textColor: "text-warning" },
-                { icon: <Globe2 size={24} />, title: "Rigorous", text: "Professional-grade tools", color: "from-purple-500/30 to-purple-500/10", iconBg: "bg-purple-500/20", textColor: "text-purple-400" },
+                { icon: <Trophy size={24} />, title: t('about.pillars.competitive'), text: t('about.pillars.competitiveDesc'), color: "from-accent/30 to-accent/10", iconBg: "bg-accent/20", textColor: "text-accent" },
+                { icon: <MapPin size={24} />, title: t('about.pillars.authoritative'), text: t('about.pillars.authoritativeDesc'), color: "from-sky/30 to-sky/10", iconBg: "bg-sky/20", textColor: "text-sky" },
+                { icon: <Zap size={24} />, title: t('about.pillars.immersive'), text: t('about.pillars.immersiveDesc'), color: "from-warning/30 to-warning/10", iconBg: "bg-warning/20", textColor: "text-warning" },
+                { icon: <Globe2 size={24} />, title: t('about.pillars.rigorous'), text: t('about.pillars.rigorousDesc'), color: "from-purple-500/30 to-purple-500/10", iconBg: "bg-purple-500/20", textColor: "text-purple-400" },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -173,9 +177,9 @@ const About: React.FC = () => {
           className="scroll-mt-32 relative"
         >
           <div className="mb-12">
-            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Support the Mission</h2>
+            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">{t('about.support.title')}</h2>
             <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
-              ExploreCapitals remains free to use. Your contribution covers infrastructure costs and funds ongoing map improvements.
+              {t('about.support.desc')}
             </p>
           </div>
 
@@ -197,18 +201,15 @@ const About: React.FC = () => {
 
             <div className="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12 relative z-10">
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br from-pink-500/40 to-pink-500/10 flex items-center justify-center text-pink-400 border-2 border-white/30 shrink-0">
-                <Heart size={40} className={userProfile?.isSupporter ? "fill-current" : ""} strokeWidth={1.5} />
+                <Heart size={40} strokeWidth={1.5} />
               </div>
 
               <div className="flex-1">
                 <h3 className="text-2xl md:text-3xl font-black text-white mb-3 uppercase tracking-tight">
-                  {userProfile?.isSupporter ? "You're Supporting ExploreCapitals" : "Support the Project"}
+                  {t('about.support.cardTitle')}
                 </h3>
                 <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold mb-8">
-                  {userProfile?.isSupporter
-                    ? "Your contribution directly funds server infrastructure and new geographic datasets. Supporters receive a badge on their profile."
-                    : "Choose an amount to support ongoing development. All supporters are recognized on their profile as contributors to geographic education."
-                  }
+                  {t('about.support.cardDesc')}
                 </p>
 
                 <div className="grid grid-cols-3 gap-4 max-w-xs">
@@ -228,7 +229,7 @@ const About: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-[10px] md:text-xs text-white/40 mt-4 uppercase tracking-[0.2em] font-bold">
-                  🔒 Secure payment via Stripe
+                  {t('about.support.securePayment')}
                 </p>
               </div>
             </div>
@@ -244,9 +245,9 @@ const About: React.FC = () => {
           className="scroll-mt-32 relative"
         >
           <div className="mb-12">
-            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">Contact & Support</h2>
+            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">{t('about.contact.title')}</h2>
             <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
-              Questions, feedback, or partnership inquiries: <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-sky transition-all underline underline-offset-4">anaximanderomiletus@gmail.com</a>
+              {t('about.contact.desc')} <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-sky transition-all underline underline-offset-4">anaximanderomiletus@gmail.com</a>
             </p>
           </div>
 
@@ -255,16 +256,16 @@ const About: React.FC = () => {
             {[
               {
                 icon: <ShieldCheck size={28} />,
-                title: "Privacy & Security",
-                text: "User data is encrypted end-to-end. We never share or sell personal information.",
+                title: t('about.contact.privacy.title'),
+                text: t('about.contact.privacy.desc'),
                 color: "from-sky/30 to-sky/10",
                 iconBg: "bg-sky/20",
                 textColor: "text-sky"
               },
               {
                 icon: <Zap size={28} />,
-                title: "Response Commitment",
-                text: "We respond to all inquiries within 24-48 hours.",
+                title: t('about.contact.response.title'),
+                text: t('about.contact.response.desc'),
                 color: "from-accent/30 to-accent/10",
                 iconBg: "bg-accent/20",
                 textColor: "text-accent"
@@ -298,7 +299,7 @@ const About: React.FC = () => {
 
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-7xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">
-              Ready to Learn<br />the World?
+              {t('about.cta.title1')}<br />{t('about.cta.title2')}
             </h2>
 
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center px-2">
@@ -309,7 +310,7 @@ const About: React.FC = () => {
                     size="lg"
                     className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase border-2 border-white/30 transition-all group font-black"
                   >
-                    Play <Play className="ml-2 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
+                    {t('about.cta.play')} <Play className="ml-2 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
                   </Button>
                 </Link>
               </div>
@@ -317,7 +318,7 @@ const About: React.FC = () => {
               <div className="w-full sm:w-auto hover:scale-105 active:scale-95 transition-transform duration-150">
                 <Link to="/map" className="block">
                   <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase bg-white/5 border-2 border-white/10 hover:bg-white/20 transition-all group font-black">
-                    Explore Map <Compass className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 md:w-7 md:h-7" />
+                    {t('about.cta.exploreMap')} <Compass className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 md:w-7 md:h-7" />
                   </Button>
                 </Link>
               </div>

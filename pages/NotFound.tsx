@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { Globe, ArrowLeft, Search } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { useTranslation } from '../context/LocaleContext';
 
 const NotFound: React.FC = () => {
   const { setPageLoading } = useLayout();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     setPageLoading(false);
@@ -28,9 +30,9 @@ const NotFound: React.FC = () => {
         </div>
 
         <h1 className="text-4xl font-display font-black mb-3">404</h1>
-        <p className="text-xl text-white/70 mb-2">Page Not Found</p>
+        <p className="text-xl text-white/70 mb-2">{t('notFound.title')}</p>
         <p className="text-sm text-white/40 mb-8">
-          This page doesn't exist — but there's a whole world to explore.
+          {t('notFound.desc')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -39,14 +41,14 @@ const NotFound: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-xl transition-colors"
           >
             <ArrowLeft size={16} />
-            Back to Home
+            {t('notFound.goHome')}
           </Link>
           <Link
             to="/database"
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white/80 font-black text-[11px] uppercase tracking-[0.2em] rounded-xl border border-white/10 transition-colors"
           >
             <Search size={16} />
-            Browse Countries
+            {t('notFound.browseCountries')}
           </Link>
         </div>
       </div>

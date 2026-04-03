@@ -1,21 +1,17 @@
 
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User as UserIcon, LogOut, ChevronRight, Play } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Play, Smartphone } from 'lucide-react';
 import Button from './Button';
+import LanguageSwitcher from './LanguageSwitcher';
 import { useLayout } from '../context/LayoutContext';
-import { useAuth } from '../context/AuthContext';
-import { useUser } from '../context/UserContext';
-import { isPremiumUser } from '../services/subscription';
-import { getAvatarById } from '../constants/avatars';
-import AccountMenu from './AccountMenu';
-import ConfirmationModal from './ConfirmationModal';
+import { useTranslation } from '../context/LocaleContext';
 
 // Sliding active indicator for nav links
 const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]; isOverMap: boolean }> = ({ navLinks, isOverMap }) => {
   const location = useLocation();
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
-  
+
   const updateIndicator = useCallback(() => {
     const activeLink = document.querySelector(`[data-nav-link="${location.pathname}"]`) as HTMLElement;
     if (activeLink) {
@@ -33,21 +29,18 @@ const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]
       setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
     }
   }, [location.pathname]);
-  
-  // Update on mount and when pathname changes
+
   useLayoutEffect(() => {
-    // Small delay to ensure DOM is ready
     requestAnimationFrame(updateIndicator);
   }, [updateIndicator]);
-  
-  // Update on resize
+
   useEffect(() => {
     window.addEventListener('resize', updateIndicator);
     return () => window.removeEventListener('resize', updateIndicator);
   }, [updateIndicator]);
-  
+
   return (
-    <div 
+    <div
       className={`absolute -bottom-1.5 h-0.5 rounded-full transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOverMap ? 'bg-primary' : 'bg-sky-light'}`}
       style={{
         left: indicatorStyle.left,
@@ -59,135 +52,28 @@ const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]
   );
 };
 
-
-// Mobile Profile Link for Signed In Users
-const MobileProfileLinkSignedIn: React.FC<{
-  authUser: any;
-  user: any;
-  avatar: any;
-  onClose: () => void;
-  onSignOut: () => void;
-}> = ({ authUser, user, avatar, onClose, onSignOut }) => {
-  const { loyaltyProgress } = useUser();
-  const initials = (authUser?.displayName || user?.name)?.[0]?.toUpperCase() || 'E';
-
-  return (
-    <div className="space-y-1">
-      {/* Profile Link */}
-      <button
-        onClick={onClose}
-        className="flex items-center gap-4 py-4 border-b border-white/5 group w-full text-left"
-        style={{ WebkitTapHighlightColor: 'transparent' }}
-      >
-        {/* Avatar */}
-        <div className={`relative shrink-0 w-11 h-11 rounded-xl ${avatar ? avatar.color : 'bg-gel-blue'} flex items-center justify-center shadow-lg border border-white/30 overflow-hidden`}>
-          {avatar ? (
-            <div className="text-white">{React.cloneElement(avatar.icon as React.ReactElement, { size: 22 })}</div>
-          ) : (authUser?.photoURL || user?.photoURL)?.startsWith('http') ? (
-            <img src={authUser?.photoURL || user?.photoURL} alt="avatar" className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-base font-black text-white">{initials}</span>
-          )}
-          <div className="absolute inset-0 bg-glossy-gradient opacity-40 pointer-events-none" />
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-display font-black text-white/90 truncate tracking-tight group-active:text-sky-light transition-colors">
-            {authUser?.displayName || user?.name}
-          </h3>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-white/40">
-            {loyaltyProgress.tier} • {loyaltyProgress.points.toLocaleString()} pts
-          </p>
-        </div>
-
-        <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
-      </button>
-
-      {/* Sign Out */}
-      <button
-        onClick={onSignOut}
-        className="flex items-center gap-3 py-3 text-red-400/80 hover:text-red-400 transition-colors w-full"
-      >
-        <LogOut size={18} />
-        <span className="text-sm font-bold uppercase tracking-wider">Sign Out</span>
-      </button>
-    </div>
-  );
-};
-
-// Mobile Profile Link for Signed Out Users
-const MobileProfileLinkSignedOut: React.FC<{
-  onClose: () => void;
-}> = ({ onClose }) => {
-  return (
-    <button
-      onClick={onClose}
-      className="flex items-center gap-4 py-4 border-b border-white/5 group w-full text-left"
-      style={{ WebkitTapHighlightColor: 'transparent' }}
-    >
-      {/* Icon */}
-      <div className="relative shrink-0 w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden group-active:border-sky/40 group-active:bg-sky/10 transition-all">
-        <UserIcon size={22} className="text-white/60 group-active:text-sky-light transition-colors" />
-        <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-      </div>
-
-      {/* Text */}
-      <div className="flex-1">
-        <h3 className="text-xl font-display font-black text-white/60 tracking-tight group-active:text-sky-light transition-colors uppercase">
-          Sign In
-        </h3>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-white/30">
-          Track progress & earn rewards
-        </p>
-      </div>
-
-      <ChevronRight size={20} className="text-white/30 group-active:text-sky-light group-active:translate-x-1 transition-all shrink-0" />
-    </button>
-  );
-};
-
 const Navigation: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const lastScrollY = useRef(0);
   const location = useLocation();
-  const navigate = useNavigate();
-  
-  // Auth context for mobile account panel
-  const { user: authUser, signOut, loading: authLoading } = useAuth();
-  const { user, userProfile, isAuthenticated, isLoading: userLoading } = useUser();
-  const isPremium = isPremiumUser(userProfile?.subscriptionStatus, userProfile?.subscriptionPlan);
-  const avatar = getAvatarById(authUser?.photoURL || user?.photoURL);
-  
-  // Use Context for determining navbar mode and threshold
+
   const { navbarMode, scrollThreshold } = useLayout();
-  
-  const handleMobileSignOut = async () => {
-    setShowSignOutModal(false);
-    setIsMobileMenuOpen(false);
-    await signOut();
-    navigate('/');
-  };
+  const { t } = useTranslation();
+
   const isHeroMode = navbarMode === 'hero';
   const isMapPage = location.pathname === '/map';
-  const isOverMap = isMapPage || location.pathname === '/games/map-dash'; // Pages with light backgrounds
-
-  // Navigation is now instant: Link navigates immediately, and the
-  // useEffect watching `location` closes the menu automatically.
-  // No delayed navigation — no risk of "cancel" behavior on iOS.
+  const isOverMap = isMapPage || location.pathname === '/games/map-dash';
 
   useEffect(() => {
     let rafId = 0;
     const handleScroll = () => {
-      if (rafId) return; // Already scheduled
+      if (rafId) return;
       rafId = requestAnimationFrame(() => {
         rafId = 0;
         const currentScrollY = window.scrollY;
 
-        // Determine visibility based on scroll direction
         if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
           setIsVisible(false);
         } else {
@@ -199,7 +85,6 @@ const Navigation: React.FC = () => {
       });
     };
 
-    // Check initially
     handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -209,13 +94,10 @@ const Navigation: React.FC = () => {
     };
   }, [scrollThreshold]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  // Lock body scroll when mobile menu is open to prevent background scrolling.
-  // Captures scrollY in a closure so cleanup always restores the exact position.
   useEffect(() => {
     if (!isMobileMenuOpen) return;
 
@@ -237,36 +119,22 @@ const Navigation: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/games', label: 'Games' },
-    { path: '/database', label: 'Database' },
-    { path: '/map', label: 'Map' },
-    { path: '/about', label: 'About' },
+    { path: '/', label: t('nav.home') },
+    { path: '/games', label: t('nav.games') },
+    { path: '/database', label: t('nav.database') },
+    { path: '/blog', label: t('nav.blog') },
+    { path: '/map', label: t('nav.map') },
+    { path: '/about', label: t('nav.about') },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
 
-  // Navigation Logic:
-  // 1. Hero Mode:
-  //    - Top: Transparent BG, White Text.
-  //    - Scrolled: Transparent BG (content handles bg), Dark Text.
-  // 2. Default Mode:
-  //    - Top: Transparent BG, Dark Text.
-  //    - Scrolled: White/Blur BG, Dark Text.
-  
-  // Navigation Logic:
-  // 1. Transparent by default
-  // 2. Adaptive text color based on background (Map = Light background = Dark text)
-  // 3. Subtle backdrop blur on scroll for legibility
-  
-  // Transition is on the <nav> element — navClasses only need visual state.
-  // Top padding uses pb-X (bottom only); paddingTop is set via inline style
-  // so the nav extends its background into the iOS safe-area at the top.
   let navClasses = "bg-transparent pb-4";
   let textColorClass = "text-white";
 
   if (isOverMap) {
-    textColorClass = "text-[#1A1C1E]"; // Deep dark color for light background
+    textColorClass = "text-[#1A1C1E]";
 
     if (isScrolled) {
       navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl pb-2.5 shadow-sm";
@@ -274,7 +142,6 @@ const Navigation: React.FC = () => {
       navClasses = "bg-transparent pb-4";
     }
   } else {
-    // Default Mode (Dark Background Pages)
     textColorClass = "text-white";
 
     if (isScrolled) {
@@ -284,24 +151,19 @@ const Navigation: React.FC = () => {
     }
   }
 
-  // Mobile menu open overrides - keep nav transparent, only override text color
   if (isMobileMenuOpen) {
     navClasses = "bg-transparent pb-4";
     textColorClass = "text-white";
   }
 
-  // Compute nav top padding: safe-area-inset-top + visual padding
   const navVisualPaddingTop = isScrolled && !isMobileMenuOpen ? '0.625rem' : '1rem';
-
-  // Map page no longer hides the navbar on short viewports
-  const hideOnMapLandscape = false;
 
   return (
     <>
       <nav
         className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
           (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
-        } ${navClasses} ${hideOnMapLandscape ? '[@media(max-height:620px)]:-translate-y-full' : ''}`}
+        } ${navClasses}`}
         style={{ paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})` }}
       >
         <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
@@ -322,49 +184,50 @@ const Navigation: React.FC = () => {
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-              
+
                   return (
-                <Link 
-                  key={link.path} 
+                <Link
+                  key={link.path}
                   to={link.path}
                   data-nav-link={link.path}
                   className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
-                    active 
+                    active
                       ? activeColor
                       : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
                   }`}
                   style={{ transform: 'translateZ(0)' }}
                 >
                   {link.label}
-                  {/* Hover underline - expands from center */}
-                  <div 
+                  <div
                     className={`absolute -bottom-1.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out ${
-                      active 
-                        ? 'scale-x-0' // Hide hover underline when active (sliding indicator shows instead)
+                      active
+                        ? 'scale-x-0'
                         : `scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
-                    }`} 
+                    }`}
                   />
                 </Link>
               );
             })}
-            {/* Sliding active indicator */}
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
             <Link to="/games">
-              <Button variant={isPremium ? 'premium' : 'primary'} size="sm" className="group uppercase text-sm tracking-widest px-8 py-2.5">
-                Play Now <Play className="ml-1.5 w-4 h-4" fill="currentColor" />
+              <Button variant="primary" size="sm" className="group uppercase text-sm tracking-widest px-8 py-2.5">
+                {t('nav.playNow')} <Play className="ml-1.5 w-4 h-4" fill="currentColor" />
               </Button>
             </Link>
-            <div className={`flex items-center shrink-0 border-l pl-4 ${isOverMap ? 'border-[#1A1C1E]/20' : 'border-white/10'}`}>
-              <AccountMenu isOverMap={isOverMap} />
+            <div className={`flex items-center gap-3 shrink-0 border-l pl-4 ${isOverMap ? 'border-[#1A1C1E]/20' : 'border-white/10'}`}>
+              <LanguageSwitcher variant="navbar" isOverMap={isOverMap} />
+              <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50' : 'text-white/40'}`}>
+                <Smartphone size={14} />
+                <span>{t('nav.appSoon')}</span>
+              </div>
             </div>
           </div>
 
-          {/* Mobile Toggle - hamburger menu - optimized for instant touch response */}
+          {/* Mobile Toggle */}
           <div className="lg:hidden flex items-center relative z-50 shrink-0">
-            <button 
+            <button
               onPointerDown={(e) => {
-                // Use pointerdown for instant response on both touch and mouse
                 e.preventDefault();
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
@@ -392,7 +255,7 @@ const Navigation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Smooth fade in/out */}
+      {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen
@@ -410,14 +273,13 @@ const Navigation: React.FC = () => {
           paddingTop: 'calc(env(safe-area-inset-top, 0px) + 5rem)',
           paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)',
           willChange: 'opacity',
-          transform: 'translateZ(0)', // Force GPU compositing layer
+          transform: 'translateZ(0)',
           WebkitBackfaceVisibility: 'hidden',
         }}
         aria-hidden={!isMobileMenuOpen}
       >
-        {/* Subtle ambient glow — uses radial-gradient instead of blur filter for performance */}
         <div className="absolute top-0 right-0 w-full h-[40%] bg-[radial-gradient(ellipse_at_top_right,rgba(0,122,255,0.08)_0%,transparent_70%)] pointer-events-none" />
-        
+
         <div className="flex flex-col relative z-10">
           {navLinks.map((link, index) => {
             return (
@@ -440,33 +302,8 @@ const Navigation: React.FC = () => {
               </Link>
             );
           })}
-          
-          {/* Account Panel - right after nav links */}
-          <div
-            style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
-              opacity: isMobileMenuOpen ? 1 : 0,
-              transition: isMobileMenuOpen
-                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${navLinks.length * 0.04}s, opacity 0.25s ease-out ${navLinks.length * 0.04}s`
-                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-            }}
-          >
-            {isAuthenticated ? (
-              <MobileProfileLinkSignedIn
-                authUser={authUser}
-                user={user}
-                avatar={avatar}
-                onClose={() => navigate('/profile')}
-                onSignOut={() => setShowSignOutModal(true)}
-              />
-            ) : (
-              <MobileProfileLinkSignedOut
-                onClose={() => navigate('/auth', { state: { from: location } })}
-              />
-            )}
-          </div>
 
-          {/* Play button - right after account */}
+          {/* iOS App Coming Soon */}
           <div
             style={{
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
@@ -475,27 +312,51 @@ const Navigation: React.FC = () => {
                 ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 1) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 1) * 0.04}s`
                 : 'transform 0.12s ease-in, opacity 0.1s ease-in',
             }}
-            className="mt-6"
+          >
+            <div className="flex items-center gap-3 py-4 border-b border-white/5 text-white/30">
+              <Smartphone size={20} />
+              <div>
+                <span className="text-sm font-bold uppercase tracking-wider">{t('nav.iosAppComingSoon')}</span>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-white/20 mt-0.5">
+                  {t('nav.iosAppDesc')}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Language Switcher */}
+          <div
+            style={{
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
+              opacity: isMobileMenuOpen ? 1 : 0,
+              transition: isMobileMenuOpen
+                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 2) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 2) * 0.04}s`
+                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
+            }}
+            className="mt-4"
+          >
+            <LanguageSwitcher variant="mobile" />
+          </div>
+
+          {/* Play button */}
+          <div
+            style={{
+              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
+              opacity: isMobileMenuOpen ? 1 : 0,
+              transition: isMobileMenuOpen
+                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 3) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 3) * 0.04}s`
+                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
+            }}
+            className="mt-4"
           >
             <Link to="/games">
-              <Button variant={isPremium ? 'premium' : 'primary'} size="lg" className="w-full justify-center h-14 text-lg group uppercase">
-                Play <Play className="ml-2 w-5 h-5" fill="currentColor" />
+              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
+                {t('nav.play')} <Play className="ml-2 w-5 h-5" fill="currentColor" />
               </Button>
             </Link>
           </div>
         </div>
       </div>
-
-      {/* Sign Out Confirmation Modal */}
-      <ConfirmationModal
-        isOpen={showSignOutModal}
-        onClose={() => setShowSignOutModal(false)}
-        onConfirm={handleMobileSignOut}
-        title="Sign Out?"
-        message="Are you sure you want to end your session? Your progress is safely stored in your account."
-        confirmText="SIGN OUT"
-        variant="danger"
-      />
     </>
   );
 };

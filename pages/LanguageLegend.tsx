@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Languages, Play, Lock, Crown } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, Play, Crown } from 'lucide-react';
 import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -9,17 +9,18 @@ import { getFlagUrl } from '../utils/flags';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
-import { useGameLimit } from '../hooks/useGameLimit';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
-import Breadcrumbs from '../components/Breadcrumbs';
+import { getGameStructuredData } from '../utils/gameStructuredData';
+import { useTranslation } from '../context/LocaleContext';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
 };
 
 export default function LanguageLegend() {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -31,7 +32,6 @@ export default function LanguageLegend() {
   const [feedbackKey, setFeedbackKey] = useState(0);
   const [hasReported, setHasReported] = useState(false);
   const { recordGameResult } = useUser();
-  const { isPremium } = useGameLimit();
   const navigate = useNavigate();
   const { setPageLoading } = useLayout();
 
@@ -106,10 +106,6 @@ export default function LanguageLegend() {
   }, [allLanguages, previousCountryId]);
 
   const startGame = () => {
-    if (!isPremium) {
-      navigate('/premium');
-      return;
-    }
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
@@ -134,47 +130,6 @@ export default function LanguageLegend() {
     setTimeout(generateQuestion, 700);
   };
 
-  // Premium check screen
-  if (!isPremium && gameState === 'start') {
-    return (
-      <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden flex items-center justify-center px-4">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src={`${import.meta.env.BASE_URL}png/GAMES/language-legend.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
-        </div>
-        <SEO title="Language Legend - Premium Game" description="Identify countries by their official languages. A premium geography game." />
-
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-amber-500/10 rounded-full blur-3xl opacity-60" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-600/10 rounded-full blur-3xl opacity-40" />
-        </div>
-
-        <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Language Legend' }]} />
-          <div className="w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-8 text-center border-2 border-amber-500/30">
-            <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-amber-500/30 relative overflow-hidden">
-              <img src={`${import.meta.env.BASE_URL}png/GAMES/language-legend.png`} alt="Language Legend" className="w-full h-full object-cover" />
-            </div>
-            <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Language Legend</h1>
-            <p className="text-amber-400 text-xs mb-6 font-bold uppercase tracking-[0.2em]">Premium Game</p>
-            <p className="text-white/60 text-sm mb-8">Unlock this game and more with Premium membership.</p>
-            <div className="flex flex-col gap-4">
-              <Button onClick={() => navigate('/premium')} className="w-full h-14 bg-gradient-to-r from-amber-500 to-amber-600 border-0">
-                <Crown size={18} /> UNLOCK
-              </Button>
-              <button
-                onClick={() => navigate('/games')}
-                className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group"
-              >
-                <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-                Back to Games
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -189,7 +144,16 @@ export default function LanguageLegend() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-            <SEO title="Language Legend - Premium Game" description="Identify countries by their official languages. A premium geography game." />
+            <SEO
+              title="Language Legend - Premium Game"
+              description="Identify countries by their official languages. A premium geography game."
+              structuredData={getGameStructuredData({
+                name: 'Language Legend',
+                slug: 'language-legend',
+                description: 'Identify countries by their official languages. A premium geography game.',
+                image: '/png/GAMES/language-legend.png',
+              })}
+            />
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
@@ -218,7 +182,7 @@ export default function LanguageLegend() {
                   className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-secondary transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"
                 >
                   <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" /> 
-                  Back to Games
+                  {t('game.backToGames')}
                 </button>
               </div>
             </div>
@@ -348,18 +312,18 @@ export default function LanguageLegend() {
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
               <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
-              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">
-                  Play Again <Play size={20} fill="currentColor" />
+                  {t('game.playAgain')} <Play size={20} fill="currentColor" />
                 </Button>
                 <button 
                   onClick={() => navigate('/games')}
                   className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
                 >
                   <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-                  Back to Games
+                  {t('game.backToGames')}
                 </button>
               </div>
             </div>

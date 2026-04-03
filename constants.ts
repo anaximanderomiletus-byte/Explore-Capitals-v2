@@ -335,7 +335,7 @@ export const GAMES: Game[] = [
     image: './png/GAMES/territory-titan.png',
     status: 'active',
     description: 'Master autonomous regions and dependencies worldwide.',
-    premium: true
+
   },
   {
     id: '11',
@@ -343,7 +343,7 @@ export const GAMES: Game[] = [
     image: './png/GAMES/area-ace.png',
     status: 'active',
     description: 'Which country is larger? Test your size knowledge.',
-    premium: true
+
   },
   {
     id: '12',
@@ -351,7 +351,7 @@ export const GAMES: Game[] = [
     image: './png/GAMES/currency-craze.png',
     status: 'active',
     description: 'Match countries to their official currencies.',
-    premium: true
+
   },
   {
     id: '13',
@@ -359,7 +359,7 @@ export const GAMES: Game[] = [
     image: './png/GAMES/language-legend.png',
     status: 'active',
     description: 'Identify countries by their official languages.',
-    premium: true
+
   },
   {
     id: '14',
@@ -367,7 +367,7 @@ export const GAMES: Game[] = [
     image: './png/GAMES/time-zone-trekker.png',
     status: 'active',
     description: 'Match countries to their time zones.',
-    premium: true
+
   },
   {
     id: '15',
@@ -375,6 +375,6 @@ export const GAMES: Game[] = [
     image: './png/GAMES/driving-direction.png',
     status: 'active',
     description: 'Left or right? Know which side countries drive on.',
-    premium: true
+
   }
 ];

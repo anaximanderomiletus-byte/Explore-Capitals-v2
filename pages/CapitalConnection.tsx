@@ -12,6 +12,8 @@ import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
+import { getGameStructuredData } from '../utils/gameStructuredData';
+import { useTranslation } from '../context/LocaleContext';
 
 // Better shuffle algorithm
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -36,6 +38,7 @@ interface GameCard {
 }
 
 export default function CapitalConnection() {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -235,7 +238,16 @@ export default function CapitalConnection() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
           >
-        <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
+        <SEO
+          title="Capital Connection - Games"
+          description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game."
+          structuredData={getGameStructuredData({
+            name: 'Capital Connection',
+            slug: 'capital-connection',
+            description: 'Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game.',
+            image: '/png/GAMES/capital-connection.png',
+          })}
+        />
         <div className="fixed inset-0 z-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-3xl opacity-40" />
@@ -255,7 +267,7 @@ export default function CapitalConnection() {
             <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest font-black">PLAY <Play size={20} fill="currentColor" /></Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/30 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group relative z-20 pointer-events-auto">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
-              Back to Games
+              {t('game.backToGames')}
             </button>
           </div>
         </div>
@@ -346,13 +358,13 @@ export default function CapitalConnection() {
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
               <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
-              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">Play Again <Play size={20} fill="currentColor" /></Button>
+                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">{t('game.playAgain')} <Play size={20} fill="currentColor" /></Button>
                 <button onClick={() => navigate('/games')} className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto">
                   <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-                  Back to Games
+                  {t('game.backToGames')}
                 </button>
               </div>
             </div>

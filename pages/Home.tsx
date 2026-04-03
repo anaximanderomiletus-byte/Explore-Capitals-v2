@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, UserPlus, Play, User, Star, Flame } from 'lucide-react';
+import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, Smartphone, Play, Star, Flame } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
-import { useAuth } from '../context/AuthContext';
+
 import { useUser } from '../context/UserContext';
 import { ResponsiveAd } from '../components/AdSense';
 import { COUNTRIES } from '../constants';
@@ -13,6 +13,7 @@ import { loadTours } from '../data/staticTours';
 import { getStaticImages } from '../data/images';
 import { toSlug } from '../utils/slug';
 import { TourData } from '../types';
+import { useTranslation } from '../context/LocaleContext';
 
 const Section: React.FC<{
   children: React.ReactNode;
@@ -36,9 +37,10 @@ const Section: React.FC<{
 
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
-  const { isAuthenticated, isLoading: loading } = useUser();
+  const _user = useUser(); // Guest-only context for fact-of-the-day
   const [factImage, setFactImage] = useState('');
   const [factOfTheDay, setFactOfTheDay] = useState<{ country: typeof COUNTRIES[0]; stop: TourData['stops'][0]; fact: string } | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setPageLoading(false);
@@ -153,34 +155,34 @@ const Home: React.FC = () => {
           <div className="text-center lg:text-left lg:col-start-1">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-xl border-2 border-white/30 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white shadow-premium transition-all hover:bg-white/10 cursor-default glow-badge">
               <Zap size={10} fill="currentColor" className="animate-pulse text-sky sm:w-3 sm:h-3" />
-              <span>Free Global Education</span>
+              <span>{t('home.badge')}</span>
             </div>
           </div>
 
           {/* Heading */}
           <div className="text-center lg:text-left lg:col-start-1">
-            <h1 className="text-6xl sm:text-7xl md:text-7xl lg:text-[clamp(6rem,9vw,8rem)] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
-              Play <br className="hidden lg:block" />Your <br />
+            <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-[clamp(4.5rem,7vw,6rem)] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
+              {t('home.hero.play')} <br className="hidden lg:block" />{t('home.hero.your')} <br />
               <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible" style={{ paddingBottom: '0.15em', paddingRight: '0.1em', display: 'inline-block' }}>
-                Atlas.
+                {t('home.hero.atlas')}
               </span>
             </h1>
           </div>
 
           {/* Globe */}
           <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0">
-            {/* Static glow rings */}
+            {/* Animated glow rings */}
             <div
-              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[clamp(580px,58vw,880px)] lg:h-[clamp(580px,58vw,880px)] rounded-full pointer-events-none"
+              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[clamp(580px,58vw,880px)] lg:h-[clamp(580px,58vw,880px)] rounded-full pointer-events-none animate-glow-pulse"
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
             />
             <div
-              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[clamp(480px,48vw,720px)] lg:h-[clamp(480px,48vw,720px)] rounded-full pointer-events-none"
+              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[clamp(480px,48vw,720px)] lg:h-[clamp(480px,48vw,720px)] rounded-full pointer-events-none animate-glow-pulse-slow"
               style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
             />
 
             <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[clamp(380px,40vw,600px)] lg:h-[clamp(380px,40vw,600px)] flex-shrink-0 pointer-events-none">
-              <div className="w-full h-full" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
+              <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                 <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                   <img
                     src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
@@ -194,13 +196,13 @@ const Home: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Decorative bubbles — static */}
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none">
+              {/* Decorative floating bubbles */}
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none animate-float-gentle">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-28 xl:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-11 lg:h-11 xl:w-14 xl:h-14" />
                 </div>
               </div>
-              <div className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none">
+              <div className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none animate-float-gentle-delayed">
                 <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-36 xl:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
                   <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-[80px] xl:h-[80px]" />
                 </div>
@@ -210,16 +212,16 @@ const Home: React.FC = () => {
 
           {/* Description */}
           <div className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4">
-            <p className="text-base sm:text-lg md:text-xl lg:text-xl text-white/50 max-w-lg mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
-              Master world capitals, identify flags, and conquer the map. High-fidelity geography games designed to build global intuition.
+            <p className="text-sm sm:text-base md:text-lg lg:text-lg text-white/50 max-w-md mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
+              {t('home.hero.desc')}
             </p>
           </div>
 
           {/* Button */}
           <div className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0">
             <Link to="/games">
-              <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 lg:w-96 h-16 sm:h-[4.5rem] md:h-20 lg:h-20 text-2xl sm:text-2xl md:text-3xl lg:text-3xl group uppercase">
-                Play <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
+              <Button variant="primary" size="lg" className="w-64 sm:w-72 md:w-80 lg:w-80 h-14 sm:h-16 md:h-[4.5rem] lg:h-[4.5rem] text-xl sm:text-2xl md:text-2xl lg:text-2xl group uppercase">
+                {t('home.hero.play')} <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
               </Button>
             </Link>
           </div>
@@ -232,7 +234,7 @@ const Home: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] glow-badge">
               <Zap size={10} fill="currentColor" className="text-sky" />
-              <span>Stop of the Day</span>
+              <span>{t('home.stopOfTheDay')}</span>
             </div>
           </div>
 
@@ -284,7 +286,7 @@ const Home: React.FC = () => {
                 </p>
                 <Link to={`/country/${toSlug(factOfTheDay.country.name)}`}>
                   <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
-                    Explore {factOfTheDay.country.name} <ArrowRight size={14} className="ml-1" />
+                    {t('home.explore', { country: factOfTheDay.country.name })} <ArrowRight size={14} className="ml-1" />
                   </Button>
                 </Link>
               </div>
@@ -316,42 +318,42 @@ const Home: React.FC = () => {
         <RevealSection className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between mb-6 sm:mb-8 md:mb-12 gap-4 sm:gap-6 text-center sm:text-left">
             <div className="max-w-xl">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none drop-shadow-xl">Games</h2>
-              <p className="text-white/40 text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest">Rank up from Explorer to Legend.</p>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none drop-shadow-xl">{t('home.games.title')}</h2>
+              <p className="text-white/40 text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest">{t('home.games.subtitle')}</p>
             </div>
             <Link to="/games">
               <Button variant="secondary" size="md" className="px-6 sm:px-8 h-10 sm:h-12 text-xs sm:text-sm uppercase bg-white/5 border-white/10 backdrop-blur-lg hover:bg-white/10">
-                All Games
+                {t('home.games.allGames')}
               </Button>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
             <GameCard
-              title="Capital Quiz"
-              desc="Recall test of world capitals."
+              title={t('home.games.capitalQuiz.title')}
+              desc={t('home.games.capitalQuiz.desc')}
               icon={<GraduationCap size={28} />}
               color="bg-gel-blue"
               link="/games/capital-quiz"
-              stats="Play Now"
+              stats={t('home.games.playNow')}
               image="./png/GAMES/capital-quiz.png"
             />
             <GameCard
-              title="Map Dash"
-              desc="Find nations on the map."
+              title={t('home.games.mapDash.title')}
+              desc={t('home.games.mapDash.desc')}
               icon={<Globe2 size={28} />}
               color="bg-sky"
               link="/games/map-dash"
-              stats="Play Now"
+              stats={t('home.games.playNow')}
               image="./png/GAMES/map-dash.png"
             />
             <GameCard
-              title="Flag Frenzy"
-              desc="Identify global flags."
+              title={t('home.games.flagFrenzy.title')}
+              desc={t('home.games.flagFrenzy.desc')}
               icon={<Trophy size={28} />}
               color="bg-accent"
               link="/games/flag-frenzy"
-              stats="Play Now"
+              stats={t('home.games.playNow')}
               image="./png/GAMES/flag-frenzy.png"
             />
           </div>
@@ -367,18 +369,18 @@ const Home: React.FC = () => {
             <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center relative z-10">
               <div className="text-center lg:text-left">
                 <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-sky/10 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 md:mb-8 glow-badge">
-                  <span>Loyalty Path</span>
+                  <span>{t('home.loyalty.badge')}</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-black text-white mb-3 sm:mb-4 md:mb-8 leading-[0.95] tracking-tighter uppercase">
-                  Learn. <br />
-                  <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Earn Rewards.</span>
+                  {t('home.loyalty.learn')} <br />
+                  <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">{t('home.loyalty.earnRewards')}</span>
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg text-white/50 mb-4 sm:mb-6 md:mb-10 leading-relaxed font-bold max-w-md mx-auto lg:mx-0 uppercase tracking-wide">
-                  Unlock themed avatars and game modes as you rise through the ranks.
+                  {t('home.loyalty.desc')}
                 </p>
                 <Link to="/loyalty">
                   <Button variant="primary" size="lg" className="h-11 sm:h-14 md:h-16 px-8 sm:px-10 md:px-12 text-base sm:text-lg uppercase">
-                    View Ranks
+                    {t('home.loyalty.viewRanks')}
                   </Button>
                 </Link>
               </div>
@@ -391,15 +393,15 @@ const Home: React.FC = () => {
                       <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
                     </div>
                     <div>
-                      <div className="text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1">Current Rank</div>
-                      <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter leading-none">Explorer</h3>
+                      <div className="text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1">{t('home.loyalty.currentRank')}</div>
+                      <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter leading-none">{t('home.loyalty.explorer')}</h3>
                     </div>
                   </div>
 
                   <div className="space-y-4 sm:space-y-6 md:space-y-10">
                     <div>
                       <div className="flex justify-between items-end mb-2 sm:mb-3 md:mb-4">
-                        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/30">Next Level</span>
+                        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/30">{t('home.loyalty.nextLevel')}</span>
                         <span className="text-base sm:text-lg md:text-xl font-black text-sky">75%</span>
                       </div>
                       <div className="h-2.5 sm:h-3 md:h-4 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/5">
@@ -415,11 +417,11 @@ const Home: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                       <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
                         <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Star size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Earn Points</div>
+                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">{t('home.loyalty.earnPoints')}</div>
                       </div>
                       <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
                         <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Flame size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">Build Streaks</div>
+                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">{t('home.loyalty.buildStreaks')}</div>
                       </div>
                     </div>
                   </div>
@@ -437,12 +439,64 @@ const Home: React.FC = () => {
         </div>
       </Section>
 
+      {/* ═══════════════ WHY GEOGRAPHY ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-5xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 glow-badge">
+              <Globe2 size={10} className="text-sky" />
+              <span>{t('home.whyGeo.badge')}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter uppercase leading-none mb-4 sm:mb-6 drop-shadow-xl">
+              {t('home.whyGeo.title1')}<br />
+              <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">{t('home.whyGeo.title2')}</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 md:gap-8">
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <GraduationCap className="text-sky w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.academic.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.whyGeo.academic.desc')}
+              </p>
+            </div>
+
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Compass className="text-accent w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.global.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.whyGeo.global.desc')}
+              </p>
+            </div>
+
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-warning/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Zap className="text-warning w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.learn.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.whyGeo.learn.desc')}
+              </p>
+            </div>
+          </div>
+
+          <p className="text-white/30 text-xs sm:text-sm text-center mt-6 sm:mt-8 md:mt-10 max-w-3xl mx-auto leading-relaxed font-medium">
+            {t('home.whyGeo.footer')}
+          </p>
+        </RevealSection>
+      </Section>
+
       {/* ═══════════════ EXPLORE ═══════════════ */}
       <Section className="py-12 sm:py-16 md:py-24">
         <RevealSection className="max-w-7xl mx-auto">
           <div className="text-center mb-6 sm:mb-8 md:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display font-black text-white mb-2 sm:mb-4 md:mb-6 tracking-tighter uppercase leading-none">Explore</h2>
-            <p className="text-white/40 text-sm sm:text-base md:text-xl font-bold max-w-2xl mx-auto uppercase tracking-widest px-2">Master the atlas in our interactive database.</p>
+            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display font-black text-white mb-2 sm:mb-4 md:mb-6 tracking-tighter uppercase leading-none">{t('home.exploreSection.title')}</h2>
+            <p className="text-white/40 text-sm sm:text-base md:text-xl font-bold max-w-2xl mx-auto uppercase tracking-widest px-2">{t('home.exploreSection.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-8 lg:gap-10">
@@ -474,10 +528,10 @@ const Home: React.FC = () => {
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
                   <BookOpen size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>Database</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>Nation database with population and cultural data.</p>
+                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>{t('home.exploreSection.database')}</h3>
+                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>{t('home.exploreSection.databaseDesc')}</p>
                 <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
-                  Browse Now <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
+                  {t('home.exploreSection.browseNow')} <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 </div>
               </div>
             </Link>
@@ -516,13 +570,49 @@ const Home: React.FC = () => {
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
                   <Compass size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
                 </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>Atlas</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>Explore the world with immersive guided tours.</p>
+                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>{t('home.exploreSection.atlas')}</h3>
+                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>{t('home.exploreSection.atlasDesc')}</p>
                 <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-accent uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
-                  Open Atlas <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
+                  {t('home.exploreSection.openAtlas')} <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
                 </div>
               </div>
             </Link>
+          </div>
+        </RevealSection>
+      </Section>
+
+      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
+      <Section className="py-12 sm:py-16 md:py-24">
+        <RevealSection className="max-w-5xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter uppercase leading-none mb-3 sm:mb-4 drop-shadow-xl">{t('home.howItWorks.title')}</h2>
+            <p className="text-white/40 text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest">{t('home.howItWorks.subtitle')}</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 md:gap-8">
+            <div className="text-center md:text-left">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">01</div>
+              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step1.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.howItWorks.step1.desc')}
+              </p>
+            </div>
+
+            <div className="text-center md:text-left">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">02</div>
+              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step2.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.howItWorks.step2.desc')}
+              </p>
+            </div>
+
+            <div className="text-center md:text-left">
+              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">03</div>
+              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step3.title')}</h3>
+              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
+                {t('home.howItWorks.step3.desc')}
+              </p>
+            </div>
           </div>
         </RevealSection>
       </Section>
@@ -538,36 +628,27 @@ const Home: React.FC = () => {
       >
         <RevealSection className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display font-black text-white mb-3 sm:mb-6 md:mb-10 tracking-tighter uppercase leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-            Start Your <br />
+            {t('home.cta.title1')} <br />
             <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">
-              Expedition.
+              {t('home.cta.title2')}
             </span>
           </h2>
 
           <p className="text-sm sm:text-base md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-10 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed text-white/30 px-2">
-            Master the atlas and join the global elite.
+            {t('home.cta.subtitle')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
             <Link to="/games" className="group/btn w-full sm:w-auto">
               <Button variant="primary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
-                Play <Play className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
+                {t('home.cta.play')} <Play className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
               </Button>
             </Link>
-            {!isAuthenticated && !loading && (
-            <Link to="/auth" className="group/btn w-full sm:w-auto">
-              <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all group">
-                Sign Up <UserPlus className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
+            <div className="group/btn w-full sm:w-auto">
+              <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all whitespace-nowrap group cursor-default opacity-60">
+                {t('home.cta.iosAppSoon')} <Smartphone className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
               </Button>
-            </Link>
-            )}
-            {isAuthenticated && (
-              <Link to="/profile" className="group/btn w-full sm:w-auto">
-                <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/20 transition-all whitespace-nowrap group">
-                  View Profile <User className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
-                </Button>
-              </Link>
-            )}
+            </div>
           </div>
         </RevealSection>
       </Section>

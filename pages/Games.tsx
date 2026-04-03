@@ -1,65 +1,19 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, Clock, Lock, Shuffle, Crown, Sparkles, X, Zap } from 'lucide-react';
+import { Play, Clock, Lock, Shuffle } from 'lucide-react';
 import Button from '../components/Button';
 import RevealSection from '../components/RevealSection';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
+import { useTranslation } from '../context/LocaleContext';
 import { BannerAd } from '../components/AdSense';
-import { useGameLimit } from '../hooks/useGameLimit';
-import { useUser } from '../context/UserContext';
-import { useAuth } from '../context/AuthContext';
-import { createSinglePlayCheckout, verifySinglePlay, addLocalPurchasedPlay, getLocalPurchasedPlays } from '../services/subscription';
 
 const Games: React.FC = () => {
   const { setPageLoading } = useLayout();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isPremium } = useGameLimit();
-  const { userProfile } = useUser();
-  const { user } = useAuth();
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<typeof GAMES[0] | null>(null);
-  const [buyingPlay, setBuyingPlay] = useState(false);
-  const [localPlays, setLocalPlays] = useState<Record<string, number>>({});
-
-  // On mount: check for returning from Stripe checkout
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
-    const unlockedGameId = params.get('unlocked');
-
-    if (sessionId && unlockedGameId) {
-      // Verify the purchase server-side, then store locally
-      verifySinglePlay(sessionId).then(result => {
-        if (result.valid && result.gameId) {
-          addLocalPurchasedPlay(result.gameId);
-          setLocalPlays(getLocalPurchasedPlays());
-        }
-      });
-      // Clean up URL
-      window.history.replaceState({}, '', '/games');
-    }
-
-    // Load any existing local plays
-    setLocalPlays(getLocalPurchasedPlays());
-  }, []);
-
-  // Lock body scroll when upgrade modal is open
-  useEffect(() => {
-    if (showUpgradeModal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [showUpgradeModal]);
-
-  // Separate free and premium games
-  const freeGames = useMemo(() => GAMES.filter(g => !g.premium), []);
-  const premiumGames = useMemo(() => GAMES.filter(g => g.premium), []);
 
   const getGamePath = (id: string) => {
     switch (id) {
@@ -72,7 +26,6 @@ const Games: React.FC = () => {
       case '7': return 'capital-connection';
       case '8': return 'region-roundup';
       case '9': return 'landmark-legend';
-      // Premium games
       case '10': return 'territory-titans';
       case '11': return 'area-ace';
       case '12': return 'currency-craze';
@@ -84,8 +37,7 @@ const Games: React.FC = () => {
   };
 
   const playRandomGame = () => {
-    // Only select from active free games for random play
-    const activeGames = freeGames.filter(g => g.status === 'active');
+    const activeGames = GAMES.filter(g => g.status === 'active');
     const randomGame = activeGames[Math.floor(Math.random() * activeGames.length)];
     if (randomGame) {
       navigate(`/games/${getGamePath(randomGame.id)}`);
@@ -93,40 +45,18 @@ const Games: React.FC = () => {
   };
 
   useEffect(() => {
-    // Render page immediately — images load progressively via native loading="lazy"
     setPageLoading(false);
   }, [setPageLoading]);
 
-  const handleBuySinglePlay = async (game: typeof GAMES[0]) => {
-    setBuyingPlay(true);
-    try {
-      // Pass userId if logged in, otherwise null (guest checkout)
-      const { url } = await createSinglePlayCheckout(game.id, user?.uid);
-      if (url) window.location.href = url;
-    } catch (err: any) {
-      console.error('Single play checkout failed:', err);
-      setBuyingPlay(false);
-    }
-  };
-
-  const renderGameCard = (game: typeof GAMES[0], isPremiumGame: boolean) => {
-    const hasPurchasedPlay = (userProfile?.purchasedPlays?.[game.id] ?? 0) > 0 || (localPlays[game.id] ?? 0) > 0;
-    const isLocked = isPremiumGame && !isPremium && !hasPurchasedPlay;
+  const renderGameCard = (game: typeof GAMES[0]) => {
     const isActive = game.status === 'active';
-    
+
     return (
       <div
-        className={`group bg-white/20 rounded-3xl overflow-hidden border-2 ${isPremiumGame ? 'border-amber-500/30' : 'border-white/50'} shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''} h-full flex flex-col`}
+        className={`group bg-white/20 rounded-3xl overflow-hidden border-2 border-white/50 shadow-[0_12px_28px_rgba(0,0,0,0.15)] transition-all duration-700 hover:bg-white/30 relative ${!isActive ? 'opacity-50 grayscale' : ''} h-full flex flex-col`}
       >
         <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-        
-        {/* Premium Badge */}
-        {isPremiumGame && (
-          <div className="absolute top-4 left-4 z-20 px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full text-[9px] font-black uppercase tracking-widest text-white flex items-center gap-1.5 shadow-lg">
-            <Crown size={10} /> PREMIUM
-          </div>
-        )}
-        
+
         <div className="relative h-40 sm:h-44 md:h-48 shrink-0 overflow-hidden border-b border-white/20">
           <img
             src={game.image}
@@ -136,62 +66,43 @@ const Games: React.FC = () => {
             decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-70" />
-          
-          {/* Locked overlay for premium games when user is not premium */}
-          {isLocked && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-              <div className="px-6 py-3 bg-amber-500/20 backdrop-blur-xl rounded-xl text-amber-400 font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-3 border border-amber-500/30">
-                <Lock size={16} /> $0.99 / play
-              </div>
-            </div>
-          )}
-          
+
           {/* Coming soon overlay */}
           {!isActive && (
             <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
               <div className="px-6 py-3 bg-white/10 backdrop-blur-xl rounded-xl text-white font-black text-[10px] uppercase tracking-[0.2em] flex items-center gap-3 border border-white/20">
-                <Lock size={16} /> Coming Soon
+                <Lock size={16} /> {t('games.comingSoon')}
               </div>
             </div>
           )}
-          
-          {/* Time badge - only show for active, unlocked games */}
-          {isActive && !isLocked && (
+
+          {/* Time badge */}
+          {isActive && (
             <div className="absolute top-4 right-4 bg-white/30 backdrop-blur-xl border border-white/50 rounded-full px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-white relative overflow-hidden">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
-               <Clock size={10} className="inline mr-1.5 relative z-10 text-sky-light" /> <span className="relative z-10">1 Min</span>
+               <Clock size={10} className="inline mr-1.5 relative z-10 text-sky-light" /> <span className="relative z-10">{t('games.1min')}</span>
             </div>
           )}
         </div>
-        
+
         <div className="p-5 sm:p-6 md:p-8 flex flex-col flex-1 min-h-0 relative z-10">
-          <h3 className={`text-xl sm:text-2xl font-display font-black mb-2 tracking-tighter leading-none uppercase drop-shadow-md ${isPremiumGame ? 'text-amber-400' : 'text-white'}`}>{game.title}</h3>
+          <h3 className="text-xl sm:text-2xl font-display font-black text-white mb-2 tracking-tighter leading-none uppercase drop-shadow-md">{game.title}</h3>
           <p className="text-white/60 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base leading-relaxed font-bold uppercase tracking-tight line-clamp-2 drop-shadow-sm">{game.description}</p>
-          
+
           <div className="mt-auto">
             {isActive ? (
-              isLocked ? (
-                <Button
-                  variant="premium"
-                  className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl whitespace-nowrap"
-                  onClick={() => { setSelectedGame(game); setShowUpgradeModal(true); }}
-                >
-                  <Lock size={24} className="mr-2 shrink-0" /> UNLOCK
+              <Link to={`/games/${getGamePath(game.id)}`}>
+                <Button variant="primary" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl border-2 border-white/30">
+                  {t('games.play')} <Play size={20} fill="currentColor" />
                 </Button>
-              ) : (
-                <Link to={`/games/${getGamePath(game.id)}`}>
-                  <Button variant="primary" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl border-2 border-white/30">
-                    PLAY <Play size={20} fill="currentColor" />
-                  </Button>
-                </Link>
-              )
+              </Link>
             ) : (
               <Button
                 variant="secondary"
                 className="w-full h-14 sm:h-16 md:h-[4.5rem] opacity-50 text-lg sm:text-xl font-black uppercase tracking-[0.1em]"
                 disabled={true}
               >
-                Coming Soon
+                {t('games.comingSoon')}
               </Button>
             )}
           </div>
@@ -235,10 +146,10 @@ const Games: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky/30 border border-white/40 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-white mb-6 relative overflow-hidden group">
                <div className="absolute inset-0 bg-glossy-gradient opacity-50" />
                <Play size={12} className="relative z-10 text-sky-light" fill="currentColor" />
-               <span className="relative z-10 drop-shadow-md">GAMES</span>
+               <span className="relative z-10 drop-shadow-md">{t('games.badge')}</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-3 md:mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">Games</h1>
-            <p className="text-white/70 text-lg font-bold uppercase tracking-wide drop-shadow-md">Earn points and rank up.</p>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-3 md:mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">{t('games.title')}</h1>
+            <p className="text-white/70 text-lg font-bold uppercase tracking-wide drop-shadow-md">{t('games.subtitle')}</p>
           </div>
 
           <button
@@ -247,35 +158,15 @@ const Games: React.FC = () => {
           >
             <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 pointer-events-none" />
             <Shuffle size={18} className="text-sky-light transition-transform duration-700 relative z-10" />
-            <span className="relative z-10">Random Game</span>
+            <span className="relative z-10">{t('games.randomGame')}</span>
           </button>
         </RevealSection>
 
-        {/* Free Games Section */}
         <RevealSection className="mb-12" delay={0.1}>
-          <h2 className="text-lg font-bold text-white/60 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-            <Play size={16} className="text-sky-light" fill="currentColor" />
-            Free Games
-          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {freeGames.map((game, i) => (
+            {GAMES.map((game, i) => (
               <RevealSection key={game.id} delay={0.05 * i} className="h-full">
-                {renderGameCard(game, false)}
-              </RevealSection>
-            ))}
-          </div>
-        </RevealSection>
-
-        {/* Premium Games Section */}
-        <RevealSection className="mb-12" delay={0.1}>
-          <h2 className="text-lg font-bold text-amber-400 uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-            <Crown size={16} className="text-amber-400" />
-            Premium Games
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {premiumGames.map((game, i) => (
-              <RevealSection key={game.id} delay={0.05 * i} className="h-full">
-                {renderGameCard(game, true)}
+                {renderGameCard(game)}
               </RevealSection>
             ))}
           </div>
@@ -286,107 +177,6 @@ const Games: React.FC = () => {
           <BannerAd slot="9489406693" />
         </RevealSection>
       </div>
-
-      {/* Unlock Modal - Portal to body so fixed positioning always works */}
-      {showUpgradeModal && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-            onClick={() => { setShowUpgradeModal(false); setSelectedGame(null); }}
-          />
-          <div className="relative bg-surface-dark border-2 border-amber-500/30 rounded-3xl p-6 w-full max-w-sm shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <button
-              onClick={() => { setShowUpgradeModal(false); setSelectedGame(null); }}
-              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="text-center">
-              {/* Game title */}
-              {selectedGame && (
-                <p className="text-amber-400 text-[10px] font-black uppercase tracking-[0.3em] mb-3">
-                  {selectedGame.title}
-                </p>
-              )}
-
-              <div className="w-14 h-14 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock size={28} className="text-amber-400" />
-              </div>
-
-              <h3 className="text-2xl font-display font-bold text-white mb-1 uppercase tracking-tight">
-                Unlock This Game
-              </h3>
-              <p className="text-white/50 text-xs mb-6 font-medium">
-                Choose how you want to play
-              </p>
-
-              {/* Option 1: Single Play */}
-              <button
-                onClick={() => selectedGame && handleBuySinglePlay(selectedGame)}
-                disabled={buyingPlay}
-                className="w-full mb-3 p-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/30 rounded-2xl transition-all duration-200 text-left group"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center group-hover:bg-amber-500/30 transition-colors">
-                      <Zap size={20} className="text-amber-400" />
-                    </div>
-                    <div>
-                      <p className="text-white font-bold text-sm uppercase tracking-wide">Try Once</p>
-                      <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider">Single play, instant access</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-amber-400 font-black text-lg">$0.99</p>
-                  </div>
-                </div>
-              </button>
-
-              {/* Divider */}
-              <div className="flex items-center gap-3 my-3">
-                <div className="flex-1 h-px bg-white/10" />
-                <span className="text-white/30 text-[9px] font-black uppercase tracking-widest">or</span>
-                <div className="flex-1 h-px bg-white/10" />
-              </div>
-
-              {/* Option 2: Subscribe */}
-              <button
-                onClick={() => {
-                  setShowUpgradeModal(false);
-                  setSelectedGame(null);
-                  navigate('/premium');
-                }}
-                className="w-full mb-4 p-4 bg-gradient-to-r from-amber-500/10 to-amber-600/10 hover:from-amber-500/20 hover:to-amber-600/20 border border-amber-500/20 hover:border-amber-500/40 rounded-2xl transition-all duration-200 text-left group"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-amber-500/30 rounded-xl flex items-center justify-center group-hover:bg-amber-500/40 transition-colors">
-                      <Crown size={20} className="text-amber-400" />
-                    </div>
-                    <div>
-                      <p className="text-amber-400 font-bold text-sm uppercase tracking-wide">Go Premium</p>
-                      <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider">All games, unlimited plays</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-amber-400 font-black text-lg">$5.99</p>
-                    <p className="text-white/30 text-[9px] font-bold">/month</p>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => { setShowUpgradeModal(false); setSelectedGame(null); }}
-                className="w-full py-2 text-white/40 text-[10px] font-black uppercase tracking-[0.2em] hover:text-white/60 transition-colors"
-              >
-                Maybe Later
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
     </div>
   );
 };

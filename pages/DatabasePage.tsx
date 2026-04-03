@@ -10,6 +10,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
+import { useTranslation } from '../context/LocaleContext';
 import Button from '../components/Button';
 import { BannerAd } from '../components/AdSense';
 import { useDebounce } from '../hooks';
@@ -145,6 +146,7 @@ interface MobileCountryCardProps {
 }
 
 const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onClick, isTerritory, isDeFacto, sovereignty }) => {
+  const { t } = useTranslation();
   let titleColor = 'text-white';
   if (isTerritory) titleColor = 'text-accent';
   if (isDeFacto) titleColor = 'text-warning';
@@ -165,7 +167,7 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
             {(isTerritory || isDeFacto) && (
               <div className="text-[8px] font-black uppercase tracking-[0.2em] text-primary mt-2 flex items-center gap-1.5">
                 <div className="w-1 h-1 rounded-full bg-primary" />
-                {sovereignty || 'Limited Recognition'}
+                {sovereignty || t('database.limitedRecognition')}
               </div>
             )}
           </div>
@@ -177,12 +179,12 @@ const MobileCountryCard: React.FC<MobileCountryCardProps> = memo(({ country, onC
 
       <div className="grid grid-cols-2 gap-3 mb-6 relative z-10">
         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-           <div className="text-[8px] text-white/30 uppercase font-black tracking-[0.2em] mb-1">Population</div>
+           <div className="text-[8px] text-white/30 uppercase font-black tracking-[0.2em] mb-1">{t('database.population')}</div>
            <div className="text-sm font-black text-white/80 tracking-tight">{country.population}</div>
         </div>
         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
            <div className="text-[8px] text-white/30 uppercase font-black tracking-[0.2em] mb-1 flex items-center gap-1.5">
-              <Maximize2 size={10} /> Area
+              <Maximize2 size={10} /> {t('database.area')}
            </div>
            <div className="text-sm font-black text-white/80 tracking-tight">{country.area}</div>
         </div>
@@ -213,8 +215,8 @@ interface SimpleTableProps {
   headerBgClass?: string;
 }
 
-const SimpleTable: React.FC<SimpleTableProps> = memo(({ 
-  items, 
+const SimpleTable: React.FC<SimpleTableProps> = memo(({
+  items,
   onItemClick,
   sortConfig,
   onSort,
@@ -223,31 +225,32 @@ const SimpleTable: React.FC<SimpleTableProps> = memo(({
   titleColor,
   headerBgClass = 'bg-surface-dark'
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="overflow-hidden rounded-3xl border border-white/20 bg-white/10">
       <table className="w-full text-left border-collapse table-fixed">
         <thead className="z-20">
           <tr className={`${headerBgClass} border-b border-white/15 backdrop-blur-md`}>
             <th className="w-[30%]">
-              <SortHeader label={showSovereignty ? "Territory" : "Country"} field="name" sortConfig={sortConfig} onSort={onSort} />
+              <SortHeader label={showSovereignty ? t('database.territory') : t('database.country')} field="name" sortConfig={sortConfig} onSort={onSort} />
             </th>
             {showSovereignty && (
               <th className="w-[15%] px-6 py-4 text-left text-[9px] font-black text-white/50 uppercase tracking-[0.3em] whitespace-nowrap">
-                {showSovereignty ? 'Sovereignty' : 'Status'}
+                {showSovereignty ? t('database.sovereignty') : t('database.status')}
               </th>
             )}
             <th className={showSovereignty ? "w-[20%]" : "w-[20%]"}>
-              <SortHeader label="Capital" field="capital" sortConfig={sortConfig} onSort={onSort} />
+              <SortHeader label={t('database.capital')} field="capital" sortConfig={sortConfig} onSort={onSort} />
             </th>
             <th className={showSovereignty ? "w-[15%]" : "w-[15%]"}>
-              <SortHeader label={showSovereignty ? "Sector" : "Region"} field="region" sortConfig={sortConfig} onSort={onSort} />
+              <SortHeader label={showSovereignty ? t('database.sector') : t('database.region')} field="region" sortConfig={sortConfig} onSort={onSort} />
             </th>
             <th className={showSovereignty ? "w-[20%]" : "w-[15%]"}>
-              <SortHeader label="Population" field="population" sortConfig={sortConfig} onSort={onSort} align="right" />
+              <SortHeader label={t('database.population')} field="population" sortConfig={sortConfig} onSort={onSort} align="right" />
             </th>
             {!showSovereignty && (
               <th className="w-[20%]">
-                <SortHeader label="Area (km²)" field="area" sortConfig={sortConfig} onSort={onSort} align="right" />
+                <SortHeader label={t('database.areaKm')} field="area" sortConfig={sortConfig} onSort={onSort} align="right" />
               </th>
             )}
           </tr>
@@ -396,6 +399,7 @@ const sortAndFilter = <T extends Country>(
 };
 
 const DatabasePage: React.FC = () => {
+  const { t } = useTranslation();
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearch = useDebounce(searchInput, 200);
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: SortDirection } | null>({ key: 'name', direction: 'asc' });
@@ -467,10 +471,10 @@ const DatabasePage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6 relative overflow-hidden group">
                <Globe size={12} className="relative z-10 text-sky-light" />
-               <span className="relative z-10">GLOBAL DATABASE</span>
+               <span className="relative z-10">{t('database.badge')}</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">Database</h1>
-            <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">Detailed data for 195 sovereign states.</p>
+            <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-4 tracking-tighter uppercase leading-none">{t('database.heading')}</h1>
+            <p className="text-white/70 text-lg font-bold uppercase tracking-wide max-w-2xl">{t('database.subtitle')}</p>
           </div>
 
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto min-w-0">
@@ -480,7 +484,7 @@ const DatabasePage: React.FC = () => {
               title="Random Search"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
-              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">Random</span>
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">{t('database.random')}</span>
             </button>
 
             <div className="relative w-full md:w-[400px] md:max-w-full min-w-0 group">
@@ -489,7 +493,7 @@ const DatabasePage: React.FC = () => {
               </div>
               <input
                 type="text"
-                placeholder="SEARCH..."
+                placeholder={t('database.search')}
                 className="block w-full pl-16 pr-6 py-4 bg-white/15 border border-white/40 rounded-2xl text-white placeholder:text-white/20 font-bold uppercase text-[11px] tracking-[0.2em] focus:outline-none focus:ring-4 focus:ring-sky/20 focus:border-white/60 focus:bg-white/20 transition-all duration-300 h-[58px]"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
@@ -523,8 +527,8 @@ const DatabasePage: React.FC = () => {
                 <Globe size={24} />
               </div>
               <div>
-                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">Autonomous Regions</h2>
-                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Major non-sovereign dependencies and territories.</p>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">{t('database.autonomousRegions')}</h2>
+                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">{t('database.autonomousRegionsDesc')}</p>
               </div>
             </div>
 
@@ -558,8 +562,8 @@ const DatabasePage: React.FC = () => {
                 <AlertTriangle size={24} />
               </div>
               <div>
-                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">De Facto States</h2>
-                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">Entities with limited international recognition.</p>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">{t('database.deFactoStates')}</h2>
+                <p className="text-white/60 text-sm font-bold uppercase tracking-[0.2em] mt-0.5">{t('database.deFactoStatesDesc')}</p>
               </div>
             </div>
 
@@ -591,8 +595,8 @@ const DatabasePage: React.FC = () => {
               <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
                  <Search className="w-8 h-8 text-white/10" />
               </div>
-              <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">No results found</h3>
-              <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">No countries matched "{debouncedSearch}". Try a different search term.</p>
+              <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight mb-2">{t('database.noResults')}</h3>
+              <p className="text-white/20 uppercase tracking-widest text-[9px] font-black">{t('database.noResultsDesc', { query: debouncedSearch })}</p>
             </div>
           </RevealSection>
         )}
@@ -614,7 +618,7 @@ const DatabasePage: React.FC = () => {
               className="group h-14 px-10 border border-white/20 hover:border-white/40 text-[10px] uppercase tracking-[0.3em]"
             >
               <ArrowUp size={16} className="mr-2 transition-transform text-sky-light" />
-              <span className="relative z-10">Back to Top</span>
+              <span className="relative z-10">{t('database.backToTop')}</span>
             </Button>
           </div>
         )}

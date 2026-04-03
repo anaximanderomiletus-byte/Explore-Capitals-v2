@@ -20,6 +20,12 @@ export default {
       return response;
     }
 
+    // Blog pages are pre-rendered static HTML — try /blog/{slug}.html
+    if (url.pathname.startsWith('/blog/') && !url.pathname.includes('.')) {
+      const blogHtml = await env.ASSETS.fetch(new URL(url.pathname + '.html', url.origin));
+      if (blogHtml.status !== 404) return blogHtml;
+    }
+
     // SPA fallback: serve index.html with 200 for client-side routing
     return env.ASSETS.fetch(new URL('/', url.origin));
   },

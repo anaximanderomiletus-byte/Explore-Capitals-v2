@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from '../context/LocaleContext';
 
 interface SEOProps {
   title: string;
@@ -25,6 +26,7 @@ const SEO: React.FC<SEOProps> = ({
   isHomePage = false,
   noIndex = false
 }) => {
+  const { locale } = useTranslation();
   const siteName = "ExploreCapitals";
   const siteDomain = "ExploreCapitals.com";
   // For home page, use title as-is. For other pages, append site domain
@@ -87,7 +89,8 @@ const SEO: React.FC<SEOProps> = ({
     setProperty('og:image', image || DEFAULT_OG_IMAGE);
     setProperty('og:image:alt', image ? imageAlt : DEFAULT_OG_ALT);
     setProperty('og:site_name', siteName);
-    setProperty('og:locale', 'en_US');
+    const localeMap: Record<string, string> = { en: 'en_US', es: 'es_ES', fr: 'fr_FR', de: 'de_DE' };
+    setProperty('og:locale', localeMap[locale] || 'en_US');
 
     // 5. Twitter Card
     setMeta('twitter:card', 'summary_large_image');
@@ -117,7 +120,7 @@ const SEO: React.FC<SEOProps> = ({
       scriptJSONLD.textContent = JSON.stringify(structuredData);
       document.head.appendChild(scriptJSONLD);
     }
-  }, [fullTitle, description, keywords, image, imageAlt, type, structuredData, noIndex]);
+  }, [fullTitle, description, keywords, image, imageAlt, type, structuredData, noIndex, locale]);
 
   return null;
 };

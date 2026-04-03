@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
+import { useTranslation } from '../context/LocaleContext';
 import { getFlagUrl } from '../utils/flags';
 import { toSlug } from '../utils/slug';
 
@@ -20,6 +21,7 @@ interface StoredMarker {
 }
 
 const MapPage: React.FC = () => {
+  const { t } = useTranslation();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markersLayerRef = useRef<any>(null);
@@ -60,21 +62,21 @@ const MapPage: React.FC = () => {
   // Memoize Popup Content Creator
   const createPopupContent = useCallback((country: Country, type: 'sovereign' | 'territory' | 'defacto') => {
     const flagUrl = getFlagUrl(country.flag);
-    
+
     let subheader = '';
     let linkClass = 'text-sky';
     let linkGlow = '';
-    
+
     if (type === 'territory') {
-      subheader = `<div class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-3">Territory of ${(country as any).sovereignty}</div>`;
+      subheader = `<div class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-3">${t('map.territoryOf')} ${(country as any).sovereignty}</div>`;
       linkClass = 'text-accent';
     } else if (type === 'defacto') {
       subheader = `<div class="text-[10px] font-black text-warning uppercase tracking-[0.2em] mb-3"> ${(country as any).sovereignty}</div>`;
       linkClass = 'text-warning';
     } else {
-      subheader = `<div class="text-[10px] font-black text-sky uppercase tracking-[0.2em] mb-3">Sovereign State</div>`;
+      subheader = `<div class="text-[10px] font-black text-sky uppercase tracking-[0.2em] mb-3">${t('map.sovereignState')}</div>`;
     }
-    
+
     return `
       <div class="flex flex-col font-sans relative">
         <div class="flex items-center gap-4 mb-5 relative">
@@ -83,25 +85,25 @@ const MapPage: React.FC = () => {
            </div>
            <h3 class="font-display font-black text-2xl text-white tracking-tighter uppercase leading-none m-0 drop-shadow-xl">${country.name}</h3>
         </div>
-        
+
         ${subheader}
 
         <div class="mb-6 bg-black/40 p-4 rounded-2xl border border-white/10 shadow-inner relative text-center">
-           <span class="text-[10px] font-black text-sky-light uppercase tracking-[0.2em] block mb-1">Capital City</span>
+           <span class="text-[10px] font-black text-sky-light uppercase tracking-[0.2em] block mb-1">${t('map.capitalCity')}</span>
            <span class="font-display font-black text-white text-lg uppercase tracking-tight drop-shadow-sm">${country.capital}</span>
         </div>
 
         <div class="text-center relative">
-          <button 
+          <button
             data-country-slug="${toSlug(country.name)}"
             class="learn-more-btn ${linkClass} ${linkGlow} w-full h-12 bg-white/10 border-2 border-white/40 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all outline-none"
           >
-            View Country
+            ${t('map.viewCountry')}
           </button>
         </div>
       </div>
     `;
-  }, []);
+  }, [t]);
 
   // Smart centering function to handle UI obstructions
   const centerMapOnMarker = useCallback((marker: any) => {
@@ -810,7 +812,7 @@ const MapPage: React.FC = () => {
         <button 
           onClick={() => setShowUI(true)}
           className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
-          title="Show UI"
+          title={t('map.showUI')}
         >
           <Eye size={20} className="relative z-10 drop-shadow-sm" />
         </button>
@@ -820,7 +822,7 @@ const MapPage: React.FC = () => {
         <button 
           onClick={() => setShowUI(!showUI)}
           className="w-12 h-12 bg-white/80 backdrop-blur-3xl border border-black/10 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/90 transition-all  relative overflow-hidden group shadow-lg shadow-black/5"
-          title="Show UI"
+          title={t('map.showUI')}
         >
           <Eye size={20} className="relative z-10 drop-shadow-sm" />
         </button>
@@ -840,7 +842,7 @@ const MapPage: React.FC = () => {
                   </button>
                   <input 
                       type="text" 
-                      placeholder="SEARCH..." 
+                      placeholder={t('map.search')}
                       className="bg-transparent border-none outline-none text-[9px] text-[#1A1C1E] w-full placeholder:text-black/30 font-black uppercase tracking-[0.2em] relative z-10"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -956,7 +958,7 @@ const MapPage: React.FC = () => {
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-500 text-[8px] font-black uppercase tracking-[0.2em] shadow-inner border ${showDeFacto ? 'bg-warning/20 text-[#92400e] border-warning/40' : 'bg-black/5 text-black/20 border-black/20 opacity-40 hover:opacity-100 hover:bg-black/10'}`}
                 >
                   <span className="flex items-center gap-2">
-                    <AlertTriangle size={12} /> De Facto
+                    <AlertTriangle size={12} /> {t('map.deFact')}
                   </span>
                   <div className={`w-7 h-3.5 rounded-full p-0.5 transition-all duration-500 ${showDeFacto ? 'bg-warning' : 'bg-white/10'}`}>
                       <div className={`w-2.5 h-2.5 bg-white rounded-full shadow-md transform transition-transform duration-500 ${showDeFacto ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
@@ -970,15 +972,15 @@ const MapPage: React.FC = () => {
             <div className="flex flex-col gap-2 text-[8px] font-black uppercase tracking-[0.3em] text-black/40 relative z-10">
               <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary border border-black/10"></div>
-                  <span className="drop-shadow-sm">Sovereign</span>
+                  <span className="drop-shadow-sm">{t('map.sovereign')}</span>
               </div>
               <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-accent border border-black/10"></div>
-                  <span className="drop-shadow-sm">Territory</span>
+                  <span className="drop-shadow-sm">{t('map.territory')}</span>
               </div>
               <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-warning border border-black/10"></div>
-                  <span className="drop-shadow-sm">De Facto</span>
+                  <span className="drop-shadow-sm">{t('map.deFact')}</span>
               </div>
             </div>
           </div>
@@ -991,7 +993,7 @@ const MapPage: React.FC = () => {
         <button
           onClick={() => setShowUI(false)}
           className="w-12 h-12 bg-white/40 backdrop-blur-3xl border border-black/20 rounded-full flex items-center justify-center text-[#1A1C1E] hover:bg-white/60 transition-all  relative overflow-hidden group"
-          title="Hide UI"
+          title={t('map.hideUI')}
         >
           <EyeOff size={20} className="relative z-10 drop-shadow-sm" />
         </button>
@@ -1079,7 +1081,7 @@ const MapPage: React.FC = () => {
                       </div>
                       <input 
                           type="text" 
-                          placeholder="Search..."
+                          placeholder={t('map.search')}
                           className="block w-full pl-12 pr-12 py-3 bg-transparent text-[#1A1C1E] text-xs font-black uppercase tracking-widest placeholder:text-black/30 outline-none rounded-xl"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
@@ -1169,7 +1171,7 @@ const MapPage: React.FC = () => {
                         }
                       `}
                   >
-                      <AlertTriangle size={14} /> De Facto
+                      <AlertTriangle size={14} /> {t('map.deFact')}
                   </button>
                   <div className="w-[1px] h-6 bg-black/10 flex-shrink-0 mx-1"></div>
                   {REGIONS.map(region => (

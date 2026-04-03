@@ -13,8 +13,11 @@ import { getCountryCode, getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import Breadcrumbs from '../components/Breadcrumbs';
+import { getGameStructuredData } from '../utils/gameStructuredData';
+import { useTranslation } from '../context/LocaleContext';
 
 export default function MapDash() {
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -305,7 +308,16 @@ export default function MapDash() {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
       </div>
-      <SEO title="Map Dash - Games" description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out." />
+      <SEO
+        title="Map Dash - Games"
+        description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out."
+        structuredData={getGameStructuredData({
+          name: 'Map Dash',
+          slug: 'map-dash',
+          description: 'Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out.',
+          image: '/png/GAMES/map-dash.png',
+        })}
+      />
 
       <style>{`
         .mapdash-marker .marker-pin {
@@ -461,7 +473,7 @@ export default function MapDash() {
                     className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-sky-light transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"
                   >
                     <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" />
-                    Back to Games
+                    {t('game.backToGames')}
                   </button>
                 </div>
               </div>
@@ -507,16 +519,16 @@ export default function MapDash() {
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>
                 <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
-                <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">Final Score</p>
+                <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
                 <div className="flex flex-col gap-6">
-                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">Play Again <Play size={20} fill="currentColor" /></Button>
+                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">{t('game.playAgain')} <Play size={20} fill="currentColor" /></Button>
                   <button
                     onClick={() => navigate('/games')}
                     className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
                   >
                     <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-                    Back to Games
+                    {t('game.backToGames')}
                   </button>
                 </div>
               </div>
@@ -550,7 +562,7 @@ export default function MapDash() {
                 <X size={18} className="text-white shrink-0" strokeWidth={3} />
               )}
               <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
-                {lastResult === 'correct' ? 'Correct!' : 'Wrong'}
+                {lastResult === 'correct' ? t('game.correct') : t('game.incorrect')}
               </span>
               {lastResult === 'incorrect' && wrongSelectionData && (
                 <>

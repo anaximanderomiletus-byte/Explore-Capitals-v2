@@ -2,8 +2,7 @@ import { TourData } from "../types";
 import { loadTours } from "../data/staticTours";
 import { getStaticImages } from "../data/images";
 import { COUNTRIES } from "../constants";
-import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+// Firestore removed — image fallback now uses localStorage only
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -31,18 +30,8 @@ const saveToCache = (keyword: string, dataUrl: string) => {
   }
 };
 
-const getFirestoreImage = async (keyword: string): Promise<string | null> => {
-  if (!db) return null;
-  try {
-    const docRef = doc(db, FIRESTORE_COLLECTION, keyword.replace(/\//g, '_'));
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      return data.url || null;
-    }
-  } catch (e) {
-    // Firestore image store read failed
-  }
+const getFirestoreImage = async (_keyword: string): Promise<string | null> => {
+  // Firestore removed — no server-side image fallback
   return null;
 };
 

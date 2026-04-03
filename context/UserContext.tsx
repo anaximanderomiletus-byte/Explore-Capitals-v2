@@ -7,18 +7,14 @@ import {
   UserProfile,
   UserStats,
 } from '../types';
-import { useAuth } from './AuthContext';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 
 const GUEST_KEY = 'explorecapitals:user:guest';
 
 type UserContextType = {
-  user: UserProfile; // Guaranteed to be a UserProfile (Guest or Auth)
-  userProfile: UserProfile; // Alias for user (for hooks compatibility)
-  isAuthenticated: boolean;
+  user: UserProfile;
+  userProfile: UserProfile;
+  isAuthenticated: false;
   isLoading: boolean;
-  isSyncing: boolean;
   recordGameResult: (payload: GameResultPayload) => void;
   updateUserStats: (stats: UserStats) => Promise<void>;
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>;
@@ -58,11 +54,9 @@ const tierThresholds: { tier: LoyaltyTier; minPoints: number; benefits: string[]
 
 const nowIso = () => new Date().toISOString();
 
-const makeUser = (id: string, name: string, email?: string, photoURL?: string): UserProfile => ({
+const makeUser = (id: string, name: string): UserProfile => ({
   id,
   name: name.trim() || 'Guest Explorer',
-  email: email?.trim(),
-  photoURL,
   joinedAt: nowIso(),
   loyaltyPoints: 0,
   tier: 'Explorer',
@@ -188,16 +182,13 @@ const evaluateAchievements = (
   }
 
   if (countryLookup) {
-    // Region-specific icons and unique titles mapping
     const regionData: Record<string, { icon: string; title: string }> = {
-      // Continents - use "(Continent) Master" naming
       'Africa': { icon: '🌍', title: 'Africa Master' },
       'Europe': { icon: '🌍', title: 'Europe Master' },
       'Asia': { icon: '🌏', title: 'Asia Master' },
       'North America': { icon: '🌎', title: 'North America Master' },
       'South America': { icon: '🌎', title: 'South America Master' },
       'Oceania': { icon: '🌏', title: 'Oceania Master' },
-      // Regions - unique creative names
       'Middle East': { icon: '🕌', title: 'Oasis Oracle' },
       'Caribbean': { icon: '🌺', title: 'Island Virtuoso' },
       'Central America': { icon: '🌋', title: 'Mayan Maven' },
@@ -211,20 +202,19 @@ const evaluateAchievements = (
       'Central Asia': { icon: '🐫', title: 'Silk Road Scholar' },
       'Pacific': { icon: '🌊', title: 'Polynesian Pioneer' },
     };
-    
+
     Object.entries(user.stats.byRegion).forEach(([region, stat]) => {
       const attempts = (stat as any).correct + (stat as any).wrong;
       const accuracy = attempts > 0 ? (stat as any).correct / attempts : 0;
       if (attempts >= 15 && accuracy >= 0.7) {
         const id = `region-master-${region.toLowerCase().replace(/\s+/g, '-')}`;
         if (!user.achievements.some((a) => a.id === id)) {
-          // Find the best matching data for this region
-          const data = regionData[region] || 
-            Object.entries(regionData).find(([key]) => 
-              region.toLowerCase().includes(key.toLowerCase()) || 
+          const data = regionData[region] ||
+            Object.entries(regionData).find(([key]) =>
+              region.toLowerCase().includes(key.toLowerCase()) ||
               key.toLowerCase().includes(region.toLowerCase())
             )?.[1] || { icon: '🌐', title: `${region} Expert` };
-          
+
           user.achievements.push({
             id,
             title: data.title,
@@ -243,27 +233,25 @@ const getLocalGuest = (): UserProfile => {
   try {
     const raw = localStorage.getItem(GUEST_KEY);
     if (!raw || raw === 'undefined' || raw === 'null') return fallback;
-    
+
     const data = JSON.parse(raw);
     if (!data || typeof data !== 'object') return fallback;
-    
-    // Ensure all critical structures exist
+
     data.stats = normalizeStats(data.stats);
     data.achievements = Array.isArray(data.achievements) ? data.achievements : [];
     data.loyaltyPoints = typeof data.loyaltyPoints === 'number' ? data.loyaltyPoints : 0;
-    
+
     if (data.loyaltyPoints > 1000000) {
       data.loyaltyPoints = 150000;
       data.tier = 'Grandmaster';
     }
-    
+
     return {
       ...fallback,
       ...data,
-      id: 'guest' // Ensure ID is always guest for local storage
+      id: 'guest'
     } as UserProfile;
   } catch (e) {
-    // Failed to load guest data — use fallback
     return fallback;
   }
 };
@@ -271,117 +259,8 @@ const getLocalGuest = (): UserProfile => {
 const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user: authUser, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<UserProfile>(getLocalGuest);
-  const [loading, setLoading] = useState(false); // Default to false because we start with Guest data
-  const [syncing, setSyncing] = useState(false);
-
-  // Initial sync and auth state listener
-  useEffect(() => {
-    if (authLoading) return;
-
-    let isMounted = true;
-
-    const sync = async () => {
-      // If we have an authenticated user, try to fetch their profile
-      if (authUser && db) {
-        setSyncing(true);
-        
-        // Safety timeout for Firestore sync: 2 seconds
-        const syncTimeout = setTimeout(() => {
-          if (isMounted) {
-            setLoading(false);
-            setSyncing(false);
-          }
-        }, 2000);
-
-        try {
-          const userDoc = await getDoc(doc(db, 'users', authUser.uid));
-          
-          if (!isMounted) return;
-          clearTimeout(syncTimeout);
-
-          if (userDoc.exists()) {
-            const data = userDoc.data() as UserProfile;
-            
-            // CRITICAL: Ensure all objects and arrays exist even if Firestore missing them
-            data.stats = normalizeStats(data.stats);
-            data.achievements = Array.isArray(data.achievements) ? data.achievements : [];
-            data.loyaltyPoints = typeof data.loyaltyPoints === 'number' ? data.loyaltyPoints : 0;
-            data.joinedAt = data.joinedAt || nowIso();
-            data.tier = calculateTier(data.loyaltyPoints);
-            data.streakDays = typeof data.streakDays === 'number' ? data.streakDays : 1;
-            
-            // Clean up potentially corrupted data
-            if (data.loyaltyPoints > 1000000) {
-              data.loyaltyPoints = 150000; 
-              data.tier = 'Grandmaster';
-            }
-
-            // Merge guest progress if it exists
-            const guestRaw = localStorage.getItem(GUEST_KEY);
-            if (guestRaw) {
-              try {
-                const guestData = JSON.parse(guestRaw) as UserProfile;
-                if (guestData.loyaltyPoints > 0 || guestData.achievements.length > 0) {
-                  data.loyaltyPoints += Math.min(guestData.loyaltyPoints, 10000);
-                  data.tier = calculateTier(data.loyaltyPoints);
-                  data.stats.totalCorrect += guestData.stats.totalCorrect;
-                  data.stats.totalWrong += guestData.stats.totalWrong;
-                  data.stats.totalTimeSeconds += Math.min(guestData.stats.totalTimeSeconds, 36000);
-                  
-                  guestData.achievements.forEach(ach => {
-                    if (!data.achievements.some(a => a.id === ach.id)) {
-                      data.achievements.push(ach);
-                    }
-                  });
-
-                  await setDoc(doc(db, 'users', authUser.uid), data, { merge: true });
-                }
-                localStorage.removeItem(GUEST_KEY);
-              } catch (e) {}
-            }
-            
-            setProfile(data);
-          } else {
-            // Create new profile for new user, carrying over guest data if any
-            const guestData = getLocalGuest();
-            let newUser = makeUser(authUser.uid, authUser.displayName || 'Explorer', authUser.email || undefined, authUser.photoURL || undefined);
-            
-            if (guestData.id === 'guest' && guestData.loyaltyPoints > 0) {
-              newUser = {
-                ...newUser,
-                    stats: normalizeStats(guestData.stats),
-                    loyaltyPoints: Math.min(guestData.loyaltyPoints, 10000),
-                    tier: calculateTier(Math.min(guestData.loyaltyPoints, 10000)),
-                    achievements: guestData.achievements,
-                    streakDays: guestData.streakDays,
-                  };
-                localStorage.removeItem(GUEST_KEY);
-            }
-
-            await setDoc(doc(db, 'users', authUser.uid), newUser);
-            setProfile(newUser);
-          }
-        } catch (err) {
-          if (import.meta.env.DEV) console.error('Failed to sync user profile:', err);
-        } finally {
-          if (isMounted) {
-            setLoading(false);
-            setSyncing(false);
-          }
-            }
-      } else if (!authUser) {
-        // Not authenticated, ensure we're using Guest data
-        setProfile(getLocalGuest());
-        setLoading(false);
-        setSyncing(false);
-      }
-    };
-
-    sync();
-    return () => { isMounted = false; };
-  }, [authUser, authLoading]);
+  const [loading] = useState(false);
 
   // Persist guest profile to localStorage
   useEffect(() => {
@@ -408,7 +287,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         gameProgress.lastScore = payload.score;
         gameProgress.bestScore = Math.max(gameProgress.bestScore, payload.score);
         gameProgress.lastPlayedAt = nowIso();
-        
+
         const duration = Math.min(Math.max(0, payload.durationSeconds ?? 0), 3600);
         gameProgress.totalTimeSeconds += duration;
         next.stats.totalTimeSeconds += duration;
@@ -435,52 +314,27 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const attemptCount = correct.length + wrong.length;
         const accuracyBonus = attemptCount > 0 ? Math.round((correct.length / attemptCount) * 50) : 10;
         const rawDelta = payload.score + accuracyBonus + correct.length * 5;
-        const deltaPoints = Math.min(rawDelta, 5000); 
-        
+        const deltaPoints = Math.min(rawDelta, 5000);
+
         next.loyaltyPoints += deltaPoints;
         next.tier = calculateTier(next.loyaltyPoints);
         next.lastSessionAt = nowIso();
 
         evaluateAchievements(next, payload, countryLookup);
-        
-        if (authUser && db) {
-          setDoc(doc(db, 'users', authUser.uid), next, { merge: true })
-            .catch(() => { /* persist failed — will retry on next action */ });
-        }
 
         return next;
       });
     },
-    [authUser, countryLookup],
+    [countryLookup],
   );
 
   const updateUserStats = useCallback(async (stats: UserStats) => {
     setProfile(prev => ({ ...prev, stats }));
-    if (authUser && db) {
-      try {
-        await updateDoc(doc(db, 'users', authUser.uid), { 
-          stats,
-          lastSessionAt: nowIso()
-        });
-      } catch (err) {
-        if (import.meta.env.DEV) console.error('[UserContext] Failed to update stats:', err);
-      }
-    }
-  }, [authUser]);
+  }, []);
 
   const updateUserProfile = useCallback(async (updates: Partial<UserProfile>) => {
     setProfile(prev => ({ ...prev, ...updates }));
-    if (authUser && db) {
-      try {
-        await updateDoc(doc(db, 'users', authUser.uid), {
-          ...updates,
-          lastSessionAt: nowIso()
-        });
-      } catch (err) {
-        if (import.meta.env.DEV) console.error('[UserContext] Failed to update profile:', err);
-      }
-    }
-  }, [authUser]);
+  }, []);
 
   const strengthWeakness = useMemo(() => {
     const entries = Object.entries(profile.stats.byCountry).map(([countryId, stat]) => {
@@ -522,10 +376,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const value: UserContextType = {
     user: profile,
-    userProfile: profile, // Alias for hooks compatibility
-    isAuthenticated: !!authUser,
+    userProfile: profile,
+    isAuthenticated: false,
     isLoading: loading,
-    isSyncing: syncing,
     recordGameResult,
     updateUserStats,
     updateUserProfile,
