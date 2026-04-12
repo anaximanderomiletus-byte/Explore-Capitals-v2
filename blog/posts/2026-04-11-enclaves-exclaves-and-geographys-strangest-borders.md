@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, borders, history, maps]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/know-your-neighbor.png
 readTime: 7
 ---
 

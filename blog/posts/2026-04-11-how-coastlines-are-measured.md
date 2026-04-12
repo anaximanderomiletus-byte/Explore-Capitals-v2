@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, maps, cartography, nature]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/area-ace.png
 readTime: 6
 ---
 

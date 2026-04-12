@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, history, countries, politics]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/flag-frenzy.png
 readTime: 7
 ---
 

@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, countries, continents, maps]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/map-dash.png
 readTime: 6
 ---
 

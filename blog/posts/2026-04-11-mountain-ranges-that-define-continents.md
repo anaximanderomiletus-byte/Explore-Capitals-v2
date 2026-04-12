@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, nature, mountains, borders]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/region-roundup.png
 readTime: 7
 ---
 

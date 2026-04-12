@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, climate, nature, maps]
 image: /og-image.png
-thumbnail:
+thumbnail: /png/GAMES/global-detective.png
 readTime: 7
 ---
 
