@@ -179,7 +179,7 @@ const Navigation: React.FC = () => {
 
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden xl:flex items-center gap-6">
             <div className="flex items-center gap-8 relative mr-2">
             {navLinks.map((link) => {
               const active = isActive(link.path);
@@ -210,22 +210,14 @@ const Navigation: React.FC = () => {
             })}
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
             </div>
-            <Link to="/games">
-              <Button variant="primary" size="sm" className="group uppercase text-sm tracking-widest px-8 py-2.5">
-                {t('nav.playNow')} <Play className="ml-1.5 w-4 h-4" fill="currentColor" />
-              </Button>
-            </Link>
-            <div className={`flex items-center gap-3 shrink-0 border-l pl-4 ${isOverMap ? 'border-[#1A1C1E]/20' : 'border-white/10'}`}>
-              <LanguageSwitcher variant="navbar" isOverMap={isOverMap} />
-              <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50' : 'text-white/40'}`}>
-                <Smartphone size={14} />
-                <span>{t('nav.appSoon')}</span>
-              </div>
+            <div className={`flex items-center gap-2 shrink-0 border-l pl-5 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50 border-[#1A1C1E]/20' : 'text-white/40 border-white/10'}`}>
+              <Smartphone size={14} />
+              <span>{t('nav.appSoon')}</span>
             </div>
           </div>
 
           {/* Mobile Toggle */}
-          <div className="lg:hidden flex items-center relative z-50 shrink-0">
+          <div className="xl:hidden flex items-center relative z-50 shrink-0">
             <button
               onPointerDown={(e) => {
                 e.preventDefault();
@@ -257,7 +249,7 @@ const Navigation: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 bg-surface-dark z-[1999] lg:hidden flex flex-col pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
+        className={`fixed inset-0 bg-surface-dark z-[1999] xl:hidden flex flex-col pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
           isMobileMenuOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
@@ -303,7 +295,7 @@ const Navigation: React.FC = () => {
             );
           })}
 
-          {/* iOS App Coming Soon */}
+          {/* Play button */}
           <div
             style={{
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
@@ -312,19 +304,16 @@ const Navigation: React.FC = () => {
                 ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 1) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 1) * 0.04}s`
                 : 'transform 0.12s ease-in, opacity 0.1s ease-in',
             }}
+            className="mt-6"
           >
-            <div className="flex items-center gap-3 py-4 border-b border-white/5 text-white/30">
-              <Smartphone size={20} />
-              <div>
-                <span className="text-sm font-bold uppercase tracking-wider">{t('nav.iosAppComingSoon')}</span>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-white/20 mt-0.5">
-                  {t('nav.iosAppDesc')}
-                </p>
-              </div>
-            </div>
+            <Link to="/games">
+              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
+                {t('nav.play')} <Play className="ml-2 w-5 h-5" fill="currentColor" />
+              </Button>
+            </Link>
           </div>
 
-          {/* Language Switcher */}
+          {/* Language */}
           <div
             style={{
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
@@ -333,27 +322,9 @@ const Navigation: React.FC = () => {
                 ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 2) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 2) * 0.04}s`
                 : 'transform 0.12s ease-in, opacity 0.1s ease-in',
             }}
-            className="mt-4"
+            className="mt-6 flex justify-center"
           >
-            <LanguageSwitcher variant="mobile" />
-          </div>
-
-          {/* Play button */}
-          <div
-            style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
-              opacity: isMobileMenuOpen ? 1 : 0,
-              transition: isMobileMenuOpen
-                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 3) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 3) * 0.04}s`
-                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-            }}
-            className="mt-4"
-          >
-            <Link to="/games">
-              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
-                {t('nav.play')} <Play className="ml-2 w-5 h-5" fill="currentColor" />
-              </Button>
-            </Link>
+            <LanguageSwitcher variant="footer" />
           </div>
         </div>
       </div>
