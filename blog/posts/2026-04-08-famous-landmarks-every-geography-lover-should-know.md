@@ -2,7 +2,7 @@
 title: "Famous Landmarks Every Geography Lover Should Know"
 slug: famous-landmarks-every-geography-lover-should-know
 description: "From Machu Picchu to Angkor Wat, the world's great landmarks are more than tourist attractions. They are geographic markers that anchor history to place."
-date: 2026-04-11
+date: 2026-04-08
 author: ExploreCapitals
 tags: [geography, landmarks, culture, travel]
 image: /og-image.png

@@ -2,7 +2,7 @@
 title: "The World's Regions Explained"
 slug: the-worlds-regions-explained
 description: "What counts as the Middle East? Where does Central America end and South America begin? Regional labels shape how we understand the world, but they are surprisingly hard to define."
-date: 2026-04-11
+date: 2026-04-01
 author: ExploreCapitals
 tags: [geography, regions, countries, education]
 image: /og-image.png

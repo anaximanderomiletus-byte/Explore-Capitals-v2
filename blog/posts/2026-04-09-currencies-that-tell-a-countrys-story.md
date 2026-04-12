@@ -2,7 +2,7 @@
 title: "Currencies That Tell a Country's Story"
 slug: currencies-that-tell-a-countrys-story
 description: "Every currency carries history. From the Japanese yen to the West African franc, the money in your pocket reveals stories of empire, independence, and identity."
-date: 2026-04-11
+date: 2026-04-09
 author: ExploreCapitals
 tags: [geography, economics, culture, history]
 image: /og-image.png

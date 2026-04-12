@@ -2,7 +2,7 @@
 title: "Countries with Multiple Capitals"
 slug: countries-with-multiple-capitals
 description: "South Africa has three capitals. Bolivia has two. Malaysia splits its government between cities. Here is why some countries cannot settle on just one."
-date: 2026-04-11
+date: 2026-04-07
 author: ExploreCapitals
 tags: [capitals, geography, politics, history]
 image: /og-image.png

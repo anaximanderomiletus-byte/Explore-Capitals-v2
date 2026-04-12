@@ -2,7 +2,7 @@
 title: "Enclaves, Exclaves, and Geography's Strangest Borders"
 slug: enclaves-exclaves-and-geographys-strangest-borders
 description: "A piece of India inside Bangladesh inside India inside Bangladesh. The world's borders include some arrangements that seem impossible until you see them on a map."
-date: 2026-04-11
+date: 2026-04-02
 author: ExploreCapitals
 tags: [geography, borders, history, maps]
 image: /og-image.png

@@ -2,7 +2,7 @@
 title: "The Most Spoken Languages in the World"
 slug: the-most-spoken-languages-in-the-world
 description: "Is Mandarin or English the world's most spoken language? The answer depends on how you count. Here is what the global language map actually looks like."
-date: 2026-04-11
+date: 2026-04-07
 author: ExploreCapitals
 tags: [geography, languages, culture, education]
 image: /og-image.png

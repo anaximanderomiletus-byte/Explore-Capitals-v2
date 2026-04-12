@@ -2,7 +2,7 @@
 title: "The World's Most Populous Countries — And How They Got There"
 slug: the-worlds-most-populous-countries
 description: "India has overtaken China as the world's most populous nation. But population is not just about size — it is shaped by geography, policy, and history."
-date: 2026-04-11
+date: 2026-04-06
 author: ExploreCapitals
 tags: [geography, population, history, economics]
 image: /og-image.png

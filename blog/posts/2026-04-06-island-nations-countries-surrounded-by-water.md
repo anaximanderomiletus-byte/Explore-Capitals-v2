@@ -2,7 +2,7 @@
 title: "Island Nations: Countries Surrounded by Water"
 slug: island-nations-countries-surrounded-by-water
 description: "From Iceland to the Maldives, island nations face unique geographic challenges. Their isolation shapes everything from culture to climate vulnerability."
-date: 2026-04-11
+date: 2026-04-06
 author: ExploreCapitals
 tags: [geography, islands, countries, climate]
 image: /og-image.png

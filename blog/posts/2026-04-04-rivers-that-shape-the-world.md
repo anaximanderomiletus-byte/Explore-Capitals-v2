@@ -2,7 +2,7 @@
 title: "Rivers That Shape the World"
 slug: rivers-that-shape-the-world
 description: "Rivers draw borders, feed billions, and build civilizations. From the Nile to the Mekong, the world's great rivers are the arteries of geography."
-date: 2026-04-11
+date: 2026-04-04
 author: ExploreCapitals
 tags: [geography, nature, history, borders]
 image: /og-image.png

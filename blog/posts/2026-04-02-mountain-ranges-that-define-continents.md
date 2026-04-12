@@ -2,7 +2,7 @@
 title: "Mountain Ranges That Define Continents"
 slug: mountain-ranges-that-define-continents
 description: "The Himalayas separate India from China. The Andes run the length of South America. Mountain ranges are the walls and spines of the world's geography."
-date: 2026-04-11
+date: 2026-04-02
 author: ExploreCapitals
 tags: [geography, nature, mountains, borders]
 image: /og-image.png

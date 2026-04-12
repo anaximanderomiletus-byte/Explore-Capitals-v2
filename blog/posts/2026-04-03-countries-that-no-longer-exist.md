@@ -2,7 +2,7 @@
 title: "Countries That No Longer Exist"
 slug: countries-that-no-longer-exist
 description: "Yugoslavia, Czechoslovakia, the Soviet Union: dozens of countries have disappeared from the map in the last century alone. Here is where they went."
-date: 2026-04-11
+date: 2026-04-03
 author: ExploreCapitals
 tags: [geography, history, countries, politics]
 image: /og-image.png

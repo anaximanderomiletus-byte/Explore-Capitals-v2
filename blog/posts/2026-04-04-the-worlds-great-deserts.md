@@ -2,7 +2,7 @@
 title: "The World's Great Deserts"
 slug: the-worlds-great-deserts
 description: "Deserts cover about a third of Earth's land surface. Not all of them are hot, not all of them are sandy, and the largest one is not the Sahara."
-date: 2026-04-11
+date: 2026-04-04
 author: ExploreCapitals
 tags: [geography, climate, nature, maps]
 image: /og-image.png

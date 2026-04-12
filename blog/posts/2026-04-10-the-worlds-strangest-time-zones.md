@@ -2,7 +2,7 @@
 title: "The World's Strangest Time Zones"
 slug: the-worlds-strangest-time-zones
 description: "From Nepal's 15-minute offset to China's single time zone spanning 5,000 kilometers, the world's time zones are far stranger than the neat lines on a map suggest."
-date: 2026-04-11
+date: 2026-04-10
 author: ExploreCapitals
 tags: [geography, time, politics, maps]
 image: /og-image.png

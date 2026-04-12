@@ -2,7 +2,7 @@
 title: "Why Capital Cities Are Where They Are"
 slug: why-capital-cities-are-where-they-are
 description: "Some capitals are ancient cities chosen by history. Others were built from scratch in the middle of nowhere. The location of a capital is never accidental."
-date: 2026-04-11
+date: 2026-03-31
 author: ExploreCapitals
 tags: [capitals, geography, history, politics]
 image: /og-image.png

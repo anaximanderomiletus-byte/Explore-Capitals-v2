@@ -2,7 +2,7 @@
 title: "Territories, Dependencies, and Places That Are Not Quite Countries"
 slug: territories-dependencies-and-places-that-are-not-quite-countries
 description: "Greenland, Puerto Rico, French Polynesia: they have their own flags, cultures, and governments, but they are not sovereign states. Here is what they are."
-date: 2026-04-11
+date: 2026-04-05
 author: ExploreCapitals
 tags: [geography, countries, politics, territories]
 image: /og-image.png

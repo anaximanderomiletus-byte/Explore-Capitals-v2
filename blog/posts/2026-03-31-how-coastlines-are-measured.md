@@ -2,7 +2,7 @@
 title: "How Coastlines Are Measured — And Why Nobody Agrees"
 slug: how-coastlines-are-measured
 description: "Norway's coastline is either 25,000 or 100,000 kilometers long, depending on how you measure. The coastline paradox reveals something fundamental about geography."
-date: 2026-04-11
+date: 2026-03-31
 author: ExploreCapitals
 tags: [geography, maps, cartography, nature]
 image: /og-image.png

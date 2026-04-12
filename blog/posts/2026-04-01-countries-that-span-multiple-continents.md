@@ -2,7 +2,7 @@
 title: "Countries That Span Multiple Continents"
 slug: countries-that-span-multiple-continents
 description: "Turkey straddles Europe and Asia. Russia spans two continents. Egypt sits in both Africa and Asia. Transcontinental countries challenge our simplest geographic categories."
-date: 2026-04-11
+date: 2026-04-01
 author: ExploreCapitals
 tags: [geography, countries, continents, maps]
 image: /og-image.png

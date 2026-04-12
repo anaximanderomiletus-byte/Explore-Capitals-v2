@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowRight, BookOpen, Newspaper, Globe2, Map, Flag, Landmark, BookMarked } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -121,8 +121,13 @@ const Blog: React.FC = () => {
     setPageLoading(false);
   }, [setPageLoading]);
 
+  const POSTS_PER_PAGE = 9;
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+
   const featured = blogPosts[0];
   const rest = blogPosts.slice(1);
+  const visiblePosts = rest.slice(0, visibleCount);
+  const hasMore = visibleCount < rest.length;
 
   return (
     <div className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
@@ -253,8 +258,8 @@ const Blog: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-              {rest.map((post, i) => (
-                <RevealSection key={post.slug} delay={0.04 * i} className="h-full">
+              {visiblePosts.map((post, i) => (
+                <RevealSection key={post.slug} delay={0.04 * Math.min(i, 8)} className="h-full">
                   <Link
                     to={`/blog/${post.slug}`}
                     className="group relative flex flex-col h-full bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 transition-all duration-500 shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
@@ -300,6 +305,19 @@ const Blog: React.FC = () => {
                 </RevealSection>
               ))}
             </div>
+
+            {/* Load More */}
+            {hasMore && (
+              <div className="flex justify-center mt-10 md:mt-14">
+                <button
+                  onClick={() => setVisibleCount(prev => prev + POSTS_PER_PAGE)}
+                  className="group relative px-8 py-3 bg-white/[0.04] border border-white/10 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 group-hover:opacity-20 transition-opacity duration-300" />
+                  <span className="relative z-10">{t('blog.loadMore') || 'Load More'} ({rest.length - visibleCount})</span>
+                </button>
+              </div>
+            )}
           </RevealSection>
         )}
 

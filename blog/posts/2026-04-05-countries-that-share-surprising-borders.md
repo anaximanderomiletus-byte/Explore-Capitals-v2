@@ -2,7 +2,7 @@
 title: "Countries That Share Surprising Borders"
 slug: countries-that-share-surprising-borders
 description: "France borders Brazil. Spain borders Morocco. The Netherlands borders France. The world's borders are far stranger than most maps suggest."
-date: 2026-04-11
+date: 2026-04-05
 author: ExploreCapitals
 tags: [geography, borders, countries, quiz]
 image: /og-image.png

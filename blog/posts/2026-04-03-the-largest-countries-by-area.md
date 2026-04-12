@@ -2,7 +2,7 @@
 title: "The Largest Countries by Area — And What Fills the Space"
 slug: the-largest-countries-by-area
 description: "Russia is 70 times larger than the United Kingdom. But size alone does not tell you what a country is like. The real story is what fills the space."
-date: 2026-04-11
+date: 2026-04-03
 author: ExploreCapitals
 tags: [geography, countries, maps, nature]
 image: /og-image.png
