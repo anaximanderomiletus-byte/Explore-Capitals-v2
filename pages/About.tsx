@@ -1,330 +1,117 @@
-import React, { useEffect, useState } from 'react';
-import { Target, Award, Compass, ShieldCheck, Microscope, Clock, Heart, Loader2, Zap, Globe2, MapPin, Trophy, Play } from 'lucide-react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import Button from '../components/Button';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Compass, Database, Gamepad2, Map, BookOpen } from 'lucide-react';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
+import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
-import { useTranslation } from '../context/LocaleContext';
-
 import { VerticalSidebarAd } from '../components/AdSense';
-// Lazy-load payment service to avoid Firebase init blocking page render
-const loadPayment = () => import('../services/payment').then(m => m.createCheckoutSession);
 
 const About: React.FC = () => {
   const { setPageLoading } = useLayout();
-  const { t } = useTranslation();
-  const { hash } = useLocation();
-  const [searchParams] = useSearchParams();
-
-
-  // Donation state
-  const [donationBusy, setDonationBusy] = useState(false);
-  const [donationStatus, setDonationStatus] = useState<string | null>(null);
-  const [donationError, setDonationError] = useState<string | null>(null);
 
   useEffect(() => {
     setPageLoading(false);
+  }, [setPageLoading]);
 
-    // Handle payment success/cancel redirects
-    if (searchParams.get('success') === 'true') {
-      setDonationStatus(t('about.support.thankYou'));
-    } else if (searchParams.get('canceled') === 'true') {
-      setDonationError(t('about.support.canceled'));
-    }
-
-    if (hash === '#contact') {
-      const element = document.getElementById('contact');
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
-      }
-    } else if (hash === '#support') {
-      const element = document.getElementById('support');
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
-      }
-    }
-  }, [setPageLoading, hash, searchParams]);
-
-  const handleDonation = async (amount: number) => {
-    setDonationBusy(true);
-    setDonationStatus(null);
-    setDonationError(null);
-    try {
-      const checkout = await loadPayment();
-      const { url } = await checkout(amount * 100);
-      window.location.href = url;
-    } catch (err: any) {
-      console.error('Donation failed:', err);
-      setDonationError(err?.message ?? 'Failed to start donation. Please try again.');
-      setDonationBusy(false);
-    }
-  };
-
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "name": "ExploreCapitals",
-    "url": "https://explorecapitals.com",
-    "description": "ExploreCapitals is a premier digital atlas and geography education platform designed to help learners master world capitals, national demographics, and global cartography through interactive high-fidelity mapping.",
-    "foundingDate": "2024",
-    "knowsAbout": ["Geography", "World Capitals", "Cartography", "Global Education"]
-  };
+  const sections = [
+    { icon: <Database size={16} />, title: 'Country Database', desc: 'Profiles for 195+ countries with capitals, flags, currencies, languages, and population data.', tint: 'bg-sky/10 text-sky-light' },
+    { icon: <Gamepad2 size={16} />, title: 'Geography Games', desc: 'Quizzes and map challenges covering capitals, flags, regions, languages, and landmarks.', tint: 'bg-accent/10 text-accent' },
+    { icon: <Map size={16} />, title: 'Interactive Map', desc: 'A searchable world map with country details and regional navigation.', tint: 'bg-pink-500/10 text-pink-400' },
+    { icon: <BookOpen size={16} />, title: 'Blog', desc: 'Articles on world geography, borders, capitals, and cultural topics.', tint: 'bg-secondary/10 text-secondary' },
+  ];
 
   return (
-    <main className="pt-28 pb-16 px-4 md:px-6 min-h-screen overflow-x-hidden relative">
+    <main className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       <SEO
         title="About"
-        description="ExploreCapitals is a free geography education platform. Learn about our mission to make world geography engaging through interactive games and tools."
-        structuredData={structuredData}
+        description="ExploreCapitals is a free geography platform with interactive games, a 195+ country database, a world map, and a blog."
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'EducationalOrganization',
+          name: 'ExploreCapitals',
+          url: 'https://explorecapitals.com',
+          description: 'Free interactive geography education platform.',
+          foundingDate: '2024',
+        }}
       />
 
-      {/* Vertical Sidebar Ads - Large screens only */}
       <VerticalSidebarAd slot="9489406693" position="left" />
       <VerticalSidebarAd slot="9489406693" position="right" />
 
-      {/* Background glow — static, GPU-promoted */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden will-change-transform">
-        <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.04)_0%,transparent_70%)] blur-3xl" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-[radial-gradient(circle_at_center,rgba(52,199,89,0.02)_0%,transparent_60%)] blur-3xl" />
-      </div>
+      <div className="max-w-3xl mx-auto relative z-10">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
 
-      <div className="max-w-6xl mx-auto space-y-12 md:space-y-16 relative z-10">
-        {/* Mission & Hero Section */}
-        <section className="relative">
-          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
-          {/* Background accent — static */}
-          <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gradient-to-br from-sky/10 to-accent/5 blur-3xl pointer-events-none" />
-
-          <div className="relative">
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky/20 to-accent/10 border-2 border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.4em] text-white/90 mb-8 relative overflow-hidden group/badge hover:border-white/60 transition-all duration-300">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-10" />
-              <Compass size={14} className="text-sky-light relative z-10" />
-              <span className="relative z-10">{t('about.badge')}</span>
-            </div>
-
-            <h1 className="text-5xl md:text-8xl font-display font-black text-white leading-[1.1] mb-6 tracking-tighter uppercase drop-shadow-xl">
-              {t('about.title1')}<br />
-              <span className="bg-clip-text bg-gradient-to-r from-sky-light via-accent to-sky-light [-webkit-text-fill-color:transparent]">{t('about.title2')}</span>
-            </h1>
-
-            <p className="text-lg md:text-2xl text-white/70 leading-relaxed font-bold max-w-3xl">
-              {t('about.heroDesc')}
+        {/* Hero */}
+        <RevealSection className="mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6">
+            <Compass size={12} className="text-sky-light" />
+            <span>About</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tighter uppercase leading-tight mb-6">
+            About
+          </h1>
+          <div className="space-y-4 text-base sm:text-lg text-white/70 leading-relaxed font-medium max-w-2xl">
+            <p>
+              ExploreCapitals is a free online geography platform. It includes a reference database covering 195+ countries — capitals, flags, currencies, languages, and population figures — alongside an interactive world map, a set of geography games, and a blog with articles on world geography.
+            </p>
+            <p>
+              Everything is accessible without an account. Hosting and development costs are covered by banner ads and optional donations, so there are no paid tiers or gated content.
             </p>
           </div>
+        </RevealSection>
 
-          {/* Story & Pillars Grid */}
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start mt-16">
-            {/* Story Section */}
-            <div className="space-y-5">
-              <div>
-                <h2 className="text-3xl md:text-5xl font-display font-black text-white tracking-tighter uppercase mb-6 leading-none drop-shadow-md">{t('about.platform.title')}</h2>
-                <div className="space-y-5">
-                  <div className="text-xl md:text-2xl text-white/80 leading-relaxed font-bold border-l-4 border-sky/60 pl-6 py-2">
-                    {t('about.platform.desc1')}
-                  </div>
-                  <div className="hidden lg:block text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
-                    We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
-                  </div>
-                  <div className="hidden lg:block text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
-                    Every dataset is <strong className="text-sky-light">sourced and verified</strong>. Every interaction is designed to <strong className="text-accent">reinforce retention</strong>. Whether you're a student, educator, or geography enthusiast — this platform is <strong className="text-white">built for depth</strong>.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Four Pillars - Fun Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-              {[
-                { icon: <Trophy size={24} />, title: t('about.pillars.competitive'), text: t('about.pillars.competitiveDesc'), color: "from-accent/30 to-accent/10", iconBg: "bg-accent/20", textColor: "text-accent" },
-                { icon: <MapPin size={24} />, title: t('about.pillars.authoritative'), text: t('about.pillars.authoritativeDesc'), color: "from-sky/30 to-sky/10", iconBg: "bg-sky/20", textColor: "text-sky" },
-                { icon: <Zap size={24} />, title: t('about.pillars.immersive'), text: t('about.pillars.immersiveDesc'), color: "from-warning/30 to-warning/10", iconBg: "bg-warning/20", textColor: "text-warning" },
-                { icon: <Globe2 size={24} />, title: t('about.pillars.rigorous'), text: t('about.pillars.rigorousDesc'), color: "from-purple-500/30 to-purple-500/10", iconBg: "bg-purple-500/20", textColor: "text-purple-400" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className={`bg-gradient-to-br ${item.color} p-6 md:p-8 rounded-2xl md:rounded-3xl border-2 border-white/20 hover:border-white/40 hover:-translate-y-1 relative overflow-hidden flex flex-col h-full transition-all duration-150 group cursor-default`}
-                >
-                  <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-                  <div className={`${item.iconBg} w-12 h-12 rounded-xl flex items-center justify-center ${item.textColor} mb-4 relative z-10 group-hover:scale-110 transition-transform duration-150`}>
-                    {item.icon}
-                  </div>
-                  <h3 className="font-display font-black text-white text-lg mb-1 uppercase tracking-tight relative z-10">{item.title}</h3>
-                  <p className="text-white/60 text-sm font-bold relative z-10">{item.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Supporting Text - Mobile/Tablet Only */}
-          <div className="lg:hidden mt-8 max-w-3xl">
-            <p className="text-lg md:text-xl text-white/70 leading-relaxed font-bold border-l-4 border-accent/40 pl-6 py-2">
-              We combine <strong className="text-sky-light">premium interface design</strong>, <strong className="text-accent">accurate geographic data</strong>, and <strong className="text-white">rigorous gamification</strong> to create the standard for digital geography education.
-            </p>
-          </div>
-
-          {/* Decorative Section Divider */}
-          <div className="h-1 w-full bg-gradient-to-r from-transparent via-sky/30 to-transparent mt-10 md:mt-12 mb-0"></div>
-        </section>
-
-        {/* Support Section */}
-        <section
-          id="support"
-          className="scroll-mt-32 relative"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">{t('about.support.title')}</h2>
-            <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
-              {t('about.support.desc')}
-            </p>
-          </div>
-
-          {/* Status Messages */}
-          {donationStatus && (
-            <div className="mb-8 p-4 md:p-6 bg-green-500/10 border-2 border-green-500/30 rounded-2xl text-green-400 text-sm md:text-base font-bold animate-[fadeIn_0.3s_ease-out]">
-              ✨ {donationStatus}
-            </div>
-          )}
-          {donationError && (
-            <div className="mb-8 p-4 md:p-6 bg-red-500/10 border-2 border-red-500/30 rounded-2xl text-red-400 text-sm md:text-base font-bold animate-[fadeIn_0.3s_ease-out]">
-              ⚠️ {donationError}
-            </div>
-          )}
-
-          <div className="group bg-gradient-to-br from-pink-500/20 to-pink-500/5 p-8 md:p-12 rounded-3xl border-2 border-white/20 hover:border-pink-500/40 hover:scale-[1.01] transition-all duration-150 relative overflow-hidden">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-pink-500/10 blur-3xl pointer-events-none" />
-
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12 relative z-10">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br from-pink-500/40 to-pink-500/10 flex items-center justify-center text-pink-400 border-2 border-white/30 shrink-0">
-                <Heart size={40} strokeWidth={1.5} />
-              </div>
-
-              <div className="flex-1">
-                <h3 className="text-2xl md:text-3xl font-black text-white mb-3 uppercase tracking-tight">
-                  {t('about.support.cardTitle')}
-                </h3>
-                <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold mb-8">
-                  {t('about.support.cardDesc')}
-                </p>
-
-                <div className="grid grid-cols-3 gap-4 max-w-xs">
-                  {[5, 10, 20].map((amount) => (
-                    <button
-                      key={amount}
-                      onClick={() => handleDonation(amount)}
-                      disabled={donationBusy}
-                      className="py-4 px-4 bg-gradient-to-br from-pink-500/20 to-pink-500/5 hover:from-pink-500/30 hover:to-pink-500/10 border-2 border-white/20 hover:border-pink-500/40 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(236,72,153,0.2)] active:scale-95 rounded-2xl text-base font-black text-white uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    >
-                      {donationBusy ? (
-                        <Loader2 size={18} className="animate-spin" />
-                      ) : (
-                        <span>${amount}</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-[10px] md:text-xs text-white/40 mt-4 uppercase tracking-[0.2em] font-bold">
-                  {t('about.support.securePayment')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Decorative Section Divider */}
-        <div className="h-1 w-full bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
-
-        {/* Contact Section */}
-        <section
-          id="contact"
-          className="scroll-mt-32 relative"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl md:text-6xl font-display font-black text-white tracking-tighter mb-4 uppercase leading-none drop-shadow-md">{t('about.contact.title')}</h2>
-            <p className="text-lg md:text-xl text-white/60 font-bold max-w-2xl leading-relaxed">
-              {t('about.contact.desc')} <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky-light font-black hover:text-sky transition-all underline underline-offset-4">anaximanderomiletus@gmail.com</a>
-            </p>
-          </div>
-
-          {/* Info Cards */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                icon: <ShieldCheck size={28} />,
-                title: t('about.contact.privacy.title'),
-                text: t('about.contact.privacy.desc'),
-                color: "from-sky/30 to-sky/10",
-                iconBg: "bg-sky/20",
-                textColor: "text-sky"
-              },
-              {
-                icon: <Zap size={28} />,
-                title: t('about.contact.response.title'),
-                text: t('about.contact.response.desc'),
-                color: "from-accent/30 to-accent/10",
-                iconBg: "bg-accent/20",
-                textColor: "text-accent"
-              },
-            ].map((item, i) => (
+        {/* What's Here */}
+        <RevealSection className="mb-12 md:mb-16">
+          <h2 className="text-xl sm:text-2xl font-display font-black text-white tracking-tighter uppercase leading-none mb-6">
+            What's here
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {sections.map((s, i) => (
               <div
-                key={i}
-                className={`group bg-gradient-to-br ${item.color} p-8 md:p-10 rounded-3xl border-2 border-white/20 hover:border-white/40 hover:-translate-y-1 transition-all duration-150 flex flex-col items-start gap-6 relative overflow-hidden`}
+                key={s.title}
+                className="group relative bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/10 rounded-xl p-5 transition-all overflow-hidden"
               >
-                <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-                <div className={`${item.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center ${item.textColor} border-2 border-white/30 relative z-10 group-hover:scale-110 transition-transform duration-150`}>
-                  {item.icon}
+                <span className="absolute top-3 right-4 text-[10px] font-black text-white/15 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+                <div className={`w-10 h-10 rounded-lg ${s.tint} flex items-center justify-center mb-4`}>
+                  {s.icon}
                 </div>
-                <div>
-                  <h4 className="text-lg md:text-xl font-black text-white mb-2 uppercase tracking-tight relative z-10">{item.title}</h4>
-                  <p className="text-white/60 text-sm md:text-base leading-relaxed font-bold relative z-10">
-                    {item.text}
-                  </p>
-                </div>
+                <h3 className="text-sm font-black text-white uppercase tracking-tight mb-2">{s.title}</h3>
+                <p className="text-[13px] text-white/55 font-medium leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
-        </section>
+        </RevealSection>
 
-        {/* Bottom Banner - Call to Action */}
-        <section
-          className="bg-gradient-to-br from-sky/20 via-accent/10 to-transparent p-10 md:p-16 text-center rounded-3xl border-2 border-white/20 relative overflow-hidden group/banner"
-        >
-          <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-gradient-to-br from-sky/10 to-accent/5 blur-3xl pointer-events-none" />
-          <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none rounded-[inherit]" />
-
-          <div className="relative z-10 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-7xl font-display font-black text-white mb-8 tracking-tighter uppercase leading-tight drop-shadow-lg">
-              {t('about.cta.title1')}<br />{t('about.cta.title2')}
-            </h2>
-
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center px-2">
-              <div className="w-full sm:w-auto hover:scale-105 active:scale-95 transition-transform duration-150">
-                <Link to="/games" className="block">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase border-2 border-white/30 transition-all group font-black"
-                  >
-                    {t('about.cta.play')} <Play className="ml-2 w-5 h-5 md:w-7 md:h-7" fill="currentColor" />
-                  </Button>
+        {/* CTA */}
+        <RevealSection>
+          <div className="relative bg-gradient-to-br from-sky/[0.1] via-white/[0.03] to-accent/[0.08] border border-white/10 rounded-2xl p-6 sm:p-8 overflow-hidden">
+            <div className="absolute -top-16 -right-16 w-48 h-48 bg-sky/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10">
+              <p className="text-[10px] font-black text-sky-light uppercase tracking-[0.3em] mb-3">Start here</p>
+              <h2 className="text-2xl sm:text-3xl font-display font-black text-white tracking-tighter uppercase leading-tight mb-5">
+                Explore the site
+              </h2>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  to="/games"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-sky/20 hover:bg-sky/30 border border-sky/30 hover:border-sky/50 rounded-xl text-sm font-black text-white uppercase tracking-tight transition-all"
+                >
+                  <Gamepad2 size={16} className="text-sky-light" />
+                  Browse games
                 </Link>
-              </div>
-
-              <div className="w-full sm:w-auto hover:scale-105 active:scale-95 transition-transform duration-150">
-                <Link to="/map" className="block">
-                  <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 h-16 md:h-20 text-xl md:text-2xl uppercase bg-white/5 border-2 border-white/10 hover:bg-white/20 transition-all group font-black">
-                    {t('about.cta.exploreMap')} <Compass className="ml-2 transition-transform group-hover:scale-110 w-5 h-5 md:w-7 md:h-7" />
-                  </Button>
+                <Link
+                  to="/map"
+                  className="group inline-flex items-center justify-center gap-2 px-5 py-3 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 rounded-xl text-sm font-black text-white uppercase tracking-tight transition-all"
+                >
+                  <Map size={16} className="text-white/70 group-hover:text-sky-light transition-colors" />
+                  Open the map
                 </Link>
               </div>
             </div>
           </div>
-        </section>
+        </RevealSection>
       </div>
     </main>
   );

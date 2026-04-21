@@ -14,6 +14,7 @@ import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
+import GameFooterNav from '../components/GameFooterNav';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -202,16 +203,10 @@ export default function TerritoryTitans() {
               <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Master territories & dependencies.</p>
               <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">
-                  PLAY <Play size={20} fill="currentColor" />
+                <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">
+                  PLAY <Play size={24} fill="currentColor" />
                 </Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-accent transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"
-                >
-                  <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" /> 
-                  {t('game.backToGames')}
-                </button>
+                <GameFooterNav />
               </div>
             </div>
             </div>
@@ -236,7 +231,7 @@ export default function TerritoryTitans() {
 
             {/* Top Bar */}
             <div className="game-top-bar max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-4 bg-white/10 backdrop-blur-2xl p-2 md:p-3 rounded-2xl border border-white/20 z-10">
-              <Link to="/games" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+              <Link to="/games/all" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
                 <ArrowLeft size={18} className="transition-transform" />
               </Link>
               <div className="flex-1 flex flex-col items-center justify-center min-w-0">
@@ -349,16 +344,10 @@ export default function TerritoryTitans() {
               <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">
-                  {t('game.playAgain')} <Play size={20} fill="currentColor" />
+                <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">
+                  {t('game.playAgain')} <Play size={24} fill="currentColor" />
                 </Button>
-                <button 
-                  onClick={() => navigate('/games')}
-                  className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
-                >
-                  <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-                  {t('game.backToGames')}
-                </button>
+                <GameFooterNav />
               </div>
             </div>
             </div>

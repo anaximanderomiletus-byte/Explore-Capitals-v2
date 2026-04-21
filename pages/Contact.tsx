@@ -1,8 +1,10 @@
-
 import React, { useEffect } from 'react';
-import { MessageSquare, Globe, Compass } from 'lucide-react';
+import { Mail, MessageCircle, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
+import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
+import { VerticalSidebarAd } from '../components/AdSense';
 
 const Contact: React.FC = () => {
   const { setPageLoading } = useLayout();
@@ -11,68 +13,95 @@ const Contact: React.FC = () => {
     setPageLoading(false);
   }, [setPageLoading]);
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "name": "Contact ExploreCapitals",
-    "description": "Get in touch with the team behind ExploreCapitals for technical feedback, institutional inquiries, or collaboration.",
-    "url": "https://explorecapitals.com/contact"
-  };
-
   return (
-    <main className="pt-32 pb-20 px-6 bg-surface-dark min-h-screen overflow-x-hidden relative">
+    <main className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       <SEO
         title="Contact"
-        description="Get in touch with ExploreCapitals. Questions, feedback, or partnership inquiries welcome. We love hearing from geography enthusiasts."
-        structuredData={structuredData}
+        description="Questions, ideas, or just saying hi — reach the ExploreCapitals team directly. Every message gets a real reply."
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'Contact ExploreCapitals',
+          url: 'https://explorecapitals.com/contact',
+        }}
       />
 
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] right-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-3xl opacity-40" />
-      </div>
+      <VerticalSidebarAd slot="9489406693" position="left" />
+      <VerticalSidebarAd slot="9489406693" position="right" />
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        <header className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
-           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-sky/20 border-2 border-white/20 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8 relative overflow-hidden">
-              <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
-              <MessageSquare size={14} className="relative z-10" /> <span className="relative z-10">Communication Hub</span>
-           </div>
-           <h1 className="text-6xl md:text-8xl font-display font-black text-white tracking-tighter mb-8 uppercase leading-[0.85] drop-shadow-2xl">
-             Get in <span className="text-sky">Touch.</span>
-           </h1>
-           <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-bold uppercase tracking-widest drop-shadow-md">
-             Our team is dedicated to building the most accurate geography platform on the web.
-           </p>
-        </header>
+      <div className="max-w-3xl mx-auto relative z-10">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
 
-        <section className="bg-white/10 backdrop-blur-3xl rounded-[4rem] p-10 md:p-20 border-2 border-white/20 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 relative overflow-hidden">
-           <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
-           <h2 className="text-3xl md:text-4xl font-display font-black text-white mb-8 tracking-tighter uppercase drop-shadow-lg">Direct Outreach</h2>
-           <div className="p-8 bg-black/20 rounded-3xl border-2 border-white/10 shadow-inner relative overflow-hidden group">
-             <div className="absolute inset-0 bg-glossy-gradient opacity-5" />
-             <p className="text-white/80 text-xl md:text-2xl leading-relaxed font-medium italic relative z-10">
-               Send us an email at <a href="mailto:anaximanderomiletus@gmail.com" className="text-sky font-black whitespace-nowrap hover:text-white transition-all underline decoration-sky/40 underline-offset-8">anaximanderomiletus@gmail.com</a>
-             </p>
-           </div>
-        </section>
+        {/* Hero */}
+        <RevealSection className="mb-6 md:mb-8">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6">
+            <MessageCircle size={12} className="text-sky-light" />
+            <span>Get in Touch</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tighter uppercase leading-tight mb-5">
+            Say{' '}
+            <span
+              className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible"
+              style={{ display: 'inline-block', paddingBottom: '0.15em', paddingRight: '0.1em' }}
+            >hello</span>.
+          </h1>
+          <p className="text-base sm:text-lg text-white/60 leading-relaxed font-medium max-w-2xl">
+            Feedback, ideas, or partnership inquiries — we'd love to hear from you. Every email reaches a real person and gets a real reply.
+          </p>
+        </RevealSection>
 
-        {/* Categories Section */}
-        <section className="mt-16 grid sm:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-           {[
-             { title: "Collaborations", icon: <Globe size={24} />, text: "Educational institutions seeking to partner or integrate." },
-             { title: "Technical Support", icon: <Compass size={24} />, text: "Report bugs or map errors." },
-             { title: "Media & Press", icon: <MessageSquare size={24} />, text: "Interviews or press inquiries." },
-           ].map((cat, i) => (
-             <div key={i} className="p-8 bg-white/5 backdrop-blur-xl rounded-3xl border-2 border-white/10 hover:bg-white/10 hover:border-sky/30 transition-all duration-500 group relative overflow-hidden">
-                <div className="absolute inset-0 bg-glossy-gradient opacity-5 pointer-events-none" />
-                <div className="text-sky mb-4 transition-all origin-left relative z-10">{cat.icon}</div>
-                <h4 className="font-display font-black text-white mb-3 text-xs uppercase tracking-[0.2em] relative z-10">{cat.title}</h4>
-                <p className="text-[10px] text-white/30 font-bold leading-relaxed uppercase tracking-widest relative z-10">{cat.text}</p>
-             </div>
-           ))}
-        </section>
+        {/* Email Card */}
+        <RevealSection className="mb-8 md:mb-10">
+          <a
+            href="mailto:anaximanderomiletus@gmail.com"
+            className="group relative block bg-gradient-to-br from-sky/[0.08] via-white/[0.03] to-accent/[0.05] border border-white/10 hover:border-white/20 rounded-2xl p-6 sm:p-8 transition-all overflow-hidden"
+          >
+            <div className="absolute -top-20 -right-20 w-52 h-52 bg-sky/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex items-center gap-5">
+              <div className="w-14 h-14 bg-sky/20 rounded-2xl text-sky-light border border-white/20 flex items-center justify-center shrink-0">
+                <Mail size={22} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-1.5">Drop us a line</p>
+                <p className="text-base sm:text-xl font-black text-white tracking-tight truncate group-hover:text-sky-light transition-colors">
+                  anaximanderomiletus@gmail.com
+                </p>
+              </div>
+            </div>
+          </a>
+        </RevealSection>
+
+        {/* Info Strip */}
+        <RevealSection>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 bg-accent/20 rounded-xl text-accent border border-white/20 flex items-center justify-center">
+              <Sparkles size={15} />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-display font-black text-white tracking-tighter uppercase leading-none">
+              What to expect
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-sky/10 flex items-center justify-center text-sky-light shrink-0">
+                <Zap size={16} />
+              </div>
+              <div>
+                <h4 className="text-sm font-black text-white uppercase tracking-tight mb-2">Fast replies</h4>
+                <p className="text-base text-white/60 font-medium leading-relaxed">We respond to every message, usually within 24–48 hours.</p>
+              </div>
+            </div>
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                <ShieldCheck size={16} />
+              </div>
+              <div>
+                <h4 className="text-sm font-black text-white uppercase tracking-tight mb-2">Kept private</h4>
+                <p className="text-base text-white/60 font-medium leading-relaxed">Your message stays between us. We never share or sell personal info.</p>
+              </div>
+            </div>
+          </div>
+        </RevealSection>
       </div>
     </main>
   );

@@ -11,6 +11,7 @@ import { useLayout } from '../context/LayoutContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { getCountryTour, getGeneratedImage } from '../services/geminiService';
+import { getStaticImages } from '../data/images';
 import { TourData } from '../types';
 import { getFlagUrl } from '../utils/flags';
 import { toSlug } from '../utils/slug';
@@ -46,7 +47,7 @@ const PhotoPrint: React.FC<{
         style={{
           background: 'linear-gradient(145deg, rgba(40,40,45,0.95) 0%, rgba(20,20,22,0.98) 50%, rgba(30,30,35,0.95) 100%)',
           border: '2px solid rgba(255,255,255,0.12)',
-          boxShadow: '0 12px 48px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.08), inset 0 -1px 1px rgba(0,0,0,0.3)',
+          boxShadow: '0 12px 48px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.08)',
         }}
       >
         {/* Glass reflection layers */}
@@ -56,7 +57,7 @@ const PhotoPrint: React.FC<{
         {/* Bottom edge catch light */}
         <div className="absolute bottom-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
 
-        <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border border-black/60 shadow-inner bg-[#0A0A0A]">
+        <div className="w-full aspect-video rounded-lg sm:rounded-2xl overflow-hidden relative group/img border border-white/5 bg-[#0A0A0A]">
           {currentSrc ? (
             <img
               src={currentSrc}
@@ -155,6 +156,7 @@ const CountryExploration: React.FC = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   
   const [introImage, setIntroImage] = useState<string | null>(null);
+  const [capitalImage, setCapitalImage] = useState<string | null>(null);
   const [stopImages, setStopImages] = useState<Record<number, string | null>>({});
 
   const [view, setView] = useState<ViewState>('loading');
@@ -262,6 +264,11 @@ const CountryExploration: React.FC = () => {
       }, 8000);
 
       try {
+        // Load capital image from static map
+        getStaticImages().then(images => {
+          if (images[country.name]) setCapitalImage(images[country.name]);
+        });
+
         const data = await getCountryTour(country.name);
 
         if (data) {
@@ -837,17 +844,8 @@ const CountryExploration: React.FC = () => {
                 />
               </div>
 
-              {/* 3. Itinerary Glass Card + Actions */}
-              <div
-                className="w-full max-w-2xl rounded-2xl p-5 sm:p-6 flex flex-col items-center gap-5"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(24px) saturate(1.4)',
-                  WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
-                }}
-              >
+              {/* 3. Itinerary Card + Actions */}
+              <div className="w-full max-w-2xl p-5 sm:p-6 flex flex-col items-center gap-5">
                 <div className="flex flex-col items-center gap-1">
                   <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
                   <div className="h-0.5 w-12 bg-sky/40 rounded-full" />
@@ -902,29 +900,14 @@ const CountryExploration: React.FC = () => {
 
                 {/* Actions */}
                 <div className="flex flex-col items-center gap-3 w-full pt-2">
-                  <button
+                  <Button
                     onClick={startTour}
-                    className="group relative w-full max-w-sm h-14 rounded-[22px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
-                    style={{
-                      background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
-                      border: '1px solid rgba(255,255,255,0.25)',
-                      backdropFilter: 'blur(40px) saturate(1.8)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
-                    }}
+                    variant="primary"
+                    size="lg"
+                    className="w-full max-w-sm text-sm font-black uppercase tracking-[0.2em]"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
-                    <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
-                    <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                      <span className="text-sm font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
-                        Start Tour
-                      </span>
-                      <div className="w-9 h-9 rounded-full bg-white/12 flex items-center justify-center group-hover:bg-white/20 transition-colors backdrop-blur-sm">
-                        <ChevronRight size={20} className="text-white transition-all" />
-                      </div>
-                    </div>
-                  </button>
+                    Start Tour <ChevronRight size={20} />
+                  </Button>
 
                   <button
                     onClick={() => navigate(`/country/${toSlug(country.name)}`)}
@@ -973,17 +956,39 @@ const CountryExploration: React.FC = () => {
 
            {/* Navigation Controls */}
            <div className="sticky top-24 z-50 w-full px-4 sm:px-6 flex justify-center items-center pointer-events-none">
-              {/* Progress Header */}
-              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 flex items-center gap-2 sm:gap-4 animate-in slide-in-from-top-4 duration-700 pointer-events-auto max-w-full overflow-hidden">
-                 <div className="w-2 h-2 rounded-full bg-sky animate-pulse shrink-0" />
-                 <span className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] shrink-0">
-                   STOP {stepIndex + 1} OF {tourData.stops.length}
-                 </span>
-                 <div className="h-4 w-[1px] bg-white/20 shrink-0" />
-                 <span className="text-[9px] sm:text-[10px] font-black text-sky-light uppercase tracking-[0.1em] sm:tracking-[0.2em] truncate">
-                      {currentStop.stopName}
-                 </span>
+              <div className="flex items-center gap-2 sm:gap-3 pointer-events-auto animate-in slide-in-from-top-4 duration-700 max-w-full">
+                {/* Prev Arrow */}
+                <button
+                  onClick={prevStop}
+                  disabled={stepIndex === 0}
+                  aria-label="Previous stop"
+                  className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/10 flex items-center justify-center text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+                >
+                  <ChevronLeft size={18} strokeWidth={2.5} />
+                </button>
+
+                {/* Progress Header */}
+                <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full px-3 sm:px-6 py-2 flex items-center gap-2 sm:gap-4 max-w-full overflow-hidden">
+                   <div className="w-2 h-2 rounded-full bg-sky animate-pulse shrink-0" />
+                   <span className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] shrink-0">
+                     STOP {stepIndex + 1} OF {tourData.stops.length}
+                   </span>
+                   <div className="h-4 w-[1px] bg-white/20 shrink-0" />
+                   <span className="text-[9px] sm:text-[10px] font-black text-sky-light uppercase tracking-[0.1em] sm:tracking-[0.2em] truncate">
+                        {currentStop.stopName}
+                   </span>
                 </div>
+
+                {/* Next Arrow */}
+                <button
+                  onClick={nextStop}
+                  disabled={stepIndex >= tourData.stops.length - 1}
+                  aria-label="Next stop"
+                  className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/10 flex items-center justify-center text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+                >
+                  <ChevronRight size={18} strokeWidth={2.5} />
+                </button>
+              </div>
            </div>
 
            {/* Narrative Content Scroll */}
@@ -1224,32 +1229,15 @@ const CountryExploration: React.FC = () => {
                       transition={{ delay: 0.2, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                       className="w-full md:w-auto shrink-0"
                     >
-                         <button
+                         <Button
                            onClick={nextQuestion}
                            disabled={!selectedOption || isExitingFeedback}
-                           className="group relative w-full md:min-w-[300px] h-16 rounded-2xl overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                           style={{
-                             background: 'linear-gradient(180deg, rgba(0,194,255,0.6) 0%, rgba(0,122,255,0.75) 100%)',
-                             boxShadow: '0 8px 32px rgba(0,194,255,0.25), inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 2px rgba(0,0,0,0.15)',
-                             border: '1px solid rgba(255,255,255,0.2)',
-                             backdropFilter: 'blur(16px)',
-                             WebkitBackdropFilter: 'blur(16px)',
-                           }}
+                           variant="primary"
+                           size="lg"
+                           className="w-full md:min-w-[300px] text-sm font-black uppercase tracking-[0.2em]"
                          >
-                           {/* Liquid glass layers */}
-                           <div className="absolute inset-0 bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" style={{ height: '55%' }} />
-                           <div className="absolute inset-x-4 top-[3px] h-[40%] bg-white/15 rounded-xl blur-[3px] pointer-events-none" />
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-                           <div className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/10 pointer-events-none" />
-                           <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                             <span className="text-sm font-black uppercase tracking-[0.2em] text-white/90">
-                               {isLastQuestion ? 'Finish Tour' : 'Next Stop'}
-                             </span>
-                             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                               <ChevronRight size={18} className="text-white/80 transition-all" />
-                             </div>
-                           </div>
-                         </button>
+                           {isLastQuestion ? 'Finish Tour' : 'Next Stop'} <ChevronRight size={18} />
+                         </Button>
                     </motion.div>
                 </div>
               </motion.div>
@@ -1266,10 +1254,17 @@ const CountryExploration: React.FC = () => {
       const isPerfect = score === tourData.stops.length;
       return (
         <Container className="w-full h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-16 pb-6 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
-          {/* Immersive Aurora Background */}
+          {/* Capital city background image */}
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[120%] bg-sky/15 rounded-full blur-3xl opacity-80" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[100%] bg-accent/7.5 rounded-full blur-3xl opacity-60" />
+            {capitalImage && (
+              <img
+                src={`${import.meta.env.BASE_URL}${capitalImage.replace(/^\//, '')}`}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )}
+            <div className="absolute inset-0 bg-surface-dark/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-surface-dark/40" />
           </div>
 
           <div className={`flex items-center justify-center relative z-10 w-full max-w-3xl transition-all duration-700 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
@@ -1491,30 +1486,14 @@ const CountryExploration: React.FC = () => {
 
                 {/* Action Controls: Compact */}
                 <div className="flex flex-col items-center gap-3 relative z-10 pt-4">
-                  <button
+                  <Button
                     onClick={restartTour}
-                    className="group relative w-full max-w-[280px] h-12 rounded-[20px] overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
-                    style={{
-                      background: 'linear-gradient(180deg, rgba(0,194,255,0.45) 0%, rgba(0,122,255,0.6) 100%)',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.12), 0 8px 24px rgba(0,122,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.1)',
-                      border: '1px solid rgba(255,255,255,0.25)',
-                      backdropFilter: 'blur(40px) saturate(1.8)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(1.8)',
-                    }}
+                    variant="primary"
+                    size="md"
+                    className="w-full max-w-[280px] text-xs font-black uppercase tracking-[0.2em]"
                   >
-                    {/* Liquid Glass specular highlight */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/8 to-transparent pointer-events-none" style={{ height: '50%' }} />
-                    <div className="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/8 to-transparent pointer-events-none" />
-
-                    {/* Content */}
-                    <div className="relative z-10 flex items-center justify-center gap-3 h-full">
-                      <RotateCcw size={14} className="text-white/80 group-hover:rotate-[-180deg] transition-transform duration-700" />
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-white drop-shadow-sm">
-                        Restart Tour
-                      </span>
-                    </div>
-                  </button>
+                    Restart Tour <RotateCcw size={14} />
+                  </Button>
                   
                   <button 
                     onClick={() => navigate(`/country/${toSlug(country.name)}`)}

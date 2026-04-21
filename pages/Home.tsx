@@ -1,45 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, BookOpen, ArrowRight, Compass, Globe2, GraduationCap, Zap, MapPin, Smartphone, Play, Star, Flame } from 'lucide-react';
+import { Trophy, Compass, Play } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
-import RevealSection from '../components/RevealSection';
 import { useLayout } from '../context/LayoutContext';
-
-import { useUser } from '../context/UserContext';
-import { ResponsiveAd } from '../components/AdSense';
-import { COUNTRIES } from '../constants';
-import { loadTours } from '../data/staticTours';
-import { getStaticImages } from '../data/images';
-import { toSlug } from '../utils/slug';
-import { TourData } from '../types';
 import { useTranslation } from '../context/LocaleContext';
-
-const Section: React.FC<{
-  children: React.ReactNode;
-  background?: React.ReactNode;
-  className?: string;
-}> = ({ children, background, className = '' }) => (
-  <section className={`relative overflow-hidden isolate w-full ${className}`}>
-    {background && (
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {background}
-      </div>
-    )}
-    <div
-      className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8"
-      style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
-    >
-      {children}
-    </div>
-  </section>
-);
+import { VerticalSidebarAd } from '../components/AdSense';
 
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
-  const _user = useUser(); // Guest-only context for fact-of-the-day
-  const [factImage, setFactImage] = useState('');
-  const [factOfTheDay, setFactOfTheDay] = useState<{ country: typeof COUNTRIES[0]; stop: TourData['stops'][0]; fact: string } | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -48,60 +17,39 @@ const Home: React.FC = () => {
     (window as any).__dismissLoader?.();
   }, [setPageLoading]);
 
-  // Stop of the Day — load tours async, then pick seeded random fact
-  useEffect(() => {
-    loadTours().then(tours => {
-      const today = new Date();
-      const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-
-      // Simple seeded pseudo-random
-      const seededRandom = (s: number) => {
-        const x = Math.sin(s) * 10000;
-        return x - Math.floor(x);
-      };
-
-      // Pick a country that has tour data
-      const countriesWithTours = COUNTRIES.filter(c => tours[c.name]?.stops?.length > 0);
-      const countryIndex = Math.floor(seededRandom(seed) * countriesWithTours.length);
-      const country = countriesWithTours[countryIndex];
-      const tour = tours[country.name];
-
-      // Pick a random stop from that country's tour
-      const stopIndex = Math.floor(seededRandom(seed + 1) * tour.stops.length);
-      const stop = tour.stops[stopIndex];
-
-      // Pick a fun fact paragraph from the stop's description
-      const factIndex = Math.floor(seededRandom(seed + 2) * stop.description.length);
-      const fact = stop.description[factIndex];
-
-      setFactOfTheDay({ country, stop, fact });
-
-      // Load image for the selected fact
-      getStaticImages().then(images => {
-        const img = images[stop.imageKeyword] || images[country.name] || '';
-        setFactImage(img);
-      });
-    });
-  }, []);
-
   return (
     <main className="relative flex-grow bg-[#0F172A] w-full home-glow">
       <style>{`
         .home-glow h1, .home-glow h2 {
           text-shadow: 0 0 40px rgba(0,194,255,0.15), 0 0 80px rgba(0,194,255,0.08);
         }
-        .home-glow h3 {
-          text-shadow: 0 0 25px rgba(0,194,255,0.12), 0 0 50px rgba(0,194,255,0.06);
-        }
         .home-glow .glow-badge {
           box-shadow: 0 0 15px rgba(0,194,255,0.15), 0 0 40px rgba(0,194,255,0.06);
-        }
-        .home-glow .glow-card {
-          box-shadow: 0 0 30px rgba(0,194,255,0.08), 0 0 60px rgba(0,194,255,0.04);
         }
         .home-glow .glow-bubble {
           box-shadow: 0 0 20px rgba(0,194,255,0.2), 0 0 50px rgba(0,194,255,0.08), inset -4px -4px 12px rgba(255,255,255,0.25), inset 4px 4px 8px rgba(255,255,255,0.1);
         }
+        @keyframes aurora-drift {
+          0%, 100% { transform: translate(-5%, -5%) rotate(0deg) scale(1); }
+          33%      { transform: translate(5%, 2%) rotate(120deg) scale(1.12); }
+          66%      { transform: translate(-2%, 5%) rotate(240deg) scale(0.95); }
+        }
+        .home-aurora { animation: aurora-drift 40s ease-in-out infinite; }
+        @keyframes star-twinkle {
+          0%, 100% { opacity: 0.5; }
+          50%      { opacity: 0.9; }
+        }
+        .home-stars { animation: star-twinkle 6s ease-in-out infinite; }
+        @keyframes gutter-breathe-l {
+          0%, 100% { opacity: 0.55; transform: translateY(-50%) scale(1); }
+          50%      { opacity: 0.85; transform: translateY(-50%) scale(1.08); }
+        }
+        @keyframes gutter-breathe-r {
+          0%, 100% { opacity: 0.55; transform: translateY(-50%) scale(1.05); }
+          50%      { opacity: 0.85; transform: translateY(-50%) scale(1); }
+        }
+        .home-gutter-l { animation: gutter-breathe-l 9s ease-in-out infinite; }
+        .home-gutter-r { animation: gutter-breathe-r 11s ease-in-out infinite; }
       `}</style>
       <SEO
         title="ExploreCapitals | Free Geography Games, World Capitals Quiz & Interactive Map"
@@ -139,564 +87,121 @@ const Home: React.FC = () => {
         }}
       />
 
+      <VerticalSidebarAd slot="9489406693" position="left" />
+      <VerticalSidebarAd slot="9489406693" position="right" />
+
       {/* ═══════════════ HERO ═══════════════ */}
-      <Section
-        className="min-h-screen flex items-center"
-        background={
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.08)_0%,transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,rgba(52,199,89,0.05)_0%,transparent_40%)]" />
-            <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-[#0F172A] to-transparent" />
-          </div>
-        }
-      >
-        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-x-10 lg:gap-y-3 xl:gap-x-16 xl:gap-y-4 items-center pt-20 sm:pt-24 md:pt-[12vh] lg:pt-[12vh] pb-12 sm:pb-16 md:pb-[6vh]">
-          {/* Badge */}
-          <div className="text-center lg:text-left lg:col-start-1">
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/5 backdrop-blur-xl border-2 border-white/30 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white shadow-premium transition-all hover:bg-white/10 cursor-default glow-badge">
-              <Zap size={10} fill="currentColor" className="animate-pulse text-sky sm:w-3 sm:h-3" />
-              <span>{t('home.badge')}</span>
-            </div>
-          </div>
+      <section className="relative overflow-hidden isolate w-full min-h-screen flex items-center md:items-start">
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {/* Star field */}
+          <div
+            className="absolute inset-0 home-stars"
+            style={{
+              backgroundImage:
+                'radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,0.55), transparent 60%),' +
+                'radial-gradient(1px 1px at 27% 68%, rgba(0,194,255,0.65), transparent 60%),' +
+                'radial-gradient(1.5px 1.5px at 42% 14%, rgba(255,255,255,0.7), transparent 60%),' +
+                'radial-gradient(1px 1px at 56% 83%, rgba(255,255,255,0.4), transparent 60%),' +
+                'radial-gradient(1px 1px at 71% 37%, rgba(139,200,255,0.55), transparent 60%),' +
+                'radial-gradient(1.5px 1.5px at 83% 61%, rgba(255,255,255,0.55), transparent 60%),' +
+                'radial-gradient(1px 1px at 91% 19%, rgba(0,194,255,0.5), transparent 60%),' +
+                'radial-gradient(1px 1px at 8% 82%, rgba(255,255,255,0.5), transparent 60%)',
+              backgroundSize: '100% 100%',
+            }}
+          />
 
-          {/* Heading */}
-          <div className="text-center lg:text-left lg:col-start-1">
-            <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-[clamp(4.5rem,7vw,6rem)] font-display font-black text-white tracking-tighter leading-[1.05] uppercase drop-shadow-2xl overflow-visible">
-              {t('home.hero.play')} <br className="hidden lg:block" />{t('home.hero.your')} <br />
-              <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible" style={{ paddingBottom: '0.15em', paddingRight: '0.1em', display: 'inline-block' }}>
-                {t('home.hero.atlas')}
-              </span>
+          {/* Aurora conic sweep */}
+          <div
+            className="absolute top-1/2 left-1/2 w-[160%] h-[160%] -translate-x-1/2 -translate-y-1/2 home-aurora"
+            style={{
+              background:
+                'conic-gradient(from 180deg at 50% 50%, rgba(0,194,255,0.12) 0deg, transparent 70deg, rgba(80,120,255,0.08) 140deg, transparent 220deg, rgba(0,230,255,0.14) 300deg, transparent 360deg)',
+              filter: 'blur(90px)',
+            }}
+          />
+
+          {/* Left gutter glow pocket */}
+          <div
+            className="absolute top-1/2 -left-[25%] w-[75%] h-[120%] rounded-full home-gutter-l"
+            style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,120,255,0.06) 40%, transparent 70%)', filter: 'blur(60px)' }}
+          />
+
+          {/* Right gutter glow pocket */}
+          <div
+            className="absolute top-1/2 -right-[25%] w-[75%] h-[120%] rounded-full home-gutter-r"
+            style={{ background: 'radial-gradient(circle, rgba(120,90,255,0.14) 0%, rgba(0,194,255,0.06) 40%, transparent 70%)', filter: 'blur(60px)' }}
+          />
+
+          {/* Original top atmospherics (kept) */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,rgba(52,199,89,0.05)_0%,transparent_40%)]" />
+          <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-[#0F172A] to-transparent" />
+        </div>
+        <div
+          className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8"
+          style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
+        >
+          <div className="max-w-7xl mx-auto flex flex-col items-center justify-center pt-20 md:pt-[15vh] pb-12 md:pb-12">
+            {/* Wordmark */}
+            <h1 className="font-display font-black text-5xl md:text-5xl tracking-tighter uppercase text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] text-center mb-8 md:mb-8">
+              Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
             </h1>
-          </div>
 
-          {/* Globe */}
-          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-5 flex justify-center items-center my-1 sm:my-2 lg:my-0">
-            {/* Animated glow rings */}
-            <div
-              className="absolute w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] md:w-[520px] md:h-[520px] lg:w-[clamp(580px,58vw,880px)] lg:h-[clamp(580px,58vw,880px)] rounded-full pointer-events-none animate-glow-pulse"
-              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
-            />
-            <div
-              className="absolute w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] lg:w-[clamp(480px,48vw,720px)] lg:h-[clamp(480px,48vw,720px)] rounded-full pointer-events-none animate-glow-pulse-slow"
-              style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
-            />
+            {/* Globe */}
+            <div className="relative flex justify-center items-center mb-10 md:mb-12">
+              {/* Animated glow rings */}
+              <div
+                className="absolute w-[560px] h-[560px] md:w-[620px] md:h-[620px] rounded-full pointer-events-none animate-glow-pulse"
+                style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
+              />
+              <div
+                className="absolute w-[460px] h-[460px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none animate-glow-pulse-slow"
+                style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
+              />
 
-            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[clamp(380px,40vw,600px)] lg:h-[clamp(380px,40vw,600px)] flex-shrink-0 pointer-events-none">
-              <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
-                <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
-                  <img
-                    src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
-                    alt="Globe - Click to explore the map"
-                    className="w-[82%] h-[82%] object-contain"
-                    loading="eager"
-                    fetchPriority="high"
-                  />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
-                  <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
-                </Link>
-              </div>
-
-              {/* Decorative floating bubbles */}
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 md:top-2 md:right-2 z-10 pointer-events-none animate-float-gentle">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-28 xl:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                  <Trophy className="text-sky w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 lg:w-11 lg:h-11 xl:w-14 xl:h-14" />
+              <div className="relative w-[360px] h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
+                <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
+                  <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                    <img
+                      src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
+                      alt="Globe - Click to explore the map"
+                      className="w-[82%] h-[82%] object-contain"
+                      loading="eager"
+                      fetchPriority="high"
+                    />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
+                    <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
+                  </Link>
                 </div>
-              </div>
-              <div className="absolute -bottom-1 -left-2 sm:-bottom-2 sm:-left-4 md:bottom-2 md:-left-8 lg:-left-12 z-10 pointer-events-none animate-float-gentle-delayed">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-36 xl:h-36 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                  <Compass className="text-sky w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-[80px] xl:h-[80px]" />
+
+                {/* Decorative floating bubbles */}
+                <div className="absolute -top-1 -right-1 md:top-2 md:right-2 z-10 pointer-events-none animate-float-gentle">
+                  <div className="w-20 h-20 md:w-24 md:h-24 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
+                    <Trophy className="text-sky w-10 h-10 md:w-12 md:h-12" />
+                  </div>
+                </div>
+                <div className="absolute -bottom-1 -left-2 md:bottom-2 md:-left-8 z-10 pointer-events-none animate-float-gentle-delayed">
+                  <div className="w-24 h-24 md:w-28 md:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
+                    <Compass className="text-sky w-12 h-12 md:w-14 md:h-14" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Description */}
-          <div className="text-center lg:text-left lg:col-start-1 mt-2 sm:mt-3 lg:-mt-1 lg:mb-4">
-            <p className="text-sm sm:text-base md:text-lg lg:text-lg text-white/50 max-w-md mx-auto lg:mx-0 leading-relaxed font-bold px-2 sm:px-0">
-              {t('home.hero.desc')}
-            </p>
-          </div>
-
-          {/* Button */}
-          <div className="text-center lg:text-left lg:col-start-1 mt-3 sm:mt-5 lg:mt-0">
-            <Link to="/games">
-              <Button variant="primary" size="lg" className="w-64 sm:w-72 md:w-80 lg:w-80 h-14 sm:h-16 md:h-[4.5rem] lg:h-[4.5rem] text-xl sm:text-2xl md:text-2xl lg:text-2xl group uppercase">
-                {t('home.hero.play')} <Play className="ml-2 transition-transform sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-8 lg:h-8" size={24} fill="currentColor" />
-              </Button>
-            </Link>
+            {/* Button */}
+            <div className="text-center">
+              <Link to="/games">
+                <Button variant="primary" size="lg" className="w-80 md:w-96 h-20 text-3xl uppercase tracking-widest font-black">
+                  {t('home.hero.play')} <Play className="ml-2 w-9 h-9" fill="currentColor" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </Section>
+      </section>
 
-      {/* ═══════════════ STOP OF THE DAY ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 md:mb-8 justify-center lg:justify-start">
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] glow-badge">
-              <Zap size={10} fill="currentColor" className="text-sky" />
-              <span>{t('home.stopOfTheDay')}</span>
-            </div>
-          </div>
-
-          {factOfTheDay ? (
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden relative group glow-card">
-            {/* Background image */}
-            <div className="absolute inset-0 pointer-events-none">
-              {factImage && (
-                <img
-                  src={`${import.meta.env.BASE_URL}${factImage.startsWith('/') ? factImage.slice(1) : factImage}`}
-                  alt=""
-                  className="w-full h-full object-cover opacity-[0.07] blur-sm scale-110"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-            </div>
-
-            <div className="grid md:grid-cols-[1fr_1.2fr] gap-0 relative z-10">
-              {/* Landmark Image */}
-              <div className="relative aspect-[16/9] sm:aspect-[2/1] md:aspect-auto overflow-hidden">
-                {factImage && (
-                  <img
-                    src={`${import.meta.env.BASE_URL}${factImage.startsWith('/') ? factImage.slice(1) : factImage}`}
-                    alt={factOfTheDay.stop.stopName}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0F172A]/80" />
-                {/* Country badge */}
-                <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 md:bottom-4 md:left-4 flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-md rounded-lg px-2 py-1.5 sm:px-2.5 sm:py-1.5 border border-white/10">
-                  <span className="text-base sm:text-lg md:text-xl">{factOfTheDay.country.flag}</span>
-                  <div>
-                    <div className="text-[7px] sm:text-[8px] font-black text-sky uppercase tracking-[0.15em] leading-none">{factOfTheDay.country.region}</div>
-                    <div className="text-xs sm:text-sm md:text-base font-display font-black text-white uppercase tracking-tight leading-none">{factOfTheDay.country.name}</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Fact Content */}
-              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center items-center md:items-start text-center md:text-left">
-                <h3 className="flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base md:text-lg font-black text-sky uppercase tracking-wider leading-tight mb-2 sm:mb-3 max-w-full whitespace-nowrap overflow-hidden">
-                  <MapPin className="text-sky shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
-                  <span className="truncate">{factOfTheDay.stop.stopName}</span>
-                </h3>
-                <p className="text-white/60 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-6 sm:mb-8 font-medium">
-                  {factOfTheDay.fact}
-                </p>
-                <Link to={`/country/${toSlug(factOfTheDay.country.name)}`}>
-                  <Button variant="secondary" size="md" className="h-10 sm:h-11 px-5 sm:px-6 text-xs sm:text-sm uppercase bg-white/5 border-white/10 hover:bg-white/10">
-                    {t('home.explore', { country: factOfTheDay.country.name })} <ArrowRight size={14} className="ml-1" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-          ) : (
-          /* Skeleton — same card shape so nothing shifts when data arrives */
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden glow-card">
-            <div className="grid md:grid-cols-[1fr_1.2fr] gap-0">
-              {/* Image placeholder */}
-              <div className="aspect-[16/9] sm:aspect-[2/1] md:min-h-[260px] bg-white/[0.04] animate-pulse" />
-              {/* Text placeholder */}
-              <div className="p-5 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-center gap-3">
-                <div className="h-4 bg-white/[0.07] rounded-full animate-pulse w-2/5" />
-                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-full" />
-                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[90%]" />
-                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[80%]" />
-                <div className="h-3 bg-white/[0.05] rounded-full animate-pulse w-[70%]" />
-                <div className="mt-2 h-9 bg-white/[0.06] rounded-xl animate-pulse w-36" />
-              </div>
-            </div>
-          </div>
-          )}
-        </RevealSection>
-      </Section>
-
-      {/* ═══════════════ GAMES ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between mb-6 sm:mb-8 md:mb-12 gap-4 sm:gap-6 text-center sm:text-left">
-            <div className="max-w-xl">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none drop-shadow-xl">{t('home.games.title')}</h2>
-              <p className="text-white/40 text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest">{t('home.games.subtitle')}</p>
-            </div>
-            <Link to="/games">
-              <Button variant="secondary" size="md" className="px-6 sm:px-8 h-10 sm:h-12 text-xs sm:text-sm uppercase bg-white/5 border-white/10 backdrop-blur-lg hover:bg-white/10">
-                {t('home.games.allGames')}
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-            <GameCard
-              title={t('home.games.capitalQuiz.title')}
-              desc={t('home.games.capitalQuiz.desc')}
-              icon={<GraduationCap size={28} />}
-              color="bg-gel-blue"
-              link="/games/capital-quiz"
-              stats={t('home.games.playNow')}
-              image="./png/GAMES/capital-quiz.png"
-            />
-            <GameCard
-              title={t('home.games.mapDash.title')}
-              desc={t('home.games.mapDash.desc')}
-              icon={<Globe2 size={28} />}
-              color="bg-sky"
-              link="/games/map-dash"
-              stats={t('home.games.playNow')}
-              image="./png/GAMES/map-dash.png"
-            />
-            <GameCard
-              title={t('home.games.flagFrenzy.title')}
-              desc={t('home.games.flagFrenzy.desc')}
-              icon={<Trophy size={28} />}
-              color="bg-accent"
-              link="/games/flag-frenzy"
-              stats={t('home.games.playNow')}
-              image="./png/GAMES/flag-frenzy.png"
-            />
-          </div>
-        </RevealSection>
-      </Section>
-
-      {/* ═══════════════ LOYALTY PATH ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-7xl mx-auto">
-          <div className="bg-white/[0.02] border border-white/10 rounded-2xl sm:rounded-[2.5rem] md:rounded-[4rem] p-5 sm:p-8 md:p-12 lg:p-20 overflow-hidden relative group glow-card">
-            <div className="absolute inset-0 bg-aurora opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none" />
-
-            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center relative z-10">
-              <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1 sm:py-1.5 bg-sky/10 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 md:mb-8 glow-badge">
-                  <span>{t('home.loyalty.badge')}</span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-black text-white mb-3 sm:mb-4 md:mb-8 leading-[0.95] tracking-tighter uppercase">
-                  {t('home.loyalty.learn')} <br />
-                  <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">{t('home.loyalty.earnRewards')}</span>
-                </h2>
-                <p className="text-sm sm:text-base md:text-lg text-white/50 mb-4 sm:mb-6 md:mb-10 leading-relaxed font-bold max-w-md mx-auto lg:mx-0 uppercase tracking-wide">
-                  {t('home.loyalty.desc')}
-                </p>
-                <Link to="/loyalty">
-                  <Button variant="primary" size="lg" className="h-11 sm:h-14 md:h-16 px-8 sm:px-10 md:px-12 text-base sm:text-lg uppercase">
-                    {t('home.loyalty.viewRanks')}
-                  </Button>
-                </Link>
-              </div>
-
-              <div className="relative">
-                <div className="bg-white/5 border border-white/10 p-4 sm:p-6 md:p-10 rounded-xl sm:rounded-2xl md:rounded-[3rem] transform transition-all duration-700 glow-card">
-                  <div className="flex items-center gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-10">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white border border-white/20 relative overflow-hidden flex-shrink-0">
-                      <Trophy size={24} className="relative z-10 drop-shadow-lg sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                      <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
-                    </div>
-                    <div>
-                      <div className="text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1">{t('home.loyalty.currentRank')}</div>
-                      <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter leading-none">{t('home.loyalty.explorer')}</h3>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 sm:space-y-6 md:space-y-10">
-                    <div>
-                      <div className="flex justify-between items-end mb-2 sm:mb-3 md:mb-4">
-                        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/30">{t('home.loyalty.nextLevel')}</span>
-                        <span className="text-base sm:text-lg md:text-xl font-black text-sky">75%</span>
-                      </div>
-                      <div className="h-2.5 sm:h-3 md:h-4 w-full bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <div
-                          className="h-full bg-frutiger-gradient rounded-full relative"
-                          style={{ width: '75%' }}
-                        >
-                          <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
-                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Star size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">{t('home.loyalty.earnPoints')}</div>
-                      </div>
-                      <div className="p-3 sm:p-4 md:p-8 bg-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 flex flex-col items-center hover:bg-white/10 transition-colors text-center glow-card">
-                        <div className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white leading-none mb-1 sm:mb-2"><Flame size={24} className="inline sm:w-7 sm:h-7 md:w-8 md:h-8" /></div>
-                        <div className="text-[8px] sm:text-[9px] md:text-[10px] text-sky font-black uppercase tracking-[0.2em] sm:tracking-[0.3em]">{t('home.loyalty.buildStreaks')}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </RevealSection>
-      </Section>
-
-      {/* Strategic Ad Placement */}
-      <Section className="py-4 md:py-8">
-        <div className="max-w-4xl mx-auto">
-          <ResponsiveAd slot="2512934803" className="rounded-2xl overflow-hidden" />
-        </div>
-      </Section>
-
-      {/* ═══════════════ WHY GEOGRAPHY ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-5xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8 md:mb-12">
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 glow-badge">
-              <Globe2 size={10} className="text-sky" />
-              <span>{t('home.whyGeo.badge')}</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter uppercase leading-none mb-4 sm:mb-6 drop-shadow-xl">
-              {t('home.whyGeo.title1')}<br />
-              <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">{t('home.whyGeo.title2')}</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 md:gap-8">
-            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <GraduationCap className="text-sky w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.academic.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.whyGeo.academic.desc')}
-              </p>
-            </div>
-
-            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Compass className="text-accent w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.global.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.whyGeo.global.desc')}
-              </p>
-            </div>
-
-            <div className="bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-center glow-card">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-warning/10 rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Zap className="text-warning w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-display font-black text-white uppercase tracking-tight mb-2 sm:mb-3">{t('home.whyGeo.learn.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.whyGeo.learn.desc')}
-              </p>
-            </div>
-          </div>
-
-          <p className="text-white/30 text-xs sm:text-sm text-center mt-6 sm:mt-8 md:mt-10 max-w-3xl mx-auto leading-relaxed font-medium">
-            {t('home.whyGeo.footer')}
-          </p>
-        </RevealSection>
-      </Section>
-
-      {/* ═══════════════ EXPLORE ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8 md:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display font-black text-white mb-2 sm:mb-4 md:mb-6 tracking-tighter uppercase leading-none">{t('home.exploreSection.title')}</h2>
-            <p className="text-white/40 text-sm sm:text-base md:text-xl font-bold max-w-2xl mx-auto uppercase tracking-widest px-2">{t('home.exploreSection.subtitle')}</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-8 lg:gap-10">
-            <Link to="/database" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)] glow-card">
-                {/* Database preview background */}
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-700">
-                  <div className="absolute inset-0 flex flex-col gap-[6px] p-3 sm:p-4 md:p-6 pt-8 sm:pt-10 md:pt-14">
-                    {/* Mock header row */}
-                    <div className="flex items-center gap-2 pb-2 border-b border-white/15 mb-1">
-                      <div className="w-6 h-3 rounded bg-white/25" />
-                      <div className="w-16 h-3 rounded bg-white/25" />
-                      <div className="flex-1" />
-                      <div className="w-12 h-3 rounded bg-white/20" />
-                      <div className="w-14 h-3 rounded bg-white/20" />
-                    </div>
-                    {/* Mock data rows */}
-                    {[...Array(12)].map((_, i) => (
-                      <div key={i} className="flex items-center gap-2 py-[5px] px-2 rounded-lg bg-white/[0.04]">
-                        <div className="w-5 h-4 rounded-sm bg-white/20 shrink-0" />
-                        <div className="h-3 rounded bg-white/25" style={{ width: `${50 + (i * 7) % 40}%` }} />
-                        <div className="flex-1" />
-                        <div className="w-10 h-3 rounded bg-sky/20 shrink-0" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-gel-blue rounded-full flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
-                  <BookOpen size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
-                </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>{t('home.exploreSection.database')}</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>{t('home.exploreSection.databaseDesc')}</p>
-                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
-                  {t('home.exploreSection.browseNow')} <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
-                </div>
-              </div>
-            </Link>
-
-            <Link to="/map" className="group">
-              <div className="h-full p-5 sm:p-6 md:p-12 bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] flex flex-col items-center text-center transition-all duration-500 hover:bg-white/[0.08] relative overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.15)] glow-card">
-                {/* Map wireframe preview background */}
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05] group-hover:opacity-[0.08] transition-opacity duration-700">
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid slice">
-                    <g stroke="white" strokeWidth="0.8" fill="none">
-                      <path d="M 100 150 L 120 120 L 140 130 L 130 160 Z" />
-                      <path d="M 130 200 L 145 180 L 155 220 Z" />
-                      <path d="M 350 140 L 380 130 L 400 150 L 370 160 Z" />
-                      <path d="M 400 180 L 430 160 L 450 240 L 420 260 Z" />
-                      <path d="M 480 120 L 550 100 L 600 150 L 520 180 Z" />
-                      <path d="M 650 320 L 680 310 L 690 340 L 660 350 Z" />
-                    </g>
-                    <g stroke="white" strokeWidth="0.3" opacity="0.3">
-                      <line x1="0" y1="100" x2="960" y2="100" />
-                      <line x1="0" y1="200" x2="960" y2="200" />
-                      <line x1="0" y1="300" x2="960" y2="300" />
-                      <line x1="0" y1="400" x2="960" y2="400" />
-                      <line x1="200" y1="0" x2="200" y2="500" />
-                      <line x1="400" y1="0" x2="400" y2="500" />
-                      <line x1="600" y1="0" x2="600" y2="500" />
-                      <line x1="800" y1="0" x2="800" y2="500" />
-                    </g>
-                  </svg>
-                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '30%', left: '15%' }} />
-                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '35%', left: '42%' }} />
-                  <div className="absolute w-1.5 h-1.5 rounded-full bg-accent/20" style={{ top: '50%', left: '45%' }} />
-                  <div className="absolute w-2 h-2 rounded-full bg-sky/20" style={{ top: '25%', left: '65%' }} />
-                  <div className="absolute w-1.5 h-1.5 rounded-full bg-warning/20" style={{ top: '65%', left: '70%' }} />
-                </div>
-
-                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 bg-accent rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-10 border border-white/20 relative z-10 glow-bubble">
-                  <Compass size={24} className="sm:w-7 sm:h-7 md:w-10 md:h-10" />
-                </div>
-                <h3 className="text-xl sm:text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 relative z-10" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8), 0 4px 24px rgba(0,0,0,0.5)' }}>{t('home.exploreSection.atlas')}</h3>
-                <p className="text-white/40 text-sm sm:text-base md:text-xl leading-relaxed mb-4 sm:mb-6 md:mb-10 font-bold max-w-xs relative z-10" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}>{t('home.exploreSection.atlasDesc')}</p>
-                <div className="mt-auto inline-flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px] md:text-[10px] font-black text-accent uppercase tracking-[0.3em] sm:tracking-[0.4em] transition-transform relative z-10" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
-                  {t('home.exploreSection.openAtlas')} <ArrowRight size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
-                </div>
-              </div>
-            </Link>
-          </div>
-        </RevealSection>
-      </Section>
-
-      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <Section className="py-12 sm:py-16 md:py-24">
-        <RevealSection className="max-w-5xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8 md:mb-12">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-white tracking-tighter uppercase leading-none mb-3 sm:mb-4 drop-shadow-xl">{t('home.howItWorks.title')}</h2>
-            <p className="text-white/40 text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest">{t('home.howItWorks.subtitle')}</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 md:gap-8">
-            <div className="text-center md:text-left">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">01</div>
-              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step1.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.howItWorks.step1.desc')}
-              </p>
-            </div>
-
-            <div className="text-center md:text-left">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">02</div>
-              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step2.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.howItWorks.step2.desc')}
-              </p>
-            </div>
-
-            <div className="text-center md:text-left">
-              <div className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-sky/20 mb-2">03</div>
-              <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight mb-2">{t('home.howItWorks.step3.title')}</h3>
-              <p className="text-white/50 text-xs sm:text-sm leading-relaxed font-medium">
-                {t('home.howItWorks.step3.desc')}
-              </p>
-            </div>
-          </div>
-        </RevealSection>
-      </Section>
-
-      {/* ═══════════════ START YOUR EXPEDITION ═══════════════ */}
-      <Section
-        className="py-12 sm:py-16 md:py-24"
-        background={
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[80%] h-[60%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(0,194,255,0.06)_0%,transparent_60%)] blur-[30px]" />
-          </div>
-        }
-      >
-        <RevealSection className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display font-black text-white mb-3 sm:mb-6 md:mb-10 tracking-tighter uppercase leading-[0.9] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-            {t('home.cta.title1')} <br />
-            <span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">
-              {t('home.cta.title2')}
-            </span>
-          </h2>
-
-          <p className="text-sm sm:text-base md:text-xl lg:text-2xl mb-4 sm:mb-6 md:mb-10 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed text-white/30 px-2">
-            {t('home.cta.subtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 md:gap-6 px-2">
-            <Link to="/games" className="group/btn w-full sm:w-auto">
-              <Button variant="primary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase border-2 border-white/30 transition-all group">
-                {t('home.cta.play')} <Play className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" fill="currentColor" />
-              </Button>
-            </Link>
-            <div className="group/btn w-full sm:w-auto">
-              <Button variant="secondary" size="lg" className="w-full sm:w-72 md:w-80 lg:w-72 xl:w-96 h-16 sm:h-24 md:h-28 lg:h-20 xl:h-28 text-xl sm:text-2xl md:text-3xl lg:text-xl xl:text-3xl uppercase bg-white/5 border-2 border-white/10 backdrop-blur-md hover:bg-white/10 transition-all whitespace-nowrap group cursor-default opacity-60">
-                {t('home.cta.iosAppSoon')} <Smartphone className="ml-2 w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-5 lg:h-5 xl:w-8 xl:h-8" />
-              </Button>
-            </div>
-          </div>
-        </RevealSection>
-      </Section>
     </main>
   );
 };
-
-const GameCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; color: string; link: string; stats: string; image?: string }> = ({
-  title,
-  desc,
-  icon,
-  color,
-  link,
-  stats,
-  image,
-}) => (
-  <Link to={link} className="group block h-full relative">
-    {/* Solid Gel-style background — no backdrop-blur to avoid rendering rectangles on hover/scroll */}
-    <div className={`absolute inset-0 bg-white/10 rounded-2xl sm:rounded-[2rem] lg:rounded-[3rem] border-2 border-white/40 transition-all duration-700 ease-out group-hover:bg-white/15 group-hover:border-white/60 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.15),0_0_25px_rgba(0,194,255,0.08),0_0_50px_rgba(0,194,255,0.04)]`}>
-      {/* Thumbnail background image */}
-      {image && (
-        <div className="absolute inset-0">
-          <img src={image} alt="" className="w-full h-full object-cover opacity-[0.07] group-hover:opacity-[0.12] scale-110 group-hover:scale-105 transition-all duration-700" loading="lazy" decoding="async" />
-        </div>
-      )}
-      {/* Glossy overlay layer */}
-      <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
-      {/* Accent glow on hover */}
-      <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 ease-out ${color}`} />
-    </div>
-
-    <div className="relative p-5 sm:p-6 md:p-8 lg:p-12 flex flex-col h-full z-10">
-      <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 ${color} rounded-xl sm:rounded-2xl flex items-center justify-center text-white mb-4 sm:mb-6 md:mb-8 lg:mb-10 transition-all duration-700 ease-out relative overflow-hidden border-2 border-white/40`}>
-        <div className="relative z-10 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6 md:[&>svg]:w-7 md:[&>svg]:h-7 lg:[&>svg]:w-8 lg:[&>svg]:h-8">{icon}</div>
-        <div className="absolute inset-0 bg-glossy-gradient opacity-40" />
-      </div>
-      <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-3 md:mb-4 leading-none group-hover:text-sky-light transition-colors duration-500 ease-out drop-shadow-md">
-        {title}
-      </h3>
-      <p className="text-white/60 text-sm sm:text-base md:text-base lg:text-lg leading-relaxed mb-4 sm:mb-6 md:mb-8 lg:mb-10 font-bold uppercase tracking-wide group-hover:text-white/80 transition-colors duration-500 ease-out">{desc}</p>
-      <div className="mt-auto pt-4 sm:pt-5 md:pt-6 lg:pt-8 border-t border-white/10 flex items-center justify-between">
-        <div className="text-[8px] sm:text-[9px] md:text-[10px] font-black text-sky-light uppercase tracking-[0.2em] sm:tracking-[0.3em] drop-shadow-sm">{stats}</div>
-        <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center text-white transition-all duration-300 ease-out border border-white/10 shadow-inner hover:bg-white/20 hover:border-white/40 hover:scale-110">
-          <ArrowRight size={18} className="sm:w-5 sm:h-5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-        </div>
-      </div>
-    </div>
-  </Link>
-);
 
 export default Home;

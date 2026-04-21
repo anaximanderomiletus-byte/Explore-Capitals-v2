@@ -5,7 +5,7 @@
   "nav.map": "Map",
   "nav.about": "About",
   "nav.blog": "Blog",
-  "nav.playNow": "Play Now",
+  "nav.playNow": "Play",
   "nav.play": "Play",
   "nav.appSoon": "App Soon",
   "nav.iosAppComingSoon": "iOS App Coming Soon",
@@ -22,7 +22,7 @@
 
   "home.badge": "Free Global Education",
   "home.hero.play": "Play",
-  "home.hero.your": "Your",
+  "home.hero.your": "The",
   "home.hero.atlas": "Atlas.",
   "home.hero.desc": "Master world capitals, identify flags, and conquer the map. High-fidelity geography games designed to build global intuition.",
   "home.stopOfTheDay": "Stop of the Day",
@@ -37,7 +37,7 @@
   "home.games.mapDash.desc": "Click the correct country on an unlabeled map before the timer runs out. Sharpens spatial memory.",
   "home.games.flagFrenzy.title": "Flag Frenzy",
   "home.games.flagFrenzy.desc": "Match flags to their nations across every continent. Learn the stories behind the colors and symbols.",
-  "home.games.playNow": "Play Now",
+  "home.games.playNow": "Play",
 
   "home.loyalty.badge": "Loyalty Path",
   "home.loyalty.learn": "Learn.",
@@ -83,7 +83,7 @@
   "home.cta.title2": "Expedition.",
   "home.cta.subtitle": "Master the atlas and join the global elite.",
   "home.cta.play": "Play",
-  "home.cta.iosAppSoon": "iOS App Soon",
+  "home.cta.iosAppSoon": "App Soon",
 
   "games.badge": "GAMES",
   "games.title": "Games",
@@ -128,6 +128,8 @@
   "about.cta.exploreMap": "Explore Map",
 
   "game.backToGames": "Back to Games",
+  "game.viewOtherGames": "View Other Games",
+  "game.randomGame": "Random Game",
   "game.playAgain": "Play Again",
   "game.score": "Score",
   "game.timeLeft": "Time Left",
@@ -162,7 +164,7 @@
   "blog.backToBlog": "Back to Blog",
   "blog.exploreGames": "Explore Our Games",
   "blog.exploreGamesDesc": "Put your geography knowledge to the test with our free interactive games.",
-  "blog.playNow": "Play Now",
+  "blog.playNow": "Play",
   "blog.allArticles": "All Articles",
   "blog.noArticles": "No articles yet",
   "blog.noArticlesDesc": "Check back soon for new geography articles and guides.",

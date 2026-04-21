@@ -5,7 +5,7 @@
   "nav.map": "Carte",
   "nav.about": "À propos",
   "nav.blog": "Blog",
-  "nav.playNow": "Jouer maintenant",
+  "nav.playNow": "Jouer",
   "nav.play": "Jouer",
   "nav.appSoon": "App bientôt",
   "nav.iosAppComingSoon": "App iOS bientôt disponible",
@@ -22,7 +22,7 @@
 
   "home.badge": "Éducation mondiale gratuite",
   "home.hero.play": "Jouez",
-  "home.hero.your": "votre",
+  "home.hero.your": "à l'",
   "home.hero.atlas": "Atlas.",
   "home.hero.desc": "Maîtrisez les capitales du monde, identifiez les drapeaux et conquérez la carte. Des jeux de géographie haute fidélité conçus pour développer votre intuition mondiale.",
   "home.stopOfTheDay": "Escale du jour",
@@ -37,7 +37,7 @@
   "home.games.mapDash.desc": "Cliquez sur le bon pays sur une carte sans étiquettes avant la fin du chrono. Aiguisez votre mémoire spatiale.",
   "home.games.flagFrenzy.title": "Flag Frenzy",
   "home.games.flagFrenzy.desc": "Associez les drapeaux à leurs nations sur tous les continents. Découvrez les histoires derrière les couleurs et les symboles.",
-  "home.games.playNow": "Jouer maintenant",
+  "home.games.playNow": "Jouer",
 
   "home.loyalty.badge": "Parcours de fidélité",
   "home.loyalty.learn": "Apprenez.",
@@ -83,7 +83,7 @@
   "home.cta.title2": "expédition.",
   "home.cta.subtitle": "Maîtrisez l'atlas et rejoignez l'élite mondiale.",
   "home.cta.play": "Jouer",
-  "home.cta.iosAppSoon": "App iOS bientôt",
+  "home.cta.iosAppSoon": "App bientôt",
 
   "games.badge": "JEUX",
   "games.title": "Jeux",
@@ -128,6 +128,8 @@
   "about.cta.exploreMap": "Explorer la carte",
 
   "game.backToGames": "Retour aux jeux",
+  "game.viewOtherGames": "Voir d'autres jeux",
+  "game.randomGame": "Jeu aléatoire",
   "game.playAgain": "Rejouer",
   "game.score": "Score",
   "game.timeLeft": "Temps restant",
@@ -162,7 +164,7 @@
   "blog.backToBlog": "Retour au blog",
   "blog.exploreGames": "Découvrez nos jeux",
   "blog.exploreGamesDesc": "Testez vos connaissances en géographie avec nos jeux interactifs gratuits.",
-  "blog.playNow": "Jouer maintenant",
+  "blog.playNow": "Jouer",
   "blog.allArticles": "Tous les articles",
   "blog.noArticles": "Pas encore d'articles",
   "blog.noArticlesDesc": "Revenez bientôt pour de nouveaux articles et guides de géographie.",

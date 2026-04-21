@@ -1,9 +1,7 @@
 
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Play, Smartphone } from 'lucide-react';
-import Button from './Button';
-import LanguageSwitcher from './LanguageSwitcher';
+import { Menu, Smartphone, X } from 'lucide-react';
 import { useLayout } from '../context/LayoutContext';
 import { useTranslation } from '../context/LocaleContext';
 
@@ -13,7 +11,14 @@ const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
 
   const updateIndicator = useCallback(() => {
-    const activeLink = document.querySelector(`[data-nav-link="${location.pathname}"]`) as HTMLElement;
+    // Match the same way isActive does: exact for "/", startsWith for others
+    const activeLink = navLinks.reduce((found: HTMLElement | null, link) => {
+      if (found) return found;
+      const matches = link.path === '/'
+        ? location.pathname === '/'
+        : location.pathname.startsWith(link.path);
+      return matches ? (document.querySelector(`[data-nav-link="${link.path}"]`) as HTMLElement | null) : null;
+    }, null as HTMLElement | null);
     if (activeLink) {
       const parent = activeLink.parentElement;
       if (parent) {
@@ -59,12 +64,25 @@ const Navigation: React.FC = () => {
   const lastScrollY = useRef(0);
   const location = useLocation();
 
-  const { navbarMode, scrollThreshold } = useLayout();
+  const { scrollThreshold } = useLayout();
   const { t } = useTranslation();
 
-  const isHeroMode = navbarMode === 'hero';
   const isMapPage = location.pathname === '/map';
   const isOverMap = isMapPage || location.pathname === '/games/map-dash';
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prevOverflow; };
+    }
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     let rafId = 0;
@@ -94,37 +112,12 @@ const Navigation: React.FC = () => {
     };
   }, [scrollThreshold]);
 
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location]);
-
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
-
-    const scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.overflow = '';
-      window.scrollTo(0, scrollY);
-    };
-  }, [isMobileMenuOpen]);
-
   const navLinks = [
     { path: '/', label: t('nav.home') },
-    { path: '/games', label: t('nav.games') },
     { path: '/database', label: t('nav.database') },
-    { path: '/blog', label: t('nav.blog') },
+    { path: '/games', label: t('nav.games') },
     { path: '/map', label: t('nav.map') },
-    { path: '/about', label: t('nav.about') },
+    { path: '/blog', label: t('nav.blog') },
   ];
 
   const isActive = (path: string) =>
@@ -135,62 +128,50 @@ const Navigation: React.FC = () => {
 
   if (isOverMap) {
     textColorClass = "text-[#1A1C1E]";
-
-    if (isScrolled) {
-      navClasses = "bg-white/70 md:bg-white/20 backdrop-blur-xl pb-2.5 shadow-sm";
-    } else {
-      navClasses = "bg-transparent pb-4";
-    }
+    navClasses = isScrolled
+      ? "bg-white/70 md:bg-white/20 backdrop-blur-xl pb-2.5 shadow-sm"
+      : "bg-transparent pb-4";
   } else {
     textColorClass = "text-white";
-
-    if (isScrolled) {
-      navClasses = "bg-surface-dark/30 backdrop-blur-xl pb-2.5 shadow-lg";
-    } else {
-      navClasses = "bg-transparent pb-4";
-    }
+    navClasses = isScrolled
+      ? "bg-surface-dark/30 backdrop-blur-xl pb-2.5 shadow-lg"
+      : "bg-transparent pb-4";
   }
 
-  if (isMobileMenuOpen) {
-    navClasses = "bg-transparent pb-4";
-    textColorClass = "text-white";
-  }
-
-  const navVisualPaddingTop = isScrolled && !isMobileMenuOpen ? '0.625rem' : '1rem';
+  const navVisualPaddingTop = isScrolled ? '0.625rem' : '1rem';
 
   return (
     <>
-      <nav
-        className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
-          (isVisible || isMobileMenuOpen) ? 'translate-y-0' : '-translate-y-full'
-        } ${navClasses}`}
-        style={{ paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})` }}
-      >
-        <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
-          {/* Logo */}
-          <div className="flex items-center gap-2 shrink-0">
-            <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
-              <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
-              <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0`}>
-                Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
-              </span>
-            </Link>
-          </div>
+    <nav
+      className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${navClasses}`}
+      style={{ paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})` }}
+    >
+      <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
+        {/* Logo */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Link to="/" className="flex items-center gap-2 group shrink-0">
+            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
+            <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0 hidden sm:inline`}>
+              Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
+            </span>
+          </Link>
+        </div>
 
-
-          {/* Desktop Nav */}
-          <div className="hidden xl:flex items-center gap-6">
-            <div className="flex items-center gap-8 relative mr-2">
+        {/* Desktop Nav Links — lg+ only */}
+        <div className="hidden lg:flex items-center gap-3 sm:gap-6">
+          <div className="flex items-center gap-4 sm:gap-8 relative">
             {navLinks.map((link) => {
               const active = isActive(link.path);
               const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
 
-                  return (
+              return (
                 <Link
                   key={link.path}
                   to={link.path}
                   data-nav-link={link.path}
-                  className={`font-black text-[10px] uppercase tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
+                  className={`font-black text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
                     active
                       ? activeColor
                       : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
@@ -209,126 +190,99 @@ const Navigation: React.FC = () => {
               );
             })}
             <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
-            </div>
-            <div className={`flex items-center gap-2 shrink-0 border-l pl-5 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50 border-[#1A1C1E]/20' : 'text-white/40 border-white/10'}`}>
+          </div>
+          <div className={`flex items-center gap-2 shrink-0 border-l pl-5 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50 border-[#1A1C1E]/20' : 'text-white/40 border-white/10'}`}>
+            <Smartphone size={14} />
+            <span>{t('nav.appSoon')}</span>
+          </div>
+        </div>
+
+        {/* Hamburger — mobile/tablet only */}
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open menu"
+          className={`lg:hidden ${textColorClass} p-2 -mr-2 transition-opacity hover:opacity-70`}
+        >
+          <Menu size={26} strokeWidth={2.5} />
+        </button>
+      </div>
+    </nav>
+
+    {/* Mobile/Tablet Drawer */}
+    {isMobileMenuOpen && (
+      <div className="fixed inset-0 z-[2500] lg:hidden">
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/70 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        {/* Panel */}
+        <div
+          className="absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col animate-in slide-in-from-right duration-300 shadow-[-20px_0_60px_rgba(0,0,0,0.5)]"
+          style={{
+            paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
+            paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1rem)`,
+          }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 pb-6 border-b border-white/10">
+            <Link
+              to="/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-2"
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
+                alt="ExploreCapitals"
+                className="w-7 h-7 object-contain"
+              />
+              <span className="font-display font-black text-lg tracking-tighter text-white uppercase">
+                Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
+              </span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
+              className="text-white p-2 -mr-2 transition-opacity hover:opacity-70"
+            >
+              <X size={26} strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {/* Links */}
+          <div className="flex flex-col p-4 gap-1 flex-1">
+            {navLinks.map((link) => {
+              const active = isActive(link.path);
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-4 rounded-xl font-black text-sm uppercase tracking-[0.25em] transition-colors ${
+                    active
+                      ? 'bg-sky/15 text-sky-light border border-sky/30'
+                      : 'text-white/70 hover:bg-white/5 hover:text-white border border-transparent'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-auto px-6 pt-6 border-t border-white/10">
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/40">
               <Smartphone size={14} />
               <span>{t('nav.appSoon')}</span>
             </div>
           </div>
-
-          {/* Mobile Toggle */}
-          <div className="xl:hidden flex items-center relative z-50 shrink-0">
-            <button
-              onPointerDown={(e) => {
-                e.preventDefault();
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
-              className="relative w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation active:opacity-80 transition-opacity duration-75"
-              aria-label="Toggle menu"
-              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
-            >
-              <div className="relative w-5 h-4 flex flex-col justify-between pointer-events-none">
-                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen
-                    ? 'bg-sky-light rotate-45 translate-y-[7px]'
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-150 ${
-                  isOverMap && !isMobileMenuOpen ? 'bg-[#1A1C1E]' : 'bg-white'
-                } ${isMobileMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />
-                <span className={`block h-[2px] rounded-full transition-all duration-200 origin-center ${
-                  isMobileMenuOpen
-                    ? 'bg-sky-light -rotate-45 -translate-y-[7px]'
-                    : isOverMap ? 'bg-[#1A1C1E]' : 'bg-white'
-                }`} />
-              </div>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 bg-surface-dark z-[1999] xl:hidden flex flex-col pb-8 px-6 sm:px-8 overflow-y-auto overflow-x-hidden ${
-          isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
-        }`}
-        style={{
-          transition: isMobileMenuOpen
-            ? 'opacity 0.2s ease-out'
-            : 'opacity 0.15s ease-in',
-          WebkitOverflowScrolling: 'touch',
-          touchAction: isMobileMenuOpen ? 'pan-y' : 'none',
-          height: 'var(--viewport-height, 100dvh)',
-          minHeight: 'var(--viewport-height, 100dvh)',
-          paddingTop: 'calc(env(safe-area-inset-top, 0px) + 5rem)',
-          paddingBottom: 'max(env(safe-area-inset-bottom, 32px), 32px)',
-          willChange: 'opacity',
-          transform: 'translateZ(0)',
-          WebkitBackfaceVisibility: 'hidden',
-        }}
-        aria-hidden={!isMobileMenuOpen}
-      >
-        <div className="absolute top-0 right-0 w-full h-[40%] bg-[radial-gradient(ellipse_at_top_right,rgba(0,122,255,0.08)_0%,transparent_70%)] pointer-events-none" />
-
-        <div className="flex flex-col relative z-10">
-          {navLinks.map((link, index) => {
-            return (
-              <Link
-                key={link.path}
-                to={link.path}
-                style={{
-                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
-                  opacity: isMobileMenuOpen ? 1 : 0,
-                  transition: isMobileMenuOpen
-                    ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${index * 0.04}s, opacity 0.25s ease-out ${index * 0.04}s`
-                    : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-                  WebkitTapHighlightColor: 'transparent',
-                }}
-                className={`block py-4 text-2xl font-display font-black uppercase tracking-tighter border-b border-white/5 ${
-                  isActive(link.path) ? 'text-primary' : 'text-white/60 active:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-
-          {/* Play button */}
-          <div
-            style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
-              opacity: isMobileMenuOpen ? 1 : 0,
-              transition: isMobileMenuOpen
-                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 1) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 1) * 0.04}s`
-                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-            }}
-            className="mt-6"
-          >
-            <Link to="/games">
-              <Button variant="primary" size="lg" className="w-full justify-center h-14 text-lg group uppercase">
-                {t('nav.play')} <Play className="ml-2 w-5 h-5" fill="currentColor" />
-              </Button>
-            </Link>
-          </div>
-
-          {/* Language */}
-          <div
-            style={{
-              transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(14px)',
-              opacity: isMobileMenuOpen ? 1 : 0,
-              transition: isMobileMenuOpen
-                ? `transform 0.35s cubic-bezier(0.25, 1, 0.5, 1) ${(navLinks.length + 2) * 0.04}s, opacity 0.25s ease-out ${(navLinks.length + 2) * 0.04}s`
-                : 'transform 0.12s ease-in, opacity 0.1s ease-in',
-            }}
-            className="mt-6 flex justify-center"
-          >
-            <LanguageSwitcher variant="footer" />
-          </div>
         </div>
       </div>
-    </>
+    )}
+  </>
   );
 };
 

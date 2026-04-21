@@ -41,6 +41,9 @@ const Footer: React.FC = () => {
               <Link to="/database" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('nav.database')}</Link>
             </li>
             <li>
+              <Link to="/blog" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('nav.blog')}</Link>
+            </li>
+            <li>
               <Link to="/map" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('nav.map')}</Link>
             </li>
           </ul>
@@ -51,13 +54,13 @@ const Footer: React.FC = () => {
           <h4 className="font-black text-sky text-[10px] uppercase tracking-[0.4em] mb-8">{t('footer.about')}</h4>
           <ul className="space-y-4">
             <li>
-              <Link to="/about" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('footer.aboutUs')}</Link>
+              <Link to="/about" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('footer.about')}</Link>
             </li>
             <li>
-              <Link to="/blog" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('nav.blog')}</Link>
+              <Link to="/contact" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('footer.contact')}</Link>
             </li>
             <li>
-              <Link to="/about#contact" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('footer.contact')}</Link>
+              <Link to="/donate" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">Donate</Link>
             </li>
             <li>
               <Link to="/terms" className="text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest">{t('footer.terms')}</Link>

@@ -144,9 +144,20 @@ function articlePage(post, allPosts) {
     </aside>` : ''}
 
     <div class="blog-cta">
-      <h2>Ready to test your knowledge?</h2>
-      <p>Put what you just read into practice with our free geography games.</p>
-      <a href="/games" class="blog-btn">Play Now</a>
+      <div class="blog-cta-glow"></div>
+      <div class="blog-cta-globe" aria-hidden="true"></div>
+      <div class="blog-cta-inner">
+        <div class="blog-cta-badge">
+          <span class="blog-cta-dot"></span>
+          <span>Free Geography Games</span>
+        </div>
+        <h2>Ready to test your knowledge?</h2>
+        <p>Put what you just read into practice — quizzes, maps, capitals, and more.</p>
+        <a href="/games" class="blog-btn">
+          <span>Play</span>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="18" height="18"><path d="M8 5v14l11-7z"/></svg>
+        </a>
+      </div>
     </div>
   </main>
 
@@ -390,11 +401,18 @@ function getStyles() {
     .blog-card p { font-size: 0.85rem; color: rgba(255,255,255,0.5); font-weight: 500; line-height: 1.5; margin-bottom: 0.75rem; }
     .blog-read-more { font-size: 0.7rem; font-weight: 800; color: #00C2FF; text-transform: uppercase; letter-spacing: 0.15em; }
 
-    .blog-cta { margin-top: 3rem; text-align: center; padding: 2.5rem 1.5rem; background: rgba(0,194,255,0.04); border: 1px solid rgba(0,194,255,0.1); border-radius: 1.5rem; }
-    .blog-cta h2 { font-size: 1.5rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-    .blog-cta p { color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 1.25rem; }
-    .blog-btn { display: inline-block; padding: 0.75rem 2.5rem; background: linear-gradient(135deg,#00C2FF,#007AFF); color: #fff; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em; border-radius: 0.75rem; text-decoration: none; transition: opacity 0.15s; }
-    .blog-btn:hover { opacity: 0.9; text-decoration: none; }
+    .blog-cta { position: relative; margin-top: 3rem; padding: 3rem 1.5rem; background: linear-gradient(135deg, rgba(0,194,255,0.14) 0%, rgba(0,100,255,0.08) 50%, rgba(15,23,42,0.6) 100%); border: 1px solid rgba(0,194,255,0.22); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 0 80px rgba(0,194,255,0.06); }
+    .blog-cta-glow { position: absolute; top: -30%; left: -10%; width: 60%; height: 160%; background: radial-gradient(ellipse at center, rgba(0,194,255,0.22) 0%, transparent 65%); filter: blur(40px); pointer-events: none; z-index: 0; }
+    .blog-cta-globe { position: absolute; top: 50%; right: -60px; width: 320px; height: 320px; transform: translateY(-50%); background-image: url('/png/STYLE/explorecapitals-globe-favicon.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.14; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); }
+    .blog-cta-inner { position: relative; z-index: 1; text-align: center; }
+    .blog-cta-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,194,255,0.14); border: 1px solid rgba(0,194,255,0.3); border-radius: 999px; padding: 0.35rem 0.9rem; margin-bottom: 1rem; font-size: 0.65rem; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(139,210,255,0.95); }
+    .blog-cta-dot { width: 6px; height: 6px; border-radius: 50%; background: #00C2FF; box-shadow: 0 0 10px #00C2FF; animation: blog-cta-pulse 2s ease-in-out infinite; }
+    @keyframes blog-cta-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.8); } }
+    .blog-cta h2 { font-size: 1.75rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 0.75rem; line-height: 1; text-shadow: 0 2px 20px rgba(0,194,255,0.2); }
+    .blog-cta p { color: rgba(255,255,255,0.65); font-weight: 600; margin-bottom: 1.75rem; max-width: 32rem; margin-left: auto; margin-right: auto; }
+    .blog-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.95rem 2.75rem; background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.2em; border-radius: 999px; text-decoration: none; transition: transform 0.15s ease-out, filter 0.15s ease-out, box-shadow 0.15s ease-out; box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 40px rgba(0,194,255,0.35); position: relative; }
+    .blog-btn:hover { filter: brightness(1.1); transform: translateY(-2px); text-decoration: none; box-shadow: 0 14px 40px rgba(0,0,0,0.3), 0 0 50px rgba(0,194,255,0.5); }
+    .blog-btn svg { flex-shrink: 0; }
 
     .blog-empty { text-align: center; color: rgba(255,255,255,0.3); padding: 4rem 0; font-weight: 600; }
 

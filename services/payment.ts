@@ -36,8 +36,8 @@ export const createCheckoutSession = async (amountInCents: number) => {
 
   const { data } = await createSession({
     amount: amountInCents,
-    successUrl: `${window.location.origin}/about?success=true`,
-    cancelUrl: `${window.location.origin}/about?canceled=true`,
+    successUrl: `${window.location.origin}/donate?success=true`,
+    cancelUrl: `${window.location.origin}/donate?canceled=true`,
   });
 
   return data;

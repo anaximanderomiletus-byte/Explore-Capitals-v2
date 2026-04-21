@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { Calendar, Clock, User, ArrowLeft, ArrowRight, Play, Newspaper } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, ArrowRight, Play, Newspaper } from 'lucide-react';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
@@ -87,48 +87,46 @@ const BlogPost: React.FC = () => {
         }}
       />
 
-      {/* Scoped article styles — WSJ-inspired editorial typography */}
+      {/* Article body styles — matches site sans-serif system */}
       <style>{`
-        .article-body {
-          font-family: Georgia, 'Times New Roman', serif;
-        }
         .article-body h2 {
           font-family: var(--font-display, system-ui, -apple-system, sans-serif);
-          font-size: 1.5rem;
+          font-size: 1.375rem;
           font-weight: 800;
           color: white;
           letter-spacing: -0.02em;
-          margin-top: 2.75rem;
-          margin-bottom: 1rem;
-          line-height: 1.25;
+          text-transform: uppercase;
+          margin-top: 2.5rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.2;
         }
         .article-body h3 {
           font-family: var(--font-display, system-ui, -apple-system, sans-serif);
-          font-size: 1.175rem;
-          font-weight: 700;
-          color: rgba(255,255,255,0.9);
-          margin-top: 2.25rem;
-          margin-bottom: 0.75rem;
+          font-size: 1.125rem;
+          font-weight: 800;
+          color: rgba(255,255,255,0.85);
+          text-transform: uppercase;
           letter-spacing: -0.01em;
-          line-height: 1.3;
+          margin-top: 2rem;
+          margin-bottom: 0.5rem;
+          line-height: 1.25;
         }
         .article-body p {
-          color: rgba(255,255,255,0.72);
-          font-size: 1.0625rem;
-          line-height: 1.8;
-          margin-bottom: 1.5rem;
-          letter-spacing: 0.005em;
+          color: rgba(255,255,255,0.55);
+          font-size: 0.9375rem;
+          line-height: 1.75;
+          margin-bottom: 1.25rem;
+          font-weight: 500;
         }
         .article-body strong {
-          color: rgba(255,255,255,0.9);
+          color: rgba(255,255,255,0.8);
           font-weight: 700;
         }
         .article-body em {
-          color: rgba(255,255,255,0.65);
-          font-style: italic;
+          color: rgba(255,255,255,0.5);
         }
         .article-body a {
-          color: #00C2FF;
+          color: var(--color-sky-light, #00C2FF);
           text-decoration: underline;
           text-underline-offset: 3px;
           text-decoration-color: rgba(0,194,255,0.3);
@@ -139,173 +137,131 @@ const BlogPost: React.FC = () => {
         }
         .article-body ul {
           list-style: none;
-          padding-left: 1.25rem;
-          margin-bottom: 1.5rem;
+          padding-left: 1rem;
+          margin-bottom: 1.25rem;
         }
         .article-body li {
-          color: rgba(255,255,255,0.72);
-          font-size: 1.0625rem;
-          line-height: 1.8;
-          margin-bottom: 0.5rem;
+          color: rgba(255,255,255,0.55);
+          font-size: 0.9375rem;
+          line-height: 1.75;
+          margin-bottom: 0.375rem;
           position: relative;
-          padding-left: 0.875rem;
+          padding-left: 0.75rem;
+          font-weight: 500;
         }
         .article-body li::before {
           content: '';
           position: absolute;
           left: -0.25rem;
-          top: 0.7rem;
-          width: 5px;
-          height: 5px;
+          top: 0.65rem;
+          width: 4px;
+          height: 4px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.3);
+          background: rgba(255,255,255,0.2);
         }
         .article-body hr {
           border: none;
           height: 1px;
-          background: rgba(255,255,255,0.1);
-          margin: 2.5rem 0;
+          background: rgba(255,255,255,0.06);
+          margin: 2rem 0;
         }
         .article-body img {
           border-radius: 0.75rem;
           max-width: 100%;
-          margin: 2rem 0;
+          margin: 1.5rem 0;
           border: 1px solid rgba(255,255,255,0.06);
         }
         .article-body blockquote {
-          border-left: 3px solid rgba(255,255,255,0.2);
-          padding: 0.5rem 1.5rem;
-          margin: 2rem 0;
+          border-left: 2px solid rgba(255,255,255,0.15);
+          padding: 0.25rem 1.25rem;
+          margin: 1.5rem 0;
         }
         .article-body blockquote p {
-          font-style: italic;
-          color: rgba(255,255,255,0.6);
-          font-size: 1.125rem;
-        }
-        .article-body > p:first-child::first-letter {
-          float: left;
-          font-family: var(--font-display, system-ui, -apple-system, sans-serif);
-          font-size: 3.5rem;
-          font-weight: 800;
-          line-height: 0.85;
-          padding-right: 0.5rem;
-          padding-top: 0.25rem;
-          color: white;
-        }
-        @media (min-width: 640px) {
-          .article-body h2 { font-size: 1.625rem; }
-          .article-body p, .article-body li { font-size: 1.125rem; }
-          .article-body blockquote p { font-size: 1.1875rem; }
+          color: rgba(255,255,255,0.45);
+          font-size: 0.9375rem;
         }
       `}</style>
 
       <div className="max-w-3xl mx-auto relative z-10">
 
-        {/* ── Breadcrumbs ── */}
         <Breadcrumbs items={[
           { label: 'Home', href: '/' },
           { label: 'Blog', href: '/blog' },
           { label: post.title },
         ]} />
 
-        {/* ── Article Header ── */}
+        {/* Header */}
         <RevealSection>
-          <header className="mb-10 md:mb-12">
-            {/* Category + Meta line */}
-            <div className="flex flex-wrap items-center gap-3 mb-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+          <header className="mb-8 md:mb-10">
+            <div className="flex flex-wrap items-center gap-3 mb-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
               <span className="flex items-center gap-1.5">
-                <Newspaper size={11} className="text-sky/60" />
+                <Newspaper size={11} className="text-sky/50" />
                 {post.tags[0] || t('blog.article')}
               </span>
               <span className="w-px h-3 bg-white/10" />
               <span className="flex items-center gap-1.5">
-                <Calendar size={11} className="text-white/25" />
+                <Calendar size={11} />
                 {formatDate(post.date)}
               </span>
               <span className="w-px h-3 bg-white/10" />
               <span className="flex items-center gap-1.5">
-                <Clock size={11} className="text-white/25" />
+                <Clock size={11} />
                 {post.readTime} {t('blog.minRead')}
               </span>
             </div>
 
-            {/* Title — sentence case, tight leading, editorial weight */}
-            <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-display font-black text-white tracking-tight leading-[1.12] mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white tracking-tighter uppercase leading-[1.1] mb-4">
               {post.title}
             </h1>
 
-            {/* Description / Deck */}
-            <p className="text-lg md:text-xl text-white/55 leading-relaxed mb-6" style={{ fontFamily: 'Georgia, serif' }}>
+            <p className="text-base text-white/45 leading-relaxed font-medium mb-4">
               {post.description}
             </p>
 
-            {/* Author byline */}
-            <div className="flex items-center gap-2 text-[11px] font-bold text-white/40">
-              <User size={13} className="text-white/25" />
-              <span>By {post.author}</span>
-            </div>
-
-            {/* Separator */}
-            <div className="h-px w-full bg-white/10 mt-6" />
+            <div className="h-px w-full bg-white/[0.06]" />
           </header>
         </RevealSection>
 
-        {/* ── Hero Thumbnail ── */}
-        {post.thumbnail && (
-          <RevealSection delay={0.05} className="mb-10 md:mb-12">
-            <div className="relative rounded-xl overflow-hidden border border-white/8">
-              <img
-                src={post.thumbnail}
-                alt={post.title}
-                className="w-full h-48 sm:h-64 md:h-80 object-cover"
-                loading="eager"
-              />
-            </div>
-          </RevealSection>
-        )}
-
-        {/* ── Article Body ── */}
-        <RevealSection delay={post.thumbnail ? 0.1 : 0.05}>
+        {/* Article Body */}
+        <RevealSection delay={0.05}>
           <div
             className="article-body"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
         </RevealSection>
 
-        {/* ── Prev / Next Navigation ── */}
+        {/* Prev / Next */}
         {(prevPost || nextPost) && (
           <RevealSection delay={0.1}>
-            <div className="mt-14">
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-sky/20 to-transparent mb-8" />
-              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">{t('blog.continueReading')}</div>
-              <nav className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="mt-12">
+              <div className="h-px w-full bg-white/[0.06] mb-6" />
+              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-4">{t('blog.continueReading')}</div>
+              <nav className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {prevPost ? (
                   <Link
                     to={`/blog/${prevPost.slug}`}
-                    className="group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-sky/20 hover:-translate-y-0.5 transition-all duration-500 overflow-hidden"
+                    className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] transition-all"
                   >
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-[0.06] pointer-events-none rounded-2xl" />
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center relative z-10 group-hover:border-sky/30 transition-colors duration-300">
-                      <ArrowLeft size={12} className="text-white/40 group-hover:text-sky-light transition-colors" />
+                    <div className="shrink-0 w-7 h-7 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+                      <ArrowLeft size={11} className="text-white/30 group-hover:text-sky-light transition-colors" />
                     </div>
-                    <div className="relative z-10 min-w-0">
-                      <span className="block text-[8px] font-black uppercase tracking-[0.2em] text-white/25 mb-0.5">{t('blog.previous')}</span>
-                      <span className="block text-xs font-black uppercase tracking-tight text-white/80 group-hover:text-sky-light transition-colors leading-snug line-clamp-1">{prevPost.title}</span>
+                    <div className="min-w-0">
+                      <span className="block text-[8px] font-black uppercase tracking-[0.2em] text-white/20 mb-0.5">{t('blog.previous')}</span>
+                      <span className="block text-xs font-black uppercase tracking-tight text-white/60 group-hover:text-sky-light transition-colors line-clamp-1">{prevPost.title}</span>
                     </div>
                   </Link>
                 ) : <div />}
                 {nextPost ? (
                   <Link
                     to={`/blog/${nextPost.slug}`}
-                    className="group relative flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-sky/20 hover:-translate-y-0.5 transition-all duration-500 overflow-hidden"
+                    className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] transition-all"
                   >
-                    <div className="absolute inset-0 bg-glossy-gradient opacity-[0.06] pointer-events-none rounded-2xl" />
-                    <div className="relative z-10 min-w-0 flex-grow">
-                      <span className="block text-[8px] font-black uppercase tracking-[0.2em] text-white/25 mb-0.5 ">{t('blog.next')}</span>
-                      <span className="block text-xs font-black uppercase tracking-tight text-white/80 group-hover:text-sky-light transition-colors leading-snug line-clamp-1">{nextPost.title}</span>
+                    <div className="min-w-0 flex-grow">
+                      <span className="block text-[8px] font-black uppercase tracking-[0.2em] text-white/20 mb-0.5">{t('blog.next')}</span>
+                      <span className="block text-xs font-black uppercase tracking-tight text-white/60 group-hover:text-sky-light transition-colors line-clamp-1">{nextPost.title}</span>
                     </div>
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center relative z-10 group-hover:border-sky/30 transition-colors duration-300">
-                      <ArrowRight size={12} className="text-white/40 group-hover:text-sky-light transition-colors" />
+                    <div className="shrink-0 w-7 h-7 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+                      <ArrowRight size={11} className="text-white/30 group-hover:text-sky-light transition-colors" />
                     </div>
                   </Link>
                 ) : <div />}
@@ -314,31 +270,28 @@ const BlogPost: React.FC = () => {
           </RevealSection>
         )}
 
-        {/* ── CTA ── */}
+        {/* CTA */}
         <RevealSection delay={0.15}>
-          <div className="mt-14 relative bg-white/[0.03] border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 text-center overflow-hidden shadow-[inset_0_0_30px_rgba(255,255,255,0.1)]">
-            <div className="absolute inset-0 bg-glossy-gradient opacity-[0.06] pointer-events-none rounded-3xl" />
-            {/* Ambient glow */}
-            <div className="absolute top-[-30%] left-[20%] w-[60%] h-[60%] rounded-full bg-sky/[0.06] blur-3xl pointer-events-none" />
-
-            <h3 className="text-xl sm:text-2xl font-display font-black uppercase tracking-tight text-white mb-3 relative z-10 drop-shadow-md">
-              {t('blog.exploreGames')}
-            </h3>
-            <p className="text-white/50 text-sm sm:text-base font-medium mb-6 max-w-md mx-auto relative z-10">
-              {t('blog.exploreGamesDesc')}
-            </p>
+          <div className="mt-12 relative overflow-hidden border border-white/[0.12] rounded-2xl p-6 sm:p-8 text-center">
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/flag-frenzy.png`} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm pointer-events-none select-none" />
+            <div className="absolute inset-0 bg-black/50 pointer-events-none" />
             <div className="relative z-10">
+              <h3 className="text-lg sm:text-xl font-display font-black uppercase tracking-tight text-white mb-2">
+                {t('blog.exploreGames')}
+              </h3>
+              <p className="text-white/60 text-sm font-medium mb-5 max-w-md mx-auto">
+                {t('blog.exploreGamesDesc')}
+              </p>
               <Link to="/games">
-                <Button variant="primary" size="lg" className="text-lg uppercase tracking-widest">
-                  {t('blog.playNow')} <Play size={18} fill="currentColor" className="ml-1.5" />
+                <Button variant="primary" size="lg" className="text-base uppercase tracking-widest">
+                  {t('blog.playNow')} <Play size={16} fill="currentColor" className="ml-1.5" />
                 </Button>
               </Link>
             </div>
           </div>
         </RevealSection>
 
-        {/* Ad slot */}
-        <RevealSection className="mt-12 md:mt-16">
+        <RevealSection className="mt-10 md:mt-14">
           <BannerAd slot="9489406693" />
         </RevealSection>
       </div>

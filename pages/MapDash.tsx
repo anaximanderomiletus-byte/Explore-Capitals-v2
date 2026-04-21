@@ -15,6 +15,7 @@ import GameSideAds from '../components/GameSideAds';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
+import GameFooterNav from '../components/GameFooterNav';
 
 export default function MapDash() {
   const { t } = useTranslation();
@@ -362,7 +363,7 @@ export default function MapDash() {
           >
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <Link to="/games">
+              <Link to="/games/all">
                 <button className="game-back-btn w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white/80 hover:text-white transition-all border border-white/20 group active:scale-95">
                   <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
                 </button>
@@ -458,7 +459,7 @@ export default function MapDash() {
 
             <GameSideAds />
             <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games' }, { label: 'Map Dash' }]} />
+              <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games/all' }, { label: 'Map Dash' }]} />
               <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
@@ -467,14 +468,8 @@ export default function MapDash() {
                 <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
                 <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-6">
-                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">PLAY <Play size={20} fill="currentColor" /></Button>
-                  <button
-                    onClick={() => navigate('/games')}
-                    className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-sky-light transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto"
-                  >
-                    <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" />
-                    {t('game.backToGames')}
-                  </button>
+                  <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">PLAY <Play size={24} fill="currentColor" /></Button>
+                  <GameFooterNav />
                 </div>
               </div>
             </div>
@@ -522,14 +517,8 @@ export default function MapDash() {
                 <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
                 <div className="flex flex-col gap-6">
-                  <Button onClick={startGame} size="md" className="w-full h-16 text-xl uppercase tracking-widest border border-white/20 font-black">{t('game.playAgain')} <Play size={20} fill="currentColor" /></Button>
-                  <button
-                    onClick={() => navigate('/games')}
-                    className="inline-flex items-center justify-center gap-2 text-white/50 hover:text-white transition-all font-black uppercase tracking-[0.3em] text-[10px] group/link relative z-20 pointer-events-auto"
-                  >
-                    <ArrowLeft size={14} className="group-hover/link:-translate-x-1 transition-transform" />
-                    {t('game.backToGames')}
-                  </button>
+                  <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">{t('game.playAgain')} <Play size={24} fill="currentColor" /></Button>
+                  <GameFooterNav />
                 </div>
               </div>
             </div>

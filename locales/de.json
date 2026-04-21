@@ -5,7 +5,7 @@
   "nav.map": "Karte",
   "nav.about": "Über uns",
   "nav.blog": "Blog",
-  "nav.playNow": "Jetzt spielen",
+  "nav.playNow": "Spielen",
   "nav.play": "Spielen",
   "nav.appSoon": "App bald",
   "nav.iosAppComingSoon": "iOS-App kommt bald",
@@ -22,7 +22,7 @@
 
   "home.badge": "Kostenlose globale Bildung",
   "home.hero.play": "Spiele",
-  "home.hero.your": "deinen",
+  "home.hero.your": "den",
   "home.hero.atlas": "Atlas.",
   "home.hero.desc": "Meistere Hauptstädte, erkenne Flaggen und erobere die Weltkarte. High-Fidelity-Geographiespiele, die dein globales Gespür schärfen.",
   "home.stopOfTheDay": "Halt des Tages",
@@ -37,7 +37,7 @@
   "home.games.mapDash.desc": "Klicke auf das richtige Land auf einer unbeschrifteten Karte, bevor die Zeit abläuft. Schärfe dein räumliches Gedächtnis.",
   "home.games.flagFrenzy.title": "Flag Frenzy",
   "home.games.flagFrenzy.desc": "Ordne Flaggen ihren Nationen auf jedem Kontinent zu. Entdecke die Geschichten hinter den Farben und Symbolen.",
-  "home.games.playNow": "Jetzt spielen",
+  "home.games.playNow": "Spielen",
 
   "home.loyalty.badge": "Treuepfad",
   "home.loyalty.learn": "Lerne.",
@@ -83,7 +83,7 @@
   "home.cta.title2": "Expedition.",
   "home.cta.subtitle": "Meistere den Atlas und werde Teil der globalen Elite.",
   "home.cta.play": "Spielen",
-  "home.cta.iosAppSoon": "iOS-App bald",
+  "home.cta.iosAppSoon": "App bald",
 
   "games.badge": "SPIELE",
   "games.title": "Spiele",
@@ -128,6 +128,8 @@
   "about.cta.exploreMap": "Karte erkunden",
 
   "game.backToGames": "Zurück zu den Spielen",
+  "game.viewOtherGames": "Andere Spiele ansehen",
+  "game.randomGame": "Zufälliges Spiel",
   "game.playAgain": "Nochmal spielen",
   "game.score": "Punktzahl",
   "game.timeLeft": "Restzeit",
@@ -162,7 +164,7 @@
   "blog.backToBlog": "Zurück zum Blog",
   "blog.exploreGames": "Entdecke unsere Spiele",
   "blog.exploreGamesDesc": "Teste dein Geographiewissen mit unseren kostenlosen interaktiven Spielen.",
-  "blog.playNow": "Jetzt spielen",
+  "blog.playNow": "Spielen",
   "blog.allArticles": "Alle Artikel",
   "blog.noArticles": "Noch keine Artikel",
   "blog.noArticlesDesc": "Schau bald wieder vorbei für neue Geographie-Artikel und Ratgeber.",

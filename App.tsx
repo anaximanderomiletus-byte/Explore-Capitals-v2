@@ -15,9 +15,12 @@ import Home from './pages/Home';
 
 // ── Navbar pages: lazy but prefetched on idle after Home mounts ────
 const Games = React.lazy(() => import('./pages/Games'));
+const GamesDashboard = React.lazy(() => import('./pages/GamesDashboard'));
 const DatabasePage = React.lazy(() => import('./pages/DatabasePage'));
 const MapPage = React.lazy(() => import('./pages/MapPage'));
 const About = React.lazy(() => import('./pages/About'));
+const Contact = React.lazy(() => import('./pages/Contact'));
+const Donate = React.lazy(() => import('./pages/Donate'));
 const CapitalQuiz = React.lazy(() => import('./pages/CapitalQuiz'));
 const MapDash = React.lazy(() => import('./pages/MapDash'));
 const FlagFrenzy = React.lazy(() => import('./pages/FlagFrenzy'));
@@ -323,6 +326,7 @@ const AppContent: React.FC = () => {
               <Routes location={location}>
                 <Route path="/" element={<Home />} />
                 <Route path="/games" element={<Games />} />
+                <Route path="/games/all" element={<GamesDashboard />} />
                 <Route path="/games/capital-quiz" element={<CapitalQuiz />} />
                 <Route path="/games/map-dash" element={<MapDash />} />
                 <Route path="/games/flag-frenzy" element={<FlagFrenzy />} />
@@ -343,6 +347,8 @@ const AppContent: React.FC = () => {
                 <Route path="/country/:id" element={<CountryDetail />} />
                 <Route path="/map" element={<MapPage />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/donate" element={<Donate />} />
                 <Route path="/expedition/:id" element={<CountryExploration />} />
                 <Route path="/explore/:id" element={<ExploreRedirect />} />
                 <Route path="/blog" element={<Blog />} />
