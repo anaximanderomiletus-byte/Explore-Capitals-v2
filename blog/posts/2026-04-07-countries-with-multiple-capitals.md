@@ -6,7 +6,7 @@ date: 2026-04-07
 author: ExploreCapitals
 tags: [capitals, geography, politics, history]
 image: /og-image.png
-thumbnail: /png/GAMES/capital-connection.png
+thumbnail: /blog-images/countries-with-multiple-capitals.jpg
 readTime: 7
 ---
 

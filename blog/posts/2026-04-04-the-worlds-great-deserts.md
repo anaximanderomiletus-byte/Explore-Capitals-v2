@@ -6,7 +6,7 @@ date: 2026-04-04
 author: ExploreCapitals
 tags: [geography, climate, nature, maps]
 image: /og-image.png
-thumbnail: /png/GAMES/global-detective.png
+thumbnail: /blog-images/the-worlds-great-deserts.jpg
 readTime: 7
 ---
 

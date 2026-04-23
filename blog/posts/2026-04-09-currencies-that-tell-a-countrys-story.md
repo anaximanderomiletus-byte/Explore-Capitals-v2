@@ -6,7 +6,7 @@ date: 2026-04-09
 author: ExploreCapitals
 tags: [geography, economics, culture, history]
 image: /og-image.png
-thumbnail: /png/GAMES/currency-craze.png
+thumbnail: /blog-images/currencies-that-tell-a-countrys-story.jpg
 readTime: 7
 ---
 

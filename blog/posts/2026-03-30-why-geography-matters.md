@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [education, geography, literacy]
 image: /og-image.png
-thumbnail: /png/GAMES/capital-quiz.png
+thumbnail: /blog-images/why-geography-matters.jpg
 readTime: 6
 ---
 

@@ -6,7 +6,7 @@ date: 2026-04-06
 author: ExploreCapitals
 tags: [geography, population, history, economics]
 image: /og-image.png
-thumbnail: /png/GAMES/population-pursuit.png
+thumbnail: /blog-images/the-worlds-most-populous-countries.jpg
 readTime: 7
 ---
 

@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [borders, geography, history, politics]
 image: /og-image.png
-thumbnail: /png/GAMES/know-your-neighbor.png
+thumbnail: /blog-images/worlds-most-interesting-borders.jpg
 readTime: 7
 ---
 

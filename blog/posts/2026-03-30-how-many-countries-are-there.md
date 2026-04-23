@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [geography, politics, nations, education]
 image: /og-image.png
-thumbnail: /png/GAMES/region-roundup.png
+thumbnail: /blog-images/how-many-countries-are-there.jpg
 readTime: 6
 ---
 

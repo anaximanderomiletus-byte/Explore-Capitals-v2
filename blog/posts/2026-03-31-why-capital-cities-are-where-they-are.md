@@ -6,7 +6,7 @@ date: 2026-03-31
 author: ExploreCapitals
 tags: [capitals, geography, history, politics]
 image: /og-image.png
-thumbnail: /png/GAMES/capital-quiz.png
+thumbnail: /blog-images/why-capital-cities-are-where-they-are.jpg
 readTime: 7
 ---
 

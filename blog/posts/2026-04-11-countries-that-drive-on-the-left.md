@@ -6,7 +6,7 @@ date: 2026-04-11
 author: ExploreCapitals
 tags: [geography, history, transport, quiz]
 image: /og-image.png
-thumbnail: /png/GAMES/driving-direction.png
+thumbnail: /blog-images/countries-that-drive-on-the-left.jpg
 readTime: 7
 ---
 

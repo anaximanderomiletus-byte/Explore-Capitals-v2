@@ -6,7 +6,7 @@ date: 2026-04-03
 author: ExploreCapitals
 tags: [geography, history, countries, politics]
 image: /og-image.png
-thumbnail: /png/GAMES/flag-frenzy.png
+thumbnail: /blog-images/countries-that-no-longer-exist.jpg
 readTime: 7
 ---
 

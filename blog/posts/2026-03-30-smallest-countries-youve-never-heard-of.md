@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [geography, countries, microstates, education]
 image: /og-image.png
-thumbnail: /png/GAMES/area-ace.png
+thumbnail: /blog-images/smallest-countries-youve-never-heard-of.jpg
 readTime: 7
 ---
 

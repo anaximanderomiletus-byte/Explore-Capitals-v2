@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [geography, trade, economics, landlocked, education]
 image: /og-image.png
-thumbnail: /png/GAMES/population-pursuit.png
+thumbnail: /blog-images/landlocked-countries.jpg
 readTime: 7
 ---
 

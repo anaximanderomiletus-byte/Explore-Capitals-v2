@@ -6,7 +6,7 @@ date: 2026-04-06
 author: ExploreCapitals
 tags: [geography, islands, countries, climate]
 image: /og-image.png
-thumbnail: /png/GAMES/global-detective.png
+thumbnail: /blog-images/island-nations-countries-surrounded-by-water.jpg
 readTime: 7
 ---
 

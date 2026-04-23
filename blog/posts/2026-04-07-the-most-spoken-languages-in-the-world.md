@@ -6,7 +6,7 @@ date: 2026-04-07
 author: ExploreCapitals
 tags: [geography, languages, culture, education]
 image: /og-image.png
-thumbnail: /png/GAMES/language-legend.png
+thumbnail: /blog-images/the-most-spoken-languages-in-the-world.jpg
 readTime: 7
 ---
 

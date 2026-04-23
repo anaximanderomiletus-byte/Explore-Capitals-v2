@@ -6,7 +6,7 @@ date: 2026-04-04
 author: ExploreCapitals
 tags: [geography, nature, history, borders]
 image: /og-image.png
-thumbnail: /png/GAMES/map-dash.png
+thumbnail: /blog-images/rivers-that-shape-the-world.jpg
 readTime: 7
 ---
 

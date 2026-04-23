@@ -6,7 +6,7 @@ date: 2026-04-03
 author: ExploreCapitals
 tags: [geography, countries, maps, nature]
 image: /og-image.png
-thumbnail: /png/GAMES/area-ace.png
+thumbnail: /blog-images/the-largest-countries-by-area.jpg
 readTime: 7
 ---
 

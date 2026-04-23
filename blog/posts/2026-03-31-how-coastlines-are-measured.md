@@ -6,7 +6,7 @@ date: 2026-03-31
 author: ExploreCapitals
 tags: [geography, maps, cartography, nature]
 image: /og-image.png
-thumbnail: /png/GAMES/area-ace.png
+thumbnail: /blog-images/how-coastlines-are-measured.jpg
 readTime: 6
 ---
 

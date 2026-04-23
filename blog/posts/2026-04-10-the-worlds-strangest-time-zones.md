@@ -6,7 +6,7 @@ date: 2026-04-10
 author: ExploreCapitals
 tags: [geography, time, politics, maps]
 image: /og-image.png
-thumbnail: /png/GAMES/time-zone-trekker.png
+thumbnail: /blog-images/the-worlds-strangest-time-zones.jpg
 readTime: 7
 ---
 

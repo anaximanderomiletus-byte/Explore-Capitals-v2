@@ -6,7 +6,7 @@ date: 2026-04-01
 author: ExploreCapitals
 tags: [geography, countries, continents, maps]
 image: /og-image.png
-thumbnail: /png/GAMES/map-dash.png
+thumbnail: /blog-images/countries-that-span-multiple-continents.jpg
 readTime: 6
 ---
 

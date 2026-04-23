@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [geography, education, misconceptions, facts]
 image: /og-image.png
-thumbnail: /png/GAMES/landmark-legend.png
+thumbnail: /blog-images/geography-mistakes-everyone-makes.jpg
 readTime: 7
 ---
 

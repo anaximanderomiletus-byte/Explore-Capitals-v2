@@ -6,7 +6,7 @@ date: 2026-04-05
 author: ExploreCapitals
 tags: [geography, borders, countries, quiz]
 image: /og-image.png
-thumbnail: /png/GAMES/know-your-neighbor.png
+thumbnail: /blog-images/countries-that-share-surprising-borders.jpg
 readTime: 6
 ---
 

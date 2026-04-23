@@ -6,7 +6,7 @@ date: 2026-04-05
 author: ExploreCapitals
 tags: [geography, countries, politics, territories]
 image: /og-image.png
-thumbnail: /png/GAMES/territory-titan.png
+thumbnail: /blog-images/territories-dependencies-and-places-that-are-not-quite-countries.jpg
 readTime: 7
 ---
 

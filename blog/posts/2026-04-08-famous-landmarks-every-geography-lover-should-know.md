@@ -6,7 +6,7 @@ date: 2026-04-08
 author: ExploreCapitals
 tags: [geography, landmarks, culture, travel]
 image: /og-image.png
-thumbnail: /png/GAMES/landmark-legend.png
+thumbnail: /blog-images/famous-landmarks-every-geography-lover-should-know.jpg
 readTime: 7
 ---
 

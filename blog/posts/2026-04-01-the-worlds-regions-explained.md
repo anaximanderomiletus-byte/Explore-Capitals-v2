@@ -6,7 +6,7 @@ date: 2026-04-01
 author: ExploreCapitals
 tags: [geography, regions, countries, education]
 image: /og-image.png
-thumbnail: /png/GAMES/region-roundup.png
+thumbnail: /blog-images/the-worlds-regions-explained.jpg
 readTime: 7
 ---
 

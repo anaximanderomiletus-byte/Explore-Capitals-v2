@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [education, capitals, memory, quiz]
 image: /og-image.png
-thumbnail: /png/GAMES/capital-connection.png
+thumbnail: /blog-images/hardest-capitals-to-remember.jpg
 readTime: 7
 ---
 

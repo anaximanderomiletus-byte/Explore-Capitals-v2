@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [maps, education, cartography, geography]
 image: /og-image.png
-thumbnail: /png/GAMES/map-dash.png
+thumbnail: /blog-images/beginners-guide-to-reading-maps.jpg
 readTime: 7
 ---
 

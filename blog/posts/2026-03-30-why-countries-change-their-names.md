@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [geography, history, politics, names]
 image: /og-image.png
-thumbnail: /png/GAMES/global-detective.png
+thumbnail: /blog-images/why-countries-change-their-names.jpg
 readTime: 7
 ---
 

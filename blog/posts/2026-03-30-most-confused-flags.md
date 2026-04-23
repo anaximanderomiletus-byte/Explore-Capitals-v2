@@ -6,7 +6,7 @@ date: 2026-03-30
 author: ExploreCapitals
 tags: [flags, geography, vexillology, quiz]
 image: /og-image.png
-thumbnail: /png/GAMES/flag-frenzy.png
+thumbnail: /blog-images/most-confused-flags.jpg
 readTime: 7
 ---
 

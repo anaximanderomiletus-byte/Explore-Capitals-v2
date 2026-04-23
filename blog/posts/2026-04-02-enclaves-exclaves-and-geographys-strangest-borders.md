@@ -6,7 +6,7 @@ date: 2026-04-02
 author: ExploreCapitals
 tags: [geography, borders, history, maps]
 image: /og-image.png
-thumbnail: /png/GAMES/know-your-neighbor.png
+thumbnail: /blog-images/enclaves-exclaves-and-geographys-strangest-borders.jpg
 readTime: 7
 ---
 

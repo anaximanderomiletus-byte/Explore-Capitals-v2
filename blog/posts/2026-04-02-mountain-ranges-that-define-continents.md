@@ -6,7 +6,7 @@ date: 2026-04-02
 author: ExploreCapitals
 tags: [geography, nature, mountains, borders]
 image: /og-image.png
-thumbnail: /png/GAMES/region-roundup.png
+thumbnail: /blog-images/mountain-ranges-that-define-continents.jpg
 readTime: 7
 ---
 
