@@ -210,21 +210,27 @@ const Navigation: React.FC = () => {
     </nav>
 
     {/* Mobile/Tablet Drawer */}
-    {isMobileMenuOpen && (
-      <div className="fixed inset-0 z-[2500] lg:hidden">
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/70 backdrop-blur-md animate-in fade-in duration-200"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-        {/* Panel */}
-        <div
-          className="absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col animate-in slide-in-from-right duration-300 shadow-[-20px_0_60px_rgba(0,0,0,0.5)]"
-          style={{
-            paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
-            paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1rem)`,
-          }}
-        >
+    <div
+      className={`fixed inset-0 z-[2500] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      aria-hidden={!isMobileMenuOpen}
+    >
+      {/* Backdrop */}
+      <div
+        className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ease-out ${
+          isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+        }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+      {/* Panel */}
+      <div
+        className={`absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{
+          paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
+          paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1rem)`,
+        }}
+      >
           {/* Header */}
           <div className="flex items-center justify-between px-6 pb-6 border-b border-white/10">
             <Link
@@ -279,9 +285,8 @@ const Navigation: React.FC = () => {
               <span>{t('nav.appSoon')}</span>
             </div>
           </div>
-        </div>
       </div>
-    )}
+    </div>
   </>
   );
 };

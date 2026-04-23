@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   }, [setPageLoading]);
 
   return (
-    <main className="relative flex-grow bg-[#0F172A] w-full home-glow">
+    <main className="relative flex-grow bg-[#0F172A] w-full home-glow overflow-x-hidden">
       <style>{`
         .home-glow h1, .home-glow h2 {
           text-shadow: 0 0 40px rgba(0,194,255,0.15), 0 0 80px rgba(0,194,255,0.08);
@@ -138,28 +138,28 @@ const Home: React.FC = () => {
           <div className="absolute top-0 left-0 right-0 h-[20%] bg-gradient-to-b from-[#0F172A] to-transparent" />
         </div>
         <div
-          className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8"
+          className="relative z-10 w-full min-w-0 max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8"
           style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}
         >
-          <div className="max-w-7xl mx-auto flex flex-col items-center justify-center pt-20 md:pt-[15vh] pb-12 md:pb-12">
+          <div className="w-full min-w-0 max-w-7xl mx-auto flex flex-col items-center justify-center pt-20 md:pt-[15vh] pb-12 md:pb-12">
             {/* Wordmark */}
-            <h1 className="font-display font-black text-5xl md:text-5xl tracking-tighter uppercase text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] text-center mb-8 md:mb-8">
+            <h1 className="font-display font-black text-[clamp(1.6rem,8.5vw,3rem)] sm:text-5xl tracking-tighter uppercase text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] text-center mb-8 md:mb-8 max-w-full whitespace-nowrap">
               Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
             </h1>
 
             {/* Globe */}
-            <div className="relative flex justify-center items-center mb-10 md:mb-12">
+            <div className="relative flex justify-center items-center mb-10 md:mb-12 w-full">
               {/* Animated glow rings */}
               <div
-                className="absolute w-[560px] h-[560px] md:w-[620px] md:h-[620px] rounded-full pointer-events-none animate-glow-pulse"
+                className="absolute w-[480px] h-[480px] sm:w-[560px] sm:h-[560px] md:w-[620px] md:h-[620px] rounded-full pointer-events-none animate-glow-pulse"
                 style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
               />
               <div
-                className="absolute w-[460px] h-[460px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none animate-glow-pulse-slow"
+                className="absolute w-[400px] h-[400px] sm:w-[460px] sm:h-[460px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none animate-glow-pulse-slow"
                 style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
               />
 
-              <div className="relative w-[360px] h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
+              <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
                 <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                   <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                     <img
@@ -189,9 +189,9 @@ const Home: React.FC = () => {
             </div>
 
             {/* Button */}
-            <div className="text-center">
+            <div className="text-center w-full">
               <Link to="/games">
-                <Button variant="primary" size="lg" className="w-80 md:w-96 h-20 text-3xl uppercase tracking-widest font-black">
+                <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 h-20 text-3xl uppercase tracking-widest font-black">
                   {t('home.hero.play')} <Play className="ml-2 w-9 h-9" fill="currentColor" />
                 </Button>
               </Link>
