@@ -22,7 +22,7 @@ const About: React.FC = () => {
   ];
 
   return (
-    <main className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
+    <main className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden bg-[#0F172A]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       <SEO
         title="About"
         description="ExploreCapitals is a free geography platform with interactive games, a 195+ country database, a world map, and a blog."
@@ -34,6 +34,18 @@ const About: React.FC = () => {
           description: 'Free interactive geography education platform.',
           foundingDate: '2024',
         }}
+      />
+
+      {/* Background image */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40 pointer-events-none"
+        style={{ backgroundImage: `url('${import.meta.env.BASE_URL}png/GAMES/map-dash.png')` }}
+      />
+      {/* Readability overlay */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/55 to-[#0F172A]/95"
       />
 
       <VerticalSidebarAd slot="9489406693" position="left" />

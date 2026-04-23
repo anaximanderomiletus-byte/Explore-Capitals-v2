@@ -68,7 +68,7 @@ const Donate: React.FC = () => {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Donate' }]} />
 
         {/* Hero */}
-        <RevealSection className="mb-12 md:mb-16">
+        <RevealSection className="mb-6 md:mb-8">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-pink-500/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6">
             <Heart size={12} className="text-pink-400" fill="currentColor" />
             <span>Support the Mission</span>
