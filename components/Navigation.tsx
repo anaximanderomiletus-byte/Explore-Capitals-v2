@@ -279,7 +279,7 @@ const Navigation: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="mt-auto px-6 pt-6 border-t border-white/10">
+          <div className="mt-auto px-6 pt-6 pb-2 border-t border-white/10">
             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/40">
               <Smartphone size={14} />
               <span>{t('nav.appSoon')}</span>

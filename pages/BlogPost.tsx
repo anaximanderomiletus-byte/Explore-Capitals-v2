@@ -1,6 +1,6 @@
-import React, { useMemo, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
-import { Calendar, Clock, ArrowLeft, ArrowRight, Play, Newspaper } from 'lucide-react';
+import React, { useMemo, useEffect, useCallback } from 'react';
+import { useParams, Link, Navigate, useNavigate } from 'react-router-dom';
+import { Calendar, Clock, ArrowLeft, ArrowRight, Play, Newspaper, Shuffle } from 'lucide-react';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
@@ -20,8 +20,8 @@ function markdownToHtml(md: string): string {
     .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" />')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/^[-*] (.+)$/gm, '<li>$1</li>');
 
   html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
@@ -49,11 +49,21 @@ const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { setPageLoading } = useLayout();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const post = slug ? getPostBySlug(slug) : undefined;
 
   useEffect(() => {
     setPageLoading(false);
   }, [setPageLoading]);
+
+  const handleRandomPost = useCallback(() => {
+    if (blogPosts.length <= 1) return;
+    let randomPost;
+    do {
+      randomPost = blogPosts[Math.floor(Math.random() * blogPosts.length)];
+    } while (randomPost.slug === post?.slug);
+    navigate(`/blog/${randomPost.slug}`);
+  }, [navigate, post?.slug]);
 
   const htmlContent = useMemo(() => {
     if (!post) return '';
@@ -184,39 +194,60 @@ const BlogPost: React.FC = () => {
 
       <div className="max-w-3xl mx-auto relative z-10">
 
-        <Breadcrumbs items={[
-          { label: 'Home', href: '/' },
-          { label: 'Blog', href: '/blog' },
-          { label: post.title },
-        ]} />
+        <div className="mb-6 md:mb-8">
+          <Breadcrumbs items={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+            { label: post.title },
+          ]} />
+        </div>
 
         {/* Header */}
         <RevealSection>
           <header className="mb-8 md:mb-10">
-            <div className="flex flex-wrap items-center gap-3 mb-5 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
-              <span className="flex items-center gap-1.5">
-                <Newspaper size={11} className="text-sky/50" />
-                {post.tags[0] || t('blog.article')}
-              </span>
-              <span className="w-px h-3 bg-white/10" />
-              <span className="flex items-center gap-1.5">
-                <Calendar size={11} />
-                {formatDate(post.date)}
-              </span>
-              <span className="w-px h-3 bg-white/10" />
-              <span className="flex items-center gap-1.5">
-                <Clock size={11} />
-                {post.readTime} {t('blog.minRead')}
-              </span>
+            <div className="flex items-start sm:items-center justify-between gap-4 mb-5 flex-col sm:flex-row">
+              <div className="flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                <span className="flex items-center gap-1.5">
+                  <Newspaper size={11} className="text-sky/50" />
+                  {post.tags[0] || t('blog.article')}
+                </span>
+                <span className="w-px h-3 bg-white/10" />
+                <span className="flex items-center gap-1.5">
+                  <Calendar size={11} />
+                  {formatDate(post.date)}
+                </span>
+                <span className="w-px h-3 bg-white/10" />
+                <span className="flex items-center gap-1.5">
+                  <Clock size={11} />
+                  {post.readTime} {t('blog.minRead')}
+                </span>
+              </div>
+              
+              <button
+                onClick={handleRandomPost}
+                className="flex items-center justify-center gap-2 px-3 py-1.5 bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] hover:border-white/30 rounded-xl text-white transition-all duration-300 group shrink-0"
+                title="Random Blog Post"
+                aria-label="Read a random blog post"
+              >
+                <Shuffle size={14} className="text-sky-light group-hover:rotate-12 transition-transform" />
+                <span className="font-bold uppercase text-[9px] tracking-[0.2em]">Random</span>
+              </button>
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white tracking-tighter uppercase leading-[1.1] mb-4">
               {post.title}
             </h1>
 
-            <p className="text-base text-white/45 leading-relaxed font-medium mb-4">
+            <p className="text-base text-white/45 leading-relaxed font-medium mb-8">
               {post.description}
             </p>
+
+            {post.thumbnail && (
+              <div className="w-full aspect-video sm:h-80 md:h-[400px] mt-6 mb-8 rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl relative">
+                <div className="absolute inset-0 bg-sky/20 mix-blend-overlay pointer-events-none z-10" />
+                <img src={post.thumbnail} alt={post.title} className="w-full h-full object-cover" />
+              </div>
+            )}
 
             <div className="h-px w-full bg-white/[0.06]" />
           </header>
@@ -235,7 +266,18 @@ const BlogPost: React.FC = () => {
           <RevealSection delay={0.1}>
             <div className="mt-12">
               <div className="h-px w-full bg-white/[0.06] mb-6" />
-              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25 mb-4">{t('blog.continueReading')}</div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25">{t('blog.continueReading')}</div>
+                <button
+                  onClick={handleRandomPost}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-xl text-white transition-all duration-300 group"
+                  title="Random Blog Post"
+                  aria-label="Read a random blog post"
+                >
+                  <Shuffle size={12} className="text-sky-light group-hover:rotate-12 transition-transform" />
+                  <span className="font-bold uppercase text-[9px] tracking-[0.2em]">Random</span>
+                </button>
+              </div>
               <nav className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {prevPost ? (
                   <Link

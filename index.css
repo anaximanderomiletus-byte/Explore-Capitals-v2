@@ -18,6 +18,33 @@
 }
 
 /* ==========================================================================
+   AURORA ANIMATIONS
+   ========================================================================== */
+
+@keyframes aurora-sweep-1 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(-2deg); }
+  25% { transform: translate(10vw, 5vh) scale(1.05) rotate(2deg); }
+  50% { transform: translate(-5vw, -5vh) scale(1.1) rotate(-4deg); }
+  75% { transform: translate(15vw, 5vh) scale(0.95) rotate(3deg); }
+}
+@keyframes aurora-sweep-2 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(2deg); }
+  25% { transform: translate(-15vw, -5vh) scale(1.05) rotate(-2deg); }
+  50% { transform: translate(5vw, 5vh) scale(1.1) rotate(4deg); }
+  75% { transform: translate(-10vw, -10vh) scale(0.95) rotate(-3deg); }
+}
+@keyframes aurora-sweep-3 {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  25% { transform: translate(10vw, -5vh) scale(1.05) rotate(4deg); }
+  50% { transform: translate(-15vw, 5vh) scale(1.1) rotate(-2deg); }
+  75% { transform: translate(5vw, 10vh) scale(0.95) rotate(3deg); }
+}
+
+.animate-aurora-1 { animation: aurora-sweep-1 26s ease-in-out infinite; will-change: transform; }
+.animate-aurora-2 { animation: aurora-sweep-2 32s ease-in-out infinite; will-change: transform; }
+.animate-aurora-3 { animation: aurora-sweep-3 22s ease-in-out infinite; will-change: transform; }
+
+/* ==========================================================================
    CROSS-BROWSER NORMALIZATION & PLATFORM FIXES
    Loaded AFTER Tailwind so these overrides take precedence.
    ========================================================================== */

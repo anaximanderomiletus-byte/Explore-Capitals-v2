@@ -80,6 +80,16 @@ const Blog: React.FC = () => {
                   to={`/blog/${post.slug}`}
                   className="group relative flex flex-col h-full bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-1 transition-all duration-500 shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
                 >
+                  {post.thumbnail && (
+                    <div className="w-full h-48 sm:h-52 overflow-hidden shrink-0 border-b border-white/10">
+                      <img
+                        src={post.thumbnail}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                   <div className="p-5 sm:p-6 flex flex-col flex-grow">
                     {/* Tags */}
                     <div className="flex flex-wrap gap-2 mb-3">

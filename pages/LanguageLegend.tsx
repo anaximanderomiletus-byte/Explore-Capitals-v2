@@ -14,7 +14,7 @@ import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
-import GameFooterNav from '../components/GameFooterNav';
+import GameTopNav from '../components/GameTopNav';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -143,7 +143,7 @@ export default function LanguageLegend() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
+            className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <SEO
               title="Language Legend - Premium Game"
@@ -163,12 +163,11 @@ export default function LanguageLegend() {
             </div>
 
             <GameSideAds />
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
-              <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 rounded-full text-[9px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1">
-                <Crown size={10} /> Premium
-              </div>
-              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <GameTopNav />
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group relative">
+              
+              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden">
                 <img src={`${import.meta.env.BASE_URL}png/GAMES/language-legend.png`} alt="Language Legend" className="w-full h-full object-cover" />
               </div>
               <h2 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Language Legend</h2>
@@ -178,7 +177,6 @@ export default function LanguageLegend() {
                 <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">
                   PLAY <Play size={24} fill="currentColor" />
                 </Button>
-                <GameFooterNav />
               </div>
             </div>
             </div>
@@ -299,9 +297,10 @@ export default function LanguageLegend() {
               ease: "easeOut"
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
-            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
+            className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <GameTopNav />
             <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
@@ -313,7 +312,6 @@ export default function LanguageLegend() {
                 <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">
                   {t('game.playAgain')} <Play size={24} fill="currentColor" />
                 </Button>
-                <GameFooterNav />
               </div>
             </div>
             </div>

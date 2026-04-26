@@ -6,7 +6,6 @@ import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
-import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
 import { FeedbackOverlay } from '../components/FeedbackOverlay';
@@ -14,7 +13,7 @@ import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
-import GameFooterNav from '../components/GameFooterNav';
+import GameTopNav from '../components/GameTopNav';
 
 // Better shuffle algorithm
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -237,7 +236,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
-            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
+            className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
         <SEO
           title="Capital Connection - Games"
@@ -255,8 +254,8 @@ export default function CapitalConnection() {
         </div>
 
             <GameSideAds />
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games/all' }, { label: 'Capital Connection' }]} />
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <GameTopNav />
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />
@@ -347,10 +346,11 @@ export default function CapitalConnection() {
               ease: "easeOut"
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
-            className="h-full flex px-3 sm:px-4 py-16 overflow-y-auto"
+            className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+            <GameTopNav />
             <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
@@ -360,7 +360,6 @@ export default function CapitalConnection() {
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="flex flex-col gap-6">
                 <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">{t('game.playAgain')} <Play size={24} fill="currentColor" /></Button>
-                <GameFooterNav />
               </div>
             </div>
             </div>

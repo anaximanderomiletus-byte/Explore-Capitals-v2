@@ -12,10 +12,9 @@ import { useLayout } from '../context/LayoutContext';
 import { getCountryCode, getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
-import Breadcrumbs from '../components/Breadcrumbs';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
-import GameFooterNav from '../components/GameFooterNav';
+import GameTopNav from '../components/GameTopNav';
 
 export default function MapDash() {
   const { t } = useTranslation();
@@ -458,9 +457,9 @@ export default function MapDash() {
             </div>
 
             <GameSideAds />
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games', href: '/games/all' }, { label: 'Map Dash' }]} />
-              <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <GameTopNav />
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group relative">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
@@ -469,7 +468,6 @@ export default function MapDash() {
                 <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-6">
                   <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">PLAY <Play size={24} fill="currentColor" /></Button>
-                  <GameFooterNav />
                 </div>
               </div>
             </div>
@@ -508,8 +506,9 @@ export default function MapDash() {
             </div>
 
             <GameSideAds />
-            <div className="m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-              <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
+              <GameTopNav />
+            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>
@@ -518,7 +517,6 @@ export default function MapDash() {
                 <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
                 <div className="flex flex-col gap-6">
                   <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">{t('game.playAgain')} <Play size={24} fill="currentColor" /></Button>
-                  <GameFooterNav />
                 </div>
               </div>
             </div>

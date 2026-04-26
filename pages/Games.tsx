@@ -27,11 +27,7 @@ const Games: React.FC = () => {
 
   useEffect(() => {
     setPageLoading(false);
-    const activeGames = GAMES.filter(g => g.status === 'active');
-    const randomGame = activeGames[Math.floor(Math.random() * activeGames.length)];
-    if (randomGame) {
-      navigate(`/games/${GAME_PATHS[randomGame.id] || 'capital-quiz'}`, { replace: true });
-    }
+    navigate('/games/all', { replace: true });
   }, [navigate, setPageLoading]);
 
   return null;

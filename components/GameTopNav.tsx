@@ -26,7 +26,7 @@ type Props = {
   tone?: 'dim' | 'default';
 };
 
-const GameFooterNav: React.FC<Props> = ({ tone = 'default' }) => {
+const GameTopNav: React.FC<Props> = ({ tone = 'default' }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,17 +45,17 @@ const GameFooterNav: React.FC<Props> = ({ tone = 'default' }) => {
   const baseText = tone === 'dim' ? 'text-white/30' : 'text-white/50';
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+    <div className="w-full flex items-center justify-between px-2 mb-2">
       <button
         onClick={() => navigate('/games/all')}
-        className={`inline-flex items-center justify-center gap-2 ${baseText} hover:text-sky-light transition-all font-black uppercase tracking-[0.3em] text-[10px] group/hub relative z-20 pointer-events-auto`}
+        className={`inline-flex items-center gap-1.5 ${baseText} hover:text-white transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group/hub relative z-20 pointer-events-auto`}
       >
         <ArrowLeft size={14} className="group-hover/hub:-translate-x-1 transition-transform" />
         {t('game.viewOtherGames')}
       </button>
       <button
         onClick={playRandomGame}
-        className={`inline-flex items-center justify-center gap-2 ${baseText} hover:text-sky-light transition-all font-black uppercase tracking-[0.3em] text-[10px] group/shuffle relative z-20 pointer-events-auto`}
+        className={`inline-flex items-center gap-1.5 ${baseText} hover:text-sky-light transition-all font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[9px] sm:text-[10px] group/shuffle relative z-20 pointer-events-auto`}
       >
         <Shuffle size={14} className="group-hover/shuffle:rotate-180 transition-transform" />
         {t('game.randomGame')}
@@ -64,4 +64,4 @@ const GameFooterNav: React.FC<Props> = ({ tone = 'default' }) => {
   );
 };
 
-export default GameFooterNav;
+export default GameTopNav;

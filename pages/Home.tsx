@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   }, [setPageLoading]);
 
   return (
-    <main className="relative flex-grow bg-[#0F172A] w-full home-glow overflow-x-hidden">
+    <main className="relative flex-grow bg-transparent w-full home-glow overflow-x-hidden">
       <style>{`
         .home-glow h1, .home-glow h2 {
           text-shadow: 0 0 40px rgba(0,194,255,0.15), 0 0 80px rgba(0,194,255,0.08);
@@ -110,27 +110,7 @@ const Home: React.FC = () => {
             }}
           />
 
-          {/* Aurora conic sweep */}
-          <div
-            className="absolute top-1/2 left-1/2 w-[160%] h-[160%] -translate-x-1/2 -translate-y-1/2 home-aurora"
-            style={{
-              background:
-                'conic-gradient(from 180deg at 50% 50%, rgba(0,194,255,0.12) 0deg, transparent 70deg, rgba(80,120,255,0.08) 140deg, transparent 220deg, rgba(0,230,255,0.14) 300deg, transparent 360deg)',
-              filter: 'blur(90px)',
-            }}
-          />
-
-          {/* Left gutter glow pocket */}
-          <div
-            className="absolute top-1/2 -left-[25%] w-[75%] h-[120%] rounded-full home-gutter-l"
-            style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,120,255,0.06) 40%, transparent 70%)', filter: 'blur(60px)' }}
-          />
-
-          {/* Right gutter glow pocket */}
-          <div
-            className="absolute top-1/2 -right-[25%] w-[75%] h-[120%] rounded-full home-gutter-r"
-            style={{ background: 'radial-gradient(circle, rgba(120,90,255,0.14) 0%, rgba(0,194,255,0.06) 40%, transparent 70%)', filter: 'blur(60px)' }}
-          />
+          {/* Removed circular gutter glow pockets and aurora to let global lava lamp shine through */}
 
           {/* Original top atmospherics (kept) */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
@@ -149,15 +129,8 @@ const Home: React.FC = () => {
 
             {/* Globe */}
             <div className="relative flex justify-center items-center mb-10 md:mb-12 w-full">
-              {/* Animated glow rings */}
-              <div
-                className="absolute w-[480px] h-[480px] sm:w-[560px] sm:h-[560px] md:w-[620px] md:h-[620px] rounded-full pointer-events-none animate-glow-pulse"
-                style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.18) 0%, rgba(0,194,255,0.08) 35%, rgba(0,150,255,0.03) 60%, transparent 80%)' }}
-              />
-              <div
-                className="absolute w-[400px] h-[400px] sm:w-[460px] sm:h-[460px] md:w-[500px] md:h-[500px] rounded-full pointer-events-none animate-glow-pulse-slow"
-                style={{ background: 'radial-gradient(circle, rgba(0,194,255,0.55) 0%, rgba(0,194,255,0.3) 30%, rgba(0,150,255,0.12) 55%, transparent 75%)' }}
-              />
+              {/* Glow rings removed to prevent perfect circle look */}
+
 
               <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
                 <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>

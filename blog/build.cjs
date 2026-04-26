@@ -438,21 +438,11 @@ function build() {
   // Ensure output directory exists
   fs.mkdirSync(DIST_DIR, { recursive: true });
 
-  // Generate article pages
-  for (const post of posts) {
-    const html = articlePage(post, posts);
-    const outPath = path.join(DIST_DIR, `${post.slug}.html`);
-    fs.writeFileSync(outPath, html, 'utf-8');
-    console.log(`[blog] ${post.slug}.html`);
-  }
-
-  // Generate index page
-  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexPage(posts), 'utf-8');
-  console.log(`[blog] index.html (${posts.length} posts)`);
-
   // Generate RSS feed
   fs.writeFileSync(path.join(DIST_DIR, 'feed.xml'), rssFeed(posts), 'utf-8');
   console.log('[blog] feed.xml');
+
+
 
   // Append blog URLs to sitemap
   const sitemapPath = path.join(__dirname, '..', 'dist', 'sitemap.xml');
