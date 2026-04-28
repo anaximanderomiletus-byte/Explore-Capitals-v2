@@ -259,9 +259,10 @@ const PersistentBackground: React.FC = () => {
         className="absolute inset-0 transition-opacity duration-1000 ease-in-out will-change-[opacity]"
         style={{ opacity: isMap ? 0 : 1, transform: 'translateZ(0)' }}
       >
-        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-sky/[0.14] animate-aurora-1 origin-center" style={{ transform: 'translateZ(0)' }} />
-        <div className="absolute top-[30%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-accent/[0.08] animate-aurora-2 origin-center" style={{ transform: 'translateZ(0)' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-secondary/[0.10] animate-aurora-3 origin-center" style={{ transform: 'translateZ(0)' }} />
+        <div className="absolute top-[-15%] left-[-10%] w-[130%] h-[50%] rounded-[100%] bg-sky/[0.25] animate-aurora-1 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
+        <div className="absolute top-[25%] left-[-20%] w-[130%] h-[50%] rounded-[100%] bg-accent/[0.20] animate-aurora-2 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
+        <div className="absolute bottom-[-15%] right-[-10%] w-[130%] h-[50%] rounded-[100%] bg-secondary/[0.22] animate-aurora-3 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
+        <div className="absolute bottom-[10%] left-[10%] w-[100%] h-[40%] rounded-[100%] bg-error/[0.15] animate-aurora-1 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
       </div>
     </div>
   );

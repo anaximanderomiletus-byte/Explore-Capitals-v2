@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Compass, Play } from 'lucide-react';
+import { Play } from 'lucide-react';
 import Button from '../components/Button';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
@@ -131,36 +131,22 @@ const Home: React.FC = () => {
 
             {/* Globe */}
             <div className="relative flex justify-center items-center mb-10 md:mb-12 w-full">
-              {/* Glow rings removed to prevent perfect circle look */}
-
-
               <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
-                <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
-                  <Link to="/map" className="relative w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-visible group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
-                    {/* Performance Halo for Safari */}
-                    <div className="absolute inset-[-15%] rounded-full bg-white/10 blur-3xl animate-pulse-slow pointer-events-none" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} />
+                <div className="w-full h-full animate-breathe" style={{ willChange: 'transform' }}>
+                  <Link to="/map" className="relative w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-visible group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ transform: 'translateZ(0)' }}>
+                    {/* Optimized Glow Halo */}
+                    <div className="absolute inset-[-10%] rounded-full bg-sky/20 blur-2xl animate-pulse-slow pointer-events-none" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} />
+                    <div className="absolute inset-[-2%] rounded-full bg-white/25 blur-xl animate-pulse-slow pointer-events-none" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} />
                     <img
                       src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
                       alt="Globe - Click to explore the map"
-                      className="w-[82%] h-[82%] object-contain animate-globe-glow relative z-10"
+                      className="w-[82%] h-[82%] object-contain animate-globe-glow relative z-10 rounded-full"
                       loading="eager"
                       fetchPriority="high"
                     />
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/5 to-white/20 opacity-40 pointer-events-none" />
-                    <div className="absolute inset-0 rounded-full pointer-events-none" style={{ boxShadow: 'inset 0 0 80px rgba(0,194,255,0.12), inset 0 0 30px rgba(255,255,255,0.08)' }} />
+                    <div className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_0_0_80px_rgba(0,194,255,0.15),inset_0_0_30px_rgba(255,255,255,0.1)]" />
                   </Link>
-                </div>
-
-                {/* Decorative floating bubbles */}
-                <div className="absolute -top-1 -right-1 md:top-2 md:right-2 z-10 pointer-events-none animate-float-gentle">
-                  <div className="w-20 h-20 md:w-24 md:h-24 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                    <Trophy className="text-sky w-10 h-10 md:w-12 md:h-12" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-1 -left-2 md:bottom-2 md:-left-8 z-10 pointer-events-none animate-float-gentle-delayed">
-                  <div className="w-24 h-24 md:w-28 md:h-28 aspect-square bg-sky/15 border border-sky/30 rounded-full flex items-center justify-center pointer-events-none glow-bubble">
-                    <Compass className="text-sky w-12 h-12 md:w-14 md:h-14" />
-                  </div>
                 </div>
               </div>
             </div>
