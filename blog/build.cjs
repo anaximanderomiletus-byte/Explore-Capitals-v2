@@ -91,13 +91,13 @@ function articlePage(post, allPosts) {
     image: imageUrl,
     datePublished: post.date,
     author: { '@type': 'Organization', name: post.author, url: SITE_URL },
-    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, logo: { '@type': 'ImageObject', url: `${SITE_URL}/png/STYLE/explorecapitals-globe-favicon.png` } },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL, logo: { '@type': 'ImageObject', url: `${SITE_URL}/png/STYLE/explorecapitals-globe-favicon-new.png` } },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
   })}
   </script>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/png/STYLE/explorecapitals-globe-favicon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/png/STYLE/explorecapitals-globe-favicon-new.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/png/STYLE/ExploreCapitalsAppIcon.png" />
 
   <!-- Fonts -->
@@ -202,7 +202,7 @@ function indexPage(posts) {
   })}
   </script>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/png/STYLE/explorecapitals-globe-favicon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/png/STYLE/explorecapitals-globe-favicon-new.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
@@ -310,7 +310,7 @@ function navHtml() {
   return `<nav class="blog-nav">
   <div class="blog-nav-inner">
     <a href="/" class="blog-logo">
-      <img src="/png/STYLE/explorecapitals-globe-favicon.png" alt="ExploreCapitals" width="28" height="28" />
+      <img src="/png/STYLE/explorecapitals-globe-favicon-new.png" alt="ExploreCapitals" width="28" height="28" style="filter: drop-shadow(0 0 4px rgba(255,255,255,0.7));" />
       <span>Explore<span class="blog-logo-accent">Capitals</span></span>
     </a>
     <div class="blog-nav-links">
@@ -403,7 +403,7 @@ function getStyles() {
 
     .blog-cta { position: relative; margin-top: 3rem; padding: 3rem 1.5rem; background: linear-gradient(135deg, rgba(0,194,255,0.14) 0%, rgba(0,100,255,0.08) 50%, rgba(15,23,42,0.6) 100%); border: 1px solid rgba(0,194,255,0.22); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 0 80px rgba(0,194,255,0.06); }
     .blog-cta-glow { position: absolute; top: -30%; left: -10%; width: 60%; height: 160%; background: radial-gradient(ellipse at center, rgba(0,194,255,0.22) 0%, transparent 65%); filter: blur(40px); pointer-events: none; z-index: 0; }
-    .blog-cta-globe { position: absolute; top: 50%; right: -60px; width: 320px; height: 320px; transform: translateY(-50%); background-image: url('/png/STYLE/explorecapitals-globe-favicon.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.14; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); }
+    .blog-cta-globe { position: absolute; top: 50%; right: -60px; width: 320px; height: 320px; transform: translateY(-50%); background-image: url('/png/STYLE/explorecapitals-globe-favicon-new.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.14; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); }
     .blog-cta-inner { position: relative; z-index: 1; text-align: center; }
     .blog-cta-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,194,255,0.14); border: 1px solid rgba(0,194,255,0.3); border-radius: 999px; padding: 0.35rem 0.9rem; margin-bottom: 1rem; font-size: 0.65rem; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(139,210,255,0.95); }
     .blog-cta-dot { width: 6px; height: 6px; border-radius: 50%; background: #00C2FF; box-shadow: 0 0 10px #00C2FF; animation: blog-cta-pulse 2s ease-in-out infinite; }

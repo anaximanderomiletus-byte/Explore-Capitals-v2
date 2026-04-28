@@ -1109,7 +1109,7 @@ const CountryExploration: React.FC = () => {
                       imageKeyword={currentQuestion.imageKeyword || currentQuestion.stopName}
                       caption={currentQuestion.stopName}
                       region="Stop Detail"
-                      rotation="-rotate-2"
+                      rotation="rotate-0"
                       className="max-w-[240px] md:max-w-[320px] lg:max-w-none mx-auto"
                     />
                  </div>
@@ -1236,7 +1236,7 @@ const CountryExploration: React.FC = () => {
                            size="lg"
                            className="w-full md:min-w-[300px] text-sm font-black uppercase tracking-[0.2em]"
                          >
-                           {isLastQuestion ? 'Finish Tour' : 'Next Stop'} <ChevronRight size={18} />
+                           {isLastQuestion ? 'FINISH' : 'NEXT'} <ChevronRight size={18} />
                          </Button>
                     </motion.div>
                 </div>
@@ -1492,7 +1492,7 @@ const CountryExploration: React.FC = () => {
                     size="md"
                     className="w-full max-w-[280px] text-xs font-black uppercase tracking-[0.2em]"
                   >
-                    Restart Tour <RotateCcw size={14} />
+                    RESTART <RotateCcw size={14} />
                   </Button>
                   
                   <button 

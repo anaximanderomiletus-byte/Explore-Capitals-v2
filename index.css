@@ -817,3 +817,23 @@ button::-moz-focus-inner {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+
+@keyframes globe-glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
+  50% { filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); }
+}
+
+.animate-globe-glow {
+  animation: globe-glow-pulse 4s ease-in-out infinite;
+  will-change: filter;
+}
+
+@keyframes globe-glow-pulse-sm {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)); }
+  50% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); }
+}
+
+.animate-globe-glow-sm {
+  animation: globe-glow-pulse-sm 4s ease-in-out infinite;
+  will-change: filter;
+}

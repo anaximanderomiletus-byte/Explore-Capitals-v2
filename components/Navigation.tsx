@@ -152,7 +152,7 @@ const Navigation: React.FC = () => {
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0" />
+            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0 drop-shadow-[0_0_4px_rgba(255,255,255,0.7)]" />
             <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0 hidden sm:inline`}>
               Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
             </span>
@@ -228,7 +228,6 @@ const Navigation: React.FC = () => {
         }`}
         style={{
           paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
-          paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1rem)`,
         }}
       >
           {/* Header */}
@@ -239,9 +238,9 @@ const Navigation: React.FC = () => {
               className="flex items-center gap-2"
             >
               <img
-                src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
+                src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
                 alt="ExploreCapitals"
-                className="w-7 h-7 object-contain"
+                className="w-7 h-7 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.7)]"
               />
               <span className="font-display font-black text-lg tracking-tighter text-white uppercase">
                 Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
@@ -279,7 +278,10 @@ const Navigation: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="mt-auto px-6 pt-6 pb-2 border-t border-white/10">
+          <div 
+            className="mt-auto px-6 pt-6 border-t border-white/10"
+            style={{ paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1.5rem)` }}
+          >
             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/40">
               <Smartphone size={14} />
               <span>{t('nav.appSoon')}</span>

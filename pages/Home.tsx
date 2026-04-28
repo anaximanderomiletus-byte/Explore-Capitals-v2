@@ -73,7 +73,7 @@ const Home: React.FC = () => {
               '@type': 'Organization',
               name: 'ExploreCapitals',
               url: 'https://explorecapitals.com',
-              logo: 'https://explorecapitals.com/png/STYLE/explorecapitals-globe-favicon.png',
+              logo: 'https://explorecapitals.com/png/STYLE/explorecapitals-globe-favicon-new.png',
               sameAs: ['https://twitter.com/explorecapitals'],
             },
             {
@@ -136,9 +136,9 @@ const Home: React.FC = () => {
                 <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                   <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
                     <img
-                      src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon.png`}
+                      src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
                       alt="Globe - Click to explore the map"
-                      className="w-[82%] h-[82%] object-contain"
+                      className="w-[82%] h-[82%] object-contain animate-globe-glow"
                       loading="eager"
                       fetchPriority="high"
                     />
@@ -164,8 +164,8 @@ const Home: React.FC = () => {
             {/* Button */}
             <div className="text-center w-full">
               <Link to="/games">
-                <Button variant="primary" size="lg" className="w-72 sm:w-80 md:w-96 h-20 text-3xl uppercase tracking-widest font-black">
-                  {t('home.hero.play')} <Play className="ml-2 w-9 h-9" fill="currentColor" />
+                <Button variant="primary" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[min(6.25vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center">
+                  {t('home.hero.play')} <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
                 </Button>
               </Link>
             </div>

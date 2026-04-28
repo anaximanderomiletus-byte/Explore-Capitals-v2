@@ -15,7 +15,7 @@ import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
-import GameTopNav from '../components/GameTopNav';
+import GameNavigationButtons from '../components/GameNavigationButtons';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -167,8 +167,8 @@ export default function KnowYourNeighbor() {
         </div>
 
             <GameSideAds />
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <GameTopNav />
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/know-your-neighbor.png`} alt="Know Your Neighbor" className="w-full h-full object-cover" />
@@ -176,9 +176,9 @@ export default function KnowYourNeighbor() {
           <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
           <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
-            <div className="flex flex-col gap-6">
-            <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">PLAY <Play size={24} fill="currentColor" /></Button>
-            <GameFooterNav tone="dim" />
+            <div className="flex flex-col gap-6 w-full">
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+            <GameNavigationButtons />
           </div>
         </div>
             </div>
@@ -259,28 +259,36 @@ export default function KnowYourNeighbor() {
               
             {/* Selections Grid - Fills remaining space */}
             <div className="game-neighbor-grid flex-1 min-h-0 px-1 pb-2">
-              <div className="grid grid-cols-3 gap-1.5 md:gap-2 w-full h-full" style={{ gridAutoRows: '1fr' }}>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5 md:gap-2 w-full h-full" style={{ gridAutoRows: '1fr' }}>
               {options.map((countryName) => {
                 const isSelected = selectedOptions.includes(countryName);
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
                 const isIncorrectSelection = isSelected && !isActualNeighbor;
+                const country = COUNTRIES.find(c => c.name === countryName);
+                const flagUrl = country ? getFlagUrl(country.flag) : '';
                 
                 // No hover or focus styles - prevents "pre-highlighted" appearance on touch devices
-                let btnStyle = "bg-white/5 border border-white/30 text-white/70 active:bg-white/10 active:border-sky/40 shadow-inner outline-none focus:outline-none focus:ring-0 select-none";
+                let btnStyle = "bg-white/5 border border-white/30 text-white/90 active:bg-white/10 active:border-sky/40 shadow-inner outline-none focus:outline-none focus:ring-0 select-none";
+                let overlayStyle = "bg-black/60";
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {
-                    btnStyle = "bg-accent/70 border-2 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "border-2 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    overlayStyle = "bg-accent/80";
                   } else if (isActualNeighbor && !isSelected) {
-                    btnStyle = "bg-warning/40 border-2 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "border-2 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    overlayStyle = "bg-warning/60";
                   } else if (isSelected && !isActualNeighbor) {
-                    btnStyle = "bg-red-500/70 border-2 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "border-2 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
+                    overlayStyle = "bg-red-500/80";
                   } else {
-                    btnStyle = "bg-white/5 border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
+                    overlayStyle = "bg-black/80";
                   }
                 } else {
                   if (isSelected) {
-                    btnStyle = "bg-sky/60 border-sky/30 text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)] outline-none focus:outline-none focus:ring-0 select-none";
+                    btnStyle = "border-2 border-sky/60 text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)] outline-none focus:outline-none focus:ring-0 select-none";
+                    overlayStyle = "bg-sky/60";
                   }
                 }
 
@@ -289,10 +297,16 @@ export default function KnowYourNeighbor() {
                     key={countryName}
                     onClick={() => toggleOption(countryName)}
                     disabled={!!roundResult}
-                    className={`relative p-1.5 md:p-2.5 rounded-lg md:rounded-xl font-black text-[9px] md:text-[10px] flex items-center justify-center text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group h-full ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
+                    className={`relative p-1 rounded-lg md:rounded-xl font-black text-[8px] md:text-[9px] flex items-center justify-center text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group h-full ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    <span className="leading-tight relative z-10 drop-shadow-md">{countryName}</span>
+                    {flagUrl && (
+                      <div className="absolute inset-0 z-0">
+                        <img src={flagUrl} className="w-full h-full object-cover" alt="" />
+                        <div className={`absolute inset-0 transition-colors duration-300 ${overlayStyle}`} />
+                      </div>
+                    )}
+                    <span className="leading-tight relative z-10 drop-shadow-md px-0.5">{countryName}</span>
                   </button>
                 );
               })}
@@ -303,11 +317,11 @@ export default function KnowYourNeighbor() {
             <div className="shrink-0 relative z-10 pt-2">
               <div className="h-px w-full bg-white/10 mb-2" />
               {roundResult ? (
-                <div className={`p-3 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
-                  <span className="text-sm relative z-10 drop-shadow-md">{feedback}</span>
+                <div className={`p-4 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
+                  <span className="text-sm md:text-base relative z-10 drop-shadow-md">{feedback}</span>
                 </div>
               ) : (
-                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full h-10 md:h-11 text-xs md:text-sm uppercase tracking-widest" size="lg">Submit</Button>
+                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full h-12 md:h-14 text-sm md:text-lg uppercase tracking-widest font-black" size="lg">Submit</Button>
               )}
             </div>
                  </motion.div>
@@ -335,18 +349,19 @@ export default function KnowYourNeighbor() {
             exit={{ opacity: 0, transition: { duration: 0 } }}
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-md">
-            <GameTopNav />
-            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            
+            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
-              <h2 className="text-5xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
+              <h2 className="text-4xl sm:text-6xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
               <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
-              <div className="flex flex-col gap-6">
-                <Button onClick={startGame} size="lg" className="w-full h-14 sm:h-16 md:h-[4.5rem] text-xl sm:text-2xl uppercase tracking-widest font-black">{t('game.playAgain')} <Play size={24} fill="currentColor" /></Button>
+              <div className="flex flex-col gap-6 w-full">
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">{t('game.playAgain')} <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
           </div>
+                <GameNavigationButtons />
       </div>
             </div>
           </motion.div>

@@ -4,6 +4,7 @@ import { Play, Lock, Shuffle, Clock, ArrowRight } from 'lucide-react';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
+import Button from '../components/Button';
 import { useLayout } from '../context/LayoutContext';
 import { useTranslation } from '../context/LocaleContext';
 
@@ -59,16 +60,16 @@ const GamesDashboard: React.FC = () => {
         ]} />
 
         {/* Header */}
-        <div className="flex items-end justify-between gap-4 flex-wrap mb-8 md:mb-10">
+        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 w-full mb-8 md:mb-10">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
             {t('games.title')}
           </h1>
           <button
             onClick={playRandomGame}
-            className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 mb-1"
+            className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 mb-1"
           >
             <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
-            <span className="font-bold uppercase text-[11px] tracking-[0.2em]">{t('games.randomGame')}</span>
+            <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM</span>
           </button>
         </div>
 
@@ -88,21 +89,8 @@ const GamesDashboard: React.FC = () => {
                 <div className="w-full aspect-[4/3] overflow-hidden relative border-b border-white/10 shrink-0">
                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-black/10 to-transparent z-10" />
                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                   
-                   {/* Play overlay icon */}
-                   <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                     <div className="w-16 h-16 rounded-full bg-sky-light text-black flex items-center justify-center shadow-[0_0_20px_rgba(0,194,255,0.25)]">
-                       <Play size={28} fill="currentColor" className="ml-1" />
-                     </div>
-                   </div>
-
-                   {/* Duration Badge */}
-                   <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white/90">
-                     <Clock size={12} className="text-sky-light/80" />
-                     <span className="text-[10px] font-black uppercase tracking-wider">1 min</span>
-                   </div>
                 </div>
-
+                   
                 {/* Game info */}
                 <div className="p-5 sm:p-6 flex flex-col flex-grow relative z-20">
                     <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight leading-none group-hover:text-sky-light transition-colors mb-2">
@@ -111,6 +99,11 @@ const GamesDashboard: React.FC = () => {
                     <p className="text-[13px] text-white/50 font-medium leading-relaxed flex-grow">
                       {game.description}
                     </p>
+                    <div className="mt-6">
+                      <Button variant="primary" className="w-full aspect-[4.8] text-[16px] sm:text-[18px] uppercase tracking-widest font-black flex items-center justify-center p-0 shadow-[0_10px_20px_rgba(0,122,255,0.2)]">
+                        PLAY <Play size={18} fill="currentColor" className="ml-2" />
+                      </Button>
+                    </div>
                 </div>
               </Link>
             );

@@ -55,18 +55,18 @@ const Blog: React.FC = () => {
 
         {/* Header */}
         <RevealSection className="mb-6 md:mb-8">
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-3 md:mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+          <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 w-full">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white mb-2 md:mb-4 tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
               Blogs
             </h1>
             <button
               onClick={handleRandomPost}
-              className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 mb-3 md:mb-4"
+              className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 mb-3 md:mb-4"
               title="Random Blog Post"
               aria-label="Read a random blog post"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
-              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">Random</span>
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM</span>
             </button>
           </div>
         </RevealSection>
