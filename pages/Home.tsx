@@ -107,6 +107,8 @@ const Home: React.FC = () => {
                 'radial-gradient(1px 1px at 91% 19%, rgba(0,194,255,0.5), transparent 60%),' +
                 'radial-gradient(1px 1px at 8% 82%, rgba(255,255,255,0.5), transparent 60%)',
               backgroundSize: '100% 100%',
+              willChange: 'opacity',
+              transform: 'translateZ(0)'
             }}
           />
 
@@ -134,11 +136,13 @@ const Home: React.FC = () => {
 
               <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] flex-shrink-0 pointer-events-none">
                 <div className="w-full h-full animate-breathe" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
-                  <Link to="/map" className="w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-hidden group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                  <Link to="/map" className="relative w-full h-full bg-sky/10 rounded-full border-2 border-sky/30 flex items-center justify-center overflow-visible group cursor-pointer pointer-events-auto shadow-[inset_-6px_-6px_20px_rgba(255,255,255,0.25),inset_6px_6px_14px_rgba(255,255,255,0.1),inset_0_0_60px_rgba(0,194,255,0.15)]" style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}>
+                    {/* Performance Halo for Safari */}
+                    <div className="absolute inset-[-15%] rounded-full bg-white/10 blur-3xl animate-pulse-slow pointer-events-none" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} />
                     <img
                       src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
                       alt="Globe - Click to explore the map"
-                      className="w-[82%] h-[82%] object-contain animate-globe-glow"
+                      className="w-[82%] h-[82%] object-contain animate-globe-glow relative z-10"
                       loading="eager"
                       fetchPriority="high"
                     />

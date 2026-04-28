@@ -257,11 +257,11 @@ const PersistentBackground: React.FC = () => {
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#0F172A]">
       <div
         className="absolute inset-0 transition-opacity duration-1000 ease-in-out will-change-[opacity]"
-        style={{ opacity: isMap ? 0 : 1 }}
+        style={{ opacity: isMap ? 0 : 1, transform: 'translateZ(0)' }}
       >
-        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-sky/[0.14] animate-aurora-1 origin-center" />
-        <div className="absolute top-[30%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-accent/[0.08] animate-aurora-2 origin-center" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-secondary/[0.10] animate-aurora-3 origin-center" />
+        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-sky/[0.14] animate-aurora-1 origin-center" style={{ transform: 'translateZ(0)' }} />
+        <div className="absolute top-[30%] left-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-accent/[0.08] animate-aurora-2 origin-center" style={{ transform: 'translateZ(0)' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[40%] rounded-[100%] blur-[100px] bg-secondary/[0.10] animate-aurora-3 origin-center" style={{ transform: 'translateZ(0)' }} />
       </div>
     </div>
   );

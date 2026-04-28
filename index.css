@@ -79,6 +79,11 @@ html {
   max-width: 100%;
   width: 100%;
   overflow-x: hidden;
+  /* Safari flicker prevention */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
 /* Consistent box-sizing */
@@ -503,8 +508,8 @@ body::before {
 [class*="[-webkit-text-fill-color:transparent]"] {
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
@@ -790,6 +795,26 @@ button::-moz-focus-inner {
   }
 }
 
+/* ===== SAFARI SPECIFIC TWEAKS ===== */
+.is-safari .sticky {
+  /* Safari sticky sometimes needs a specific display/transform to avoid jitters */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.is-safari .animate-in {
+  /* Safari sometimes ignores hardware acceleration on tailwind-animate classes */
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
+
+.reduce-effects * {
+  /* Stop heavy filter animations if device is struggling */
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 /* ===== iOS NOTCH/DYNAMIC ISLAND SAFE AREAS ===== */
 @supports (padding: max(0px)) {
   .safe-area-top {
@@ -819,21 +844,45 @@ button::-moz-focus-inner {
 }
 
 @keyframes globe-glow-pulse {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
-  50% { filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); }
+  0%, 100% { 
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.45));
+    -webkit-filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.45));
+    transform: translate3d(0, 0, 0);
+  }
+  50% { 
+    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.85));
+    -webkit-filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.85));
+    transform: translate3d(0, 0, 0) scale(1.005);
+  }
 }
 
 .animate-globe-glow {
   animation: globe-glow-pulse 4s ease-in-out infinite;
-  will-change: filter;
+  will-change: filter, transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 @keyframes globe-glow-pulse-sm {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)); }
-  50% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8)); }
+  0%, 100% { 
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
+    -webkit-filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
+    transform: translate3d(0, 0, 0);
+  }
+  50% { 
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+    -webkit-filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+    transform: translate3d(0, 0, 0) scale(1.005);
+  }
 }
 
 .animate-globe-glow-sm {
   animation: globe-glow-pulse-sm 4s ease-in-out infinite;
-  will-change: filter;
+  will-change: filter, transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }

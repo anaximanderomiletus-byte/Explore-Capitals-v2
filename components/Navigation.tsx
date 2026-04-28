@@ -152,7 +152,7 @@ const Navigation: React.FC = () => {
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0 drop-shadow-[0_0_4px_rgba(255,255,255,0.7)]" />
+            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0 drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]" />
             <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0 hidden sm:inline`}>
               Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
             </span>
@@ -223,8 +223,8 @@ const Navigation: React.FC = () => {
       />
       {/* Panel */}
       <div
-        className={`absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          isMobileMenuOpen ? 'translate-x-0 shadow-[-20px_0_60px_rgba(0,0,0,0.5)]' : 'translate-x-full shadow-none'
         }`}
         style={{
           paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
@@ -240,7 +240,7 @@ const Navigation: React.FC = () => {
               <img
                 src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
                 alt="ExploreCapitals"
-                className="w-7 h-7 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.7)]"
+                className="w-7 h-7 object-contain drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]"
               />
               <span className="font-display font-black text-lg tracking-tighter text-white uppercase">
                 Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>

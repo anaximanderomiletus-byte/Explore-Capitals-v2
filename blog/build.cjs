@@ -310,7 +310,7 @@ function navHtml() {
   return `<nav class="blog-nav">
   <div class="blog-nav-inner">
     <a href="/" class="blog-logo">
-      <img src="/png/STYLE/explorecapitals-globe-favicon-new.png" alt="ExploreCapitals" width="28" height="28" style="filter: drop-shadow(0 0 4px rgba(255,255,255,0.7));" />
+      <img src="/png/STYLE/explorecapitals-globe-favicon-new.png" alt="ExploreCapitals" width="28" height="28" style="filter: drop-shadow(0 0 2px rgba(255,255,255,0.4));" />
       <span>Explore<span class="blog-logo-accent">Capitals</span></span>
     </a>
     <div class="blog-nav-links">
@@ -351,7 +351,7 @@ function getStyles() {
     a:hover { text-decoration: underline; }
     img { max-width: 100%; height: auto; }
 
-    .blog-nav { position: sticky; top: 0; z-index: 100; background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.75rem 1rem; }
+    .blog-nav { position: sticky; top: 0; z-index: 100; background: rgba(15,23,42,0.85); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.75rem 1rem; }
     .blog-nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .blog-logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 900; font-size: 1.1rem; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: -0.03em; }
     .blog-logo img { width: 28px; height: 28px; }
@@ -403,7 +403,7 @@ function getStyles() {
 
     .blog-cta { position: relative; margin-top: 3rem; padding: 3rem 1.5rem; background: linear-gradient(135deg, rgba(0,194,255,0.14) 0%, rgba(0,100,255,0.08) 50%, rgba(15,23,42,0.6) 100%); border: 1px solid rgba(0,194,255,0.22); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 0 80px rgba(0,194,255,0.06); }
     .blog-cta-glow { position: absolute; top: -30%; left: -10%; width: 60%; height: 160%; background: radial-gradient(ellipse at center, rgba(0,194,255,0.22) 0%, transparent 65%); filter: blur(40px); pointer-events: none; z-index: 0; }
-    .blog-cta-globe { position: absolute; top: 50%; right: -60px; width: 320px; height: 320px; transform: translateY(-50%); background-image: url('/png/STYLE/explorecapitals-globe-favicon-new.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.14; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); }
+    .blog-cta-globe { position: absolute; top: 50%; right: -60px; width: 320px; height: 320px; transform: translateY(-50%) translateZ(0); background-image: url('/png/STYLE/explorecapitals-globe-favicon-new.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.14; pointer-events: none; z-index: 0; filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); -webkit-filter: drop-shadow(0 0 40px rgba(0,194,255,0.4)); }
     .blog-cta-inner { position: relative; z-index: 1; text-align: center; }
     .blog-cta-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,194,255,0.14); border: 1px solid rgba(0,194,255,0.3); border-radius: 999px; padding: 0.35rem 0.9rem; margin-bottom: 1rem; font-size: 0.65rem; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(139,210,255,0.95); }
     .blog-cta-dot { width: 6px; height: 6px; border-radius: 50%; background: #00C2FF; box-shadow: 0 0 10px #00C2FF; animation: blog-cta-pulse 2s ease-in-out infinite; }

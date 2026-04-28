@@ -60,13 +60,13 @@ const GamesDashboard: React.FC = () => {
         ]} />
 
         {/* Header */}
-        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 w-full mb-8 md:mb-10">
+        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 w-full mb-6 md:mb-10">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
             {t('games.title')}
           </h1>
           <button
             onClick={playRandomGame}
-            className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 mb-1"
+            className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 md:mb-1"
           >
             <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
             <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM</span>
@@ -100,8 +100,8 @@ const GamesDashboard: React.FC = () => {
                       {game.description}
                     </p>
                     <div className="mt-6">
-                      <Button variant="primary" className="w-full aspect-[4.8] text-[16px] sm:text-[18px] uppercase tracking-widest font-black flex items-center justify-center p-0 shadow-[0_10px_20px_rgba(0,122,255,0.2)]">
-                        PLAY <Play size={18} fill="currentColor" className="ml-2" />
+                      <Button variant="primary" className="w-full aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black flex items-center justify-center p-0">
+                        PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
                       </Button>
                     </div>
                 </div>
