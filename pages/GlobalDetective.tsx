@@ -173,7 +173,7 @@ export default function GlobalDetective() {
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
             <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
           <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
@@ -210,9 +210,9 @@ export default function GlobalDetective() {
             exit={{ opacity: 0, transition: { duration: 0 } }}
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
-            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
           <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
@@ -323,9 +323,9 @@ export default function GlobalDetective() {
                              // No hover styles - prevents "pre-highlighted" appearance on touch devices
                              let stateStyles = "bg-white/10 border-2 border-white/40 text-white active:bg-white/20 active:border-sky/50";
                              if (selectedAnswer) {
-                               if (isCorrect) stateStyles = "bg-accent/70 border-2 border-accent text-white";
-                               else if (isSelected) stateStyles = "bg-red-500/70 border-2 border-red-500 text-white";
-                               else if (option.name === targetCountry.name) stateStyles = "bg-accent/40 border-2 border-accent/80 text-white";
+                               if (isCorrect) stateStyles = "bg-accent/90 border-2 border-accent text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                               else if (isSelected) stateStyles = "bg-red-500/90 border-2 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                               else if (option.name === targetCountry.name) stateStyles = "bg-accent/40 border-2 border-accent/80 text-white shadow-[0_0_15px_rgba(34,197,94,0.2)]";
                                else stateStyles = "bg-white/5 border-2 border-white/5 text-white/20 opacity-40 grayscale blur-[1px]";
                              }
                              return (

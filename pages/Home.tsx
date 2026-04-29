@@ -105,7 +105,7 @@ const Home: React.FC = () => {
       <VerticalSidebarAd slot="9489406693" position="left" />
       <VerticalSidebarAd slot="9489406693" position="right" />
 
-      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-4 pb-10">
+      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-24 pb-10">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0 home-stars" style={{ backgroundImage: 'radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,0.55), transparent 60%), radial-gradient(1.5px 1.5px at 42% 14%, rgba(255,255,255,0.7), transparent 60%)', backgroundSize: '100% 100%' }} />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
@@ -204,8 +204,15 @@ const Panel: React.FC<{
 
   return (
     <motion.div
-      style={{ scale, opacity, x: targetX, zIndex }}
-      className={`absolute flex items-center justify-center w-[280px] sm:w-[360px] h-full ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'}`}
+      style={{ 
+        scale, 
+        opacity, 
+        x: targetX, 
+        zIndex,
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)'
+      }}
+      className={`absolute flex items-center justify-center w-[280px] sm:w-[360px] h-full ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'} will-change-transform`}
       onClick={() => activeIndex !== index && onClick()}
     >
       <div className="w-full h-full flex items-center justify-center pointer-events-auto">
@@ -216,83 +223,83 @@ const Panel: React.FC<{
 };
 
 const VerticalContent: React.FC<{ items: any[]; type: 'games' | 'countries' }> = ({ items, type }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const speed = 0.35;
-    let raf: number;
-    const tick = () => {
-      if (el) {
-        el.scrollTop += speed;
-        if (el.scrollTop >= el.scrollHeight / 2) el.scrollTop -= el.scrollHeight / 2;
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [type]);
+  // Duration proportional to items for consistent speed
+  const duration = items.length * 5;
 
-  const doubled = useMemo(() => [...items, ...items], [items]);
+  const content = (
+    <div className="flex flex-col gap-6 py-10 px-2">
+      {items.map((item, i) => (
+        <div key={i} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-3.5 flex flex-col gap-3 transform-gpu">
+          {type === 'games' ? (
+            <>
+              <img 
+                src={`${import.meta.env.BASE_URL}png/GAMES/${GAME_PATHS[item.id] || 'capital-quiz'}.png`} 
+                className="w-full aspect-[16/10] object-cover rounded-2xl shadow-lg" 
+                alt="" 
+                draggable="false"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}png/GAMES/capital-quiz.png`;
+                }}
+              />
+              <p className="text-[12px] font-black uppercase tracking-widest text-white/90 text-center truncate">{item.title}</p>
+            </>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-center gap-3 border-b border-white/5 pb-2">
+                <span className="text-2xl drop-shadow-sm">{item.flag}</span>
+                <div className="flex flex-col min-w-0">
+                  <p className="text-[14px] font-black text-white uppercase tracking-tight truncate leading-none mb-1">{item.name}</p>
+                  <p className="text-[10px] text-sky font-bold uppercase tracking-widest opacity-80">{item.region}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+                <div className="flex flex-col">
+                  <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Capital</span>
+                  <span className="text-[11px] text-white/90 font-medium truncate">{item.capital}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Population</span>
+                  <span className="text-[11px] text-white/90 font-medium">{item.population}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Area</span>
+                  <span className="text-[11px] text-white/90 font-medium">{item.area} km²</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Currency</span>
+                  <span className="text-[11px] text-white/90 font-medium truncate">{item.currency}</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div 
-      ref={ref} className="w-full h-full overflow-hidden relative"
+      className="w-full h-full overflow-hidden relative"
       style={{ 
         maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)'
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)'
       }}
     >
-      <div className="flex flex-col gap-6 py-10 px-2">
-        {doubled.map((item, i) => (
-          <div key={i} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-3.5 flex flex-col gap-3">
-            {type === 'games' ? (
-              <>
-                <img 
-                  src={`${import.meta.env.BASE_URL}png/GAMES/${GAME_PATHS[item.id] || 'capital-quiz'}.png`} 
-                  className="w-full aspect-[16/10] object-cover rounded-2xl shadow-lg" 
-                  alt="" 
-                  draggable="false"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}png/GAMES/capital-quiz.png`;
-                  }}
-                />
-                <p className="text-[12px] font-black uppercase tracking-widest text-white/90 text-center truncate">{item.title}</p>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2.5">
-                <div className="flex items-center gap-3 border-b border-white/5 pb-2">
-                  <span className="text-2xl drop-shadow-sm">{item.flag}</span>
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-[14px] font-black text-white uppercase tracking-tight truncate leading-none mb-1">{item.name}</p>
-                    <p className="text-[10px] text-sky font-bold uppercase tracking-widest opacity-80">{item.region}</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-y-3 gap-x-2">
-                  <div className="flex flex-col">
-                    <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Capital</span>
-                    <span className="text-[11px] text-white/90 font-medium truncate">{item.capital}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Population</span>
-                    <span className="text-[11px] text-white/90 font-medium">{item.population}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Area</span>
-                    <span className="text-[11px] text-white/90 font-medium">{item.area} km²</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[9px] uppercase text-white/30 font-bold tracking-widest mb-0.5">Currency</span>
-                    <span className="text-[11px] text-white/90 font-medium truncate">{item.currency}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <motion.div 
+        animate={{ y: ["0%", "-50%"] }}
+        transition={{
+          duration: duration,
+          ease: "linear",
+          repeat: Infinity
+        }}
+        className="flex flex-col will-change-transform"
+      >
+        {content}
+        {content}
+      </motion.div>
     </div>
   );
 };

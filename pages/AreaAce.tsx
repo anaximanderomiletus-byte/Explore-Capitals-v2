@@ -177,7 +177,7 @@ export default function AreaAce() {
             </div>
 
             <GameSideAds />
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20">
               
@@ -272,13 +272,13 @@ export default function AreaAce() {
                         
                       if (result) {
                         if (isWinner) {
-                          cardStyle = "bg-accent/60 border-2 border-accent z-20";
-                          titleStyle = "text-white";
+                          cardStyle = "bg-accent/90 border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                          titleStyle = "text-white drop-shadow-md";
                         } else if (isSelected) {
-                          cardStyle = "bg-red-500/60 border-2 border-red-500 z-10";
-                          titleStyle = "text-white";
+                          cardStyle = "bg-red-500/90 border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                          titleStyle = "text-white drop-shadow-md";
                         } else {
-                          cardStyle = "bg-black/20 border-white/5 opacity-30 z-0";
+                          cardStyle = "bg-black/20 border-white/5 opacity-30 z-0 blur-[1px]";
                           titleStyle = "text-white/20";
                         }
                       }
@@ -354,9 +354,9 @@ export default function AreaAce() {
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>

@@ -167,7 +167,7 @@ export default function KnowYourNeighbor() {
         </div>
 
             <GameSideAds />
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
             <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
@@ -242,24 +242,24 @@ export default function KnowYourNeighbor() {
                    style={{ willChange: 'transform, opacity' }}
                    className="game-neighbor-inner h-full flex flex-col justify-between relative z-10"
                  >
-            {/* Country Prompt - Compact */}
-            <div className="shrink-0 flex flex-col items-center justify-center py-2 sm:py-3">
+            {/* Country Prompt - More spacious */}
+            <div className="shrink-0 flex flex-col items-center justify-center py-4 sm:py-6 md:py-8">
               <div className="text-center">
-                 <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1.5 font-sans opacity-80 shrink-0">SELECT ALL NEIGHBORS</p>
-                 <h3 className="text-lg md:text-2xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg mb-1 md:mb-1.5">{targetCountry.name}</h3>
+                 <p className="text-sky-light font-black text-[10px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">SELECT ALL NEIGHBORS</p>
+                 <h3 className="text-xl md:text-3xl font-display font-black text-white leading-tight px-4 uppercase tracking-tighter drop-shadow-lg mb-2 md:mb-3">{targetCountry.name}</h3>
                  <img
                    src={getFlagUrl(targetCountry.flag)}
                    alt={`${targetCountry.name} Flag`}
-                   className="max-h-[6vh] md:max-h-[8vh] w-auto mx-auto min-h-0 shrink drop-shadow-2xl object-contain"
+                   className="max-h-[8vh] md:max-h-[10vh] w-auto mx-auto min-h-0 shrink drop-shadow-2xl object-contain"
                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
                  />
               </div>
             </div>
-            <div className="h-3 md:h-5 shrink-0" />
+            <div className="h-4 md:h-8 shrink-0" />
               
-            {/* Selections Grid - Fills remaining space */}
-            <div className="game-neighbor-grid flex-1 min-h-0 px-1 pb-2">
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5 md:gap-2 w-full h-full" style={{ gridAutoRows: '1fr' }}>
+            {/* Selections Grid - Fills remaining space with thinner buttons */}
+            <div className="game-neighbor-grid flex-1 min-h-0 px-1 pb-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5 md:gap-2 w-full h-full content-center" style={{ gridAutoRows: 'minmax(44px, 1fr)' }}>
               {options.map((countryName) => {
                 const isSelected = selectedOptions.includes(countryName);
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
@@ -267,29 +267,21 @@ export default function KnowYourNeighbor() {
                 const country = COUNTRIES.find(c => c.name === countryName);
                 const flagUrl = country ? getFlagUrl(country.flag) : '';
                 
-                // No hover or focus styles - prevents "pre-highlighted" appearance on touch devices
-                let btnStyle = "bg-white/5 border border-white/30 text-white/90 active:bg-white/10 active:border-sky/40 shadow-inner outline-none focus:outline-none focus:ring-0 select-none";
-                let overlayStyle = "bg-black/60";
+                // Determine which state classes to apply for the border/shadow
+                let stateClasses = "bg-white/5 border border-white/30 text-white/90 shadow-inner";
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {
-                    btnStyle = "border-2 border-accent text-white outline-none focus:outline-none focus:ring-0 select-none";
-                    overlayStyle = "bg-accent/80";
+                    stateClasses = "border-2 border-accent text-white";
                   } else if (isActualNeighbor && !isSelected) {
-                    btnStyle = "border-2 border-warning text-white outline-none focus:outline-none focus:ring-0 select-none";
-                    overlayStyle = "bg-warning/60";
+                    stateClasses = "border-2 border-warning text-white";
                   } else if (isSelected && !isActualNeighbor) {
-                    btnStyle = "border-2 border-red-500 text-white outline-none focus:outline-none focus:ring-0 select-none";
-                    overlayStyle = "bg-red-500/80";
+                    stateClasses = "border-2 border-red-500 text-white";
                   } else {
-                    btnStyle = "border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px] outline-none focus:outline-none focus:ring-0 select-none";
-                    overlayStyle = "bg-black/80";
+                    stateClasses = "border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px]";
                   }
-                } else {
-                  if (isSelected) {
-                    btnStyle = "border-2 border-sky/60 text-white shadow-[inset_0_0_12px_rgba(56,189,248,0.3)] outline-none focus:outline-none focus:ring-0 select-none";
-                    overlayStyle = "bg-sky/60";
-                  }
+                } else if (isSelected) {
+                  stateClasses = "border-2 border-white/60 text-white shadow-premium-hover brightness-105 frutiger-gloss";
                 }
 
                 return (
@@ -297,13 +289,31 @@ export default function KnowYourNeighbor() {
                     key={countryName}
                     onClick={() => toggleOption(countryName)}
                     disabled={!!roundResult}
-                    className={`relative p-1 rounded-lg md:rounded-xl font-black text-[8px] md:text-[9px] flex items-center justify-center text-center transition-all duration-500 uppercase tracking-tight overflow-hidden group h-full ${btnStyle} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''} focus:outline-none focus:ring-0`}
+                    className={`relative p-1 rounded-lg md:rounded-xl font-black text-[8px] md:text-[9px] flex items-center justify-center text-center transition-all duration-200 uppercase tracking-tight overflow-hidden group h-full focus:outline-none focus:ring-0 select-none ${stateClasses} ${roundResult && isIncorrectSelection ? 'animate-shake' : ''}`}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
                     {flagUrl && (
                       <div className="absolute inset-0 z-0">
                         <img src={flagUrl} className="w-full h-full object-cover" alt="" />
-                        <div className={`absolute inset-0 transition-colors duration-300 ${overlayStyle}`} />
+                        
+                        {/* Layered Overlays for smooth transitions */}
+                        {/* 1. Default Dark Overlay */}
+                        <div className={`absolute inset-0 bg-black/60 transition-opacity duration-200 ${(!isSelected && !roundResult) ? 'opacity-100' : 'opacity-0'}`} />
+                        
+                        {/* 2. Selection Overlay (Matches SUBMIT button) */}
+                        <div className={`absolute inset-0 bg-gel-blue backdrop-blur-[2px] transition-opacity duration-200 ${isSelected && !roundResult ? 'opacity-100' : 'opacity-0'}`} />
+                        
+                        {/* 3. Correct Result Overlay */}
+                        <div className={`absolute inset-0 bg-accent/80 transition-opacity duration-200 ${(roundResult && isActualNeighbor && isSelected) ? 'opacity-100' : 'opacity-0'}`} />
+                        
+                        {/* 4. Missed Result Overlay (Orange) */}
+                        <div className={`absolute inset-0 bg-warning/60 transition-opacity duration-200 ${(roundResult && isActualNeighbor && !isSelected) ? 'opacity-100' : 'opacity-0'}`} />
+                        
+                        {/* 5. Incorrect Result Overlay (Red) */}
+                        <div className={`absolute inset-0 bg-red-500/80 transition-opacity duration-200 ${(roundResult && isSelected && !isActualNeighbor) ? 'opacity-100' : 'opacity-0'}`} />
+                        
+                        {/* 6. Ghost/Dimmed Result Overlay */}
+                        <div className={`absolute inset-0 bg-black/80 transition-opacity duration-200 ${(roundResult && !isSelected && !isActualNeighbor) ? 'opacity-100' : 'opacity-0'}`} />
                       </div>
                     )}
                     <span className="leading-tight relative z-10 drop-shadow-md px-0.5">{countryName}</span>
@@ -317,11 +327,11 @@ export default function KnowYourNeighbor() {
             <div className="shrink-0 relative z-10 pt-2">
               <div className="h-px w-full bg-white/10 mb-2" />
               {roundResult ? (
-                <div className={`p-4 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
-                  <span className="text-sm md:text-base relative z-10 drop-shadow-md">{feedback}</span>
+                <div className={`p-5 md:p-8 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
+                  <span className="text-base md:text-xl relative z-10 drop-shadow-md">{feedback}</span>
                 </div>
               ) : (
-                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full h-12 md:h-14 text-sm md:text-lg uppercase tracking-widest font-black" size="lg">Submit</Button>
+                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black" size="lg">Submit</Button>
               )}
             </div>
                  </motion.div>
@@ -349,9 +359,9 @@ export default function KnowYourNeighbor() {
             exit={{ opacity: 0, transition: { duration: 0 } }}
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
-            <div className="mx-auto mt-6 mb-8 sm:m-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>

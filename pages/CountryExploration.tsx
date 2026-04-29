@@ -1133,14 +1133,14 @@ const CountryExploration: React.FC = () => {
 
                               if (isSelected) {
                                  if (isCorrect) {
-                                   stateStyles = "bg-accent/70 border-2 border-accent text-white";
+                                   stateStyles = "bg-accent/90 border-2 border-accent text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
                                  } else {
-                                   stateStyles = "bg-red-500/60 border-2 border-red-500 text-white";
+                                   stateStyles = "bg-red-500/90 border-2 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
                                  }
                               } else if (selectedOption && option === currentQuestion.answer) {
-                                 stateStyles = "bg-accent/40 border-2 border-accent/80 text-white";
+                                 stateStyles = "bg-accent/40 border-2 border-accent/80 text-white shadow-[0_0_15px_rgba(34,197,94,0.2)]";
                               } else if (selectedOption) {
-                                 stateStyles = "opacity-20 grayscale border-2 border-white/5 bg-transparent scale-95 blur-[1px]";
+                                 stateStyles = "opacity-20 grayscale border-2 border-white/5 bg-transparent scale-95 blur-[2px]";
                               }
 
                               return (
