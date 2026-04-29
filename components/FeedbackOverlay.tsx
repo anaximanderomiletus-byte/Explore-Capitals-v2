@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, Star, Sparkles, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, XCircle, Star, Sparkles } from 'lucide-react';
 
 interface FeedbackOverlayProps {
   type: 'correct' | 'incorrect' | null;
@@ -22,10 +23,21 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
     }
   }, [type, triggerKey]);
 
-  // Generate some random particles for correct answers
-  const particles = Array.from({ length: 12 });
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const particleCount = isMobile ? 6 : 12;
+  const spread = isMobile ? 160 : 350;
 
-  return (
+  const particleData = useMemo(() => {
+    return Array.from({ length: particleCount }, () => ({
+      x: (Math.random() - 0.5) * spread,
+      y: (Math.random() - 0.5) * spread,
+      scale: Math.random() * 1.2 + 0.5,
+      rotate: Math.random() * 360,
+      isStar: Math.random() > 0.5,
+    }));
+  }, [triggerKey, particleCount, spread]);
+
+  const content = (
     <AnimatePresence>
       {isVisible && type && (
         <motion.div
@@ -34,34 +46,44 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          style={{ willChange: 'transform, opacity' }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center pb-[3vh] sm:pb-[5vh] pointer-events-none overflow-hidden px-4 select-none"
+          className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none overflow-hidden px-4 select-none"
+          style={{ 
+            transform: 'translateZ(0)', 
+            willChange: 'opacity',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh'
+          }}
         >
           {/* Full screen background flash */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.2, 0] }}
+            transition={{ duration: 0.4 }}
             className={`absolute inset-0 ${type === 'correct' ? 'bg-accent' : 'bg-error'}`}
+            style={{ transform: 'translateZ(0)' }}
           />
 
           {type === 'correct' ? (
             <div className="relative flex flex-col items-center">
-              {/* Particles - reduced spread on mobile */}
-              {particles.map((_, i) => (
+              {particleData.map((p, i) => (
                 <motion.div
                   key={i}
                   initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
-                  animate={{ 
-                    x: (Math.random() - 0.5) * (window.innerWidth < 640 ? 200 : 400), 
-                    y: (Math.random() - 0.5) * (window.innerWidth < 640 ? 200 : 400),
+                  animate={{
+                    x: p.x,
+                    y: p.y,
                     opacity: 0,
-                    scale: Math.random() * 1.5 + 0.5,
-                    rotate: Math.random() * 360
+                    scale: p.scale,
+                    rotate: p.rotate,
                   }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
                   className="absolute"
+                  style={{ transform: 'translateZ(0)' }}
                 >
-                  {i % 2 === 0 ? (
+                  {p.isStar ? (
                     <Star className="text-warning fill-warning w-4 h-4 sm:w-6 sm:h-6" />
                   ) : (
                     <Sparkles className="text-white w-4 h-4 sm:w-5 sm:h-5" />
@@ -71,17 +93,19 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
 
               <motion.div
                 initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
-                animate={{ 
+                animate={{
                   scale: [0.5, 1.2, 1],
                   opacity: 1,
-                  rotate: 0
+                  rotate: 0,
                 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
                 className="relative flex flex-col items-center"
+                style={{ transform: 'translateZ(0)' }}
               >
                 <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(52,199,89,0.5)]">
                   <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
-                
+
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -98,13 +122,14 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
             <div className="relative flex flex-col items-center max-w-full">
               <motion.div
                 initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ 
+                animate={{
                   scale: [0.5, 1.1, 1],
                   opacity: 1,
-                  x: [0, -15, 15, -10, 10, 0]
+                  x: [0, -12, 12, -8, 8, 0],
                 }}
                 transition={{ duration: 0.4 }}
                 className="relative flex flex-col items-center w-full"
+                style={{ transform: 'translateZ(0)' }}
               >
                 <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(255,59,48,0.5)]">
                   <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
@@ -125,7 +150,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15, type: "spring", stiffness: 260, damping: 20 }}
+                    transition={{ delay: 0.15, type: 'spring', stiffness: 260, damping: 20 }}
                     className="mt-2 sm:mt-3 flex flex-col items-center w-full max-w-[90vw] sm:max-w-none"
                   >
                     <div className="bg-[#1A1A1A] rounded-2xl sm:rounded-[2.5rem] border-2 border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] sm:shadow-[0_30px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col items-center w-full">
@@ -134,7 +159,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                           You Selected
                         </span>
                       </div>
-                      
+
                       <div className="px-5 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 flex items-center justify-center gap-3 sm:gap-4 md:gap-6">
                         {incorrectFlagCode && (
                           <div className="relative flex-shrink-0">
@@ -159,4 +184,8 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
       )}
     </AnimatePresence>
   );
+
+  return typeof document !== 'undefined' 
+    ? createPortal(content, document.body) 
+    : null;
 };

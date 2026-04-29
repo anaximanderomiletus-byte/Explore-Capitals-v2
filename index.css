@@ -883,7 +883,7 @@ button::-moz-focus-inner {
 }
 
 .animate-globe-glow {
-  animation: globe-glow-pulse 4s ease-in-out infinite;
+  animation: globe-glow-pulse 6s ease-in-out infinite;
   will-change: filter;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
@@ -901,8 +901,18 @@ button::-moz-focus-inner {
 }
 
 .animate-globe-glow-sm {
-  animation: globe-glow-pulse-sm 4s ease-in-out infinite;
+  animation: globe-glow-pulse-sm 6s ease-in-out infinite;
   will-change: filter;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+}
+
+@keyframes glow-soft-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95) translateZ(0); }
+  50% { opacity: 0.8; transform: scale(1.1) translateZ(0); }
+}
+
+.animate-glow-soft {
+  animation: glow-soft-pulse 6s ease-in-out infinite;
+  will-change: opacity, transform;
 }
