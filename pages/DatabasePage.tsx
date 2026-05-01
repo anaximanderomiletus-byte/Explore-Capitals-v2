@@ -481,7 +481,7 @@ const DatabasePage: React.FC = () => {
             <button
               onClick={handleRandomSearch}
               className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[58px] shrink-0"
-              title="Random Search"
+              title="Random Profile"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
               <span className="font-bold uppercase text-[11px] tracking-[0.2em]">{t('database.random')}</span>

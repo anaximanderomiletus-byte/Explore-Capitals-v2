@@ -230,7 +230,7 @@ const BlogPost: React.FC = () => {
                 aria-label="Read a random blog post"
               >
                 <Shuffle size={14} className="text-sky-light group-hover:rotate-12 transition-transform" />
-                <span className="font-bold uppercase text-[9px] tracking-[0.2em]">Random</span>
+                <span className="font-bold uppercase text-[9px] tracking-[0.2em]">RANDOM BLOG</span>
               </button>
             </div>
 
@@ -275,7 +275,7 @@ const BlogPost: React.FC = () => {
                   aria-label="Read a random blog post"
                 >
                   <Shuffle size={12} className="text-sky-light group-hover:rotate-12 transition-transform" />
-                  <span className="font-bold uppercase text-[9px] tracking-[0.2em]">Random</span>
+                  <span className="font-bold uppercase text-[9px] tracking-[0.2em]">RANDOM BLOG</span>
                 </button>
               </div>
               <nav className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -324,9 +324,9 @@ const BlogPost: React.FC = () => {
               <p className="text-white/60 text-sm font-medium mb-5 max-w-md mx-auto">
                 {t('blog.exploreGamesDesc')}
               </p>
-              <Link to="/games">
-                <Button variant="primary" size="lg" className="text-base uppercase tracking-widest">
-                  {t('blog.playNow')} <Play size={16} fill="currentColor" className="ml-1.5" />
+              <Link to="/games" className="flex justify-center">
+                <Button variant="primary" size="lg" className="text-lg uppercase tracking-[0.2em] w-[90%] max-w-[320px] flex items-center justify-center">
+                  {t('blog.playNow')} <Play size={20} fill="currentColor" className="ml-2" />
                 </Button>
               </Link>
             </div>

@@ -1,5 +1,5 @@
 
-import { AlertCircle, ArrowLeft, BrainCircuit, ChevronLeft, ChevronRight, Compass, Globe, HelpCircle, ImageOff, MapPin, Plane, RotateCcw, Trophy, Navigation, Scroll, X } from 'lucide-react';
+import { AlertCircle, ArrowLeft, BrainCircuit, ChevronLeft, ChevronRight, Compass, Globe, HelpCircle, ImageOff, MapPin, Plane, RotateCcw, Trophy, Navigation, Scroll, X, Play } from 'lucide-react';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -844,69 +844,16 @@ const CountryExploration: React.FC = () => {
                 />
               </div>
 
-              {/* 3. Itinerary Card + Actions */}
-              <div className="w-full max-w-2xl p-5 sm:p-6 flex flex-col items-center gap-5">
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Planned Itinerary</span>
-                  <div className="h-0.5 w-12 bg-sky/40 rounded-full" />
-                </div>
-
-                {/* Desktop: Horizontal chips / Mobile: Vertical list */}
-                <div className="w-full">
-                  {/* Desktop horizontal layout */}
-                  <div className="hidden md:flex flex-wrap justify-center gap-2.5">
-                    {tourData.stops.map((stop, idx) => {
-                      const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
-                      return (
-                        <div key={idx} className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/[0.05] border border-white/10 hover:border-sky/40 transition-all duration-300 group/stop">
-                          <div className="w-8 h-8 shrink-0 rounded-lg bg-black/60 border border-white/10 overflow-hidden relative">
-                            <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
-                            <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
-                            <div className="absolute top-0 left-0 bg-sky/80 text-white text-[5px] font-black px-1 py-px rounded-br-md">
-                              {idx + 1}
-                            </div>
-                          </div>
-                          <span className="text-[11px] font-black text-white/70 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors whitespace-nowrap">{displayLabel}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Mobile vertical layout */}
-                  <div className="md:hidden relative">
-                    <div className="absolute top-3 bottom-3 left-[18px] w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-0" />
-                    <div className="flex flex-col gap-4 relative z-10">
-                      {tourData.stops.map((stop, idx) => {
-                        const displayLabel = stop.stopName.replace(/\s*\(.*\)/, '').trim();
-                        return (
-                          <div key={idx} className="flex items-center gap-3 group/stop">
-                            <div className="w-9 h-9 shrink-0 rounded-xl bg-black/60 border border-white/10 overflow-hidden relative shadow-lg group-hover/stop:border-sky/50 transition-all duration-300">
-                              <ExpeditionVisual src={stopImages[idx]} alt={stop.stopName} className="opacity-60 group-hover/stop:opacity-100 transition-opacity duration-500" />
-                              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
-                              <div className="absolute top-0 left-0 bg-sky/80 text-white text-[5px] font-black px-1 py-px rounded-br-md">
-                                {idx + 1}
-                              </div>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-[6px] font-bold text-white/20 uppercase tracking-widest mb-0.5">Waypoint 0{idx + 1}</span>
-                              <span className="text-[13px] font-black text-white/80 uppercase tracking-tight group-hover/stop:text-sky-light transition-colors">{displayLabel}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-col items-center gap-3 w-full pt-2">
+              {/* Actions */}
+              <div className="w-full max-w-2xl p-5 sm:p-6 flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-3 w-full">
                   <Button
                     onClick={startTour}
                     variant="primary"
                     size="lg"
-                    className="w-full max-w-sm text-sm font-black uppercase tracking-[0.2em]"
+                    className="w-full max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
                   >
-                    Start Tour <ChevronRight size={20} />
+                    START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
                   </Button>
 
                   <button

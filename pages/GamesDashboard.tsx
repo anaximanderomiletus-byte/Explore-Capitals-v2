@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, Lock, Shuffle, Clock, ArrowRight } from 'lucide-react';
+import { Play, Lock, Shuffle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate, PanInfo, useDragControls } from 'framer-motion';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -30,116 +31,276 @@ const GamesDashboard: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  
+  const [viewMode, setViewMode] = useState<'grid' | 'carousel'>('carousel');
+  const [shuffledGames, setShuffledGames] = useState<any[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  const infiniteGames = useMemo(() => {
+    if (shuffledGames.length === 0) return [];
+    return [...shuffledGames, ...shuffledGames, ...shuffledGames];
+  }, [shuffledGames]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [cardWidth, setCardWidth] = useState(540);
+  const x = useMotionValue(0);
+  const dragControls = useDragControls();
 
   useEffect(() => {
     setPageLoading(false);
+    
+    // Shuffle games on load
+    const active = GAMES.filter(g => g.status === 'active');
+    const shuffled = [...active].sort(() => Math.random() - 0.5);
+    setShuffledGames(shuffled);
+    setActiveIndex(shuffled.length); // Start in middle set for carousel
+    
+    const handleResize = () => {
+      const w = window.innerWidth;
+      setIsMobile(w < 768);
+      if (w < 640) setCardWidth(w * 0.95);
+      else if (w < 1024) setCardWidth(540);
+      else setCardWidth(640);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [setPageLoading]);
 
+  // Carousel Infinite Jump
+  useEffect(() => {
+    const n = shuffledGames.length;
+    if (n === 0 || viewMode === 'grid') return;
+    
+    if (activeIndex >= 2 * n) {
+      setActiveIndex(activeIndex - n);
+      x.set(x.get() + n * cardWidth);
+    } else if (activeIndex < n) {
+      setActiveIndex(activeIndex + n);
+      x.set(x.get() - n * cardWidth);
+    }
+  }, [activeIndex, shuffledGames.length, cardWidth, x, viewMode]);
+
+  // Carousel Animation
+  useEffect(() => {
+    if (viewMode === 'carousel' && infiniteGames.length > 0) {
+      animate(x, -activeIndex * cardWidth, {
+        type: "spring",
+        stiffness: 260,
+        damping: 28,
+        mass: 1
+      });
+    }
+  }, [activeIndex, cardWidth, x, viewMode, infiniteGames.length]);
+
   const playRandomGame = () => {
-    const activeGames = GAMES.filter(g => g.status === 'active');
-    const randomGame = activeGames[Math.floor(Math.random() * activeGames.length)];
+    const active = GAMES.filter(g => g.status === 'active');
+    const randomGame = active[Math.floor(Math.random() * active.length)];
     if (randomGame) {
       navigate(`/games/${GAME_PATHS[randomGame.id] || 'capital-quiz'}`);
     }
   };
 
-  const activeGames = GAMES.filter(g => g.status === 'active');
-  const comingSoonGames = GAMES.filter(g => g.status !== 'active');
+  if (shuffledGames.length === 0) return null;
 
   return (
-    <div className="pt-20 sm:pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-5 md:px-6 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
+    <div className="pt-16 sm:pt-20 md:pt-24 pb-16 min-h-screen relative overflow-hidden bg-[#0F172A]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       <SEO
         title="All Games"
         description="Browse all geography games on ExploreCapitals."
       />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <Breadcrumbs items={[
-          { label: 'Home', href: '/' },
-          { label: 'Games' },
-        ]} />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-sky/10 to-transparent" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games' }]} />
 
         {/* Header */}
-        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 w-full mb-6 md:mb-10">
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-            {t('games.title')}
-          </h1>
-          <button
-            onClick={playRandomGame}
-            className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 md:mb-1"
-          >
-            <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
-            <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM</span>
-          </button>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-4 md:mt-0 mb-6 md:mb-0 relative z-50">
+          <div>
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-xl">
+              {t('games.title')}
+            </h1>
+          </div>
+          
+          <div className="flex flex-row md:items-center gap-3 md:gap-4 w-full md:w-auto min-w-0">
+            <div className="hidden md:flex items-center bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-md h-[46px] sm:h-[58px]">
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`flex-none px-4 sm:px-6 py-2 h-full rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'grid' ? 'bg-white text-black' : 'text-white/40 hover:text-white/60'}`}
+              >
+                Grid View
+              </button>
+              <button 
+                onClick={() => setViewMode('carousel')}
+                className={`flex-none px-4 sm:px-6 py-2 h-full rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'carousel' ? 'bg-white text-black' : 'text-white/40 hover:text-white/60'}`}
+              >
+                Carousel
+              </button>
+            </div>
+
+            <button
+              onClick={playRandomGame}
+              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[46px] sm:h-[58px] shrink-0"
+              title="Random Game"
+            >
+              <Shuffle size={16} className="text-sky-light group-hover:rotate-12 transition-transform" />
+              <span className="font-bold uppercase text-[10px] sm:text-[11px] tracking-[0.2em]">RANDOM GAME</span>
+            </button>
+          </div>
         </div>
 
-        {/* Arcade Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8">
-          {/* Active games */}
-          {activeGames.map((game) => {
-            const path = GAME_PATHS[game.id] || 'capital-quiz';
-            const imgName = path === 'territory-titans' ? 'territory-titan' : path;
-            return (
-              <Link
-                key={game.id}
-                to={`/games/${path}`}
-                className="group relative flex flex-col h-full bg-white/[0.03] border border-white/10 rounded-3xl overflow-hidden hover:bg-white/[0.05] hover:border-white/20 transition-all duration-500 shadow-[0_8px_24px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,194,255,0.06)] hover:-translate-y-1"
-              >
-                {/* Thumbnail */}
-                <div className="w-full aspect-[4/3] overflow-hidden relative border-b border-white/10 shrink-0">
-                   <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-black/10 to-transparent z-10" />
-                   <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                </div>
-                   
-                {/* Game info */}
-                <div className="p-5 sm:p-6 flex flex-col flex-grow relative z-20">
-                    <h3 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight leading-none group-hover:text-sky-light transition-colors mb-2">
+        {viewMode === 'grid' && !isMobile ? (
+          /* OG Premium Grid */
+          <motion.div 
+            key="grid"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pt-8 md:pt-12 pb-12"
+          >
+            {shuffledGames.map((game) => {
+              const path = GAME_PATHS[game.id] || 'capital-quiz';
+              const imgName = path === 'territory-titans' ? 'territory-titan' : path;
+              return (
+                <Link
+                  key={game.id}
+                  to={`/games/${path}`}
+                  className="group relative aspect-[16/10] bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
+                >
+                  <div className="absolute inset-0 z-0">
+                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-50 group-hover:brightness-75" />
+                    <div className="absolute inset-0 bg-black/40 z-10" />
+                  </div>
+                  <div className="relative z-20 p-6 sm:p-8 flex flex-col items-center justify-center w-full h-full text-center">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white uppercase tracking-tight leading-none mb-6 drop-shadow-2xl">
                       {game.title}
                     </h3>
-                    <p className="text-[13px] text-white/50 font-medium leading-relaxed flex-grow">
-                      {game.description}
-                    </p>
-                    <div className="mt-6">
-                      <Button variant="primary" className="w-full aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black flex items-center justify-center p-0">
-                        PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
+                    <div className="w-full flex justify-center">
+                      <Button variant="primary" className="w-full max-w-[280px] py-4 text-lg uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
+                        PLAY <Play className="ml-3 fill-current" />
                       </Button>
                     </div>
-                </div>
-              </Link>
-            );
-          })}
-
-          {/* Coming soon games */}
-          {comingSoonGames.map((game) => {
-            const path = GAME_PATHS[game.id] || 'capital-quiz';
-            const imgName = path === 'territory-titans' ? 'territory-titan' : path;
-            return (
-              <div
-                key={game.id}
-                className="group relative flex flex-col h-full bg-white/[0.02] border border-white/[0.05] rounded-3xl overflow-hidden opacity-40 grayscale transition-all duration-500"
+                  </div>
+                </Link>
+              );
+            })}
+          </motion.div>
+        ) : (
+          /* Premium Arcade Carousel */
+          <>
+            <motion.div 
+              key="carousel"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative w-full h-[450px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-visible md:-mt-16"
+            >
+              <motion.div
+                className="flex items-center justify-center h-full touch-none"
+                drag="x"
+                dragControls={dragControls}
+                dragListener={false}
+                dragElastic={0.15}
+                style={{ x }}
+                onDragEnd={(_: any, info: PanInfo) => {
+                  const currentX = x.get();
+                  const predictedX = currentX + info.velocity.x * 0.4;
+                  setActiveIndex(Math.round(-predictedX / cardWidth));
+                }}
               >
-                  <div className="w-full aspect-[4/3] overflow-hidden relative border-b border-white/[0.05] flex items-center justify-center bg-[#0F172A] shrink-0">
-                     <Lock size={48} className="text-white/20 absolute z-20" />
-                     <div className="absolute inset-0 bg-[#0F172A]/60 z-10" />
-                     <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover opacity-50" />
-                  </div>
-                  <div className="p-5 sm:p-6 flex flex-col flex-grow relative z-20">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-1 rounded border border-white/10 bg-white/5 text-[8px] font-black uppercase tracking-widest text-white/50">Coming Soon</span>
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-display font-black text-white/70 uppercase tracking-tight leading-none mb-2">
-                        {game.title}
-                      </h3>
-                      <p className="text-[13px] text-white/30 font-medium leading-relaxed flex-grow">
-                        {game.description}
-                      </p>
-                  </div>
+                {infiniteGames.map((game, index) => (
+                  <CarouselCard 
+                    key={`${game.id}-${index}`} 
+                    game={game} 
+                    index={index} 
+                    activeIndex={activeIndex} 
+                    scrollX={x} 
+                    width={cardWidth} 
+                    dragControls={dragControls}
+                    onClick={() => setActiveIndex(index)}
+                  />
+                ))}
+              </motion.div>
+            </motion.div>
+
+            <div className="flex items-center justify-center gap-8 mt-6 md:-mt-12 mb-12 relative z-50 animate-in fade-in slide-in-from-bottom-2 duration-700">
+              <button 
+                onClick={() => setActiveIndex(prev => prev - 1)} 
+                className="hidden md:flex w-10 h-10 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white transition-all duration-300 hover:bg-white/10"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <div className="flex gap-2">
+                {shuffledGames.map((_, i) => (
+                  <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${activeIndex % shuffledGames.length === i ? 'bg-white w-8' : 'bg-white/20 w-3'}`} />
+                ))}
               </div>
-            );
-          })}
-        </div>
+
+              <button 
+                onClick={() => setActiveIndex(prev => prev + 1)} 
+                className="hidden md:flex w-10 h-10 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white transition-all duration-300 hover:bg-white/10"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
+  );
+};
+
+/* ── Carousel Card Component ────────────────────────────────────────── */
+
+const CarouselCard: React.FC<{ 
+  game: any; index: number; activeIndex: number; scrollX: any; width: number; dragControls: any; onClick: () => void 
+}> = ({ game, index, activeIndex, scrollX, width, dragControls, onClick }) => {
+  const targetX = index * width;
+  const relativeX = useTransform(scrollX, (val) => val + targetX);
+  
+  const scale = useTransform(relativeX, [-width, 0, width], [0.9, width > 500 ? 1.15 : 1.05, 0.9]);
+  const opacity = useTransform(relativeX, [-width, 0, width], [0.6, 1, 0.6]);
+  const rotateY = useTransform(relativeX, [-width, 0, width], [15, 0, -15]);
+  const zIndex = useTransform(relativeX, [-width, 0, width], [10, 30, 10]);
+
+  const path = GAME_PATHS[game.id] || 'capital-quiz';
+  const imgName = path === 'territory-titans' ? 'territory-titan' : path;
+
+  return (
+    <motion.div
+      style={{ scale, opacity, x: targetX, zIndex, rotateY, perspective: 1200, transformStyle: 'preserve-3d', width }}
+      className={`absolute flex items-center justify-center h-full ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'} will-change-transform`}
+      onClick={() => activeIndex !== index && onClick()}
+    >
+      <div 
+        onPointerDown={(e) => dragControls.start(e)}
+        className="w-[85%] sm:w-[90%] aspect-square sm:aspect-[16/10] bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
+      >
+        <div className="absolute inset-0 z-0">
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover brightness-50 group-hover:brightness-75 transition-all duration-1000" />
+          <div className="absolute inset-0 bg-black/40 z-10" />
+        </div>
+           
+        <div className="relative z-20 flex flex-col items-center justify-center py-8 sm:py-12 px-6 sm:px-8 text-center w-full h-full gap-6 sm:gap-8">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-white uppercase tracking-tighter leading-none drop-shadow-2xl">
+              {game.title}
+            </h3>
+            
+            <div className="w-full flex justify-center px-4">
+              <Link to={`/games/${path}`} className="w-full flex justify-center">
+                <Button variant="primary" className="w-full max-w-[360px] py-6 text-2xl uppercase tracking-[0.2em] font-black flex items-center justify-center shadow-premium active:scale-95 transition-all duration-300 group/btn">
+                  PLAY <Play className="ml-3 fill-current group-hover/btn:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

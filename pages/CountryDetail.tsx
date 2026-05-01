@@ -7,7 +7,7 @@ import {
   ArrowLeft, Map, Compass, Navigation,
   Clock, Phone, Car, Users, Maximize2, Banknote,
   TrendingUp, Languages, Building2, AlertTriangle,
-  MapPin, Globe
+  MapPin, Globe, Play
 } from 'lucide-react';
 import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 
@@ -28,6 +28,104 @@ const FALLBACK_SCENES = [
   "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=80",
   "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
 ];
+
+const Polaroid: React.FC<{ 
+  photo: { image: string, caption: string }, 
+  rotation: number, 
+  zIndex: number, 
+  xOffset?: number,
+  yOffset?: number,
+  className?: string 
+}> = ({ photo, rotation, zIndex, xOffset = 0, yOffset = 0, className = "" }) => (
+  <div 
+    className={`bg-[#FCFCFC] p-2 pb-8 sm:p-3 sm:pb-10 shadow-[0_10px_30px_rgba(0,0,0,0.3),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm flex flex-col items-center relative overflow-hidden flex-shrink-0 w-[220px] sm:w-[260px] lg:w-[280px] min-w-[220px] sm:min-w-[260px] lg:min-w-[280px] transition-all duration-500 hover:z-[100] hover:scale-105 hover:rotate-0 ${className}`}
+    style={{ 
+      transform: `rotate(${rotation}deg) translate(${xOffset}px, ${yOffset}px)`, 
+      zIndex 
+    }}
+  >
+    <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+    <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
+      <img src={photo.image} alt={photo.caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+      <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+    </div>
+    <p className="mt-4 sm:mt-6 text-sm sm:text-lg font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
+      <MapPin size={12} className="text-sky/60 shrink-0" strokeWidth={2} />
+      {photo.caption}
+    </p>
+  </div>
+);
+
+const InteractivePolaroidStack: React.FC<{ photos: { image: string, caption: string }[] }> = ({ photos }) => {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % photos.length);
+  };
+
+  if (!photos.length) return null;
+
+  return (
+    <div className="relative w-[220px] sm:w-[260px] h-[320px] sm:h-[360px] mx-auto select-none touch-none">
+      <AnimatePresence initial={false}>
+        {photos.map((photo, i) => {
+          // Calculate relative position in stack
+          const position = (i - currentIndex + photos.length) % photos.length;
+          const isTop = position === 0;
+          
+          // Only show top 4 cards for performance and visual clarity
+          if (position > 3) return null;
+
+          return (
+            <motion.div
+              key={photo.image}
+              className="absolute inset-0 flex justify-center"
+              style={{ zIndex: photos.length - position }}
+              initial={false}
+              animate={{
+                x: isTop ? 0 : (position * 4),
+                y: isTop ? 0 : (position * 4),
+                rotate: isTop ? 0 : (position * 4 * (i % 2 === 0 ? 1 : -1)),
+                scale: isTop ? 1 : 1 - (position * 0.04),
+                opacity: 1 - (position * 0.2),
+                filter: isTop ? "blur(0px)" : `blur(${position * 0.5}px)`,
+              }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 25 
+              }}
+              drag={isTop ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              onDragEnd={(_, info) => {
+                if (Math.abs(info.offset.x) > 80 || Math.abs(info.velocity.x) > 500) {
+                  handleNext();
+                }
+              }}
+              onClick={isTop ? handleNext : undefined}
+              whileTap={isTop ? { scale: 0.98 } : {}}
+            >
+              <Polaroid photo={photo} rotation={0} zIndex={1} />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+      
+      {/* Interaction Hint */}
+      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-40">
+        <div className="flex gap-1">
+          {photos.map((_, i) => (
+            <div 
+              key={i} 
+              className={`w-1 h-1 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-sky-light w-3' : 'bg-white/20'}`} 
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -131,21 +229,20 @@ const CountryDetail: React.FC = () => {
       return { image: FALLBACK_SCENES[idx], caption: `${country.capital}, ${country.name}` };
   }, [country, dataLoaded]);
 
-  // Two photos for the expedition section
+  // All available photos for the expedition section
   const expeditionPhotos = useMemo(() => {
     if (!country || !dataLoaded) return [];
     const photos: { image: string; caption: string }[] = [];
     
-    // Try country main image first
+    // 1. Try country main image first
     if (images[country.name]) {
       photos.push({ image: images[country.name], caption: country.capital });
     }
     
-    // Pull from tour stops for variety
+    // 2. Pull all images from tour stops
     const tourData = tours[country.name];
     if (tourData?.stops) {
       for (const stop of tourData.stops) {
-        if (photos.length >= 2) break;
         const img = images[stop.imageKeyword || stop.stopName];
         if (img && !photos.some(p => p.image === img)) {
           photos.push({ image: img, caption: stop.stopName });
@@ -153,15 +250,15 @@ const CountryDetail: React.FC = () => {
       }
     }
     
-    // Fallbacks if we still need images
-    while (photos.length < 2) {
+    // 3. Fallbacks if we have very few images (ensure at least 3 for a "stack" look if available)
+    let fallbackCount = 0;
+    while (photos.length < 3 && fallbackCount < FALLBACK_SCENES.length) {
       const idx = (country.id.charCodeAt(0) + photos.length) % FALLBACK_SCENES.length;
       const fallback = FALLBACK_SCENES[idx];
       if (!photos.some(p => p.image === fallback)) {
         photos.push({ image: fallback, caption: country.capital });
-      } else {
-        photos.push({ image: FALLBACK_SCENES[(idx + 1) % FALLBACK_SCENES.length], caption: country.capital });
       }
+      fallbackCount++;
     }
     
     return photos;
@@ -617,47 +714,38 @@ const CountryDetail: React.FC = () => {
 
         {/* Coordinates + Actions — flanked by polaroids on desktop */}
         <section>
-          {/* Mobile/Tablet: Tour location photograph */}
-          {expeditionPhotos[1] && (
-            <div className="md:hidden flex justify-center mb-8">
-              <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-1 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] sm:max-w-[280px]">
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
-                  <img src={expeditionPhotos[1].image} alt={expeditionPhotos[1].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
-                  <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                  <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
-                </div>
-                <p className="mt-6 text-lg font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
-                  <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
-                  {expeditionPhotos[1].caption}
-                </p>
-              </div>
+          {/* Mobile/Tablet: Interactive Tour location photographs stack */}
+          {expeditionPhotos.length > 0 && (
+            <div className="md:hidden flex justify-center mb-16 mt-4 overflow-visible">
+              <InteractivePolaroidStack photos={expeditionPhotos} />
             </div>
           )}
         </section>
       </div>
 
       {/* Full-width polaroid + CTA section — breaks out of max-w-4xl for wider photos */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-        <section>
-          <div className="md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 lg:gap-12 md:items-center">
-            {/* Left polaroid (desktop only) */}
-            {expeditionPhotos[0] && (
-              <div className="hidden md:flex justify-center">
-                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform -rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] lg:max-w-[280px]">
-                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                  <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
-                    <img src={expeditionPhotos[0].image} alt={expeditionPhotos[0].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
-                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                    <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 relative z-10 overflow-visible">
+        <section className="overflow-visible">
+          <div className="md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 lg:gap-12 md:items-center overflow-visible">
+            {/* Left polaroid stack (desktop only) */}
+            <div className="hidden md:flex justify-end relative w-full h-[320px] lg:h-[360px] overflow-visible">
+              {expeditionPhotos.filter((_, i) => i % 2 === 0).map((photo, i) => {
+                const rotations = [-5, 4, -2, 6];
+                const xOffsets = [-15, 10, -5, 12];
+                const yOffsets = [10, -8, 15, -5];
+                return (
+                  <div key={i} className="absolute inset-0 flex justify-end">
+                    <Polaroid 
+                      photo={photo} 
+                      rotation={rotations[i % rotations.length]} 
+                      zIndex={10 - i}
+                      xOffset={xOffsets[i % xOffsets.length]}
+                      yOffset={yOffsets[i % yOffsets.length]}
+                    />
                   </div>
-                  <p className="mt-6 text-lg lg:text-xl font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
-                    <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
-                    {expeditionPhotos[0].caption}
-                  </p>
-                </div>
-              </div>
-            )}
+                );
+              })}
+            </div>
 
             {/* Center: coordinates + CTA */}
             <div className="flex flex-col items-center text-center gap-6 sm:gap-7 py-2 md:px-2 lg:px-4">
@@ -677,11 +765,9 @@ const CountryDetail: React.FC = () => {
 
               {/* Expedition CTA — show for all entries that have tour data */}
               {tours[country.name]?.stops?.length > 0 && (
-                <Link to={`/expedition/${toSlug(country.name)}`} className="w-full sm:w-auto">
-                  <Button variant="primary" size="md" className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-14 text-sm sm:text-base text-white border border-white/20 rounded-full">
-                    <span className="flex items-center gap-3">
-                      START EXPEDITION <Compass size={18} />
-                    </span>
+                <Link to={`/expedition/${toSlug(country.name)}`} className="block w-[80vw] max-w-[384px] mx-auto">
+                  <Button variant="primary" className="w-full aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black flex items-center justify-center p-0">
+                    TRAVEL <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
                   </Button>
                 </Link>
               )}
@@ -705,23 +791,25 @@ const CountryDetail: React.FC = () => {
               </button>
             </div>
 
-            {/* Right polaroid (desktop only) */}
-            {expeditionPhotos[1] && (
-              <div className="hidden md:flex justify-center">
-                <div className="bg-[#FCFCFC] p-3 pb-10 shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.05)] rounded-sm transform rotate-2 hover:rotate-0 transition-all duration-700 flex flex-col items-center relative overflow-hidden w-full max-w-[260px] lg:max-w-[280px]">
-                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                  <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
-                    <img src={expeditionPhotos[1].image} alt={expeditionPhotos[1].caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
-                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-                    <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
+            {/* Right polaroid stack (desktop only) */}
+            <div className="hidden md:flex justify-start relative w-full h-[320px] lg:h-[360px] overflow-visible">
+              {expeditionPhotos.filter((_, i) => i % 2 !== 0).map((photo, i) => {
+                const rotations = [5, -4, 3, -6];
+                const xOffsets = [15, -12, 8, -10];
+                const yOffsets = [12, 10, -5, 15];
+                return (
+                  <div key={i} className="absolute inset-0 flex justify-start">
+                    <Polaroid 
+                      photo={photo} 
+                      rotation={rotations[i % rotations.length]} 
+                      zIndex={10 - i}
+                      xOffset={xOffsets[i % xOffsets.length]}
+                      yOffset={yOffsets[i % yOffsets.length]}
+                    />
                   </div>
-                  <p className="mt-6 text-lg lg:text-xl font-cursive text-gray-600 text-center px-2 flex items-center justify-center gap-1.5 leading-tight">
-                    <MapPin size={15} className="text-sky/60 shrink-0" strokeWidth={2} />
-                    {expeditionPhotos[1].caption}
-                  </p>
-                </div>
-              </div>
-            )}
+                );
+              })}
+            </div>
           </div>
         </section>
 

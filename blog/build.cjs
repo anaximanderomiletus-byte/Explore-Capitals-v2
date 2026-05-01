@@ -155,7 +155,7 @@ function articlePage(post, allPosts) {
         <p>Put what you just read into practice — quizzes, maps, capitals, and more.</p>
         <a href="/games" class="blog-btn">
           <span>Play</span>
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="18" height="18"><path d="M8 5v14l11-7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="22" height="22"><path d="M8 5v14l11-7z"/></svg>
         </a>
       </div>
     </div>
@@ -410,7 +410,7 @@ function getStyles() {
     @keyframes blog-cta-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.8); } }
     .blog-cta h2 { font-size: 1.75rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 0.75rem; line-height: 1; text-shadow: 0 2px 20px rgba(0,194,255,0.2); }
     .blog-cta p { color: rgba(255,255,255,0.65); font-weight: 600; margin-bottom: 1.75rem; max-width: 32rem; margin-left: auto; margin-right: auto; }
-    .blog-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.95rem 2.75rem; background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.2em; border-radius: 999px; text-decoration: none; transition: transform 0.15s ease-out, filter 0.15s ease-out, box-shadow 0.15s ease-out; box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 40px rgba(0,194,255,0.35); position: relative; }
+    .blog-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.8rem; padding: 1.1rem 1.5rem; width: 90%; max-width: 320px; background: linear-gradient(180deg, #BFE6FF 0%, #00C2FF 48%, #007AFF 52%, #00C2FF 100%); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-weight: 900; font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.25em; border-radius: 999px; text-decoration: none; transition: transform 0.15s ease-out, filter 0.15s ease-out, box-shadow 0.15s ease-out; box-shadow: 0 10px 30px rgba(0,0,0,0.25), 0 0 40px rgba(0,194,255,0.35); position: relative; }
     .blog-btn:hover { filter: brightness(1.1); transform: translateY(-2px); text-decoration: none; box-shadow: 0 14px 40px rgba(0,0,0,0.3), 0 0 50px rgba(0,194,255,0.5); }
     .blog-btn svg { flex-shrink: 0; }
 

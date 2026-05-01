@@ -66,7 +66,7 @@ const Blog: React.FC = () => {
               aria-label="Read a random blog post"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
-              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM</span>
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM BLOG</span>
             </button>
           </div>
         </RevealSection>
