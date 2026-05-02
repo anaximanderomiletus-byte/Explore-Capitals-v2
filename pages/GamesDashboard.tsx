@@ -180,7 +180,7 @@ const GamesDashboard: React.FC = () => {
                       {game.title}
                     </h3>
                     <div className="w-full flex justify-center">
-                      <Button variant="primary" className="w-full max-w-[280px] py-4 text-lg uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
+                      <Button as="div" variant="primary" className="w-full max-w-[280px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
                         PLAY <Play className="ml-3 fill-current" />
                       </Button>
                     </div>
@@ -292,8 +292,12 @@ const CarouselCard: React.FC<{
             </h3>
             
             <div className="w-full flex justify-center px-4">
-              <Link to={`/games/${path}`} className="w-full flex justify-center">
-                <Button variant="primary" className="w-full max-w-[360px] py-6 text-2xl uppercase tracking-[0.2em] font-black flex items-center justify-center shadow-premium active:scale-95 transition-all duration-300 group/btn">
+              <Link 
+                to={`/games/${path}`} 
+                className="w-full flex justify-center"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <Button as="div" variant="primary" className="w-full max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium active:scale-95 transition-all duration-300 group/btn">
                   PLAY <Play className="ml-3 fill-current group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
               </Link>

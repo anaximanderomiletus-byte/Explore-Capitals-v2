@@ -203,8 +203,9 @@ export default function KnowYourNeighbor() {
       </div>
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-      <div className="max-w-2xl mx-auto w-full flex shrink-0 items-center gap-2 mb-2 md:mb-2 bg-white/10 backdrop-blur-2xl p-2 md:p-2.5 rounded-2xl border border-white/20 z-10">
-         <Link to="/games/all" className="game-back-btn p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/60 hover:text-white transition-all duration-75 border border-white/10 group shadow-inner shrink-0">
+      <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl rounded-3xl border-white/20 overflow-hidden relative z-10">
+  <div className="game-top-bar w-full flex shrink-0 items-center gap-2 p-2 md:p-3 border-b border-white/10 z-20">
+         <Link to="/games/all" className="game-back-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white/70 hover:text-white transition-all duration-200 border border-white/20 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95 shrink-0 group">
            <ArrowLeft size={18} className="transition-transform" />
          </Link>
 
@@ -217,8 +218,8 @@ export default function KnowYourNeighbor() {
          {/* Spacer to balance the back button */}
          <div className="game-back-spacer w-[42px] shrink-0" />
       </div>
+  <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-1.5 sm:p-2 md:p-4 relative z-10">
 
-      <div className="game-card flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl md:rounded-3xl border border-white/20 p-1.5 sm:p-2 md:p-4 overflow-y-auto overflow-x-hidden relative z-10">
          
          {/* Points and Timer - Responsive layout for all screen sizes */}
          <div className="flex items-center justify-between gap-2 mb-1 sm:mb-2 md:mb-2 relative z-20 shrink-0">
@@ -336,7 +337,9 @@ export default function KnowYourNeighbor() {
             </div>
                  </motion.div>
                </AnimatePresence>
-            </div>
+            
+  </div>
+</div>
             <FeedbackOverlay type={roundResult} triggerKey={feedbackKey} />
           </motion.div>
         )}

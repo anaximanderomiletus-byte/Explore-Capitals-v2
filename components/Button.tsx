@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'accent' | 'danger' | 'premium';
   size?: 'sm' | 'md' | 'lg';
   isFlat?: boolean;
+  as?: any;
 }
 
 // Inject global shing animation styles once
@@ -62,6 +63,7 @@ const Button: React.FC<ButtonProps> = ({
   size = 'md', 
   isFlat = false,
   className = '', 
+  as: Component = 'button',
   ...props 
 }) => {
   // Check if a text color is already provided in className to avoid conflicts
@@ -104,7 +106,7 @@ const Button: React.FC<ButtonProps> = ({
   const shingClass = showShing ? 'shing-btn' : '';
 
   return (
-    <button 
+    <Component 
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${shingClass} ${className}`}
       style={{ WebkitTapHighlightColor: 'transparent' }}
       {...props}
@@ -119,7 +121,7 @@ const Button: React.FC<ButtonProps> = ({
         </span>
       )}
       <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
-    </button>
+    </Component>
   );
 };
 

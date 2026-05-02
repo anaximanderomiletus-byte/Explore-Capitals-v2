@@ -850,10 +850,9 @@ const CountryExploration: React.FC = () => {
                   <Button
                     onClick={startTour}
                     variant="primary"
-                    size="lg"
-                    className="w-full max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
+                    className="w-full max-w-[364px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center mx-auto shadow-premium"
                   >
-                    START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
+                    START TOUR <Play className="ml-3 fill-current" />
                   </Button>
 
                   <button
@@ -1180,10 +1179,9 @@ const CountryExploration: React.FC = () => {
                            onClick={nextQuestion}
                            disabled={!selectedOption || isExitingFeedback}
                            variant="primary"
-                           size="lg"
-                           className="w-full md:min-w-[300px] text-sm font-black uppercase tracking-[0.2em]"
+                           className="w-full md:min-w-[300px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium"
                          >
-                           {isLastQuestion ? 'FINISH' : 'NEXT'} <ChevronRight size={18} />
+                           {isLastQuestion ? 'FINISH' : 'NEXT'} <ChevronRight size={22} />
                          </Button>
                     </motion.div>
                 </div>
@@ -1436,10 +1434,9 @@ const CountryExploration: React.FC = () => {
                   <Button
                     onClick={restartTour}
                     variant="primary"
-                    size="md"
-                    className="w-full max-w-[280px] text-xs font-black uppercase tracking-[0.2em]"
+                    className="w-full max-w-[280px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium"
                   >
-                    RESTART <RotateCcw size={14} />
+                    RESTART <RotateCcw size={20} className="ml-2" />
                   </Button>
                   
                   <button 
