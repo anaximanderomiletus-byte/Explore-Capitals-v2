@@ -11,7 +11,6 @@ import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
-import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
@@ -206,9 +205,9 @@ export default function LandmarkLegend() {
             </div>
 
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
-            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-2xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
                 <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/landmark-legend.png`} alt="Landmark Legend" className="w-full h-full object-cover" />
                 </div>
@@ -216,7 +215,7 @@ export default function LandmarkLegend() {
                 <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify nations through their landmarks.</p>
                 <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-6 w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
                   <GameNavigationButtons />
                 </div>
               </div>
@@ -247,7 +246,7 @@ export default function LandmarkLegend() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-4 md:pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
             <SEO title="Landmark Legend - Games" description="Identify countries by their famous landmarks. Test your knowledge of world monuments, natural wonders, and iconic locations." />
             
@@ -258,21 +257,16 @@ export default function LandmarkLegend() {
             </div>
 
             {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-            <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl rounded-2xl rounded-3xl border-white/30 overflow-hidden relative z-10">
-  <div className="game-top-bar w-full flex shrink-0 items-center gap-2 p-2 md:p-3 border-b border-white/10 z-20">
-               <Link to="/games/all" className="game-back-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white/70 hover:text-white transition-all duration-200 border border-white/20 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95 shrink-0 group">
-                 <ArrowLeft size={18} className="transition-transform" />
-               </Link>
-
-               {/* Game title - flexbox centered, will shrink if needed */}
-               <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                  <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Landmark Legend</h2>
-                  <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
-               </div>
-
-               {/* Spacer to balance the back button */}
-               <div className="game-back-spacer w-[42px] shrink-0" />
-            </div>
+            <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+    <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
+      <ArrowLeft size={24} />
+    </Link>
+    <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Landmark Legend</h2>
+    </div>
+    <div className="w-[32px] sm:w-[40px] shrink-0" />
+  </div>
   <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
 
                
@@ -359,7 +353,7 @@ export default function LandmarkLegend() {
             
   </div>
 </div>
-            <FeedbackOverlay type={feedback} triggerKey={feedbackKey} />
+            
           </motion.div>
         )}
 
@@ -382,9 +376,9 @@ export default function LandmarkLegend() {
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                   <Trophy size={36} className="relative z-10 drop-shadow-lg" />
                 </div>

@@ -362,10 +362,8 @@ export default function MapDash() {
           >
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <Link to="/games/all">
-                <button className="game-back-btn w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-surface-dark/80 hover:bg-surface-dark/100 backdrop-blur-xl rounded-full text-white/80 hover:text-white transition-all duration-200 border border-white/20 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95 shrink-0 group">
-                  <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
-                </button>
+              <Link to="/games/all" className="p-2 text-white/50 hover:text-white transition-colors drop-shadow-md inline-block">
+                <ArrowLeft size={28} />
               </Link>
             </div>
 
@@ -457,7 +455,7 @@ export default function MapDash() {
             </div>
 
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
             <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
                 <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
@@ -467,7 +465,7 @@ export default function MapDash() {
                 <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
                 <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-6 w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
                 </div>
               <GameNavigationButtons />
               </div>
@@ -507,7 +505,7 @@ export default function MapDash() {
             </div>
 
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
               
             <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
                 <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">

@@ -9,7 +9,6 @@ import { Country } from '../types';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
-import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { getFlagUrl } from '../utils/flags';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
@@ -184,9 +183,9 @@ export default function PopulationPursuit() {
         </div>
 
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-2xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/population-pursuit.png`} alt="Population Pursuit" className="w-full h-full object-cover" />
           </div>
@@ -194,7 +193,7 @@ export default function PopulationPursuit() {
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Choose the larger population.</p>
             <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
             <div className="flex flex-col gap-6 w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
             <GameNavigationButtons />
           </div>
         </div>
@@ -209,7 +208,7 @@ export default function PopulationPursuit() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-4 md:pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
       <SEO title="Population Pursuit - Games" description="Which country has more people? Compare populations and test your knowledge of world demographics in this geography game." />
       
@@ -220,21 +219,16 @@ export default function PopulationPursuit() {
       </div>
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-      <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl rounded-2xl rounded-3xl border-white/20 overflow-hidden relative z-10">
-  <div className="game-top-bar w-full flex shrink-0 items-center gap-2 p-2 md:p-3 border-b border-white/10 z-20">
-         <Link to="/games/all" className="game-back-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white/70 hover:text-white transition-all duration-200 border border-white/20 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95 shrink-0 group">
-           <ArrowLeft size={18} className="transition-transform" />
-         </Link>
-
-         {/* Game title - flexbox centered, will shrink if needed */}
-         <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-            <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Population Pursuit</h2>
-            <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
-         </div>
-
-         {/* Spacer to balance the back button */}
-         <div className="game-back-spacer w-[42px] shrink-0" />
-      </div>
+      <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+    <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
+      <ArrowLeft size={24} />
+    </Link>
+    <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Population Pursuit</h2>
+    </div>
+    <div className="w-[32px] sm:w-[40px] shrink-0" />
+  </div>
   <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
 
           
@@ -280,19 +274,23 @@ export default function PopulationPursuit() {
                 const isWrong = isSelected && !isWinner;
                 
                 // No hover styles on mobile - prevents "pre-highlighted" sticky hover on touch devices
-                let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
-                let titleStyle = "text-white/80";
+                let cardStyle = "border-2 border-white/10 active:border-sky/50";
+                let overlayStyle = "bg-black/50 hover:bg-black/40 active:bg-black/30";
+                let titleStyle = "text-white";
                   
                 if (result) {
                     if (isWinner) {
-                        cardStyle = "bg-accent/90 border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                        cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                        overlayStyle = "bg-accent/90 backdrop-blur-md";
                         titleStyle = "text-white drop-shadow-md";
                     } else if (isSelected) {
-                        cardStyle = "bg-red-500/90 border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                        cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                        overlayStyle = "bg-red-500/90 backdrop-blur-md";
                         titleStyle = "text-white drop-shadow-md";
                     } else {
-                        cardStyle = "bg-black/20 border-white/5 opacity-30 z-0 blur-[1px]";
-                        titleStyle = "text-white/20";
+                        cardStyle = "border-2 border-white/5 opacity-30 z-0 blur-[1px]";
+                        overlayStyle = "bg-black/70";
+                        titleStyle = "text-white/50";
                     }
                 }
 
@@ -300,46 +298,61 @@ export default function PopulationPursuit() {
                     <div 
                       key={country.id} 
                       onClick={() => handleChoice(country)} 
-                      className={`min-h-0 md:min-h-[320px] relative rounded-2xl md:rounded-3xl p-3 md:p-6 flex flex-col items-center justify-center transition-[background-color,border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`} 
+                      className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`} 
                       style={{ WebkitTapHighlightColor: 'transparent' }}
                     >
-                      <div className="mb-1 md:mb-2 flex items-center justify-center relative z-10 w-full min-h-[60px] md:min-h-[140px]">
-                        {!hasError ? (
-                          <div className={`w-full max-w-[100px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
-                            <img 
-                              src={getFlagUrl(country.flag)}
-                              alt={`${country.name} flag`}
-                              className={`w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
-                              onError={() => setHasError(true)}
-                            />
-                          </div>
-                        ) : (
-                          <div className={`w-full max-w-[100px] md:max-w-[160px] aspect-[3/2] transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
-                            <img 
-                              src={getFlagUrl(country.flag)}
-                              alt={`${country.name} flag fallback`}
-                              className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                            />
-                          </div>
-                        )}
+                      {/* Background Flag */}
+                      <div className="absolute inset-0 z-0">
+                        <img 
+                          src={getFlagUrl(country.flag)}
+                          alt={`${country.name} flag`}
+                          className={`w-full h-full object-cover transition-all duration-500 ease-out ${result ? 'scale-105' : 'scale-100'}`}
+                        />
                       </div>
                       
-                      {/* Country name - directly under flag on mobile */}
-                      <h3 className={`text-xs md:text-xl font-display font-black mb-0 md:mb-2 leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-lg line-clamp-2 text-center relative z-10 px-1 md:px-4 ${titleStyle}`}>
-                        {country.name}
-                      </h3>
-
-                      {/* Population info - shows after selection */}
-                      <div className={`text-center relative z-10 w-full px-2 md:px-4 shrink-0 transition-[opacity,transform] ${result ? 'duration-500 opacity-100 scale-100 mt-2 md:mt-3' : 'duration-0 opacity-0 scale-90 h-0 overflow-hidden pointer-events-none'}`}>
-                          <div className="h-px w-6 md:w-12 bg-white/20 mx-auto mb-1.5 md:mb-3" />
-                          <div className="flex flex-col items-center gap-0.5">
-                            <span className="text-sky-light uppercase font-black text-[6px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans">POPULATION</span>
-                            <div className={`text-[11px] md:text-3xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_3px_10px_rgba(0,0,0,0.5)] ${isWinner ? 'text-white' : 'text-white/60'}`}>
-                              {country.population}
+                      {/* Overlay */}
+                      <div className={`absolute inset-0 z-0 transition-all duration-300 ${overlayStyle}`} />
+                      
+                      {/* Content Container */}
+                      <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-2 md:p-6">
+                        {/* Small Flag (OG View) */}
+                        <div className="mb-2 md:mb-4 flex items-center justify-center relative w-full min-h-[50px] md:min-h-[140px]">
+                          {!hasError ? (
+                            <div className={`w-full max-w-[80px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
+                              <img 
+                                src={getFlagUrl(country.flag)}
+                                alt={`${country.name} flag`}
+                                className={`w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.65)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
+                                onError={() => setHasError(true)}
+                              />
                             </div>
-                          </div>
-                      </div>
+                          ) : (
+                            <div className={`w-full max-w-[80px] md:max-w-[160px] aspect-[3/2] transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
+                              <img 
+                                src={getFlagUrl(country.flag)}
+                                alt={`${country.name} flag fallback`}
+                                className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.65)]"
+                              />
+                            </div>
+                          )}
+                        </div>
 
+                        {/* Country name */}
+                        <h3 className={`text-xs sm:text-sm md:text-3xl font-display font-black leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-[0_6px_12px_rgba(0,0,0,0.85)] text-center w-full px-1 ${titleStyle}`}>
+                          {country.name}
+                        </h3>
+
+                        {/* Population info - shows after selection */}
+                        <div className={`text-center w-full transition-[opacity,transform] ${result ? 'duration-500 opacity-100 scale-100 mt-2 md:mt-4' : 'duration-0 opacity-0 scale-90 h-0 overflow-hidden pointer-events-none'}`}>
+                            <div className="h-px w-6 md:w-16 bg-white/40 mx-auto mb-1 md:mb-3" />
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="text-white/80 uppercase font-black text-[7px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans drop-shadow-md">POPULATION</span>
+                              <div className={`text-sm sm:text-base md:text-4xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_6px_12px_rgba(0,0,0,0.85)] ${isWinner ? 'text-white' : 'text-white/80'}`}>
+                                {country.population}
+                              </div>
+                            </div>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
@@ -349,7 +362,7 @@ export default function PopulationPursuit() {
             
   </div>
 </div>
-            <FeedbackOverlay type={result} triggerKey={feedbackKey} />
+            
           </motion.div>
         )}
 
@@ -372,9 +385,9 @@ export default function PopulationPursuit() {
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>

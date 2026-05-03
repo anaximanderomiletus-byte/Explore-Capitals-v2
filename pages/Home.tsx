@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Play } from 'lucide-react';
 import { motion, useMotionValue, useTransform, useSpring, PanInfo, animate } from 'framer-motion';
 import Button from '../components/Button';
@@ -38,6 +38,7 @@ const COUNTRY_HIGHLIGHTS = [
 const Home: React.FC = () => {
   const { setPageLoading } = useLayout();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(1);
   const [panelWidth, setPanelWidth] = useState(420);
 
@@ -92,6 +93,14 @@ const Home: React.FC = () => {
   };
 
   const featuredGames = useMemo(() => GAMES.filter(g => g.status === 'active').slice(0, 10), []);
+
+  const playRandomGame = () => {
+    const active = GAMES.filter(g => g.status === 'active');
+    const randomGame = active[Math.floor(Math.random() * active.length)];
+    if (randomGame) {
+      navigate(`/games/${GAME_PATHS[randomGame.id] || 'capital-quiz'}`);
+    }
+  };
 
   return (
     <main className="relative flex-grow bg-transparent w-full home-glow overflow-x-hidden select-none">
@@ -179,11 +188,9 @@ const Home: React.FC = () => {
 
         {/* Play Button */}
         <div className="mt-6 z-20">
-          <Link to="/games">
-            <Button variant="primary" className="w-[85vw] max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
-              {t('home.hero.play')} <Play className="ml-3 fill-current" />
-            </Button>
-          </Link>
+          <Button onClick={playRandomGame} variant="primary" className="w-[85vw] max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
+            {t('home.hero.play')} <Play className="ml-3 fill-current" />
+          </Button>
         </div>
       </section>
     </main>

@@ -87,9 +87,9 @@ const GamesDashboard: React.FC = () => {
     if (viewMode === 'carousel' && infiniteGames.length > 0) {
       animate(x, -activeIndex * cardWidth, {
         type: "spring",
-        stiffness: 260,
-        damping: 28,
-        mass: 1
+        stiffness: 450,
+        damping: 45,
+        mass: 0.8
       });
     }
   }, [activeIndex, cardWidth, x, viewMode, infiniteGames.length]);
@@ -205,11 +205,22 @@ const GamesDashboard: React.FC = () => {
                 dragControls={dragControls}
                 dragListener={false}
                 dragElastic={0.15}
+                dragMomentum={false}
                 style={{ x }}
                 onDragEnd={(_: any, info: PanInfo) => {
                   const currentX = x.get();
-                  const predictedX = currentX + info.velocity.x * 0.4;
-                  setActiveIndex(Math.round(-predictedX / cardWidth));
+                  const velocityFactor = info.velocity.x * 0.25;
+                  const predictedX = currentX + velocityFactor;
+                  const nextIndex = Math.round(-predictedX / cardWidth);
+                  setActiveIndex(nextIndex);
+                  
+                  // Immediate spring animation to the target
+                  animate(x, -nextIndex * cardWidth, {
+                    type: "spring",
+                    stiffness: 450,
+                    damping: 45,
+                    mass: 0.8
+                  });
                 }}
               >
                 {infiniteGames.map((game, index) => (
@@ -282,11 +293,13 @@ const CarouselCard: React.FC<{
         className="w-[85%] sm:w-[90%] aspect-square sm:aspect-[16/10] bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
       >
         <div className="absolute inset-0 z-0">
-          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover brightness-50 group-hover:brightness-75 transition-all duration-1000" />
-          <div className="absolute inset-0 bg-black/40 z-10" />
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent md:hidden z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent md:hidden z-10" />
+          <div className="absolute inset-0 hidden md:block bg-black/40 z-10" />
         </div>
            
-        <div className="relative z-20 flex flex-col items-center justify-center py-8 sm:py-12 px-6 sm:px-8 text-center w-full h-full gap-6 sm:gap-8">
+        <div className="relative z-20 flex flex-col items-center justify-between md:justify-center py-8 sm:py-12 px-6 sm:px-8 text-center w-full h-full md:gap-8">
             <h3 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-white uppercase tracking-tighter leading-none drop-shadow-2xl">
               {game.title}
             </h3>

@@ -8,12 +8,12 @@ import { getCountryCode } from '../utils/flags';
 import SEO from '../components/SEO';
 import { useLayout } from '../context/LayoutContext';
 import { useUser } from '../context/UserContext';
-import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import TimeSelector from '../components/TimeSelector';
 import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
 import GameNavigationButtons from '../components/GameNavigationButtons';
+import { getStaticImages } from '../data/images';
 
 // Better shuffle algorithm
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -35,6 +35,7 @@ interface GameCard {
   isWrong: boolean;
   isCorrect: boolean;
   flagCode?: string; // Just store the code, not the element
+  capitalImage?: string;
 }
 
 export default function CapitalConnection() {
@@ -50,12 +51,14 @@ export default function CapitalConnection() {
   const [hasReported, setHasReported] = useState(false);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
+  const [imagesMap, setImagesMap] = useState<Record<string, string>>({});
   const { recordGameResult } = useUser();
   const navigate = useNavigate();
   const { setPageLoading } = useLayout();
 
   useEffect(() => {
     setPageLoading(false);
+    getStaticImages().then(setImagesMap);
   }, [setPageLoading]);
 
   // Timer logic
@@ -89,8 +92,10 @@ export default function CapitalConnection() {
     }
   }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
-  const generateBoard = useCallback(() => {
+  const generateBoard = useCallback(async () => {
+    setIsProcessing(true);
     const roundCountries = shuffleArray(COUNTRIES).slice(0, 6);
+    const IMAGES = await getStaticImages();
     const newCards: GameCard[] = [];
     
     roundCountries.forEach(country => {
@@ -116,19 +121,33 @@ export default function CapitalConnection() {
         isMatched: false,
         isSelected: false,
         isWrong: false,
-        isCorrect: false
+        isCorrect: false,
+        capitalImage: IMAGES[country.name] || IMAGES[country.capital]
       });
     });
     
-    const shuffled = shuffleArray(newCards);
-    setCards(shuffled);
+    // We shuffle Capitals and Countries SEPARATELY so they appear in random order in their columns
+    const capitals = shuffleArray(newCards.filter(c => c.type === 'capital'));
+    const countries = shuffleArray(newCards.filter(c => c.type === 'country'));
+    
+    // Combine them back into a single array for state, but keeping them grouped is fine 
+    // since we filter by type in the render method anyway.
+    const combined = [...capitals, ...countries];
+    
+    setCards(combined);
     setSelectedIds([]);
     setIsProcessing(false);
 
     // Preload all flags for this board
-    shuffled.filter(c => c.flagCode).forEach(c => {
+    combined.filter(c => c.flagCode).forEach(c => {
       const img = new Image();
       img.src = `/flags/${c.flagCode}.png`;
+    });
+    
+    // Preload capital images
+    combined.filter(c => c.capitalImage).forEach(c => {
+      const img = new Image();
+      if (c.capitalImage) img.src = c.capitalImage;
     });
   }, []);
 
@@ -254,9 +273,9 @@ export default function CapitalConnection() {
         </div>
 
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-3xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
+            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-2xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/capital-connection.png`} alt="Capital Connection" className="w-full h-full object-cover" />
           </div>
@@ -264,7 +283,7 @@ export default function CapitalConnection() {
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Connect nations to their capitals.</p>
             <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
             <div className="flex flex-col gap-6 w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">PLAY <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
                 <GameNavigationButtons />
           </div>
         </div>
@@ -279,7 +298,7 @@ export default function CapitalConnection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -20 }}
-            className="game-playing h-full flex flex-col px-3 md:px-4 pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
+            className="game-playing h-full flex flex-col px-3 md:px-4 pt-4 md:pt-16 pb-2 md:pb-6 overflow-hidden"
           >
       <SEO title="Capital Connection - Games" description="Match countries to their capital cities. Test your geography knowledge by connecting nations with their capitals in this fun game." />
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -288,48 +307,66 @@ export default function CapitalConnection() {
       </div>
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-      <div className="game-bubble flex-1 max-w-3xl mx-auto w-full flex flex-col min-h-0 bg-white/5 backdrop-blur-xl rounded-2xl border-white/10 overflow-hidden relative z-10">
-  <div className="game-top-bar w-full flex shrink-0 items-center gap-2 p-2 md:p-3 border-b border-white/10 z-20">
-         <Link to="/games/all" className="game-back-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white/70 hover:text-white transition-all duration-200 border border-white/20 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-95 shrink-0 group">
-           <ArrowLeft size={18} className="transition-transform" />
-         </Link>
-
-         {/* Game title - flexbox centered, will shrink if needed */}
-         <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-            <h2 className="text-[9px] sm:text-[10px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Connection</h2>
-            <div className="h-0.5 w-6 bg-sky/40 rounded-full mt-1" />
-         </div>
-
-         {/* Spacer to balance the back button */}
-         <div className="game-back-spacer w-[42px] shrink-0" />
-      </div>
-  <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
+      <div className="game-bubble flex-1 max-w-3xl mx-auto w-full flex flex-col min-h-0 bg-white/5 backdrop-blur-xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+    <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
+      <ArrowLeft size={24} />
+    </Link>
+    <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Capital Connection</h2>
+    </div>
+    <div className="w-[32px] sm:w-[40px] shrink-0" />
+  </div>
+  <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-hidden p-2 sm:p-3 md:p-6 relative z-10">
 
           {/* Points and Timer - Responsive layout for all screen sizes */}
-          <div className="game-score-bar flex items-center justify-between gap-2 mb-3 sm:mb-4 relative z-20 shrink-0">
+          <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 relative z-20 shrink-0">
              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-warning/15 border border-warning/30 shrink-0">
                 <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning" />
                 <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums">{score}</span>
              </div>
+             
+             {/* Instruction Text */}
+             <div className="flex-1 text-center hidden sm:block">
+               <h3 className="text-white/90 font-display font-black tracking-[0.15em] md:tracking-[0.2em] text-[10px] md:text-xs uppercase drop-shadow-md">Match the correct pair</h3>
+             </div>
+
              <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg transition-all duration-300 shrink-0 ${timeLeft < 10 ? 'bg-red-500/15 border border-error' : 'bg-sky/20 border border-white/20'}`}>
                 <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" /></div>
                 <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums min-w-[28px] sm:min-w-[32px] md:min-w-[36px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
              </div>
           </div>
+          
+          {/* Mobile Instruction Text */}
+          <div className="w-full text-center mb-2 sm:hidden relative z-20 shrink-0">
+            <h3 className="text-white/90 font-display font-black tracking-[0.15em] text-[10px] uppercase drop-shadow-md">Match the correct pair</h3>
+          </div>
 
-          <div className="game-tile-grid flex-1 grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 auto-rows-fr content-center relative z-10">
-            {cards.map(card => (
-              <Card 
-                key={card.id} 
-                card={card} 
-                onClick={() => handleCardClick(card.id)} 
-              />
-            ))}
+          <div className="flex-1 grid grid-cols-2 gap-2 md:gap-3 relative z-10 w-full max-w-5xl mx-auto min-h-0">
+            {/* Capitals Column (Left) */}
+            <div className="flex flex-col gap-1.5 md:gap-2 h-full min-h-0">
+               <h4 className="text-center text-white/70 font-display font-bold uppercase text-[10px] sm:text-xs tracking-widest hidden sm:block md:mb-0.5 shrink-0">Capitals</h4>
+               {cards.filter(c => c.type === 'capital').map(card => (
+                 <div key={card.id} className="flex-1 min-h-0 w-full">
+                   <Card card={card} onClick={() => handleCardClick(card.id)} />
+                 </div>
+               ))}
+            </div>
+
+            {/* Countries Column (Right) */}
+            <div className="flex flex-col gap-1.5 md:gap-2 h-full min-h-0">
+               <h4 className="text-center text-white/70 font-display font-bold uppercase text-[10px] sm:text-xs tracking-widest hidden sm:block md:mb-0.5 shrink-0">Countries</h4>
+               {cards.filter(c => c.type === 'country').map(card => (
+                 <div key={card.id} className="flex-1 min-h-0 w-full">
+                   <Card card={card} onClick={() => handleCardClick(card.id)} />
+                 </div>
+               ))}
+            </div>
           </div>
       
   </div>
 </div>
-            <FeedbackOverlay type={feedback} triggerKey={feedbackKey} />
+            
           </motion.div>
         )}
 
@@ -352,9 +389,9 @@ export default function CapitalConnection() {
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
-            <div className="mx-auto my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
+            <div className="mx-auto mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
               <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
                 <Trophy size={36} className="relative z-10 drop-shadow-lg" />
               </div>
@@ -377,44 +414,80 @@ export default function CapitalConnection() {
 // Memoized Card component to prevent unnecessary re-renders
 const Card = React.memo(({ card, onClick }: { card: GameCard, onClick: () => void }) => {
   // No hover or focus styles - prevents "pre-highlighted" appearance on touch devices
-  let stateStyle = "bg-white/10 border-white/20 text-white active:bg-white/15 active:border-sky/40 focus:outline-none focus:ring-0 select-none";
+  let stateStyle = "border-white/20 active:border-sky/40";
+  let overlayStyle = "bg-black/50 hover:bg-black/40 active:bg-black/30";
   let animationClass = "";
+  let textStyle = "text-white";
   
   if (card.isMatched) {
-    stateStyle = "bg-accent/30 border-accent/50 text-white/50 cursor-default opacity-50 focus:outline-none focus:ring-0";
+    stateStyle = "border-accent/20 cursor-default";
+    overlayStyle = "bg-black/80";
+    textStyle = "text-white/30";
   } else if (card.isCorrect) {
-    stateStyle = "bg-emerald-500/40 border-emerald-400 text-white focus:outline-none focus:ring-0";
+    stateStyle = "border-accent";
+    overlayStyle = "bg-accent/90 backdrop-blur-md";
     animationClass = "animate-correct-pop";
+    textStyle = "text-white";
   } else if (card.isWrong) {
-    stateStyle = "bg-red-500/30 border-red-400 text-white focus:outline-none focus:ring-0";
+    stateStyle = "border-red-500";
+    overlayStyle = "bg-red-500/90 backdrop-blur-md";
     animationClass = "animate-shake";
+    textStyle = "text-white";
   } else if (card.isSelected) {
-    stateStyle = "bg-sky/25 border-sky/40 text-white focus:outline-none focus:ring-0";
+    stateStyle = "border-sky";
+    overlayStyle = "bg-sky/60 backdrop-blur-sm";
+    textStyle = "text-white drop-shadow-md";
   }
 
   return (
-    <button
-      onClick={onClick}
-      disabled={card.isMatched || card.isCorrect}
-      className={`h-full min-h-[60px] sm:min-h-[70px] md:min-h-[100px] rounded-xl p-3 md:p-4 flex flex-col items-center justify-center text-center transition-all duration-200 border-2 ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0`}
+    <div
+      onClick={(!card.isMatched && !card.isCorrect) ? onClick : undefined}
+      role="button"
+      tabIndex={(!card.isMatched && !card.isCorrect) ? 0 : -1}
+      className={`relative block w-full h-full min-h-0 rounded-xl transition-all duration-200 border-2 overflow-hidden group ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0 ${(!card.isMatched && !card.isCorrect) ? 'cursor-pointer' : 'cursor-default pointer-events-none'}`}
       style={{ WebkitTapHighlightColor: 'transparent' }}
     >
-      <div className={`mb-2 transition-all duration-200 ${card.type === 'country' ? '' : (card.isMatched ? 'opacity-50' : 'opacity-60')}`}>
-        {card.type === 'country' ? (
-          <img
-            src={`/flags/${card.flagCode}.png`}
-            alt={`Flag of ${card.label}`}
-            className="w-10 h-auto md:w-12 select-none object-contain"
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+      {/* Background Fill */}
+      {card.type === 'country' ? (
+        <img 
+          src={`/flags/${card.flagCode}.png`} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover transition-all duration-500 scale-[1.02] z-0 pointer-events-none rounded-[10px]" 
+        />
+      ) : (
+        card.capitalImage ? (
+          <img 
+            src={card.capitalImage} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover transition-all duration-500 scale-[1.02] z-0 pointer-events-none opacity-80 rounded-[10px]" 
           />
         ) : (
-          <Building2 size={20} className={`md:w-6 md:h-6 ${card.isMatched ? 'text-white/60' : 'text-sky-light'}`} />
-        )}
-      </div>
+          <div className="absolute inset-0 w-full h-full bg-blue-800 transition-all duration-500 z-0 pointer-events-none rounded-[10px]" />
+        )
+      )}
 
-      <span className="font-bold leading-tight text-[10px] md:text-xs uppercase tracking-tight line-clamp-2">
-        {card.label}
-      </span>
-    </button>
+      {/* Overlay */}
+      <div className={`absolute inset-0 w-full h-full transition-all duration-300 z-10 pointer-events-none rounded-[10px] ${overlayStyle}`} />
+
+      {/* Content Container (Flex) */}
+      <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center p-1 sm:p-2 z-20 pointer-events-none">
+        <div className={`mb-0.5 md:mb-1 flex items-center justify-center min-h-[20px] md:min-h-[28px] transition-all duration-200 ${card.isMatched ? 'opacity-30' : ''}`}>
+          {card.type === 'country' ? (
+            <img
+              src={`/flags/${card.flagCode}.png`}
+              alt={`Flag of ${card.label}`}
+              className="w-8 h-auto md:w-10 select-none object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+          ) : (
+            <Building2 size={20} className={`md:w-6 md:h-6 drop-shadow-md ${card.isMatched ? 'text-white/60' : 'text-sky-light'}`} />
+          )}
+        </div>
+
+        <span className={`font-display font-black leading-tight text-[9px] sm:text-[10px] md:text-xs uppercase tracking-tight line-clamp-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] text-center ${textStyle}`}>
+          {card.label}
+        </span>
+      </div>
+    </div>
   );
 });

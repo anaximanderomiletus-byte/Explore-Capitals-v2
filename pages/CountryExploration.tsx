@@ -8,7 +8,6 @@ import Button from '../components/Button';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useLayout } from '../context/LayoutContext';
-import { FeedbackOverlay } from '../components/FeedbackOverlay';
 import { COUNTRIES, TERRITORIES, DE_FACTO_COUNTRIES } from '../constants';
 import { getCountryTour, getGeneratedImage } from '../services/geminiService';
 import { getStaticImages } from '../data/images';
@@ -1034,7 +1033,7 @@ const CountryExploration: React.FC = () => {
               <div className="text-center mb-6 md:mb-8 shrink-0">
                  <div className="inline-flex items-center gap-3 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-3">
                     <div className="w-1.5 h-1.5 rounded-full bg-sky animate-pulse" />
-                    <h2 className="text-[9px] font-black text-white uppercase tracking-[0.5em]">Knowledge Check</h2>
+                    <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.5em]">Knowledge Check</h2>
                  </div>
                  <div className="w-48 md:w-64 h-1.5 bg-white/10 mx-auto relative rounded-full overflow-hidden shadow-inner border border-white/10">
                     <div 
@@ -1546,9 +1545,7 @@ const CountryExploration: React.FC = () => {
       <AnimatePresence mode="wait">
         {renderContent()}
       </AnimatePresence>
-      {view !== 'quiz' && (
-        <FeedbackOverlay type={isCorrect === null ? null : (isCorrect ? 'correct' : 'incorrect')} triggerKey={feedbackKey} />
-      )}
+
     </>
   );
 };
