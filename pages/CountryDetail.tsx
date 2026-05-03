@@ -46,7 +46,7 @@ const Polaroid: React.FC<{
   >
     <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
     <div className="w-full aspect-square overflow-hidden relative shadow-inner bg-[#F0F0EC]">
-      <img src={photo.image} alt={photo.caption} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
+      <img src={photo.image} alt={photo.caption} draggable={false} className="w-full h-full object-cover brightness-[0.85] contrast-[1.05]" loading="lazy" decoding="async" />
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
       <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.1)] pointer-events-none" />
     </div>
@@ -93,13 +93,18 @@ const InteractivePolaroidStack: React.FC<{ photos: { image: string, caption: str
               }}
               transition={{ 
                 type: "spring", 
-                stiffness: 300, 
-                damping: 25 
+                stiffness: 400, 
+                damping: 25,
+                mass: 0.5
               }}
               drag={isTop ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
+              dragMomentum={false}
+              dragElastic={0.8}
               onDragEnd={(_, info) => {
-                if (Math.abs(info.offset.x) > 80 || Math.abs(info.velocity.x) > 500) {
+                const velocityFactor = info.velocity.x * 0.4;
+                const predictedX = info.offset.x + velocityFactor;
+                if (Math.abs(predictedX) > 40) {
                   handleNext();
                 }
               }}
