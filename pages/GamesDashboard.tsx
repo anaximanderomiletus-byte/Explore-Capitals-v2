@@ -272,7 +272,7 @@ const CarouselCard: React.FC<{
   game: any; index: number; activeIndex: number; scrollX: any; width: number; dragControls: any; onClick: () => void 
 }> = ({ game, index, activeIndex, scrollX, width, dragControls, onClick }) => {
   const targetX = index * width;
-  const relativeX = useTransform(scrollX, (val) => val + targetX);
+  const relativeX = useTransform(scrollX, (val: number) => val + targetX);
   
   const scale = useTransform(relativeX, [-width, 0, width], [0.9, width > 500 ? 1.15 : 1.05, 0.9]);
   const opacity = useTransform(relativeX, [-width, 0, width], [0.6, 1, 0.6]);

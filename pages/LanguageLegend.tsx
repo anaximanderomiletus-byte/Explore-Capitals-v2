@@ -157,8 +157,8 @@ export default function LanguageLegend() {
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-secondary/15 rounded-full blur-3xl opacity-80" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-secondary/5 rounded-full blur-3xl opacity-60" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-3xl opacity-80" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-3xl opacity-60" />
             </div>
 
             <GameSideAds />
@@ -195,8 +195,8 @@ export default function LanguageLegend() {
             
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-3xl opacity-60" />
-              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-secondary/2.5 rounded-full blur-3xl opacity-40" />
+              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-3xl opacity-60" />
+              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-sky/5 rounded-full blur-3xl opacity-40" />
             </div>
 
             {/* Top Bar */}
@@ -236,7 +236,7 @@ export default function LanguageLegend() {
                   className="flex-1 flex flex-col min-h-0"
                 >
                   <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 pt-0 pb-2 md:pt-2 md:pb-4 relative z-10 overflow-hidden">
-                    <p className="text-secondary font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80 shrink-0">IDENTIFY LANGUAGE</p>
+                    <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] mb-1 md:mb-1 font-sans opacity-80 shrink-0">IDENTIFY LANGUAGE</p>
                     <h3 className="text-xl md:text-4xl font-display font-black text-white text-center px-4 leading-tight max-w-full break-words uppercase tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] mb-2 md:mb-4 shrink-0">
                       {currentQuestion.country.name}
                     </h3>
@@ -254,7 +254,7 @@ export default function LanguageLegend() {
                       const isCorrect = currentQuestion.country.languages.includes(option);
                       const isWrong = isSelected && !isCorrect;
                       
-                      let stateStyles = "bg-white/10 border-2 border-white/40 text-white active:bg-white/20 active:border-secondary/50";
+                      let stateStyles = "bg-white/10 border-2 border-white/40 text-white active:bg-white/20 active:border-sky/50";
                       if (selectedAnswer) {
                         if (isCorrect) stateStyles = "bg-accent/90 border-2 border-accent text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
                         else if (isSelected) stateStyles = "bg-red-500/90 border-2 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";

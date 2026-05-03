@@ -279,14 +279,14 @@ export default function GlobalDetective() {
                         
                         <div className="grid grid-cols-1 gap-1.5 md:gap-2.5 mb-1.5 md:mb-4">
                             {activeClues.map((clue, idx) => (
-                              <div key={idx} className="px-3 sm:px-4 rounded-xl border border-white/20 flex justify-between items-center h-[40px] sm:h-[46px] md:h-[56px] transition-all duration-500 bg-white/5 group hover:bg-white/10 shadow-inner relative overflow-hidden">
+                              <div key={idx} className="px-3 sm:px-4 rounded-xl border border-white/20 flex justify-between items-center h-[48px] sm:h-[54px] md:h-[64px] transition-all duration-500 bg-white/5 group hover:bg-white/10 shadow-inner relative overflow-hidden">
                                 <span className="text-[9px] font-black text-white/30 uppercase tracking-widest relative z-10">{clue.label}</span>
                                 <span className="font-display font-black text-white text-sm md:text-lg uppercase tracking-tight relative z-10 drop-shadow-md truncate ml-4">{clue.value}</span>
                               </div>
                             ))}
                             
                             <div
-                              className={`px-3 sm:px-4 rounded-xl border flex justify-between items-center h-[40px] sm:h-[46px] md:h-[56px] transition-all duration-500 relative overflow-hidden shadow-inner ${isCapitalRevealed ? 'bg-warning/20 border-warning/50' : 'bg-surface-dark border-white/10 cursor-pointer group'}`}
+                              className={`px-3 sm:px-4 rounded-xl border flex justify-between items-center h-[48px] sm:h-[54px] md:h-[64px] transition-all duration-500 relative overflow-hidden shadow-inner ${isCapitalRevealed ? 'bg-warning/20 border-warning/50' : 'bg-surface-dark border-white/10 cursor-pointer group'}`}
                               onClick={revealCapital}
                             >
                                 <span className={`text-[9px] font-black uppercase tracking-widest relative z-10 ${isCapitalRevealed ? 'text-white' : 'text-white/20'}`}>Capital City</span>

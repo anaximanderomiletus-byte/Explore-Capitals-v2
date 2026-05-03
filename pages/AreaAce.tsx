@@ -266,19 +266,24 @@ export default function AreaAce() {
                       const isSelected = selectedId === country.id;
                       const isWrong = isSelected && !isWinner;
                       
-                      let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
-                      let titleStyle = "text-white/80";
+                      // No hover styles on mobile - prevents "pre-highlighted" sticky hover on touch devices
+                      let cardStyle = "border-2 border-white/10 active:border-sky/50";
+                      let overlayStyle = "bg-black/50 hover:bg-black/40 active:bg-black/30";
+                      let titleStyle = "text-white";
                         
                       if (result) {
                         if (isWinner) {
-                          cardStyle = "bg-accent/90 border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                          cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                          overlayStyle = "bg-accent/90 backdrop-blur-md";
                           titleStyle = "text-white drop-shadow-md";
                         } else if (isSelected) {
-                          cardStyle = "bg-red-500/90 border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                          cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                          overlayStyle = "bg-red-500/90 backdrop-blur-md";
                           titleStyle = "text-white drop-shadow-md";
                         } else {
-                          cardStyle = "bg-black/20 border-white/5 opacity-30 z-0 blur-[1px]";
-                          titleStyle = "text-white/20";
+                          cardStyle = "border-2 border-white/5 opacity-30 z-0 blur-[1px]";
+                          overlayStyle = "bg-black/70";
+                          titleStyle = "text-white/50";
                         }
                       }
 
@@ -286,10 +291,24 @@ export default function AreaAce() {
                         <div 
                           key={country.id} 
                           onClick={() => handleChoice(country)} 
-                          className={`min-h-0 md:min-h-[320px] relative rounded-2xl md:rounded-3xl p-3 md:p-6 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
+                          className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
                           style={{ WebkitTapHighlightColor: 'transparent' }}
                         >
-                          <div className="mb-1 md:mb-2 flex items-center justify-center relative z-10 w-full min-h-[60px] md:min-h-[140px]">
+                          {/* Background Flag */}
+                          <div className="absolute inset-0 z-0">
+                            <img 
+                              src={getFlagUrl(country.flag)}
+                              alt={`${country.name} flag`}
+                              className={`w-full h-full object-cover transition-all duration-500 ease-out ${result ? 'scale-105' : 'scale-100'}`}
+                            />
+                          </div>
+                          
+                          {/* Overlay */}
+                          <div className={`absolute inset-0 z-0 transition-all duration-300 ${overlayStyle}`} />
+                          
+                          {/* Content Container */}
+                          <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-2 md:p-6">
+                            <div className="mb-2 md:mb-4 flex items-center justify-center relative z-10 w-full min-h-[50px] md:min-h-[140px]">
                             {!hasError ? (
                               <div className={`w-full max-w-[100px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
                                 <img 
@@ -323,6 +342,7 @@ export default function AreaAce() {
                               </div>
                             </div>
                           </div>
+                        </div>
                         </div>
                       );
                     })}
