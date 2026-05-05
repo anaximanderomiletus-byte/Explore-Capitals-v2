@@ -842,19 +842,23 @@ button::-moz-focus-inner {
     }
   }
   
-  /* Ensure 3D transforms use proper WebKit GPU compositing */
-  [style*="perspective"] {
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-  }
-  
-  /* Safari rounds border-radius with overflow:hidden + 3D transforms differently */
-  .rounded-\[3rem\] {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    isolation: isolate;
+  /* These fixes are for iOS Safari touch devices only — desktop Safari
+     should render identically to Chrome without these overrides. */
+  @media (hover: none) and (pointer: coarse) {
+    /* Ensure 3D transforms use proper WebKit GPU compositing */
+    [style*="perspective"] {
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    
+    /* Safari rounds border-radius with overflow:hidden + 3D transforms differently */
+    .rounded-\[3rem\] {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      isolation: isolate;
+    }
   }
 }
 
@@ -869,6 +873,7 @@ button::-moz-focus-inner {
     .h-\[450px\] {
       height: min(450px, 60dvh) !important;
     }
+
 
     /* 2. Game lobby wrapper: reduce top margin to compensate for iOS nav eating viewport.
        The .overflow-y-auto:has(.game-lobby-card) rule already handles lobby padding,

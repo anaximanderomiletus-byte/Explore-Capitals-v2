@@ -9,25 +9,25 @@ import Button from '../components/Button';
 import { useLayout } from '../context/LayoutContext';
 import { useTranslation } from '../context/LocaleContext';
 
-/* ── Instagram-style scrolling dot indicator ──────────────────────────── */
+/* ── Instagram-style scrolling dot indicator (infinite + sliding) ───── */
 const InstagramDots: React.FC<{ total: number; current: number }> = ({ total, current }) => {
-  const SLOT = 20;       // fixed width per dot slot
-  const VISIBLE = 7;     // how many slots visible at once
+  const SLOT = 20;
+  const VISIBLE = 7;
   const containerW = VISIBLE * SLOT;
-  // Slide so the active dot's slot is always centered
-  const translateX = (containerW / 2) - (SLOT / 2) - (current * SLOT);
+
+  // Triple the dots so there are always dots on both sides (mirrors the infinite carousel)
+  const tripled = total * 3;
+  const center = current + total; // active dot lives in the middle copy
+  const translateX = (containerW / 2) - (SLOT / 2) - (center * SLOT);
 
   return (
-    <div
-      className="overflow-hidden flex items-center"
-      style={{ width: containerW, height: 20 }}
-    >
+    <div className="overflow-hidden flex items-center" style={{ width: containerW, height: 20 }}>
       <div
         className="flex items-center transition-transform duration-300 ease-out"
         style={{ transform: `translateX(${translateX}px)` }}
       >
-        {Array.from({ length: total }).map((_, i) => {
-          const d = Math.abs(i - current);
+        {Array.from({ length: tripled }).map((_, i) => {
+          const d = Math.abs(i - center);
           const size = d === 0 ? 12 : d === 1 ? 9 : d === 2 ? 6 : 5;
           const opacity = d === 0 ? 1 : d === 1 ? 0.55 : d === 2 ? 0.3 : 0.12;
           return (
@@ -82,6 +82,7 @@ const GamesDashboard: React.FC = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(540);
+  const [carouselHeight, setCarouselHeight] = useState(450);
   const x = useMotionValue(0);
   const dragControls = useDragControls();
 
@@ -97,9 +98,9 @@ const GamesDashboard: React.FC = () => {
     const handleResize = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
-      if (w < 640) setCardWidth(w * 0.95);
-      else if (w < 1024) setCardWidth(540);
-      else setCardWidth(640);
+      if (w < 640) { setCardWidth(w * 0.95); setCarouselHeight(450); }
+      else if (w < 1024) { setCardWidth(540); setCarouselHeight(500); }
+      else { setCardWidth(640); setCarouselHeight(600); }
     };
     
     handleResize();
@@ -230,12 +231,12 @@ const GamesDashboard: React.FC = () => {
           /* Premium Arcade Carousel */
           <>
             {/* Mobile swipe hint */}
-            <div className="flex md:hidden items-center justify-center gap-2 -mb-2 animate-[swipe-bounce_3s_ease-in-out_infinite]">
+            <div className="flex md:hidden items-center justify-center gap-2 -mb-4 animate-[swipe-bounce_3s_ease-in-out_infinite]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                 <path d="M22 12H2" />
                 <path d="M6 8l-4 4 4 4" />
               </svg>
-              <span className="text-white font-black uppercase text-[10px] tracking-[0.2em]">SWIPE TO CHOOSE</span>
+              <span className="text-white font-black uppercase text-[10px] tracking-[0.2em]">SWIPE TO CHOOSE GAME</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
                 <path d="M2 12h20" />
                 <path d="M18 8l4 4-4 4" />
@@ -281,7 +282,8 @@ const GamesDashboard: React.FC = () => {
                     index={index} 
                     activeIndex={activeIndex} 
                     scrollX={x} 
-                    width={cardWidth} 
+                    width={cardWidth}
+                    containerHeight={carouselHeight}
                     dragControls={dragControls}
                     onClick={() => setActiveIndex(index)}
                   />
@@ -290,7 +292,7 @@ const GamesDashboard: React.FC = () => {
             </motion.div>
 
             {/* Dots + arrow nav */}
-            <div className="flex items-center justify-center gap-4 md:gap-8 mt-2 md:-mt-12 mb-6 md:mb-12 relative z-50">
+            <div className="flex items-center justify-center gap-4 md:gap-8 -mt-4 md:-mt-12 mb-6 md:mb-12 relative z-50">
               <button 
                 onClick={() => setActiveIndex(prev => prev - 1)} 
                 className="hidden md:flex w-10 h-10 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white transition-all duration-300 hover:bg-white/10"
@@ -317,16 +319,17 @@ const GamesDashboard: React.FC = () => {
 /* ── Carousel Card Component ────────────────────────────────────────── */
 
 const CarouselCard: React.FC<{ 
-  game: any; index: number; activeIndex: number; scrollX: any; width: number; dragControls: any; onClick: () => void 
-}> = ({ game, index, activeIndex, scrollX, width, dragControls, onClick }) => {
+  game: any; index: number; activeIndex: number; scrollX: any; width: number; containerHeight: number; dragControls: any; onClick: () => void 
+}> = ({ game, index, activeIndex, scrollX, width, containerHeight, dragControls, onClick }) => {
   const targetX = index * width;
   const relativeX = useTransform(scrollX, (val: number) => val + targetX);
   
-  const scale = useTransform(relativeX, [-width, 0, width], [0.9, width > 500 ? 1.15 : 1.05, 0.9]);
+  const scale = useTransform(relativeX, [-width, 0, width], [0.9, width > 500 ? 1.15 : 1, 0.9]);
   const opacity = useTransform(relativeX, [-width, 0, width], [0.6, 1, 0.6]);
   const rotateY = useTransform(relativeX, [-width, 0, width], [15, 0, -15]);
   const zIndex = useTransform(relativeX, [-width, 0, width], [10, 30, 10]);
 
+  const cardHeight = width > 500 ? undefined : Math.round(containerHeight * 0.85);
   const path = GAME_PATHS[game.id] || 'capital-quiz';
   const imgName = path === 'territory-titans' ? 'territory-titan' : path;
 
@@ -337,14 +340,15 @@ const CarouselCard: React.FC<{
         WebkitPerspective: 1200, perspective: 1200,
         WebkitTransformStyle: 'preserve-3d', transformStyle: 'preserve-3d',
         width,
+        height: containerHeight,
       }}
-      className={`absolute flex items-center justify-center h-full ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'} will-change-transform`}
+      className={`absolute flex items-center justify-center ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'} will-change-transform`}
       onClick={() => activeIndex !== index && onClick()}
     >
       <div 
         onPointerDown={(e) => dragControls.start(e)}
-        className="w-[85%] sm:w-[90%] h-[85%] sm:h-auto sm:aspect-[16/10] max-h-full bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
-        style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+        className="carousel-card-inner w-[85%] sm:w-[90%] bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
+        style={{ height: cardHeight, ...(!cardHeight ? { aspectRatio: '16/10' } : {}), WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
       >
         <div className="absolute inset-0 z-0">
           <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-75" />
