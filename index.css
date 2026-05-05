@@ -59,6 +59,12 @@
   transform: translateZ(0);
 }
 
+/* Swipe hint: gentle fade in/out for the indicator */
+@keyframes swipe-bounce {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
 /* ==========================================================================
    CROSS-BROWSER NORMALIZATION & PLATFORM FIXES
    Loaded AFTER Tailwind so these overrides take precedence.
@@ -327,7 +333,7 @@ body::before {
      in the visible area below the nav instead of the full viewport.
      Includes safe-area-inset-top because body no longer adds it. */
   .overflow-y-auto:has(.game-lobby-card) {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 6rem) !important;
+    padding-top: max(calc(env(safe-area-inset-top, 0px) + 4rem), 6rem) !important;
     padding-bottom: 1rem !important; /* 16px */
   }
 
@@ -849,6 +855,27 @@ button::-moz-focus-inner {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     isolation: isolate;
+  }
+}
+
+/* ===== iOS SAFARI: GAMES DASHBOARD PARITY WITH CHROME ===== */
+/* These rules target iOS Safari specifically (touch device + WebKit).
+   Desktop browsers (including desktop Safari) are unaffected.
+   Goal: compensate for iOS Safari's dynamic toolbar eating ~90-120px of
+   viewport, making the Games Dashboard look identical to Chrome. */
+@supports (-webkit-touch-callout: none) {
+  @media (hover: none) and (pointer: coarse) and (max-width: 767px) {
+    /* 1. Games Dashboard carousel: use dvh so height adapts to iOS toolbar state */
+    .h-\[450px\] {
+      height: min(450px, 60dvh) !important;
+    }
+
+    /* 2. Game lobby wrapper: reduce top margin to compensate for iOS nav eating viewport.
+       The .overflow-y-auto:has(.game-lobby-card) rule already handles lobby padding,
+       but the inner wrapper's mt-6 still pushes the card down too far on iOS. */
+    .overflow-y-auto:has(.game-lobby-card) .mt-6 {
+      margin-top: 0.25rem !important;
+    }
   }
 }
 

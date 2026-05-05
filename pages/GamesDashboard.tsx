@@ -9,6 +9,45 @@ import Button from '../components/Button';
 import { useLayout } from '../context/LayoutContext';
 import { useTranslation } from '../context/LocaleContext';
 
+/* ── Instagram-style scrolling dot indicator ──────────────────────────── */
+const InstagramDots: React.FC<{ total: number; current: number }> = ({ total, current }) => {
+  const SLOT = 20;       // fixed width per dot slot
+  const VISIBLE = 7;     // how many slots visible at once
+  const containerW = VISIBLE * SLOT;
+  // Slide so the active dot's slot is always centered
+  const translateX = (containerW / 2) - (SLOT / 2) - (current * SLOT);
+
+  return (
+    <div
+      className="overflow-hidden flex items-center"
+      style={{ width: containerW, height: 20 }}
+    >
+      <div
+        className="flex items-center transition-transform duration-300 ease-out"
+        style={{ transform: `translateX(${translateX}px)` }}
+      >
+        {Array.from({ length: total }).map((_, i) => {
+          const d = Math.abs(i - current);
+          const size = d === 0 ? 12 : d === 1 ? 9 : d === 2 ? 6 : 5;
+          const opacity = d === 0 ? 1 : d === 1 ? 0.55 : d === 2 ? 0.3 : 0.12;
+          return (
+            <div
+              key={i}
+              className="shrink-0 flex items-center justify-center"
+              style={{ width: SLOT, height: SLOT }}
+            >
+              <div
+                className="rounded-full bg-white transition-all duration-300"
+                style={{ width: size, height: size, opacity }}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 const GAME_PATHS: Record<string, string> = {
   '1': 'capital-quiz',
   '2': 'map-dash',
@@ -105,7 +144,7 @@ const GamesDashboard: React.FC = () => {
   if (shuffledGames.length === 0) return null;
 
   return (
-    <div className="pt-16 sm:pt-20 md:pt-24 pb-16 min-h-screen relative overflow-hidden bg-[#0F172A]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
+    <div className="pt-16 sm:pt-20 md:pt-24 pb-16 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
       <SEO
         title="All Games"
         description="Browse all geography games on ExploreCapitals."
@@ -119,14 +158,12 @@ const GamesDashboard: React.FC = () => {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games' }]} />
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-4 md:mt-0 mb-6 md:mb-0 relative z-50">
-          <div>
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-xl">
-              {t('games.title')}
-            </h1>
-          </div>
+        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 mb-6 md:mb-8 relative z-50">
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-xl">
+            {t('games.title')}
+          </h1>
           
-          <div className="flex flex-row md:items-center gap-3 md:gap-4 w-full md:w-auto min-w-0">
+          <div className="flex flex-row items-center gap-3 md:gap-4 md:mb-4">
             <div className="hidden md:flex items-center bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-md h-[46px] sm:h-[58px]">
               <button 
                 onClick={() => setViewMode('grid')}
@@ -144,11 +181,11 @@ const GamesDashboard: React.FC = () => {
 
             <button
               onClick={playRandomGame}
-              className="flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group h-[46px] sm:h-[58px] shrink-0"
+              className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0"
               title="Random Game"
             >
-              <Shuffle size={16} className="text-sky-light group-hover:rotate-12 transition-transform" />
-              <span className="font-bold uppercase text-[10px] sm:text-[11px] tracking-[0.2em]">RANDOM GAME</span>
+              <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM GAME</span>
             </button>
           </div>
         </div>
@@ -192,6 +229,19 @@ const GamesDashboard: React.FC = () => {
         ) : (
           /* Premium Arcade Carousel */
           <>
+            {/* Mobile swipe hint */}
+            <div className="flex md:hidden items-center justify-center gap-2 -mb-2 animate-[swipe-bounce_3s_ease-in-out_infinite]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <path d="M22 12H2" />
+                <path d="M6 8l-4 4 4 4" />
+              </svg>
+              <span className="text-white font-black uppercase text-[10px] tracking-[0.2em]">SWIPE TO CHOOSE</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <path d="M2 12h20" />
+                <path d="M18 8l4 4-4 4" />
+              </svg>
+            </div>
+
             <motion.div 
               key="carousel"
               initial={{ opacity: 0, y: 40 }}
@@ -239,7 +289,8 @@ const GamesDashboard: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            <div className="flex items-center justify-center gap-8 mt-6 md:-mt-12 mb-12 relative z-50 animate-in fade-in slide-in-from-bottom-2 duration-700">
+            {/* Dots + arrow nav */}
+            <div className="flex items-center justify-center gap-4 md:gap-8 mt-2 md:-mt-12 mb-6 md:mb-12 relative z-50">
               <button 
                 onClick={() => setActiveIndex(prev => prev - 1)} 
                 className="hidden md:flex w-10 h-10 rounded-full bg-white/5 border border-white/10 items-center justify-center text-white transition-all duration-300 hover:bg-white/10"
@@ -247,11 +298,7 @@ const GamesDashboard: React.FC = () => {
                 <ChevronLeft size={20} />
               </button>
 
-              <div className="flex gap-2">
-                {shuffledGames.map((_, i) => (
-                  <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${activeIndex % shuffledGames.length === i ? 'bg-white w-8' : 'bg-white/20 w-3'}`} />
-                ))}
-              </div>
+              <InstagramDots total={shuffledGames.length} current={activeIndex % shuffledGames.length} />
 
               <button 
                 onClick={() => setActiveIndex(prev => prev + 1)} 
