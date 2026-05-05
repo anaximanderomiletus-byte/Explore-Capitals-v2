@@ -179,7 +179,7 @@ export default function GlobalDetective() {
             <img src={`${import.meta.env.BASE_URL}png/GAMES/global-detective.png`} alt="Global Detective" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Global Detective</h1>
-          <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>
+          <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify the hidden country from clues.</p>
           <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
           <div className="flex flex-col gap-6 w-full">
                 <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
@@ -273,7 +273,7 @@ export default function GlobalDetective() {
                         className="h-full flex flex-col justify-between relative z-10"
                       >
                     <div className="game-content flex flex-col flex-1 justify-center">
-                        <h2 className="text-sky font-black uppercase tracking-[0.4em] text-[9px] mb-1.5 sm:mb-2 md:mb-3 flex items-center gap-2 font-sans">
+                        <h2 className="text-sky-light font-black uppercase tracking-[0.4em] text-[9px] mb-1.5 sm:mb-2 md:mb-3 flex items-center gap-2 font-sans">
                           <Search size={12} /> Country Clues
                         </h2>
                         

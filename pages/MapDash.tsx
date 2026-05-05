@@ -424,7 +424,7 @@ export default function MapDash() {
 
                   {/* Text */}
                   <div className="flex flex-col relative z-10">
-                    <p className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] leading-none mb-1 ${lastResult ? 'text-white/80' : 'text-sky'}`}>
+                    <p className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] leading-none mb-1 ${lastResult ? 'text-white/80' : 'text-sky-light'}`}>
                       FIND
                     </p>
                     <h2 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white leading-none tracking-tighter uppercase drop-shadow-lg whitespace-nowrap">{targetCountry.name}</h2>

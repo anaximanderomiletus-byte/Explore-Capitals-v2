@@ -823,6 +823,35 @@ button::-moz-focus-inner {
   transform: translate3d(0,0,0);
 }
 
+/* ===== SAFARI/iOS CAROUSEL CARD FIXES ===== */
+/* Safari iOS resolves aspect-ratio differently inside absolutely-positioned
+   flex containers, causing cards to render larger than Chrome. These rules
+   force consistent sizing on mobile by using explicit height constraints
+   instead of aspect-ratio, which both engines agree on. */
+@supports (-webkit-touch-callout: none) {
+  /* Mobile: force card height via percentage rather than aspect-ratio */
+  @media (max-width: 639px) {
+    .aspect-square {
+      aspect-ratio: auto !important;
+    }
+  }
+  
+  /* Ensure 3D transforms use proper WebKit GPU compositing */
+  [style*="perspective"] {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Safari rounds border-radius with overflow:hidden + 3D transforms differently */
+  .rounded-\[3rem\] {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    isolation: isolate;
+  }
+}
+
 /* ===== SAFARI/iOS PERFORMANCE OPTIMIZATIONS ===== */
 .reduce-effects .backdrop-blur-sm,
 .reduce-effects .backdrop-blur-md,

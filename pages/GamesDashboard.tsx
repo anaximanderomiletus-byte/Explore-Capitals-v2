@@ -198,6 +198,7 @@ const GamesDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative w-full h-[450px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-visible md:-mt-16"
+              style={{ WebkitPerspective: 1200, perspective: 1200 }}
             >
               <motion.div
                 className="flex items-center justify-center h-full touch-none"
@@ -284,13 +285,19 @@ const CarouselCard: React.FC<{
 
   return (
     <motion.div
-      style={{ scale, opacity, x: targetX, zIndex, rotateY, perspective: 1200, transformStyle: 'preserve-3d', width }}
+      style={{
+        scale, opacity, x: targetX, zIndex, rotateY,
+        WebkitPerspective: 1200, perspective: 1200,
+        WebkitTransformStyle: 'preserve-3d', transformStyle: 'preserve-3d',
+        width,
+      }}
       className={`absolute flex items-center justify-center h-full ${activeIndex === index ? 'z-30' : 'z-10 cursor-pointer'} will-change-transform`}
       onClick={() => activeIndex !== index && onClick()}
     >
       <div 
         onPointerDown={(e) => dragControls.start(e)}
-        className="w-[85%] sm:w-[90%] aspect-square sm:aspect-[16/10] bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="w-[85%] sm:w-[90%] h-[85%] sm:h-auto sm:aspect-[16/10] max-h-full bg-slate-900 border-2 border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)] transition-all duration-500 group relative flex items-center justify-center cursor-grab active:cursor-grabbing"
+        style={{ WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
       >
         <div className="absolute inset-0 z-0">
           <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-75" />
