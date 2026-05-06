@@ -790,7 +790,7 @@ const CountryExploration: React.FC = () => {
             </div>
             <h2 className="text-2xl font-display font-black mb-4 text-white uppercase tracking-tighter">Connection Issue</h2>
             <p className="text-white/40 mb-10 leading-relaxed font-bold uppercase tracking-widest text-[10px]">We couldn't retrieve the expedition data from the archive.</p>
-            <Button onClick={() => navigate(`/country/${toSlug(country.name)}`)} variant="primary" className="w-full h-16 text-white uppercase tracking-widest rounded-full">RETURN TO COUNTRY</Button>
+            <Button onClick={() => navigate(`/country/${toSlug(country.name)}`)} variant="primary" className="w-full max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">RETURN TO COUNTRY</Button>
           </div>
         </Container>
       );
@@ -798,7 +798,7 @@ const CountryExploration: React.FC = () => {
 
     if (view === 'intro') {
       return (
-        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-20 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
+        <Container className="w-full min-h-[100dvh] bg-surface-dark flex flex-col items-center justify-center pt-14 pb-8 px-3 sm:px-4 md:px-6 relative overflow-hidden" transparent>
           <SEO 
             title={`${country.name} Virtual Tour`}
             description={`Take a virtual tour of ${country.name}. Discover landmarks, culture, and geography through an interactive expedition with quizzes.`}
@@ -814,24 +814,25 @@ const CountryExploration: React.FC = () => {
 
           <div className={`relative z-10 w-full max-w-6xl flex flex-col items-center transition-all duration-500 px-4 sm:px-6 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
             <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Database', href: '/database' }, { label: country.name, href: `/country/${toSlug(country.name)}` }, { label: 'Expedition' }]} />
-            <div className="flex flex-col items-center gap-6 lg:gap-8">
+            <div className="flex flex-col items-center gap-5">
 
               {/* 1. Hero Text — Centered */}
-              <div className="flex flex-col items-center text-center space-y-3 max-w-2xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-sky/30 rounded-full border border-white/40 text-[8px] font-black tracking-[0.4em] text-white relative overflow-hidden">
-                  <Compass size={12} className="text-sky-light" />
+              <div className="flex flex-col items-center text-center space-y-4 max-w-xl">
+                <div className="inline-flex items-center gap-2.5 px-5 py-2 bg-sky/20 backdrop-blur-xl rounded-full border border-white/30 text-[10px] font-black tracking-[0.5em] text-white/90 relative overflow-hidden shadow-lg">
+                  <div className="absolute inset-0 bg-glossy-gradient opacity-20 pointer-events-none" />
+                  <Compass size={14} className="text-sky-light relative z-10" />
                   <span className="relative z-10 uppercase">Virtual Tour</span>
                 </div>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-display font-black text-white leading-tight uppercase tracking-tighter drop-shadow-md">
+                <h2 className="text-4xl sm:text-5xl font-display font-black text-white leading-[0.9] uppercase tracking-tighter drop-shadow-lg">
                   {tourData.tourTitle}
                 </h2>
-                <p className="text-xs md:text-sm lg:text-base text-white/70 font-bold italic leading-relaxed drop-shadow-sm">
+                <p className="text-sm text-white/50 font-bold italic leading-relaxed drop-shadow-sm max-w-sm">
                   {tourData.introText}
                 </p>
               </div>
 
               {/* 2. Hero Image — Centered PhotoPrint TV */}
-              <div className="max-w-[320px] md:max-w-lg lg:max-w-xl w-full">
+              <div className="w-full max-w-[400px]">
                 <PhotoPrint
                   src={introImage}
                   alt={country.name}
@@ -844,19 +845,19 @@ const CountryExploration: React.FC = () => {
               </div>
 
               {/* Actions */}
-              <div className="w-full max-w-2xl p-5 sm:p-6 flex flex-col items-center gap-3">
+              <div className="w-full max-w-2xl pt-2 sm:pt-3 pb-5 flex flex-col items-center gap-3">
                 <div className="flex flex-col items-center gap-3 w-full">
                   <Button
                     onClick={startTour}
                     variant="primary"
-                    className="w-full max-w-[364px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center mx-auto shadow-premium"
+                    className="w-full max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center mx-auto shadow-premium active:scale-95 transition-all duration-300 group/btn"
                   >
-                    START TOUR <Play className="ml-3 fill-current" />
+                    START <Play className="ml-3 fill-current group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
 
                   <button
                     onClick={() => navigate(`/country/${toSlug(country.name)}`)}
-                    className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
+                    className="text-[11px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-sky transition-colors py-1.5 px-3"
                   >
                     GO BACK
                   </button>
@@ -1030,22 +1031,22 @@ const CountryExploration: React.FC = () => {
              className={`flex-1 flex flex-col max-w-5xl mx-auto w-full min-h-0 py-2 relative z-10 transition-all duration-500 ${!contentVisible ? 'opacity-0 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'} justify-center`}
            >
               {/* Progress Header */}
-              <div className="text-center mb-6 md:mb-8 shrink-0">
-                 <div className="inline-flex items-center gap-3 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-sky animate-pulse" />
-                    <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.5em]">Knowledge Check</h2>
-                 </div>
-                 <div className="w-48 md:w-64 h-1.5 bg-white/10 mx-auto relative rounded-full overflow-hidden shadow-inner border border-white/10">
-                    <div 
-                      className="absolute h-full bg-gradient-to-r from-sky to-sky-light transition-all duration-1000 ease-out"
-                      style={{ 
-                        width: `${((stepIndex + 1) / tourData.stops.length) * 100}%`, 
-                      }}
-                    />
-                 </div>
-              </div>
+              <div className="text-center mb-3 md:mb-4 shrink-0">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-sky/20 rounded-full border border-white/30 mb-2">
+                     <div className="w-1.5 h-1.5 rounded-full bg-sky animate-pulse" />
+                     <h2 className="text-[10px] sm:text-[11px] md:text-[13px] font-black text-white uppercase tracking-[0.4em]">Knowledge Check</h2>
+                  </div>
+                  <div className="w-36 md:w-48 h-1 bg-white/10 mx-auto relative rounded-full overflow-hidden shadow-inner border border-white/10">
+                     <div 
+                       className="absolute h-full bg-gradient-to-r from-sky to-sky-light transition-all duration-1000 ease-out"
+                       style={{ 
+                         width: `${((stepIndex + 1) / tourData.stops.length) * 100}%`, 
+                       }}
+                     />
+                  </div>
+               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 items-center flex-1 min-h-0">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-10 items-center flex-1 min-h-0">
                  {/* Left: Physical Photo */}
                  <div className="lg:col-span-5 flex flex-col justify-center">
                     <PhotoPrint 
@@ -1055,7 +1056,7 @@ const CountryExploration: React.FC = () => {
                       caption={currentQuestion.stopName}
                       region="Stop Detail"
                       rotation="rotate-0"
-                      className="max-w-[240px] md:max-w-[320px] lg:max-w-none mx-auto"
+                      className="max-w-[180px] sm:max-w-[220px] md:max-w-[300px] lg:max-w-none mx-auto"
                     />
                  </div>
 
@@ -1093,7 +1094,7 @@ const CountryExploration: React.FC = () => {
                                   key={idx}
                                   onClick={() => handleQuizAnswer(option)}
                                   disabled={!!selectedOption}
-                                  className={`w-full text-left px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-[11px] sm:text-xs md:text-sm flex justify-between items-center relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
+                                  className={`w-full text-left px-4 sm:px-5 md:px-6 py-3.5 sm:py-4 md:py-5 rounded-xl md:rounded-2xl border transition-all duration-500 font-black text-xs sm:text-sm md:text-base flex justify-between items-center relative overflow-hidden group/opt ${stateStyles} ${isSelected && !isCorrect ? 'animate-shake' : ''}`}
                                   style={{ WebkitTapHighlightColor: 'transparent' }}
                                 >
                                   <div className="absolute inset-0 bg-glossy-gradient opacity-10 group/opt:opacity-20 pointer-events-none rounded-[inherit]" />
@@ -1142,28 +1143,28 @@ const CountryExploration: React.FC = () => {
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                 <div className="absolute inset-0 bg-glossy-gradient opacity-10 pointer-events-none" />
 
-                <div className="max-w-7xl mx-auto w-full p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-                    <div className="flex-1 text-left min-h-0">
+                <div className="max-w-7xl mx-auto w-full p-10 md:p-16 flex flex-col items-center gap-10 relative z-10">
+                    <div className="w-full text-center">
                         <motion.div
                           initial={{ opacity: 0, y: 16 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.12, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                           className="space-y-6"
                         >
-                          <div className="flex items-center justify-start gap-6">
+                          <div className="flex items-center justify-center gap-6">
                               <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 border-white/40 relative overflow-hidden ${isCorrect ? 'bg-accent/60 text-white' : 'bg-red-500/60 text-white'}`}>
                                    <div className="absolute inset-0 bg-glossy-gradient opacity-30" />
                                    {isCorrect ? <Trophy size={32} className="relative z-10" /> : <ImageOff size={32} className="relative z-10" />}
                               </div>
-                              <div>
+                              <div className="text-left">
                                  <h3 className="font-display font-black text-4xl md:text-5xl uppercase tracking-tighter drop-shadow-lg text-white leading-none mb-1">
                                      {isCorrect ? 'Correct' : 'Incorrect'}
                                  </h3>
                                  <p className={`text-[10px] font-black uppercase tracking-[0.4em] drop-shadow-sm ${isCorrect ? 'text-accent' : 'text-red-400'}`}>Mission Explanation</p>
                               </div>
                           </div>
-                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl border-l-4 border-white/10 pl-8 text-left select-text">
-                              {!isCorrect && currentQuestion && <><span className="text-white">The correct answer is {currentQuestion.answer}</span>{' '}</>}
+                          <p className="text-base md:text-lg text-white/70 font-bold leading-relaxed max-w-3xl mx-auto border-l-4 border-white/10 pl-8 text-left select-text">
+                              {!isCorrect && currentQuestion && <><span className="text-white font-black">{currentQuestion.answer}</span>{' — '}</>}
                               {feedbackMessage || ''}
                           </p>
                         </motion.div>
@@ -1172,15 +1173,15 @@ const CountryExploration: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.2, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="w-full md:w-auto shrink-0"
+                      className="w-full flex justify-center"
                     >
                          <Button
                            onClick={nextQuestion}
                            disabled={!selectedOption || isExitingFeedback}
                            variant="primary"
-                           className="w-full md:min-w-[300px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium"
+                           className="w-full max-w-[360px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium active:scale-95 transition-all duration-300 group/btn"
                          >
-                           {isLastQuestion ? 'FINISH' : 'NEXT'} <ChevronRight size={22} />
+                           {isLastQuestion ? 'FINISH' : 'NEXT'} <ChevronRight size={22} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
                          </Button>
                     </motion.div>
                 </div>
@@ -1433,9 +1434,9 @@ const CountryExploration: React.FC = () => {
                   <Button
                     onClick={restartTour}
                     variant="primary"
-                    className="w-full max-w-[280px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium"
+                    className="w-full max-w-[360px] py-5 text-xl font-black uppercase tracking-[0.15em] shadow-premium active:scale-95 transition-all duration-300 group/btn"
                   >
-                    RESTART <RotateCcw size={20} className="ml-2" />
+                    RESTART <RotateCcw size={20} className="ml-2 group-hover/btn:rotate-[-90deg] transition-transform" />
                   </Button>
                   
                   <button 
@@ -1484,7 +1485,7 @@ const CountryExploration: React.FC = () => {
           </div>
 
           {/* Animated Travel Visual */}
-          <div className="relative z-10 flex flex-col items-center gap-8">
+          <div className="relative z-10 flex flex-col items-center gap-8 w-full max-w-md px-6 text-center">
             <div className="relative">
               {/* Outer glow */}
               <div className="absolute inset-0 bg-sky/30 rounded-full blur-3xl animate-pulse" />
@@ -1534,7 +1535,7 @@ const CountryExploration: React.FC = () => {
               <div className="absolute -inset-4 rounded-full border border-white/10 animate-ping" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
             </div>
             
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70 text-center leading-relaxed w-full">
               {transitionDirection === 'forward' ? forwardTransitionText : backDestinationText}
             </span>
           </div>

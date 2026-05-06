@@ -97,8 +97,9 @@ const GamesDashboard: React.FC = () => {
     
     const handleResize = () => {
       const w = window.innerWidth;
+      const h = window.innerHeight;
       setIsMobile(w < 768);
-      if (w < 640) { setCardWidth(w * 0.95); setCarouselHeight(450); }
+      if (w < 640) { setCardWidth(w * 0.95); setCarouselHeight(Math.min(450, Math.round(h * 0.5))); }
       else if (w < 1024) { setCardWidth(540); setCarouselHeight(500); }
       else { setCardWidth(640); setCarouselHeight(600); }
     };
@@ -248,8 +249,8 @@ const GamesDashboard: React.FC = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="relative w-full h-[450px] sm:h-[500px] md:h-[600px] flex items-center justify-center overflow-visible md:-mt-16"
-              style={{ WebkitPerspective: 1200, perspective: 1200 }}
+              className="relative w-full flex items-center justify-center overflow-visible md:-mt-16"
+              style={{ height: carouselHeight, WebkitPerspective: 1200, perspective: 1200 }}
             >
               <motion.div
                 className="flex items-center justify-center h-full touch-none"

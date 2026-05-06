@@ -869,13 +869,7 @@ button::-moz-focus-inner {
    viewport, making the Games Dashboard look identical to Chrome. */
 @supports (-webkit-touch-callout: none) {
   @media (hover: none) and (pointer: coarse) and (max-width: 767px) {
-    /* 1. Games Dashboard carousel: use dvh so height adapts to iOS toolbar state */
-    .h-\[450px\] {
-      height: min(450px, 60dvh) !important;
-    }
-
-
-    /* 2. Game lobby wrapper: reduce top margin to compensate for iOS nav eating viewport.
+    /* Game lobby wrapper: reduce top margin to compensate for iOS nav eating viewport.
        The .overflow-y-auto:has(.game-lobby-card) rule already handles lobby padding,
        but the inner wrapper's mt-6 still pushes the card down too far on iOS. */
     .overflow-y-auto:has(.game-lobby-card) .mt-6 {

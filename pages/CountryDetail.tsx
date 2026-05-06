@@ -67,7 +67,7 @@ const InteractivePolaroidStack: React.FC<{ photos: { image: string, caption: str
   if (!photos.length) return null;
 
   return (
-    <div className="relative w-[220px] sm:w-[260px] h-[320px] sm:h-[360px] mx-auto select-none touch-none">
+    <div className="relative w-[220px] sm:w-[260px] h-[285px] sm:h-[360px] mx-auto select-none touch-none">
       <AnimatePresence initial={false}>
         {photos.map((photo, i) => {
           // Calculate relative position in stack
@@ -80,7 +80,7 @@ const InteractivePolaroidStack: React.FC<{ photos: { image: string, caption: str
           return (
             <motion.div
               key={photo.image}
-              className="absolute inset-0 flex justify-center"
+              className="absolute inset-0 flex justify-center items-start"
               style={{ zIndex: photos.length - position }}
               initial={false}
               animate={{
