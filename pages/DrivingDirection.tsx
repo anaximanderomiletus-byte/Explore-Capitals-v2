@@ -209,54 +209,59 @@ export default function DrivingDirection() {
               </div>
 
               <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
-                {/* Question Text */}
-                <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
-                  <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] opacity-80">Which side of the road does</p>
-                  <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">{currentCountry.name}</h2>
-                  <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] opacity-80">drive on?</p>
+                {/* Question + Flag — centered on mobile */}
+                <div className="flex-1 flex flex-col items-center justify-end md:justify-center md:flex-none">
+                  {/* Question Text */}
+                  <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
+                    <p className="text-sky-light font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">Which side of the road does</p>
+                    <h2 className="text-white font-display font-black text-2xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">{currentCountry.name}</h2>
+                    <p className="text-sky-light font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">drive on?</p>
+                  </div>
+
+                  {/* Country Flag */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentCountry.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.05 }}
+                      transition={{ duration: 0.25 }}
+                      style={{ willChange: 'transform, opacity' }}
+                      className="flex items-center justify-center mb-4 md:mb-6"
+                    >
+                      <div className={`w-full max-w-[180px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
+                        {!imgError ? (
+                          <img 
+                            src={getFlagUrl(currentCountry.flag)}
+                            alt={`${currentCountry.name} flag`}
+                            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
+                            onError={() => setImgError(true)}
+                          />
+                        ) : (
+                          <img 
+                            src={getFlagUrl(currentCountry.flag)}
+                            alt={`${currentCountry.name} flag fallback`}
+                            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
+                          />
+                        )}
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                {/* Country Flag */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentCountry.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.05 }}
-                    transition={{ duration: 0.25 }}
-                    style={{ willChange: 'transform, opacity' }}
-                    className="flex items-center justify-center mb-4 md:mb-6"
-                  >
-                    <div className={`w-full max-w-[140px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
-                      {!imgError ? (
-                        <img 
-                          src={getFlagUrl(currentCountry.flag)}
-                          alt={`${currentCountry.name} flag`}
-                          className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                          onError={() => setImgError(true)}
-                        />
-                      ) : (
-                        <img 
-                          src={getFlagUrl(currentCountry.flag)}
-                          alt={`${currentCountry.name} flag fallback`}
-                          className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                        />
-                      )}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-
                 {/* Choice Buttons */}
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-start justify-center md:items-center pt-6 md:pt-0">
                   <div className="w-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-2xl mx-auto">
                     {(['Left', 'Right'] as const).map((side) => {
                       const isCorrect = currentCountry.driveSide === side;
                       const isSelected = selectedSide === side;
                       const isWrong = isSelected && !isCorrect;
                       
-                      let cardStyle = "bg-white/5 border border-white/10 active:bg-white/15 active:border-sky/50";
-                      let iconColor = "text-white/60";
-                      let textColor = "text-white/80";
+                      let cardStyle = side === 'Left'
+                        ? "bg-blue-500/20 border border-blue-500/40 active:bg-blue-500/30 active:border-blue-400/60"
+                        : "bg-red-500/20 border border-red-500/40 active:bg-red-500/30 active:border-red-400/60";
+                      let iconColor = side === 'Left' ? "text-blue-400" : "text-red-400";
+                      let textColor = side === 'Left' ? "text-blue-300" : "text-red-300";
                       
                       if (result) {
                         if (isCorrect) {
