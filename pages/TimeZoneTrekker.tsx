@@ -169,7 +169,7 @@ export default function TimeZoneTrekker() {
                 <img src={`${import.meta.env.BASE_URL}png/GAMES/time-zone-trekker.png`} alt="Time Zone Trekker" className="w-full h-full object-cover" />
               </div>
               <h2 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Time Zone Trekker</h2>
-              <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Match countries to their time zones.</p>
+              <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Match countries to their time zones.</p>
               <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6 w-full">
                 <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">

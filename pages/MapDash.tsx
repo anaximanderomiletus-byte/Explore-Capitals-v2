@@ -362,8 +362,8 @@ export default function MapDash() {
           >
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <Link to="/games/all" className="p-2 text-white/50 hover:text-white transition-colors drop-shadow-md inline-block">
-                <ArrowLeft size={28} />
+              <Link to="/games/all" className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95 drop-shadow-md">
+                <ArrowLeft size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </Link>
             </div>
 
@@ -462,7 +462,7 @@ export default function MapDash() {
                   <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
                 </div>
                 <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
-                <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Find the nations on the map.</p>
+                <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Find the nations on the map.</p>
                 <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
                 <div className="flex flex-col gap-6 w-full">
                 <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
