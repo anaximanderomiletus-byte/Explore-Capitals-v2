@@ -91,8 +91,8 @@ export const imagesC: Record<string, string> = {
   "Ylang-Ylang Plantations": "/png/DATABASE/COUNTRY-IMAGES/COMOROS/ylang-ylang-plantations.png",
   "The Coelacanth Discovery": "/png/DATABASE/COUNTRY-IMAGES/COMOROS/the-coelacanth-discovery.png",
 
-  // --- Congo (Brazzaville) ---
-  "Congo (Brazzaville)": "/png/DATABASE/COUNTRY-IMAGES/CONGO-BRAZZAVILLE/brazzaville-congo.png",
+  // --- Congo ---
+  "Congo": "/png/DATABASE/COUNTRY-IMAGES/CONGO-BRAZZAVILLE/brazzaville-congo.png",
   "Odzala-Kokoua National Park": "/png/DATABASE/COUNTRY-IMAGES/CONGO-BRAZZAVILLE/odzala-kokoua-national-park.png",
   "The Congo River Rapids": "/png/DATABASE/COUNTRY-IMAGES/CONGO-BRAZZAVILLE/congo-river-rapids.png",
   "Diosso Gorge": "/png/DATABASE/COUNTRY-IMAGES/CONGO-BRAZZAVILLE/diosso-gorge.png",

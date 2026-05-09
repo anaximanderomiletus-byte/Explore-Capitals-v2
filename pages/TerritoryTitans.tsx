@@ -228,8 +228,8 @@ export default function TerritoryTitans() {
             </div>
 
             {/* Top Bar */}
-            <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
-  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+            <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/15 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 z-20">
     <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
       <ArrowLeft size={24} />
     </Link>

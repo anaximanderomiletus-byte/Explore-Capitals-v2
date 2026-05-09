@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, RefreshCw, Network, AlertCircle, Play } from 'lucide-react';
-import { COUNTRIES } from '../constants';
+import { COUNTRIES, DE_FACTO_COUNTRIES, TERRITORIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
 import { getFlagUrl } from '../utils/flags';
@@ -168,11 +168,11 @@ export default function KnowYourNeighbor() {
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-2xl p-5 sm:p-8 text-center border-2 border-white/20 overflow-hidden">
-          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
+          <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
             <img src={`${import.meta.env.BASE_URL}png/GAMES/know-your-neighbor.png`} alt="Know Your Neighbor" className="w-full h-full object-cover" />
           </div>
-          <h1 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
+          <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Know Your Neighbor</h1>
           <p className="text-white/40 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed">Identify every bordering country.</p>
           <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
             <div className="flex flex-col gap-6 w-full">
@@ -202,8 +202,8 @@ export default function KnowYourNeighbor() {
       </div>
 
       {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
-      <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
-  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+      <div className="game-bubble flex-1 max-w-2xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 z-20">
     <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
       <ArrowLeft size={24} />
     </Link>
@@ -259,7 +259,7 @@ export default function KnowYourNeighbor() {
                 const isSelected = selectedOptions.includes(countryName);
                 const isActualNeighbor = targetCountry.borders?.includes(countryName);
                 const isIncorrectSelection = isSelected && !isActualNeighbor;
-                const country = COUNTRIES.find(c => c.name === countryName);
+                const country = COUNTRIES.find(c => c.name === countryName) || DE_FACTO_COUNTRIES.find(c => c.name === countryName) || TERRITORIES.find(c => c.name === countryName);
                 const flagUrl = country ? getFlagUrl(country.flag) : '';
                 
                 // Determine which state classes to apply for the border/shadow
@@ -276,7 +276,7 @@ export default function KnowYourNeighbor() {
                     stateClasses = "border-2 border-white/5 text-white/10 opacity-40 grayscale blur-[1px]";
                   }
                 } else if (isSelected) {
-                  stateClasses = "border-2 border-white/60 text-white shadow-premium-hover brightness-105 frutiger-gloss";
+                  stateClasses = "border-2 border-sky text-white";
                 }
 
                 return (
@@ -295,8 +295,8 @@ export default function KnowYourNeighbor() {
                         {/* 1. Default Dark Overlay */}
                         <div className={`absolute inset-0 bg-black/60 transition-opacity duration-200 ${(!isSelected && !roundResult) ? 'opacity-100' : 'opacity-0'}`} />
                         
-                        {/* 2. Selection Overlay (Matches SUBMIT button) */}
-                        <div className={`absolute inset-0 bg-gel-blue backdrop-blur-[2px] transition-opacity duration-200 ${isSelected && !roundResult ? 'opacity-100' : 'opacity-0'}`} />
+                        {/* 2. Selection Overlay */}
+                        <div className={`absolute inset-0 bg-sky/60 backdrop-blur-[2px] transition-opacity duration-200 ${isSelected && !roundResult ? 'opacity-100' : 'opacity-0'}`} />
                         
                         {/* 3. Correct Result Overlay */}
                         <div className={`absolute inset-0 bg-accent/80 transition-opacity duration-200 ${(roundResult && isActualNeighbor && isSelected) ? 'opacity-100' : 'opacity-0'}`} />
@@ -322,11 +322,11 @@ export default function KnowYourNeighbor() {
             <div className="shrink-0 relative z-10 pt-2">
               <div className="h-px w-full bg-white/10 mb-2" />
               {roundResult ? (
-                <div className={`p-5 md:p-8 rounded-xl border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
+                <div className={`p-5 md:p-8 rounded-full border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === 'correct' ? 'bg-accent/60 border-accent text-white' : 'bg-red-500/60 border-red-500 text-white'}`}>
                   <span className="text-base md:text-xl relative z-10 drop-shadow-md">{feedback}</span>
                 </div>
               ) : (
-                <Button onClick={submitAnswer} disabled={selectedOptions.length === 0} className="w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black" size="lg">Submit</Button>
+                <button onClick={submitAnswer} disabled={selectedOptions.length === 0} className={`w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-display font-black rounded-full transition-all duration-200 select-none ${selectedOptions.length > 0 ? 'bg-accent/90 border-2 border-accent text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:brightness-110 active:scale-[0.98] cursor-pointer' : 'bg-white/5 border-2 border-white/10 text-white/20 cursor-not-allowed'}`} style={{ WebkitTapHighlightColor: 'transparent' }}>Submit</button>
               )}
             </div>
                  </motion.div>

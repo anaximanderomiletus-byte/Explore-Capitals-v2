@@ -961,7 +961,7 @@ export const toursC: Record<string, TourData> = {
       }
     ]
   },
-  "Congo (Brazzaville)": {
+  "Congo": {
     tourTitle: "The Green Heart",
     introText: "Western lowland gorillas dwell in the dense, steaming rainforests. Watch the mighty Congo River rushing past the city banks.",
     stops: [

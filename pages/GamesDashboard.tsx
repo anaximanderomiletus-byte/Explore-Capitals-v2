@@ -99,7 +99,7 @@ const GamesDashboard: React.FC = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
       setIsMobile(w < 768);
-      if (w < 640) { setCardWidth(w * 0.95); setCarouselHeight(Math.min(450, Math.round(h * 0.5))); }
+      if (w < 640) { setCardWidth(w * 0.95); setCarouselHeight(Math.min(650, Math.round(h * 0.65))); }
       else if (w < 1024) { setCardWidth(540); setCarouselHeight(500); }
       else { setCardWidth(640); setCarouselHeight(600); }
     };
@@ -211,8 +211,8 @@ const GamesDashboard: React.FC = () => {
                   className="group relative aspect-[16/10] bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
                 >
                   <div className="absolute inset-0 z-0">
-                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-50 group-hover:brightness-75" />
-                    <div className="absolute inset-0 bg-black/40 z-10" />
+                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-50 group-hover:brightness-100" />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-1000 z-10" />
                   </div>
                   <div className="relative z-20 p-6 sm:p-8 flex flex-col items-center justify-center w-full h-full text-center">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white uppercase tracking-tight leading-none mb-6 drop-shadow-2xl">
@@ -352,10 +352,10 @@ const CarouselCard: React.FC<{
         style={{ height: cardHeight, ...(!cardHeight ? { aspectRatio: '16/10' } : {}), WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
       >
         <div className="absolute inset-0 z-0">
-          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-75" />
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-100" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent md:hidden z-10" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent md:hidden z-10" />
-          <div className="absolute inset-0 hidden md:block bg-black/40 z-10" />
+          <div className="absolute inset-0 hidden md:block bg-black/40 group-hover:bg-black/10 transition-colors duration-1000 z-10" />
         </div>
            
         <div className="relative z-20 flex flex-col items-center justify-between md:justify-center py-8 sm:py-12 px-6 sm:px-8 text-center w-full h-full md:gap-8">
@@ -363,14 +363,14 @@ const CarouselCard: React.FC<{
               {game.title}
             </h3>
             
-            <div className="w-full flex justify-center px-4">
+            <div className="w-full flex justify-center">
               <Link 
                 to={`/games/${path}`} 
                 className="w-full flex justify-center"
                 onPointerDown={(e) => e.stopPropagation()}
               >
-                <Button as="div" variant="primary" className="w-full max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium active:scale-95 transition-all duration-300 group/btn">
-                  PLAY <Play className="ml-3 fill-current group-hover/btn:translate-x-1 transition-transform" />
+                <Button as="div" variant="primary" className="w-[95%] sm:w-[90%] max-w-[360px] shrink-0 py-4 sm:py-5 text-[18px] sm:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium active:scale-95 transition-all duration-300 group/btn">
+                  PLAY <Play className="ml-1 shrink-0 fill-current group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>

@@ -38,7 +38,7 @@ export const OFFICIAL_NAMES: Record<string, string> = {
   "China": "People's Republic of China",
   "Colombia": "Republic of Colombia",
   "Comoros": "Union of the Comoros",
-  "Republic of the Congo": "Republic of the Congo",
+  "Congo": "Republic of the Congo",
   "DR Congo": "Democratic Republic of the Congo",
   "Costa Rica": "Republic of Costa Rica",
   "Côte d'Ivoire": "Republic of Côte d'Ivoire",

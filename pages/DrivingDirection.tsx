@@ -147,12 +147,12 @@ export default function DrivingDirection() {
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
-            <div className="game-lobby-card w-full bg-white/10 backdrop-blur-3xl rounded-2xl p-5 sm:p-8 text-center border-2 border-white/20">
+            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
               
-              <div className="w-20 h-20 rounded-2xl mx-auto mb-8 border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden">
+              <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden">
                 <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
               </div>
-              <h2 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter">Driving Direction</h2>
+              <h2 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Driving Direction</h2>
               <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em]">Left or Right side of the road?</p>
               <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
               <div className="flex flex-col gap-6 w-full">
@@ -183,8 +183,8 @@ export default function DrivingDirection() {
             </div>
 
             {/* Top Bar */}
-            <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-xl border-2 border-white/20">
-  <div className="game-top-bar w-full flex shrink-0 items-center justify-between p-2 md:p-3 border-b border-white/10 z-20">
+            <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
+  <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 z-20">
     <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
       <ArrowLeft size={24} />
     </Link>
