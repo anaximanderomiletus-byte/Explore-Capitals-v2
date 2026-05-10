@@ -156,7 +156,7 @@ const Home: React.FC = () => {
         {/* THE HERO STACK CAROUSEL */}
         <div className="relative w-full h-[320px] sm:h-[400px] md:h-[440px] flex items-center justify-center">
           <motion.div
-            className="flex items-center justify-center cursor-grab active:cursor-grabbing h-full touch-none"
+            className="flex items-center justify-center cursor-grab active:cursor-grabbing h-full touch-pan-y"
             drag="x"
             dragConstraints={{ left: -2 * panelWidth, right: 0 }}
             dragMomentum={false}

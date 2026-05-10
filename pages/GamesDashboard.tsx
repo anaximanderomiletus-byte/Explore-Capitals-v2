@@ -211,7 +211,7 @@ const GamesDashboard: React.FC = () => {
                   className="group relative aspect-[16/10] bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
                 >
                   <div className="absolute inset-0 z-0">
-                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 brightness-50 group-hover:brightness-100" />
+                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 brightness-50 group-hover:brightness-100" />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-1000 z-10" />
                   </div>
                   <div className="relative z-20 p-6 sm:p-8 flex flex-col items-center justify-center w-full h-full text-center">
@@ -253,7 +253,7 @@ const GamesDashboard: React.FC = () => {
               style={{ height: carouselHeight, WebkitPerspective: 1200, perspective: 1200 }}
             >
               <motion.div
-                className="flex items-center justify-center h-full touch-none"
+                className="flex items-center justify-center h-full touch-pan-y"
                 drag="x"
                 dragControls={dragControls}
                 dragListener={false}
