@@ -1,4 +1,4 @@
-import { TourData } from "../../types";
+import { TourData } from "../../../types";
 
 export const toursE: Record<string, TourData> = {
   "Ecuador": {

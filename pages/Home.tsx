@@ -95,7 +95,11 @@ const Home: React.FC = () => {
   const featuredGames = useMemo(() => GAMES.filter(g => g.status === 'active').slice(0, 10), []);
 
   const handlePlayClick = () => {
-    navigate('/games/all');
+    const active = GAMES.filter(g => g.status === 'active');
+    const randomGame = active[Math.floor(Math.random() * active.length)];
+    if (randomGame) {
+      navigate(`/games/${GAME_PATHS[randomGame.id] || 'capital-quiz'}`);
+    }
   };
 
 
@@ -232,7 +236,7 @@ const Panel: React.FC<{
   index: number; activeIndex: number; scrollX: any; width: number; onClick: () => void; children: React.ReactNode 
 }> = ({ index, activeIndex, scrollX, width, onClick, children }) => {
   const targetX = index * width;
-  const relativeX = useTransform(scrollX, (val) => val + targetX);
+  const relativeX = useTransform(scrollX, (val: number) => val + targetX);
   
   const scale = useTransform(relativeX, [-width, 0, width], [0.75, 1, 0.75]);
   const opacity = useTransform(relativeX, [-width, 0, width], [0.3, 1, 0.3]);
