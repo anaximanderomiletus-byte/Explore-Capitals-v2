@@ -270,63 +270,63 @@ export const GAMES: Game[] = [
     title: 'Capital Quiz', 
     image: './png/GAMES/capital-quiz.png', 
     status: 'active', 
-    description: 'Test your knowledge against the clock.' 
+    description: 'Identify world capitals.' 
   },
   { 
     id: '2', 
     title: 'Map Dash', 
     image: './png/GAMES/map-dash.png', 
     status: 'active', 
-    description: 'Find the country before time runs out.' 
+    description: 'Find the nations on the map.' 
   },
   { 
     id: '3', 
     title: 'Flag Frenzy', 
     image: './png/GAMES/flag-frenzy.png', 
     status: 'active', 
-    description: 'Match the flags to their nations.' 
+    description: 'Match flags to nations.' 
   },
   {
     id: '4',
     title: 'Know Your Neighbor',
     image: './png/GAMES/know-your-neighbor.png', 
     status: 'active', 
-    description: 'Identify all the bordering countries.'
+    description: 'Identify every bordering country.'
   },
   {
     id: '5',
     title: 'Population Pursuit',
     image: './png/GAMES/population-pursuit.png',
     status: 'active', 
-    description: 'Which country has more people?'
+    description: 'Choose the larger population.'
   },
   {
     id: '6',
     title: 'Global Detective',
     image: './png/GAMES/global-detective.png', 
     status: 'active', 
-    description: 'Deduce the mystery country from 3 clues.'
+    description: 'Identify the hidden country from clues.'
   },
   {
     id: '7',
     title: 'Capital Connection',
     image: './png/GAMES/capital-connection.png',
     status: 'active', 
-    description: 'Match countries to their capitals in a race against time.'
+    description: 'Connect nations to their capitals.'
   },
   {
     id: '8',
     title: 'Region Roundup',
     image: './png/GAMES/region-roundup.png',
     status: 'active', 
-    description: 'Sort countries into their correct continents.'
+    description: 'Categorize countries into continents.'
   },
   {
     id: '9',
     title: 'Landmark Legend',
     image: './png/GAMES/landmark-legend.png',
     status: 'active', 
-    description: 'Identify the country from a famous landmark image.'
+    description: 'Identify nations through their landmarks.'
   },
   // === PREMIUM GAMES ===
   {
@@ -334,7 +334,7 @@ export const GAMES: Game[] = [
     title: 'Territory Titans',
     image: './png/GAMES/territory-titan.png',
     status: 'active',
-    description: 'Master autonomous regions and dependencies worldwide.',
+    description: 'Master territories & dependencies.',
 
   },
   {
@@ -342,7 +342,7 @@ export const GAMES: Game[] = [
     title: 'Area Ace',
     image: './png/GAMES/area-ace.png',
     status: 'active',
-    description: 'Which country is larger? Test your size knowledge.',
+    description: 'Choose the larger country.',
 
   },
   {
@@ -350,7 +350,7 @@ export const GAMES: Game[] = [
     title: 'Currency Craze',
     image: './png/GAMES/currency-craze.png',
     status: 'active',
-    description: 'Match countries to their official currencies.',
+    description: 'Match countries to their currencies.',
 
   },
   {
@@ -358,7 +358,7 @@ export const GAMES: Game[] = [
     title: 'Language Legend',
     image: './png/GAMES/language-legend.png',
     status: 'active',
-    description: 'Identify countries by their official languages.',
+    description: 'Match countries to their languages.',
 
   },
   {
@@ -374,7 +374,7 @@ export const GAMES: Game[] = [
     title: 'Driving Direction',
     image: './png/GAMES/driving-direction.png',
     status: 'active',
-    description: 'Left or right? Know which side countries drive on.',
+    description: 'Left or Right side of the road?',
 
   }
 ];

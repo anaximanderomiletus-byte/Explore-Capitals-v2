@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, Lock, Shuffle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Lock, Shuffle, ChevronLeft, ChevronRight, ArrowDownAZ } from 'lucide-react';
 import { motion, useMotionValue, useTransform, animate, PanInfo, useDragControls } from 'framer-motion';
 import { GAMES } from '../constants';
 import SEO from '../components/SEO';
@@ -72,13 +72,14 @@ const GamesDashboard: React.FC = () => {
   const navigate = useNavigate();
   
   const [viewMode, setViewMode] = useState<'grid' | 'carousel'>('carousel');
-  const [shuffledGames, setShuffledGames] = useState<any[]>([]);
+  const [displayGames, setDisplayGames] = useState<any[]>([]);
+  const [sortOrder, setSortOrder] = useState<'default' | 'alpha'>('default');
   const [isMobile, setIsMobile] = useState(false);
   
   const infiniteGames = useMemo(() => {
-    if (shuffledGames.length === 0) return [];
-    return [...shuffledGames, ...shuffledGames, ...shuffledGames];
-  }, [shuffledGames]);
+    if (displayGames.length === 0) return [];
+    return [...displayGames, ...displayGames, ...displayGames];
+  }, [displayGames]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(540);
@@ -87,13 +88,19 @@ const GamesDashboard: React.FC = () => {
   const dragControls = useDragControls();
 
   useEffect(() => {
+    const active = GAMES.filter(g => g.status === 'active');
+    let sorted = [...active];
+    if (sortOrder === 'alpha') {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    setDisplayGames(sorted);
+  }, [sortOrder]);
+
+  useEffect(() => {
     setPageLoading(false);
     
-    // Shuffle games on load
-    const active = GAMES.filter(g => g.status === 'active');
-    const shuffled = [...active].sort(() => Math.random() - 0.5);
-    setShuffledGames(shuffled);
-    setActiveIndex(shuffled.length); // Start in middle set for carousel
+    // Start in middle set for carousel
+    setActiveIndex(GAMES.filter(g => g.status === 'active').length); 
     
     const handleResize = () => {
       const w = window.innerWidth;
@@ -111,7 +118,7 @@ const GamesDashboard: React.FC = () => {
 
   // Carousel Infinite Jump
   useEffect(() => {
-    const n = shuffledGames.length;
+    const n = displayGames.length;
     if (n === 0 || viewMode === 'grid') return;
     
     if (activeIndex >= 2 * n) {
@@ -121,7 +128,7 @@ const GamesDashboard: React.FC = () => {
       setActiveIndex(activeIndex + n);
       x.set(x.get() - n * cardWidth);
     }
-  }, [activeIndex, shuffledGames.length, cardWidth, x, viewMode]);
+  }, [activeIndex, displayGames.length, cardWidth, x, viewMode]);
 
   // Carousel Animation
   useEffect(() => {
@@ -143,7 +150,7 @@ const GamesDashboard: React.FC = () => {
     }
   };
 
-  if (shuffledGames.length === 0) return null;
+  if (displayGames.length === 0) return null;
 
   return (
     <div className="pt-16 sm:pt-20 md:pt-24 pb-16 min-h-screen relative overflow-hidden" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 64px), 64px)' }}>
@@ -160,12 +167,12 @@ const GamesDashboard: React.FC = () => {
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Games' }]} />
 
         {/* Header */}
-        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 mb-6 md:mb-8 relative z-50">
+        <div className="flex flex-col items-start md:flex-row md:items-end justify-between gap-4 md:gap-4 mb-4 md:mb-6 relative z-50">
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black text-white tracking-tighter uppercase leading-none drop-shadow-xl">
             {t('games.title')}
           </h1>
           
-          <div className="flex flex-row items-center gap-3 md:gap-4 md:mb-4">
+          <div className="flex flex-row items-center gap-3 md:gap-4 overflow-x-auto pb-2 -mb-2 md:overflow-visible md:pb-0 hide-scrollbar">
             <div className="hidden md:flex items-center bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-md h-[46px] sm:h-[58px]">
               <button 
                 onClick={() => setViewMode('grid')}
@@ -182,8 +189,19 @@ const GamesDashboard: React.FC = () => {
             </div>
 
             <button
+              onClick={() => setSortOrder(prev => prev === 'default' ? 'alpha' : 'default')}
+              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 shrink-0 h-[46px] sm:h-[52px]"
+              title="Toggle Sort"
+            >
+              <ArrowDownAZ size={18} className="text-sky-light group-hover:text-white transition-colors" />
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em] hidden sm:inline">
+                {sortOrder === 'alpha' ? 'SORT: A-Z' : 'SORT: DEFAULT'}
+              </span>
+            </button>
+
+            <button
               onClick={playRandomGame}
-              className="flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0"
+              className="flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 h-[46px] sm:h-[52px]"
               title="Random Game"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
@@ -192,57 +210,49 @@ const GamesDashboard: React.FC = () => {
           </div>
         </div>
 
-        {viewMode === 'grid' && !isMobile ? (
+        {viewMode === 'grid' || isMobile ? (
           /* OG Premium Grid */
           <motion.div 
             key="grid"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pt-8 md:pt-12 pb-12"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pt-2 md:pt-3 pb-12"
           >
-            {shuffledGames.map((game) => {
+            {displayGames.map((game) => {
               const path = GAME_PATHS[game.id] || 'capital-quiz';
               const imgName = path === 'territory-titans' ? 'territory-titan' : path;
               return (
-                <Link
-                  key={game.id}
-                  to={`/games/${path}`}
-                  className="group relative aspect-[16/10] bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl hover:-translate-y-2"
-                >
-                  <div className="absolute inset-0 z-0">
-                    <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 brightness-50 group-hover:brightness-100" />
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-1000 z-10" />
-                  </div>
-                  <div className="relative z-20 p-6 sm:p-8 flex flex-col items-center justify-center w-full h-full text-center">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white uppercase tracking-tight leading-none mb-6 drop-shadow-2xl">
-                      {game.title}
-                    </h3>
-                    <div className="w-full flex justify-center">
-                      <Button as="div" variant="primary" className="w-full max-w-[280px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
-                        PLAY <Play className="ml-3 fill-current" />
-                      </Button>
+                <motion.div layout key={game.id} className="h-full" transition={{ type: "spring", stiffness: 350, damping: 25 }}>
+                  <Link
+                    to={`/games/${path}`}
+                    className="group flex flex-col bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl md:hover:-translate-y-2 transform-gpu isolate h-full min-h-[400px]"
+                  >
+                    <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-black">
+                      <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-transform duration-1000 md:group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
                     </div>
-                  </div>
-                </Link>
+                    <div className="relative z-20 px-6 pb-6 pt-4 sm:px-8 sm:pb-8 sm:pt-5 flex flex-col items-center justify-between flex-grow bg-slate-800/80 backdrop-blur-md border-t border-white/5">
+                      <h3 className="text-[19px] md:text-xl lg:text-2xl mt-1 sm:mt-0 font-display font-black text-white uppercase tracking-tight leading-none text-center drop-shadow-md group-hover:text-sky-light transition-colors duration-300 whitespace-nowrap w-full">
+                        {game.title}
+                      </h3>
+                      <p className="text-white/70 text-[10px] sm:text-[10px] xl:text-[11px] mb-6 mt-3 font-bold uppercase tracking-[0.1em] sm:tracking-[0.2em] leading-relaxed text-center block whitespace-nowrap w-full">
+                        {game.description}
+                      </p>
+                      <div className="w-full flex justify-center mt-auto">
+                        <Button as="div" variant="primary" className="w-full py-4 sm:py-5 text-lg sm:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium md:group-hover:scale-[1.02] transition-transform duration-300">
+                          PLAY <Play className="ml-3 fill-current" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
               );
             })}
           </motion.div>
         ) : (
           /* Premium Arcade Carousel */
           <>
-            {/* Mobile swipe hint */}
-            <div className="flex md:hidden items-center justify-center gap-2 -mb-4 animate-[swipe-bounce_3s_ease-in-out_infinite]">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                <path d="M22 12H2" />
-                <path d="M6 8l-4 4 4 4" />
-              </svg>
-              <span className="text-white font-black uppercase text-[10px] tracking-[0.2em]">SWIPE TO CHOOSE GAME</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                <path d="M2 12h20" />
-                <path d="M18 8l4 4-4 4" />
-              </svg>
-            </div>
 
             <motion.div 
               key="carousel"
@@ -301,7 +311,7 @@ const GamesDashboard: React.FC = () => {
                 <ChevronLeft size={20} />
               </button>
 
-              <InstagramDots total={shuffledGames.length} current={activeIndex % shuffledGames.length} />
+              <InstagramDots total={displayGames.length} current={activeIndex % displayGames.length} />
 
               <button 
                 onClick={() => setActiveIndex(prev => prev + 1)} 
