@@ -111,10 +111,11 @@ const Home: React.FC = () => {
       <VerticalSidebarAd slot="9489406693" position="left" />
       <VerticalSidebarAd slot="9489406693" position="right" />
 
-      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-12 pb-24">
+      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-12 pb-24 md:pt-24 md:pb-10">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {/* Mobile: Dense Sparkles */}
           <div 
-            className="absolute inset-0 home-stars" 
+            className="absolute inset-0 home-stars md:hidden" 
             style={{ 
               backgroundImage: [
                 "radial-gradient(1.5px 1.5px at 13% 22%, rgba(255,255,255,0.8), transparent 60%)",
@@ -143,6 +144,8 @@ const Home: React.FC = () => {
               backgroundSize: '100% 100%' 
             }} 
           />
+          {/* Desktop: Simple Sparkles */}
+          <div className="absolute inset-0 home-stars hidden md:block" style={{ backgroundImage: 'radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,0.55), transparent 60%), radial-gradient(1.5px 1.5px at 42% 14%, rgba(255,255,255,0.7), transparent 60%)', backgroundSize: '100% 100%' }} />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
         </div>
 
