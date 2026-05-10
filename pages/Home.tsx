@@ -94,13 +94,10 @@ const Home: React.FC = () => {
 
   const featuredGames = useMemo(() => GAMES.filter(g => g.status === 'active').slice(0, 10), []);
 
-  const playRandomGame = () => {
-    const active = GAMES.filter(g => g.status === 'active');
-    const randomGame = active[Math.floor(Math.random() * active.length)];
-    if (randomGame) {
-      navigate(`/games/${GAME_PATHS[randomGame.id] || 'capital-quiz'}`);
-    }
+  const handlePlayClick = () => {
+    navigate('/games/all');
   };
+
 
   return (
     <main className="relative flex-grow bg-transparent w-full home-glow overflow-x-hidden select-none">
@@ -114,9 +111,38 @@ const Home: React.FC = () => {
       <VerticalSidebarAd slot="9489406693" position="left" />
       <VerticalSidebarAd slot="9489406693" position="right" />
 
-      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-24 pb-10">
+      <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-12 pb-24">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute inset-0 home-stars" style={{ backgroundImage: 'radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,0.55), transparent 60%), radial-gradient(1.5px 1.5px at 42% 14%, rgba(255,255,255,0.7), transparent 60%)', backgroundSize: '100% 100%' }} />
+          <div 
+            className="absolute inset-0 home-stars" 
+            style={{ 
+              backgroundImage: [
+                "radial-gradient(1.5px 1.5px at 13% 22%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(2px 2px at 42% 14%, rgba(255,255,255,0.9), transparent 60%)",
+                "radial-gradient(1px 1px at 65% 33%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(2px 2px at 80% 12%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 15% 65%, rgba(255,255,255,0.6), transparent 60%)",
+                "radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(2px 2px at 55% 75%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 75% 55%, rgba(255,255,255,0.9), transparent 60%)",
+                "radial-gradient(1px 1px at 88% 85%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(2px 2px at 45% 45%, rgba(255,255,255,0.6), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 5% 40%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(1px 1px at 95% 30%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(2px 2px at 35% 25%, rgba(255,255,255,0.6), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 10% 8%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(1px 1px at 25% 90%, rgba(255,255,255,0.9), transparent 60%)",
+                "radial-gradient(2px 2px at 50% 10%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,255,255,0.6), transparent 60%)",
+                "radial-gradient(1px 1px at 70% 95%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(2px 2px at 20% 50%, rgba(255,255,255,0.8), transparent 60%)",
+                "radial-gradient(1.5px 1.5px at 60% 85%, rgba(255,255,255,0.9), transparent 60%)",
+                "radial-gradient(1px 1px at 40% 60%, rgba(255,255,255,0.7), transparent 60%)",
+                "radial-gradient(2px 2px at 90% 45%, rgba(255,255,255,0.8), transparent 60%)"
+              ].join(', '),
+              backgroundSize: '100% 100%' 
+            }} 
+          />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
         </div>
 
@@ -188,7 +214,7 @@ const Home: React.FC = () => {
 
         {/* Play Button */}
         <div className="mt-6 z-20">
-          <Button onClick={playRandomGame} variant="primary" className="w-[85vw] max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
+          <Button onClick={handlePlayClick} variant="primary" className="w-[85vw] max-w-[360px] py-5 text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium">
             {t('home.hero.play')} <Play className="ml-3 fill-current" />
           </Button>
         </div>
