@@ -81,12 +81,18 @@ export default function DrivingDirection() {
       : countriesWithDriveSide;
     
     const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+    const countryFlagUrl = getFlagUrl(country.flag);
+    const currentFlagImg = new Image();
+    currentFlagImg.decoding = 'async';
+    currentFlagImg.src = countryFlagUrl;
+
     setPreviousCountryId(country.id);
     setCurrentCountry(country);
 
-    // Preload next potential flag
+    // Warm one more flag so the following round is likely already cached.
     const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
     const img = new Image();
+    img.decoding = 'async';
     img.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
   }, [countriesWithDriveSide, previousCountryId]);
 
@@ -113,6 +119,8 @@ export default function DrivingDirection() {
     
     setTimeout(generateRound, 700);
   };
+
+  const currentFlagUrl = currentCountry ? getFlagUrl(currentCountry.flag) : '';
 
   return (
     <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">
@@ -227,20 +235,25 @@ export default function DrivingDirection() {
                       exit={{ opacity: 0, scale: 1.05 }}
                       transition={{ duration: 0.25 }}
                       style={{ willChange: 'transform, opacity' }}
-                      className="flex items-center justify-center mb-4 md:mb-6"
+                      className="w-full min-h-[96px] sm:min-h-[120px] md:min-h-[147px] flex items-center justify-center mb-4 md:mb-6"
                     >
-                      <div className={`w-full max-w-[180px] md:max-w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
+                      <div className={`w-[min(52vw,180px)] md:w-[220px] aspect-[3/2] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
                         {!imgError ? (
                           <img 
-                            src={getFlagUrl(currentCountry.flag)}
+                            src={currentFlagUrl}
                             alt={`${currentCountry.name} flag`}
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
                             className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
                             onError={() => setImgError(true)}
                           />
                         ) : (
                           <img 
-                            src={getFlagUrl(currentCountry.flag)}
+                            src={currentFlagUrl}
                             alt={`${currentCountry.name} flag fallback`}
+                            loading="eager"
+                            decoding="async"
                             className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
                           />
                         )}
