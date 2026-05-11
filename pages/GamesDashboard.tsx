@@ -189,23 +189,23 @@ const GamesDashboard: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setSortOrder(prev => prev === 'default' ? 'alpha' : 'default')}
-              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 shrink-0 h-[46px] sm:h-[52px]"
-              title="Toggle Sort"
-            >
-              <ArrowDownAZ size={18} className="text-sky-light group-hover:text-white transition-colors" />
-              <span className="font-bold uppercase text-[11px] tracking-[0.2em] hidden sm:inline">
-                {sortOrder === 'alpha' ? 'SORT: A-Z' : 'SORT: DEFAULT'}
-              </span>
-            </button>
-
-            <button
               onClick={playRandomGame}
               className="flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 h-[46px] sm:h-[52px]"
               title="Random Game"
             >
               <Shuffle size={18} className="text-sky-light group-hover:rotate-12 transition-transform" />
               <span className="font-bold uppercase text-[11px] tracking-[0.2em]">RANDOM GAME</span>
+            </button>
+
+            <button
+              onClick={() => setSortOrder(prev => prev === 'default' ? 'alpha' : 'default')}
+              className="flex items-center justify-center gap-2 px-5 py-3.5 bg-white/10 border border-white/30 hover:bg-white/20 hover:border-white/50 rounded-2xl text-white transition-all duration-300 group shrink-0 h-[46px] sm:h-[52px]"
+              title="Toggle Sort"
+            >
+              <ArrowDownAZ size={18} className="text-sky-light group-hover:text-white transition-colors" />
+              <span className="font-bold uppercase text-[11px] tracking-[0.2em] hidden sm:inline">
+                {sortOrder === 'alpha' ? 'SORT: A-Z' : 'SORT: DEFAULT'}
+              </span>
             </button>
           </div>
         </div>
@@ -224,28 +224,29 @@ const GamesDashboard: React.FC = () => {
               const imgName = path === 'territory-titans' ? 'territory-titan' : path;
               return (
                 <motion.div layout key={game.id} className="h-full" transition={{ type: "spring", stiffness: 350, damping: 25 }}>
-                  <Link
-                    to={`/games/${path}`}
-                    className="group flex flex-col bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-sky/50 transition-all duration-500 shadow-xl md:hover:-translate-y-2 transform-gpu isolate h-full min-h-[400px]"
+                  <div
+                    className="flex flex-col bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-500 shadow-xl transform-gpu isolate h-full min-h-[400px]"
                   >
                     <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-black">
-                      <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-transform duration-1000 md:group-hover:scale-105" />
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                      <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/10 z-10" />
                     </div>
                     <div className="relative z-20 px-6 pb-6 pt-4 sm:px-8 sm:pb-8 sm:pt-5 flex flex-col items-center justify-between flex-grow bg-slate-800/80 backdrop-blur-md border-t border-white/5">
-                      <h3 className="text-[19px] md:text-xl lg:text-2xl mt-1 sm:mt-0 font-display font-black text-white uppercase tracking-tight leading-none text-center drop-shadow-md group-hover:text-sky-light transition-colors duration-300 whitespace-nowrap w-full">
+                      <h3 className="text-[19px] md:text-xl lg:text-2xl mt-1 sm:mt-0 font-display font-black text-white uppercase tracking-tight leading-none text-center drop-shadow-md whitespace-nowrap w-full">
                         {game.title}
                       </h3>
                       <p className="text-white/70 text-[10px] sm:text-[10px] xl:text-[11px] mb-6 mt-3 font-bold uppercase tracking-[0.1em] sm:tracking-[0.2em] leading-relaxed text-center block whitespace-nowrap w-full">
                         {game.description}
                       </p>
                       <div className="w-full flex justify-center mt-auto">
-                        <Button as="div" variant="primary" className="w-full py-4 sm:py-5 text-lg sm:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium md:group-hover:scale-[1.02] transition-transform duration-300">
-                          PLAY <Play className="ml-3 fill-current" />
-                        </Button>
+                        <Link to={`/games/${path}`} className="w-full" aria-label={`Play ${game.title}`}>
+                          <Button as="div" variant="primary" className="w-full py-4 sm:py-5 text-lg sm:text-xl uppercase tracking-[0.15em] font-black flex items-center justify-center shadow-premium transition-transform duration-300">
+                            PLAY <Play className="ml-3 fill-current" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 </motion.div>
               );
             })}
