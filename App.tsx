@@ -311,6 +311,7 @@ const AppContent: React.FC = () => {
                 <Route path="/games/capital-connection" element={<CapitalConnection />} />
                 <Route path="/games/region-roundup" element={<RegionRoundup />} />
                 <Route path="/games/landmark-legend" element={<LandmarkLegend />} />
+                <Route path="/games/territory-titan" element={<LegacyTerritoryTitanRedirect />} />
                 <Route path="/games/territory-titans" element={<TerritoryTitans />} />
                 <Route path="/games/area-ace" element={<AreaAce />} />
                 <Route path="/games/currency-craze" element={<CurrencyCraze />} />
@@ -361,6 +362,11 @@ const ExploreRedirect: React.FC = () => {
 
 const DirectoryRedirect: React.FC = () => {
   return <Navigate to="/database" replace />;
+};
+
+const LegacyTerritoryTitanRedirect: React.FC = () => {
+  const location = useLocation();
+  return <Navigate to={{ pathname: '/games/territory-titans', search: location.search }} replace />;
 };
 
 const ConditionalFooter: React.FC = () => {

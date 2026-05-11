@@ -210,6 +210,7 @@
   "notFound.title": "Page introuvable",
   "notFound.desc": "La page que vous recherchez n'existe pas ou a été déplacée.",
   "notFound.goHome": "Retour à l'accueil",
+  "notFound.allGames": "Tous les jeux",
   "notFound.browseCountries": "Parcourir les pays",
 
   "breadcrumbs.home": "Accueil",

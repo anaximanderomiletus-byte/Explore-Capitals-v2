@@ -333,7 +333,7 @@ body::before {
      in the visible area below the nav instead of the full viewport.
      Includes safe-area-inset-top because body no longer adds it. */
   .overflow-y-auto:has(.game-lobby-card) {
-    padding-top: max(calc(env(safe-area-inset-top, 0px) + 4rem), 6rem) !important;
+    padding-top: max(calc(env(safe-area-inset-top, 0px) + 4.5rem), 6.5rem) !important;
     padding-bottom: 1rem !important; /* 16px */
   }
 
