@@ -325,6 +325,22 @@ body::before {
   }
 }
 
+/* ===== GAME LOBBY / FINISHED CARD — match bubble rounding ===== */
+.game-lobby-card {
+  border-radius: 32px !important;
+  border-width: 2px !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ===== GAME BUBBLE — subtle lift + lock internal scroll ===== */
+.game-bubble {
+  margin-bottom: 6px;
+}
+
+.game-bubble .game-card-content {
+  overflow: hidden;
+}
+
 /* ===== MOBILE GAME LAYOUT ===== */
 @media (max-width: 767px) {
   /* Better vertical centering on lobby screens:
@@ -366,7 +382,15 @@ body::before {
     height: 100svh !important;
     overflow: hidden !important;
     padding-top: 4.75rem !important;
-    padding-bottom: 0.25rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .game-bubble {
+    margin-bottom: 6px !important;
+  }
+
+  .game-card-content {
+    overflow: hidden !important;
   }
 
   .game-card {
@@ -438,11 +462,8 @@ body::before {
     max-height: 30svh !important;
   }
 
-  /* Hide footer entirely on game lobby and push it away during gameplay
-     so it never peeks below the iOS Safari URL bar */
-  body:has(.game-lobby-card) footer {
-    display: none !important;
-  }
+  /* Hide footer during active gameplay so it never peeks below the
+     iOS Safari URL bar.  Lobby / finished screens keep the footer. */
   body:has(.game-playing) footer {
     display: none !important;
   }

@@ -25,7 +25,7 @@ const getNumericValue = (str: string) => {
 
 export default function AreaAce() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -118,14 +118,36 @@ export default function AreaAce() {
     preloadFlags();
   }, [countriesWithNumericArea, previousPairIds]);
 
-  const startGame = () => {
+  const startGame = async () => {
+    setGameState('preparing');
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
     setPreviousPairIds(null);
-    generateRound();
+
+    // Pick first pair and preload their flags before showing game
+    const idxA = Math.floor(Math.random() * countriesWithNumericArea.length);
+    let idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
+    while (idxB === idxA) idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
+    const newCountryA = countriesWithNumericArea[idxA];
+    const newCountryB = countriesWithNumericArea[idxB];
+
+    await Promise.all([getFlagUrl(newCountryA.flag), getFlagUrl(newCountryB.flag)].map(src => new Promise<void>(resolve => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    })));
+
+    setPreviousPairIds([newCountryA.id, newCountryB.id]);
+    setCountryA(newCountryA);
+    setCountryB(newCountryB);
+    setResult(null);
+    setSelectedId(null);
+    setImgErrorA(false);
+    setImgErrorB(false);
     setGameState('playing');
   };
 
@@ -193,6 +215,23 @@ export default function AreaAce() {
               </div>
               <GameNavigationButtons />
             </div>
+            </div>
+          </motion.div>
+        )}
+
+        {gameState === 'preparing' && (
+          <motion.div
+            key="preparing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
+              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+                Loading
+              </div>
             </div>
           </motion.div>
         )}

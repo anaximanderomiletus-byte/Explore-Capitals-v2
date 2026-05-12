@@ -15,6 +15,7 @@ import GameSideAds from '../components/GameSideAds';
 import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
 import GameNavigationButtons from '../components/GameNavigationButtons';
+import { preloadImages } from '../utils/preloadImages';
 
 const shuffle = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -22,7 +23,7 @@ const shuffle = <T,>(array: T[]): T[] => {
 
 export default function KnowYourNeighbor() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -76,13 +77,9 @@ export default function KnowYourNeighbor() {
     return `${m}:${String(s).padStart(2, '0')}`;
   };
 
-  const generateRound = () => {
-    if (validCountries.length === 0) return;
+  const generateRound = async () => {
+    if (validCountries.length === 0) return false;
     const target = validCountries[Math.floor(Math.random() * validCountries.length)];
-    setTargetCountry(target);
-    setSelectedOptions([]);
-    setRoundResult(null);
-    setFeedback(null);
 
     const neighbors = target.borders || [];
     const potentialDistractors = COUNTRIES.filter(c => 
@@ -91,21 +88,30 @@ export default function KnowYourNeighbor() {
     const shuffledDistractors = shuffle(potentialDistractors);
     const numDistractors = Math.max(4, 15 - neighbors.length); 
     const roundDistractors = shuffledDistractors.slice(0, numDistractors);
-    setOptions(shuffle([...neighbors, ...roundDistractors]));
+    const roundOptions = shuffle([...neighbors, ...roundDistractors]);
+    const optionFlagSources = roundOptions
+      .map(countryName => COUNTRIES.find(c => c.name === countryName) || DE_FACTO_COUNTRIES.find(c => c.name === countryName) || TERRITORIES.find(c => c.name === countryName))
+      .map(country => country ? getFlagUrl(country.flag) : undefined);
 
-    // Preload flag for target country
-    const img = new Image();
-    img.src = getFlagUrl(target.flag);
+    await preloadImages([getFlagUrl(target.flag), ...optionFlagSources]);
+
+    setTargetCountry(target);
+    setSelectedOptions([]);
+    setRoundResult(null);
+    setFeedback(null);
+    setOptions(roundOptions);
+    return true;
   };
 
-  const startGame = () => {
+  const startGame = async () => {
+    setGameState('preparing');
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
     setRoundResult(null);
     setFeedbackKey(0);
-    generateRound();
-    setGameState('playing');
+    const isReady = await generateRound();
+    setGameState(isReady ? 'playing' : 'start');
   };
 
   const toggleOption = (countryName: string) => {
@@ -125,12 +131,12 @@ export default function KnowYourNeighbor() {
       setRoundResult('correct');
       setFeedbackKey(prev => prev + 1);
       setFeedback("Perfect!");
-      setTimeout(generateRound, 700);
+      setTimeout(() => { void generateRound(); }, 700);
     } else {
       setRoundResult('incorrect');
       setFeedbackKey(prev => prev + 1);
       setFeedback(`${missedNeighbors.length} missed, ${wrongSelections.length} wrong.`);
-      setTimeout(generateRound, 2500);
+      setTimeout(() => { void generateRound(); }, 2500);
     }
   };
 
@@ -180,6 +186,24 @@ export default function KnowYourNeighbor() {
             </div>
             <GameNavigationButtons />
         </div>
+            </div>
+          </motion.div>
+        )}
+
+
+        {gameState === 'preparing' && (
+          <motion.div
+            key="preparing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
+              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+                Loading
+              </div>
             </div>
           </motion.div>
         )}

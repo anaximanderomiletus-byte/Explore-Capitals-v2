@@ -14,6 +14,7 @@ import { getGameStructuredData } from '../utils/gameStructuredData';
 import { useTranslation } from '../context/LocaleContext';
 import GameNavigationButtons from '../components/GameNavigationButtons';
 import { getStaticImages } from '../data/images';
+import { preloadImages } from '../utils/preloadImages';
 
 // Better shuffle algorithm
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -40,7 +41,7 @@ interface GameCard {
 
 export default function CapitalConnection() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -134,30 +135,24 @@ export default function CapitalConnection() {
     // since we filter by type in the render method anyway.
     const combined = [...capitals, ...countries];
     
+    await preloadImages([
+      ...combined.map(c => c.flagCode ? `/flags/${c.flagCode}.png` : undefined),
+      ...combined.map(c => c.capitalImage),
+    ]);
+
     setCards(combined);
     setSelectedIds([]);
     setIsProcessing(false);
-
-    // Preload all flags for this board
-    combined.filter(c => c.flagCode).forEach(c => {
-      const img = new Image();
-      img.src = `/flags/${c.flagCode}.png`;
-    });
-    
-    // Preload capital images
-    combined.filter(c => c.capitalImage).forEach(c => {
-      const img = new Image();
-      if (c.capitalImage) img.src = c.capitalImage;
-    });
   }, []);
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback(async () => {
+    setGameState('preparing');
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
-    generateBoard();
+    await generateBoard();
     setGameState('playing');
   }, [gameDuration, generateBoard]);
 
@@ -287,6 +282,24 @@ export default function CapitalConnection() {
             </div>
             <GameNavigationButtons />
         </div>
+            </div>
+          </motion.div>
+        )}
+
+
+        {gameState === 'preparing' && (
+          <motion.div
+            key="preparing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
+              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+                Loading
+              </div>
             </div>
           </motion.div>
         )}

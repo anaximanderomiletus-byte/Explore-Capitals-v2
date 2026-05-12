@@ -21,7 +21,7 @@ const shuffle = <T,>(array: T[]): T[] => {
 
 export default function FlagFrenzy() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -79,12 +79,21 @@ export default function FlagFrenzy() {
     img.src = `/flags/${getCountryCode(target.flag)}.png`;
   };
 
-  const startGame = () => {
+  const startGame = async () => {
+    setGameState('preparing');
+    const queue = shuffle([...COUNTRIES]);
+    // Preload the first 5 flags so there's no flicker on the first few questions
+    const preloadSrc = queue.slice(0, 5).map(c => `/flags/${getCountryCode(c.flag)}.png`);
+    await Promise.all(preloadSrc.map(src => new Promise<void>(resolve => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    })));
     setScore(0);
     setTimeLeft(gameDuration);
     setFeedback(null);
     setFeedbackKey(0);
-    const queue = shuffle([...COUNTRIES]);
     setShuffledCountries(queue);
     setQuestionIndex(0);
     setCorrectCountries([]);
@@ -183,6 +192,23 @@ export default function FlagFrenzy() {
               </div>
               <GameNavigationButtons />
             </div>
+            </div>
+          </motion.div>
+        )}
+
+        {gameState === 'preparing' && (
+          <motion.div
+            key="preparing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
+              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+                Loading
+              </div>
             </div>
           </motion.div>
         )}

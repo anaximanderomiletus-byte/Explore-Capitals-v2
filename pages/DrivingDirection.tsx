@@ -17,7 +17,7 @@ import GameNavigationButtons from '../components/GameNavigationButtons';
 
 export default function DrivingDirection() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -96,14 +96,34 @@ export default function DrivingDirection() {
     img.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
   }, [countriesWithDriveSide, previousCountryId]);
 
-  const startGame = () => {
+  const startGame = async () => {
+    setGameState('preparing');
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
     setPreviousCountryId(null);
-    generateRound();
+
+    // Pick first country and await flag load before showing gameplay
+    const country = countriesWithDriveSide[Math.floor(Math.random() * countriesWithDriveSide.length)];
+    await new Promise<void>(resolve => {
+      const img = new Image();
+      img.src = getFlagUrl(country.flag);
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    });
+    setPreviousCountryId(country.id);
+    setCurrentCountry(country);
+    setResult(null);
+    setSelectedSide(null);
+    setImgError(false);
+
+    // Warm next flag
+    const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
+    const nextImg = new Image();
+    nextImg.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
+
     setGameState('playing');
   };
 
@@ -170,6 +190,23 @@ export default function DrivingDirection() {
               </div>
               <GameNavigationButtons />
             </div>
+            </div>
+          </motion.div>
+        )}
+
+        {gameState === 'preparing' && (
+          <motion.div
+            key="preparing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
+              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+                Loading
+              </div>
             </div>
           </motion.div>
         )}
