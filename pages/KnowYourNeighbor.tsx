@@ -254,11 +254,11 @@ export default function KnowYourNeighbor() {
                <AnimatePresence mode="wait">
                  <motion.div
                    key={targetCountry.id}
-                   initial={{ opacity: 0, x: 20 }}
-                   animate={{ opacity: 1, x: 0 }}
-                   exit={{ opacity: 0, x: -20 }}
-                   transition={{ duration: 0.3 }}
-                   style={{ willChange: 'transform, opacity' }}
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   exit={{ opacity: 0 }}
+                   transition={{ duration: 0.2 }}
+                   style={{ willChange: 'opacity' }}
                    className="game-neighbor-inner h-full flex flex-col justify-between relative z-10"
                  >
             {/* Country Prompt - More spacious */}
@@ -287,7 +287,7 @@ export default function KnowYourNeighbor() {
                 const flagUrl = country ? getFlagUrl(country.flag) : '';
                 
                 // Determine which state classes to apply for the border/shadow
-                let stateClasses = "bg-white/5 border border-white/30 text-white/90 shadow-inner";
+                let stateClasses = "bg-white/5 border-2 border-white/30 text-white/90 shadow-inner";
                 
                 if (roundResult) {
                   if (isActualNeighbor && isSelected) {
@@ -350,7 +350,7 @@ export default function KnowYourNeighbor() {
                   <span className="text-base md:text-xl relative z-10 drop-shadow-md">{feedback}</span>
                 </div>
               ) : (
-                <button onClick={submitAnswer} disabled={selectedOptions.length === 0} className={`w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-display font-black rounded-full transition-all duration-200 select-none ${selectedOptions.length > 0 ? 'bg-accent/90 border-2 border-accent text-white shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:brightness-110 active:scale-[0.98] cursor-pointer' : 'bg-white/5 border-2 border-white/10 text-white/20 cursor-not-allowed'}`} style={{ WebkitTapHighlightColor: 'transparent' }}>Submit</button>
+                <button onClick={submitAnswer} disabled={selectedOptions.length === 0} className={`w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-display font-black rounded-full transition-all duration-200 select-none ${selectedOptions.length > 0 ? 'bg-sky/90 border-2 border-sky text-white shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:brightness-110 active:scale-[0.98] cursor-pointer' : 'bg-white/5 border-2 border-white/10 text-white/20 cursor-not-allowed'}`} style={{ WebkitTapHighlightColor: 'transparent' }}>Submit</button>
               )}
             </div>
                  </motion.div>

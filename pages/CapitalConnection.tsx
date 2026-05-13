@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, Trophy, ArrowLeft, Building2, Network, Play } from 'lucide-react';
@@ -57,6 +57,15 @@ export default function CapitalConnection() {
   const navigate = useNavigate();
   const { setPageLoading } = useLayout();
 
+  // Refs to avoid stale closures in setTimeout callbacks
+  const selectedIdsRef = useRef<string[]>([]);
+  const boardGeneratingRef = useRef(false);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    selectedIdsRef.current = selectedIds;
+  }, [selectedIds]);
+
   useEffect(() => {
     setPageLoading(false);
     getStaticImages().then(setImagesMap);
@@ -94,7 +103,11 @@ export default function CapitalConnection() {
   }, [gameState, gameDuration, hasReported, recordGameResult, score, timeLeft]);
 
   const generateBoard = useCallback(async () => {
+    // Prevent concurrent board generation
+    if (boardGeneratingRef.current) return;
+    boardGeneratingRef.current = true;
     setIsProcessing(true);
+
     const roundCountries = shuffleArray(COUNTRIES).slice(0, 6);
     const IMAGES = await getStaticImages();
     const newCards: GameCard[] = [];
@@ -142,7 +155,9 @@ export default function CapitalConnection() {
 
     setCards(combined);
     setSelectedIds([]);
+    selectedIdsRef.current = [];
     setIsProcessing(false);
+    boardGeneratingRef.current = false;
   }, []);
 
   const startGame = useCallback(async () => {
@@ -152,22 +167,26 @@ export default function CapitalConnection() {
     setHasReported(false);
     setFeedback(null);
     setFeedbackKey(0);
+    boardGeneratingRef.current = false; // Reset in case previous game left it set
     await generateBoard();
     setGameState('playing');
   }, [gameDuration, generateBoard]);
 
   const handleCardClick = useCallback((cardId: string) => {
-    if (isProcessing || gameState !== 'playing') return;
+    // Block clicks during processing or board generation
+    if (isProcessing || boardGeneratingRef.current || gameState !== 'playing') return;
 
     setCards(prevCards => {
       const clickedCard = prevCards.find(c => c.id === cardId);
       if (!clickedCard || clickedCard.isMatched || clickedCard.isSelected) return prevCards;
 
       const newCards = prevCards.map(c => c.id === cardId ? { ...c, isSelected: true } : c);
-    const newSelectedIds = [...selectedIds, cardId];
+      // Use ref for current selectedIds to avoid stale closure
+      const currentSelectedIds = selectedIdsRef.current;
+      const newSelectedIds = [...currentSelectedIds, cardId];
 
-    if (newSelectedIds.length === 2) {
-      setIsProcessing(true);
+      if (newSelectedIds.length === 2) {
+        setIsProcessing(true);
         const card1 = newCards.find(c => c.id === newSelectedIds[0])!;
         const card2 = newCards.find(c => c.id === newSelectedIds[1])!;
 
@@ -195,21 +214,24 @@ export default function CapitalConnection() {
           
           // Then transition to matched state after animation completes
           setTimeout(() => {
-            setCards(finalCards => {
-              const matchedCards = finalCards.map(c => 
-                (c.id === card1.id || c.id === card2.id) 
-                  ? { ...c, isMatched: true, isCorrect: false } 
-                  : c
-              );
-              
-              if (willCompleteGrid) {
-                setTimeout(generateBoard, 400); // Quick transition to next board
-              }
-              
-              setIsProcessing(false);
+            setCards(finalCards => finalCards.map(c => 
+              (c.id === card1.id || c.id === card2.id) 
+                ? { ...c, isMatched: true, isCorrect: false } 
+                : c
+            ));
+            
+            // Clear selection state
             setSelectedIds([]);
-              return matchedCards;
-            });
+            selectedIdsRef.current = [];
+
+            if (willCompleteGrid) {
+              // Keep isProcessing true — generateBoard will release it when done
+              setTimeout(() => {
+                generateBoard();
+              }, 400);
+            } else {
+              setIsProcessing(false);
+            }
           }, 450);
         } else {
           // INCORRECT MATCH - show feedback popup and visual shake
@@ -228,15 +250,17 @@ export default function CapitalConnection() {
             ));
             setIsProcessing(false);
             setSelectedIds([]);
+            selectedIdsRef.current = [];
           }, 800);
         }
       } else {
         setSelectedIds(newSelectedIds);
+        selectedIdsRef.current = newSelectedIds;
       }
 
       return newCards;
     });
-  }, [isProcessing, gameState, selectedIds, generateBoard]);
+  }, [isProcessing, gameState, generateBoard]);
 
     return (
     <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">

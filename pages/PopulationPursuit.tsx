@@ -280,11 +280,11 @@ export default function PopulationPursuit() {
                   
                 if (result) {
                     if (isWinner) {
-                        cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
+                        cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)]";
                         overlayStyle = "bg-accent/90 backdrop-blur-md";
                         titleStyle = "text-white drop-shadow-md";
                     } else if (isSelected) {
-                        cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
+                        cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]";
                         overlayStyle = "bg-red-500/90 backdrop-blur-md";
                         titleStyle = "text-white drop-shadow-md";
                     } else {
@@ -306,7 +306,7 @@ export default function PopulationPursuit() {
                         <img 
                           src={getFlagUrl(country.flag)}
                           alt={`${country.name} flag`}
-                          className={`w-full h-full object-cover transition-all duration-500 ease-out ${result ? 'scale-105' : 'scale-100'}`}
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       
@@ -318,7 +318,7 @@ export default function PopulationPursuit() {
                         {/* Small Flag (OG View) */}
                         <div className="mb-2 md:mb-4 flex items-center justify-center relative w-full min-h-[50px] md:min-h-[140px]">
                           {!hasError ? (
-                            <div className={`w-full max-w-[80px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
+                            <div className="w-full max-w-[80px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center">
                               <img 
                                 src={getFlagUrl(country.flag)}
                                 alt={`${country.name} flag`}
@@ -327,7 +327,7 @@ export default function PopulationPursuit() {
                               />
                             </div>
                           ) : (
-                            <div className={`w-full max-w-[80px] md:max-w-[160px] aspect-[3/2] transition-all duration-500 ease-out ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
+                            <div className={`w-full max-w-[80px] md:max-w-[160px] aspect-[3/2] ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
                               <img 
                                 src={getFlagUrl(country.flag)}
                                 alt={`${country.name} flag fallback`}
@@ -342,8 +342,8 @@ export default function PopulationPursuit() {
                           {country.name}
                         </h3>
 
-                        {/* Population info - shows after selection */}
-                        <div className={`text-center w-full transition-[opacity,transform] ${result ? 'duration-500 opacity-100 scale-100 mt-2 md:mt-4' : 'duration-0 opacity-0 scale-90 h-0 overflow-hidden pointer-events-none'}`}>
+                        {/* Population info - always reserves space, revealed with opacity */}
+                        <div className={`text-center w-full mt-2 md:mt-4 transition-opacity duration-500 ease-out ${result ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                             <div className="h-px w-6 md:w-16 bg-white/40 mx-auto mb-1 md:mb-3" />
                             <div className="flex flex-col items-center gap-0.5">
                               <span className="text-white/80 uppercase font-black text-[7px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans drop-shadow-md">POPULATION</span>
