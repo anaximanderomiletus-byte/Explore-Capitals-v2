@@ -538,27 +538,40 @@ export default function MapDash() {
               ? { left: `${clickPoint.x}px`, top: `${Math.max(10, clickPoint.y - 60)}px` }
               : { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
           >
-            <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl border-2 backdrop-blur-xl shadow-lg ${
-              lastResult === 'correct'
-                ? 'bg-accent/90 border-white/60 shadow-accent/30'
-                : 'bg-error/90 border-white/60 shadow-error/30'
-            }`}>
-              {lastResult === 'correct' ? (
-                <Check size={18} className="text-white shrink-0" strokeWidth={3} />
-              ) : (
-                <X size={18} className="text-white shrink-0" strokeWidth={3} />
-              )}
-              <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
-                {lastResult === 'correct' ? t('game.correct') : t('game.incorrect')}
-              </span>
-              {lastResult === 'incorrect' && wrongSelectionData && (
-                <>
-                  <span className="text-white/50 font-black text-xs">•</span>
-                  <span className="text-white/80 font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
-                    {wrongSelectionData.name}
-                  </span>
-                </>
-              )}
+            <div className="flex flex-col items-center">
+              <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl backdrop-blur-xl shadow-lg ${
+                lastResult === 'correct'
+                  ? 'bg-accent/90 shadow-accent/30'
+                  : 'bg-error/90 shadow-error/30'
+              }`}>
+                {lastResult === 'correct' ? (
+                  <Check size={18} className="text-white shrink-0" strokeWidth={3} />
+                ) : (
+                  <X size={18} className="text-white shrink-0" strokeWidth={3} />
+                )}
+                <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
+                  {lastResult === 'correct' ? t('game.correct') : t('game.incorrect')}
+                </span>
+                {lastResult === 'incorrect' && wrongSelectionData && (
+                  <>
+                    <span className="text-white/50 font-black text-xs">•</span>
+                    <span className="text-white/80 font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
+                      {wrongSelectionData.name}
+                    </span>
+                  </>
+                )}
+              </div>
+              {/* Pin triangle pointing down */}
+              <div
+                className="w-0 h-0 -mt-[1px]"
+                style={{
+                  borderLeft: '8px solid transparent',
+                  borderRight: '8px solid transparent',
+                  borderTop: lastResult === 'correct'
+                    ? '10px solid rgba(52, 199, 89, 0.9)'
+                    : '10px solid rgba(255, 59, 48, 0.9)',
+                }}
+              />
             </div>
           </motion.div>
         )}
