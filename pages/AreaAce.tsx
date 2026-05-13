@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Play, Crown, Maximize2 } from 'lucide-react';
+import { Timer, Trophy, ArrowLeft, Play, Maximize2 } from 'lucide-react';
 import { COUNTRIES } from '../constants';
 import Button from '../components/Button';
 import { Country } from '../types';
@@ -25,7 +26,7 @@ const getNumericValue = (str: string) => {
 
 export default function AreaAce() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
@@ -37,11 +38,13 @@ export default function AreaAce() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [imgErrorA, setImgErrorA] = useState(false);
   const [imgErrorB, setImgErrorB] = useState(false);
+  const [incorrectCountries, setIncorrectCountries] = useState<string[]>([]);
   const [hasReported, setHasReported] = useState(false);
   const { recordGameResult } = useUser();
   const navigate = useNavigate();
   const { setPageLoading } = useLayout();
 
+  // Pre-calculate numeric values for all countries to avoid lag
   const countriesWithNumericArea = useMemo(() => {
     return COUNTRIES.map(c => ({
       ...c,
@@ -103,6 +106,7 @@ export default function AreaAce() {
     setCountryA(newCountryA);
     setCountryB(newCountryB);
 
+    // Preload next potential flags to reduce lag
     const preloadFlags = () => {
       const nextIdx1 = Math.floor(Math.random() * countriesWithNumericArea.length);
       const nextIdx2 = Math.floor(Math.random() * countriesWithNumericArea.length);
@@ -118,36 +122,14 @@ export default function AreaAce() {
     preloadFlags();
   }, [countriesWithNumericArea, previousPairIds]);
 
-  const startGame = async () => {
-    setGameState('preparing');
+  const startGame = () => {
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
     setResult(null);
     setFeedbackKey(0);
     setPreviousPairIds(null);
-
-    // Pick first pair and preload their flags before showing game
-    const idxA = Math.floor(Math.random() * countriesWithNumericArea.length);
-    let idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
-    while (idxB === idxA) idxB = Math.floor(Math.random() * countriesWithNumericArea.length);
-    const newCountryA = countriesWithNumericArea[idxA];
-    const newCountryB = countriesWithNumericArea[idxB];
-
-    await Promise.all([getFlagUrl(newCountryA.flag), getFlagUrl(newCountryB.flag)].map(src => new Promise<void>(resolve => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-    })));
-
-    setPreviousPairIds([newCountryA.id, newCountryB.id]);
-    setCountryA(newCountryA);
-    setCountryB(newCountryB);
-    setResult(null);
-    setSelectedId(null);
-    setImgErrorA(false);
-    setImgErrorB(false);
+    generateRound();
     setGameState('playing');
   };
 
@@ -164,10 +146,11 @@ export default function AreaAce() {
     setFeedbackKey(prev => prev + 1);
     if (isCorrect) setScore(s => s + 10);
     
+    // Snappier transition to next round
     setTimeout(generateRound, 700);
   };
 
-  return (
+    return (
     <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
@@ -181,60 +164,42 @@ export default function AreaAce() {
             exit={{ opacity: 0, scale: 1.1 }}
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
-            <SEO
-              title="Area Ace - Premium Game"
-              description="Which country is larger? Test your geographic size knowledge."
-              structuredData={getGameStructuredData({
-                name: 'Area Ace',
-                slug: 'area-ace',
-                description: 'Which country is larger? Test your geographic size knowledge.',
-                image: '/png/GAMES/area-ace.png',
-              })}
-            />
-            
-            <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-500/10 rounded-full blur-3xl opacity-40" />
-            </div>
+        <SEO
+          title="Area Ace - Games"
+          description="Which country is larger? Compare land areas and test your knowledge of world geography in this game."
+          structuredData={getGameStructuredData({
+            name: 'Area Ace',
+            slug: 'area-ace',
+            description: 'Which country is larger? Compare land areas and test your knowledge of world geography in this game.',
+            image: '/png/GAMES/area-ace.png',
+          })}
+        />
+
+        {/* Background Decor */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-accent/10 rounded-full blur-3xl opacity-40" />
+        </div>
 
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
             
             <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
-              
-              <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden">
-                <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
-              </div>
-              <h2 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Area Ace</h2>
-              <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Choose the larger country.</p>
-              <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
-              <div className="block w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">
-                  START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
-                </Button>
-              </div>
-              <GameNavigationButtons />
+          <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
+            <img src={`${import.meta.env.BASE_URL}png/GAMES/area-ace.png`} alt="Area Ace" className="w-full h-full object-cover" />
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Area Ace</h1>
+          <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Choose the larger country.</p>
+            <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
+            <div className="block w-full">
+                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
             </div>
+            <GameNavigationButtons />
+        </div>
             </div>
           </motion.div>
         )}
 
-        {gameState === 'preparing' && (
-          <motion.div
-            key="preparing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
-          >
-            <div className="flex flex-col items-center gap-6">
-              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
-              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
-                Loading
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {gameState === 'playing' && countryA && countryB && (
           <motion.div
@@ -244,149 +209,154 @@ export default function AreaAce() {
             exit={{ opacity: 0, y: -20 }}
             className="game-playing h-full flex flex-col px-3 md:px-4 pt-4 md:pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
-            <SEO title="Area Ace - Playing" description="Which country is larger? Compare land areas in this geography game." />
-            
-            <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-3xl" />
-            </div>
+      <SEO title="Area Ace - Games" description="Which country is larger? Compare land areas and test your knowledge of world geography in this game." />
+      
+      {/* Background Decor */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-3xl" />
+      </div>
 
-            <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
+      {/* Top Bar - Uses flexbox for reliable layout on all screens including in-app browsers */}
+      <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
   <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 z-20">
     <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
       <ArrowLeft size={24} />
     </Link>
     <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] truncate">Area Ace</h2>
+      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Area Ace</h2>
     </div>
     <div className="w-[32px] sm:w-[40px] shrink-0" />
   </div>
   <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
 
-              
-              <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40">
-                  <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning" />
-                  <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums">{score}</span>
-                </div>
-                <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl transition-all ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
-                  <Timer size={14} className={`sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`} />
-                  <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-                </div>
-              </div>
+          
+          {/* Points and Timer - Responsive layout for all screen sizes */}
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+             <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
+                <Trophy size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-warning drop-shadow-md relative z-10" />
+                <span className="font-display font-black text-lg sm:text-xl md:text-2xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+             </div>
+             <div className={`flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
+                <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" /></div>
+                <span className={`font-display font-black text-lg sm:text-xl md:text-2xl tabular-nums min-w-[36px] sm:min-w-[42px] md:min-w-[48px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+             </div>
+          </div>
 
-              <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
-                <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
-                  <p className="text-sky-light font-black text-[9px] uppercase tracking-[0.4em] opacity-80">Which country has the</p>
-                  <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter flex items-center gap-2">
-                    <Maximize2 size={24} className="text-sky-light" /> Larger Area?
-                  </h2>
-                </div>
+          <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
+                   {/* Question Text */}
+                   <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.3em]">Which country has the</p>
+                      <h2 className="text-white font-display font-black text-xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">Larger Area?</h2>
+                   </div>
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={countryA?.id + (countryB?.id || '')}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                    style={{ willChange: 'transform, opacity' }}
-                    className="w-full h-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-4xl mx-auto"
-                  >
-                    {[countryA, countryB].map((country, idx) => {
-                      if (!country) return null;
-                      const other = idx === 0 ? countryB : countryA;
-                      const areaCurrent = (country as any).numericArea;
-                      const areaOther = (other as any).numericArea;
-                      const isWinner = areaCurrent >= areaOther;
-                      const isA = idx === 0;
-                      const hasError = isA ? imgErrorA : imgErrorB;
-                      const setHasError = isA ? setImgErrorA : setImgErrorB;
-                      const isSelected = selectedId === country.id;
-                      const isWrong = isSelected && !isWinner;
+                   <AnimatePresence mode="wait">
+                     <motion.div
+                       key={countryA?.id + (countryB?.id || '')}
+                       initial={{ opacity: 0, scale: 0.98 }}
+                       animate={{ opacity: 1, scale: 1 }}
+                       exit={{ opacity: 0, scale: 1.02 }}
+                       transition={{ duration: 0.3 }}
+                       style={{ willChange: 'transform, opacity' }}
+                       className="w-full h-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-4xl mx-auto"
+                     >
+              {[countryA, countryB].map((country, idx) => {
+                         if (!country) return null;
+                const other = idx === 0 ? countryB : countryA;
+                const areaCurrent = (country as any).numericArea;
+                const areaOther = (other as any).numericArea;
+                const isWinner = areaCurrent >= areaOther;
+                const isA = idx === 0;
+                const hasError = isA ? imgErrorA : imgErrorB;
+                const setHasError = isA ? setImgErrorA : setImgErrorB;
+                const isSelected = selectedId === country.id;
+                const isWrong = isSelected && !isWinner;
+                
+                // No hover styles on mobile - prevents "pre-highlighted" sticky hover on touch devices
+                let cardStyle = "border-2 border-white/10 active:border-sky/50";
+                let overlayStyle = "bg-black/50 hover:bg-black/40 active:bg-black/30";
+                let titleStyle = "text-white";
+                  
+                if (result) {
+                    if (isWinner) {
+                        cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)]";
+                        overlayStyle = "bg-accent/90 backdrop-blur-md";
+                        titleStyle = "text-white drop-shadow-md";
+                    } else if (isSelected) {
+                        cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)]";
+                        overlayStyle = "bg-red-500/90 backdrop-blur-md";
+                        titleStyle = "text-white drop-shadow-md";
+                    } else {
+                        cardStyle = "border-2 border-white/5 opacity-30 z-0 blur-[1px]";
+                        overlayStyle = "bg-black/70";
+                        titleStyle = "text-white/50";
+                    }
+                }
+
+                  return (
+                    <div 
+                      key={country.id} 
+                      onClick={() => handleChoice(country)} 
+                      className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`} 
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                    >
+                      {/* Background Flag */}
+                      <div className="absolute inset-0 z-0">
+                        <img 
+                          src={getFlagUrl(country.flag)}
+                          alt={`${country.name} flag`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                       
-                      // No hover styles on mobile - prevents "pre-highlighted" sticky hover on touch devices
-                      let cardStyle = "border-2 border-white/10 active:border-sky/50";
-                      let overlayStyle = "bg-black/50 hover:bg-black/40 active:bg-black/30";
-                      let titleStyle = "text-white";
-                        
-                      if (result) {
-                        if (isWinner) {
-                          cardStyle = "border-2 border-accent z-20 shadow-[0_0_20px_rgba(34,197,94,0.3)] brightness-110";
-                          overlayStyle = "bg-accent/90 backdrop-blur-md";
-                          titleStyle = "text-white drop-shadow-md";
-                        } else if (isSelected) {
-                          cardStyle = "border-2 border-red-500 z-10 shadow-[0_0_20px_rgba(239,68,68,0.3)] brightness-110";
-                          overlayStyle = "bg-red-500/90 backdrop-blur-md";
-                          titleStyle = "text-white drop-shadow-md";
-                        } else {
-                          cardStyle = "border-2 border-white/5 opacity-30 z-0 blur-[1px]";
-                          overlayStyle = "bg-black/70";
-                          titleStyle = "text-white/50";
-                        }
-                      }
+                      {/* Overlay */}
+                      <div className={`absolute inset-0 z-0 transition-all duration-300 ${overlayStyle}`} />
+                      
+                      {/* Content Container */}
+                      <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-2 md:p-6">
+                        {/* Small Flag (OG View) */}
+                        <div className="mb-2 md:mb-4 flex items-center justify-center relative w-full min-h-[50px] md:min-h-[140px]">
+                          {!hasError ? (
+                            <div className="w-full max-w-[80px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center">
+                              <img 
+                                src={getFlagUrl(country.flag)}
+                                alt={`${country.name} flag`}
+                                className={`w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.65)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
+                                onError={() => setHasError(true)}
+                              />
+                            </div>
+                          ) : (
+                            <div className={`w-full max-w-[80px] md:max-w-[160px] aspect-[3/2] ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
+                              <img 
+                                src={getFlagUrl(country.flag)}
+                                alt={`${country.name} flag fallback`}
+                                className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.65)]"
+                              />
+                            </div>
+                          )}
+                        </div>
 
-                      return (
-                        <div 
-                          key={country.id} 
-                          onClick={() => handleChoice(country)} 
-                          className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
-                          style={{ WebkitTapHighlightColor: 'transparent' }}
-                        >
-                          {/* Background Flag */}
-                          <div className="absolute inset-0 z-0">
-                            <img 
-                              src={getFlagUrl(country.flag)}
-                              alt={`${country.name} flag`}
-                              className={`w-full h-full object-cover transition-all duration-500 ease-out ${result ? 'scale-105' : 'scale-100'}`}
-                            />
-                          </div>
-                          
-                          {/* Overlay */}
-                          <div className={`absolute inset-0 z-0 transition-all duration-300 ${overlayStyle}`} />
-                          
-                          {/* Content Container */}
-                          <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-2 md:p-6">
-                            <div className="mb-2 md:mb-4 flex items-center justify-center relative z-10 w-full min-h-[50px] md:min-h-[140px]">
-                            {!hasError ? (
-                              <div className={`w-full max-w-[100px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center transition-all duration-500 ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'}`}>
-                                <img 
-                                  src={getFlagUrl(country.flag)}
-                                  alt={`${country.name} flag`}
-                                  className={`w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)] transition-opacity duration-500 ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}
-                                  onError={() => setHasError(true)}
-                                />
-                              </div>
-                            ) : (
-                              <div className={`w-full max-w-[100px] md:max-w-[160px] aspect-[3/2] transition-all duration-500 ${result ? 'scale-[0.92] md:scale-[0.88]' : 'scale-100'} ${result && !isWinner ? 'opacity-40' : 'opacity-100'}`}>
-                                <img 
-                                  src={getFlagUrl(country.flag)}
-                                  alt={`${country.name} flag fallback`}
-                                  className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                                />
-                              </div>
-                            )}
-                          </div>
-                          
-                          <h3 className={`text-xs md:text-xl font-display font-black mb-0 md:mb-2 leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-lg line-clamp-2 text-center relative z-10 px-1 md:px-4 ${titleStyle}`}>
-                            {country.name}
-                          </h3>
+                        {/* Country name */}
+                        <h3 className={`text-xs sm:text-sm md:text-3xl font-display font-black leading-tight uppercase tracking-tighter transition-all duration-500 drop-shadow-[0_6px_12px_rgba(0,0,0,0.85)] text-center w-full px-1 ${titleStyle}`}>
+                          {country.name}
+                        </h3>
 
-                          <div className={`text-center relative z-10 w-full px-2 md:px-4 shrink-0 transition-all ${result ? 'duration-500 opacity-100 scale-100 mt-2 md:mt-3' : 'duration-0 opacity-0 scale-90 h-0 overflow-hidden pointer-events-none'}`}>
-                            <div className="h-px w-6 md:w-12 bg-white/20 mx-auto mb-1.5 md:mb-3" />
+                        {/* Area info - always reserves space, revealed with opacity */}
+                        <div className={`text-center w-full mt-2 md:mt-4 transition-opacity duration-500 ease-out ${result ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                            <div className="h-px w-6 md:w-16 bg-white/40 mx-auto mb-1 md:mb-3" />
                             <div className="flex flex-col items-center gap-0.5">
-                              <span className="text-sky-light uppercase font-black text-[6px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] mb-0.5">AREA (km²)</span>
-                              <div className={`text-[11px] md:text-3xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_3px_10px_rgba(0,0,0,0.5)] ${isWinner ? 'text-white' : 'text-white/60'}`}>
+                              <span className="text-white/80 uppercase font-black text-[7px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans drop-shadow-md">AREA (km²)</span>
+                              <div className={`text-sm sm:text-base md:text-4xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_6px_12px_rgba(0,0,0,0.85)] ${isWinner ? 'text-white' : 'text-white/80'}`}>
                                 {country.area}
                               </div>
                             </div>
-                          </div>
                         </div>
-                        </div>
-                      );
-                    })}
-                  </motion.div>
-                </AnimatePresence>
+                      </div>
+                    </div>
+                  );
+                })}
+                     </motion.div>
+                   </AnimatePresence>
               </div>
             
   </div>
@@ -425,9 +395,9 @@ export default function AreaAce() {
               <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
               <div className="block w-full">
                 <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">{t('game.playAgain')} <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
-              </div>
+           </div>
                 <GameNavigationButtons />
-            </div>
+      </div>
             </div>
           </motion.div>
         )}

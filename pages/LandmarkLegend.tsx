@@ -272,13 +272,13 @@ export default function LandmarkLegend() {
                
                {/* Points and Timer - Responsive layout for all screen sizes */}
                <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
-                  <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
-                     <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning drop-shadow-md relative z-10" />
-                     <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+                  <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
+                     <Trophy size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-warning drop-shadow-md relative z-10" />
+                     <span className="font-display font-black text-lg sm:text-xl md:text-2xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
                   </div>
-                  <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1 md:px-3 md:py-1.5 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
-                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" /></div>
-                     <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums min-w-[28px] sm:min-w-[32px] md:min-w-[36px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+                  <div className={`flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
+                     <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" /></div>
+                     <span className={`font-display font-black text-lg sm:text-xl md:text-2xl tabular-nums min-w-[36px] sm:min-w-[42px] md:min-w-[48px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
                   </div>
                </div>
 
@@ -294,7 +294,7 @@ export default function LandmarkLegend() {
                  >
                    {/* Centered image area */}
                    <div className="game-content flex flex-col items-center justify-center flex-1 min-h-0 py-2 md:pt-2 md:pb-6 relative z-10">
-                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY THE LANDMARK</p>
+                      <p className="text-sky-light font-black text-[9px] md:text-xs uppercase tracking-[0.4em] mb-2 md:mb-3 font-sans opacity-80 shrink-0">IDENTIFY THE LANDMARK LOCATION</p>
                       <div
                        className="game-landmark relative w-full max-w-sm md:max-w-2xl h-auto max-h-60 md:max-h-96 min-h-0 shrink rounded-xl md:rounded-2xl overflow-hidden bg-black/60 border-2 border-white/20 md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_-20px_40px_-20px_rgba(56,189,248,0.15)]"
                        style={{

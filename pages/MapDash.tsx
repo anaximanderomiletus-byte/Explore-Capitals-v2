@@ -368,15 +368,15 @@ export default function MapDash() {
             </div>
 
             {/* Score and Timer - positioned below nav bar, matching back button height */}
-            <div className="absolute top-[4.5rem] sm:top-20 md:top-24 right-3 sm:right-4 md:right-6 z-30 flex gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <div className="bg-surface-dark/90 backdrop-blur-xl rounded-xl border border-white/20 h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2">
-                <Trophy size={14} className="sm:w-4 sm:h-4 text-warning flex-shrink-0" />
-                <span className="font-display font-black text-xs sm:text-sm md:text-base text-white tabular-nums relative z-10 drop-shadow-md">{score}</span>
+            <div className="absolute top-[4.5rem] sm:top-20 md:top-24 right-3 sm:right-4 md:right-6 z-30 flex gap-2 sm:gap-2.5 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="bg-surface-dark/90 backdrop-blur-xl rounded-xl border border-white/20 h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5">
+                <Trophy size={18} className="sm:w-5 sm:h-5 text-warning flex-shrink-0" />
+                <span className="font-display font-black text-sm sm:text-base md:text-lg text-white tabular-nums relative z-10 drop-shadow-md">{score}</span>
               </div>
               
-              <div className={`rounded-xl shadow-inner h-9 sm:h-10 px-2.5 sm:px-3 md:px-4 flex items-center gap-1.5 sm:gap-2 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border-2 border-white/20'}`}>
-                <Timer size={14} className={`sm:w-4 sm:h-4 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-sky"}`} />
-                <span className={`font-display font-black text-xs sm:text-sm md:text-base tabular-nums min-w-[32px] sm:min-w-[36px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? "text-error" : "text-white"}`}>
+              <div className={`rounded-xl shadow-inner h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border-2 border-white/20'}`}>
+                <Timer size={18} className={`sm:w-5 sm:h-5 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-sky"}`} />
+                <span className={`font-display font-black text-sm sm:text-base md:text-lg tabular-nums min-w-[36px] sm:min-w-[42px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? "text-error" : "text-white"}`}>
                   {formatTime(timeLeft)}
                 </span>
               </div>

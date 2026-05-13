@@ -358,9 +358,9 @@ export default function CapitalConnection() {
 
           {/* Points and Timer - Responsive layout for all screen sizes */}
           <div className="game-score-bar flex items-center justify-between gap-2 mb-2 sm:mb-3 relative z-20 shrink-0">
-             <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-warning/15 border border-warning/30 shrink-0">
-                <Trophy size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px] text-warning" />
-                <span className="font-display font-black text-base sm:text-lg md:text-xl text-white tabular-nums">{score}</span>
+             <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-warning/15 border border-warning/30 shrink-0">
+                <Trophy size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-warning" />
+                <span className="font-display font-black text-lg sm:text-xl md:text-2xl text-white tabular-nums">{score}</span>
              </div>
              
              {/* Instruction Text */}
@@ -368,9 +368,9 @@ export default function CapitalConnection() {
                <h3 className="text-white/90 font-display font-black tracking-[0.15em] md:tracking-[0.2em] text-[10px] md:text-xs uppercase drop-shadow-md">Match the correct pair</h3>
              </div>
 
-             <div className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg transition-all duration-300 shrink-0 ${timeLeft < 10 ? 'bg-red-500/15 border border-error' : 'bg-sky/20 border border-white/20'}`}>
-                <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={14} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" /></div>
-                <span className={`font-display font-black text-base sm:text-lg md:text-xl tabular-nums min-w-[28px] sm:min-w-[32px] md:min-w-[36px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
+             <div className={`flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-300 shrink-0 ${timeLeft < 10 ? 'bg-red-500/15 border border-error' : 'bg-sky/20 border border-white/20'}`}>
+                <div className={timeLeft < 10 ? 'text-error' : 'text-sky-light'}><Timer size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" /></div>
+                <span className={`font-display font-black text-lg sm:text-xl md:text-2xl tabular-nums min-w-[36px] sm:min-w-[42px] md:min-w-[48px] ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
              </div>
           </div>
           
