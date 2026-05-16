@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Play } from 'lucide-react';
 import { motion, useMotionValue, useTransform, PanInfo, animate, useDragControls } from 'framer-motion';
@@ -9,6 +9,155 @@ import { useTranslation } from '../context/LocaleContext';
 import { VerticalSidebarAd } from '../components/AdSense';
 import { GAMES, COUNTRIES } from '../constants';
 import { toSlug } from '../utils/slug';
+
+/* ── Ember Particle System ────────────────────────────────────── */
+
+interface Ember {
+  x: number;
+  y: number;
+  size: number;
+  baseOpacity: number;
+  opacity: number;
+  vx: number;
+  vy: number;
+  driftPhase: number;
+  driftSpeed: number;
+  driftAmplitude: number;
+  pulsePhase: number;
+  pulseSpeed: number;
+  life: number;
+  maxLife: number;
+}
+
+const createEmber = (w: number, h: number): Ember => {
+  return {
+    x: Math.random() * w,
+    y: Math.random() * h,
+    size: 1 + Math.random() * 2,
+    baseOpacity: 0.3 + Math.random() * 0.6,
+    opacity: 0,
+    vx: (Math.random() - 0.5) * 0.15,
+    vy: -(0.08 + Math.random() * 0.25),
+    driftPhase: Math.random() * Math.PI * 2,
+    driftSpeed: 0.3 + Math.random() * 0.6,
+    driftAmplitude: 15 + Math.random() * 30,
+    pulsePhase: Math.random() * Math.PI * 2,
+    pulseSpeed: 0.8 + Math.random() * 1.5,
+    life: Math.random() * 1000,       // start at random phase
+    maxLife: 600 + Math.random() * 800, // frames
+  };
+};
+
+const EmberCanvas: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const embersRef = useRef<Ember[]>([]);
+  const rafRef = useRef<number>(0);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const PARTICLE_COUNT = isMobile ? 35 : 50;
+
+  const drawLoop = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    const embers = embersRef.current;
+
+    for (let i = 0; i < embers.length; i++) {
+      const e = embers[i];
+      e.life++;
+
+      // Lifecycle fade-in / fade-out
+      const lifeRatio = e.life / e.maxLife;
+      let lifeFade = 1;
+      if (lifeRatio < 0.1) lifeFade = lifeRatio / 0.1;
+      else if (lifeRatio > 0.85) lifeFade = (1 - lifeRatio) / 0.15;
+
+      // Pulse glow
+      const pulse = 0.5 + 0.5 * Math.sin(e.pulsePhase + e.life * 0.02 * e.pulseSpeed);
+
+      e.opacity = e.baseOpacity * lifeFade * (0.4 + 0.6 * pulse);
+
+      // Horizontal drift (sinusoidal sway)
+      const drift = Math.sin(e.driftPhase + e.life * 0.006 * e.driftSpeed) * e.driftAmplitude * 0.01;
+
+      e.x += e.vx + drift;
+      e.y += e.vy;
+
+      // Respawn if off-screen or expired
+      if (e.life > e.maxLife || e.y < -10 || e.x < -10 || e.x > w + 10) {
+        const fresh = createEmber(w, h);
+        fresh.y = h + 10 + Math.random() * 40; // start from bottom
+        fresh.life = 0;
+        embers[i] = fresh;
+        continue;
+      }
+
+      // Draw the ember with a soft glow
+      const currentSize = e.size * (0.7 + 0.3 * pulse);
+
+      // Outer glow
+      const glow = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, currentSize * 3);
+      glow.addColorStop(0, `rgba(255, 255, 255, ${e.opacity * 0.6})`);
+      glow.addColorStop(0.3, `rgba(220, 240, 255, ${e.opacity * 0.25})`);
+      glow.addColorStop(1, `rgba(200, 230, 255, 0)`);
+
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, currentSize * 3, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+
+      // Core bright point
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, currentSize * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, e.opacity * 1.3)})`;
+      ctx.fill();
+    }
+
+    rafRef.current = requestAnimationFrame(drawLoop);
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = canvas.offsetWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.scale(dpr, dpr);
+    };
+
+    resize();
+
+    // Initialize embers spread across the screen
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+    embersRef.current = Array.from({ length: PARTICLE_COUNT }, () => createEmber(w, h));
+
+    rafRef.current = requestAnimationFrame(drawLoop);
+    window.addEventListener('resize', resize);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('resize', resize);
+    };
+  }, [drawLoop, PARTICLE_COUNT]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ pointerEvents: 'none' }}
+    />
+  );
+};
 
 /* ── Constants ────────────────────────────────────────────────── */
 
@@ -170,8 +319,6 @@ const Home: React.FC = () => {
     <main className="relative flex-grow bg-transparent w-full home-glow overflow-x-hidden select-none">
       <style>{`
         .home-glow h1 { text-shadow: 0 0 40px rgba(0,194,255,0.15), 0 0 80px rgba(0,194,255,0.08); }
-        @keyframes star-twinkle { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
-        .home-stars { animation: star-twinkle 8s ease-in-out infinite; }
       `}</style>
 
       <SEO title="ExploreCapitals | Geography Games" description="Master world geography through fun games." isHomePage={true} />
@@ -180,39 +327,8 @@ const Home: React.FC = () => {
 
       <section className="relative overflow-hidden isolate w-full min-h-screen flex flex-col items-center justify-center pt-12 pb-24 md:pt-24 md:pb-10">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {/* Mobile: Dense Sparkles */}
-          <div 
-            className="absolute inset-0 home-stars md:hidden" 
-            style={{ 
-              backgroundImage: [
-                "radial-gradient(1.5px 1.5px at 13% 22%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(2px 2px at 42% 14%, rgba(255,255,255,0.9), transparent 60%)",
-                "radial-gradient(1px 1px at 65% 33%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(2px 2px at 80% 12%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 15% 65%, rgba(255,255,255,0.6), transparent 60%)",
-                "radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(2px 2px at 55% 75%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 75% 55%, rgba(255,255,255,0.9), transparent 60%)",
-                "radial-gradient(1px 1px at 88% 85%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(2px 2px at 45% 45%, rgba(255,255,255,0.6), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 5% 40%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(1px 1px at 95% 30%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(2px 2px at 35% 25%, rgba(255,255,255,0.6), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 10% 8%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(1px 1px at 25% 90%, rgba(255,255,255,0.9), transparent 60%)",
-                "radial-gradient(2px 2px at 50% 10%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,255,255,0.6), transparent 60%)",
-                "radial-gradient(1px 1px at 70% 95%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(2px 2px at 20% 50%, rgba(255,255,255,0.8), transparent 60%)",
-                "radial-gradient(1.5px 1.5px at 60% 85%, rgba(255,255,255,0.9), transparent 60%)",
-                "radial-gradient(1px 1px at 40% 60%, rgba(255,255,255,0.7), transparent 60%)",
-                "radial-gradient(2px 2px at 90% 45%, rgba(255,255,255,0.8), transparent 60%)"
-              ].join(', '),
-              backgroundSize: '100% 100%' 
-            }} 
-          />
-          {/* Desktop: Simple Sparkles */}
-          <div className="absolute inset-0 home-stars hidden md:block" style={{ backgroundImage: 'radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,0.55), transparent 60%), radial-gradient(1.5px 1.5px at 42% 14%, rgba(255,255,255,0.7), transparent 60%)', backgroundSize: '100% 100%' }} />
+          {/* Floating Ember Sparkles */}
+          <EmberCanvas />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(0,194,255,0.1)_0%,transparent_50%)]" />
         </div>
 
@@ -255,12 +371,14 @@ const Home: React.FC = () => {
                       className="relative w-full h-full bg-sky/5 rounded-full border-2 border-white/20 flex items-center justify-center pointer-events-auto shadow-[inset_0_0_60px_rgba(0,194,255,0.15)] group"
                     >
                       <div className="absolute inset-[-15%] rounded-full bg-sky/15 blur-3xl animate-glow-soft pointer-events-none" />
-                      <img 
-                        src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="Globe" 
-                        className="w-[82%] h-[82%] object-contain animate-globe-glow relative z-10 transition-transform duration-700"
-                        fetchPriority="high"
-                        draggable="false"
-                      />
+                      <div className="w-[82%] h-[82%] rounded-full animate-globe-glow relative z-10 flex items-center justify-center">
+                        <img 
+                          src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="Globe" 
+                          className="w-full h-full object-contain transition-transform duration-700"
+                          fetchPriority="high"
+                          draggable="false"
+                        />
+                      </div>
                     </Link>
                   </div>
                 </div>
