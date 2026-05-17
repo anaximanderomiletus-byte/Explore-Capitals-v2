@@ -228,7 +228,7 @@ const GamesDashboard: React.FC = () => {
                     className="flex flex-col bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-500 shadow-xl transform-gpu isolate h-full min-h-[400px]"
                   >
                     <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-black">
-                      <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover" />
+                      <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-black/10 z-10" />
                     </div>
                     <div className="relative z-20 px-6 pb-6 pt-4 sm:px-8 sm:pb-8 sm:pt-5 flex flex-col items-center justify-between flex-grow bg-slate-800/80 backdrop-blur-md border-t border-white/5">
@@ -363,7 +363,7 @@ const CarouselCard: React.FC<{
         style={{ height: cardHeight, ...(!cardHeight ? { aspectRatio: '16/10' } : {}), WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
       >
         <div className="absolute inset-0 z-0">
-          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-100" />
+          <img src={`${import.meta.env.BASE_URL}png/GAMES/${imgName}.png`} alt={game.title} className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 md:brightness-50 md:group-hover:brightness-100" loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent md:hidden z-10" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent md:hidden z-10" />
           <div className="absolute inset-0 hidden md:block bg-black/40 group-hover:bg-black/10 transition-colors duration-1000 z-10" />

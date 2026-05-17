@@ -376,6 +376,7 @@ const Home: React.FC = () => {
                           src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="Globe" 
                           className="w-full h-full object-contain transition-transform duration-700"
                           fetchPriority="high"
+                          decoding="async"
                           draggable="false"
                         />
                       </div>
@@ -480,6 +481,8 @@ const VerticalContent: React.FC<{
                   className="w-full aspect-[16/10] object-cover rounded-2xl shadow-lg" 
                   alt="" 
                   draggable="false"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}png/GAMES/capital-quiz.png`;
                   }}
