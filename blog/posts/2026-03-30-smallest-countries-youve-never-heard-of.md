@@ -10,75 +10,58 @@ thumbnail: /blog-images/smallest-countries-youve-never-heard-of.jpg
 readTime: 7
 ---
 
-When people think of countries, they tend to picture vast landscapes: the sprawling steppes of Russia, the deserts of Australia, the rainforests of Brazil. But some of the world's most fascinating nations are smaller than most cities. A few are smaller than some university campuses.
+When people think of countries, they usually picture huge landscapes: the vast deserts of Australia, the snowy plains of Russia, or the thick rainforests of Brazil. But some of the world's most fascinating nations are smaller than a city. In fact, a few are smaller than a university campus!
 
-These microstates challenge our assumptions about what a country needs to be. They have their own governments, currencies, flags, and seats at the United Nations. Some have economies that outperform nations hundreds of times their size. Here are the smallest countries in the world and the stories behind them.
+These tiny countries are called "microstates." They have their own governments, money, flags, and seats at the United Nations. Some even have economies that perform better than massive nations. Here are the smallest countries in the world and the incredible stories behind them.
 
-## Vatican City — 0.44 Square Kilometers
+## Vatican City
 
-The smallest country on Earth is entirely surrounded by Rome, Italy. Vatican City is the spiritual and administrative center of the Roman Catholic Church, home to the Pope, and the headquarters of a faith with over 1.3 billion followers worldwide.
+The absolute smallest country on Earth is entirely surrounded by the city of Rome, Italy. Vatican City is the headquarters of the Catholic Church and the home of the Pope. It covers only 0.44 square kilometers, which is roughly the size of 62 football fields!
 
-Despite its size, which is roughly equivalent to 62 football fields, Vatican City is a fully sovereign state. It has its own postal system, radio station, banking system, and a small military force called the Swiss Guard. It mints its own euro coins and issues its own passports. Its permanent population hovers around 800 people, making it the least populated country in the world.
+Despite its tiny size, Vatican City is a fully independent state. It has its own post office, radio station, and banking system. It even mints its own euros and has a tiny army called the Swiss Guard. With only about 800 people living there, it is the least populated country in the world.
 
-The Vatican Museums attract millions of visitors each year, and the Sistine Chapel ceiling, painted by Michelangelo between 1508 and 1512, is one of the most recognized works of art in human history.
+## Monaco
 
-## Monaco — 2.02 Square Kilometers
+Tucked along the Mediterranean Sea right next to France, Monaco is the second smallest country on Earth. It is also the most crowded. Roughly 39,000 people live in an area that is smaller than New York City's Central Park!
 
-Tucked along the French Riviera between France and the Mediterranean Sea, Monaco is the second smallest country and the most densely populated sovereign nation on Earth. Roughly 39,000 people live in an area smaller than New York City's Central Park.
+Monaco is famous for its extreme wealth. Because the country does not charge income tax, it attracts billionaires from all over the world. It is known for its fancy casinos, luxury yachts, and the famous Formula One car race. Because space is so tight, Monaco actually builds new land directly into the sea!
 
-Monaco is synonymous with wealth. It has no income tax for individuals, which has made it a magnet for the ultra-rich. The Monte Carlo Casino, the Formula One Grand Prix, and the luxury yacht-filled harbor define its international image. But Monaco is also a functioning state with its own constitution, judiciary, and diplomatic corps.
+## San Marino
 
-The country has expanded its territory by about 20 percent over the past century through land reclamation projects, literally building new land into the sea. A current project aims to add another six hectares to its coastline.
+San Marino is a tiny nation completely surrounded by Italy. It sits high up on the slopes of a mountain. Founded by a stonecutter in the year 301 AD, it claims to be the oldest republic in the entire world! 
 
-## San Marino — 61 Square Kilometers
+San Marino has maintained its independence for over 1,700 years while the rest of Italy was conquered, divided, and united around it. Today, it has about 34,000 citizens. It makes a lot of its money through tourism, banking, and by selling highly collectible postage stamps.
 
-Completely surrounded by Italy, San Marino claims to be the oldest republic in the world, founded in 301 AD by a Christian stonecutter fleeing Roman persecution. Whether or not the founding date is historically precise, San Marino has maintained its independence for centuries while the Italian peninsula around it was conquered, divided, unified, and transformed.
+## Liechtenstein
 
-The country sits on the slopes of Mount Titano in the Apennine Mountains and has a population of about 34,000. It has one of the highest GDPs per capita in the world and relies heavily on tourism, banking, and the sale of postage stamps to collectors.
+Nestled between Switzerland and Austria in the Alps, Liechtenstein is a beautiful mountain country with about 39,000 people. It is one of only two "doubly landlocked" countries in the world. This means it is entirely surrounded by other countries that also have no oceans! 
 
-San Marino's political system is unusual. Two Captains Regent serve as joint heads of state for six-month terms, a tradition that has continued since the 1200s.
+Liechtenstein is very peaceful. It dissolved its military way back in 1868 and hasn't fought a war since. Amazingly, its economy is driven by making dental products. In fact, this tiny country is the world's largest producer of false teeth!
 
-## Liechtenstein — 160 Square Kilometers
+## Tuvalu
 
-Nestled between Switzerland and Austria in the Alps, Liechtenstein is a constitutional monarchy with a population of about 39,000. It is one of only two doubly landlocked countries in the world, meaning it is surrounded entirely by other landlocked countries. The other is Uzbekistan.
+Located way out in the Pacific Ocean between Hawaii and Australia, Tuvalu is made up of nine flat coral islands. Only about 11,000 people live there. The highest point of land in the entire country is just 15 feet above sea level.
 
-Liechtenstein dissolved its military in 1868 and has not fought a war since. Its economy is driven by financial services, manufacturing, and dental products. The country is the world's largest producer of false teeth, a fact that surprises almost everyone who learns it.
+Because it is so low and flat, Tuvalu is extremely vulnerable to rising sea levels caused by climate change. In a strange twist of luck, Tuvalu makes millions of dollars every year just from the internet. Its official internet domain is ".tv," which television and streaming companies happily pay to use!
 
-The ruling Prince of Liechtenstein is one of the wealthiest monarchs in Europe, and the royal family's art collection rivals those of major international museums.
+## Nauru
 
-## Tuvalu — 26 Square Kilometers
+Nauru is a single island in the Pacific Ocean and the third-smallest country by area. It only has about 10,000 people, and it doesn't even have an official capital city!
 
-Located in the central Pacific Ocean between Hawaii and Australia, Tuvalu is one of the smallest and most remote countries on Earth. It consists of nine coral atolls with a total population of about 11,000 people. The highest point in the entire country is just 4.6 meters above sea level.
+Nauru's history is a tough lesson. In the mid-1900s, it was one of the richest countries in the world because it mined and sold phosphate (bird droppings used for fertilizer). But by the 1990s, they had dug up almost all the phosphate. The mining ruined 80 percent of the island's land. Today, Nauru struggles to make money and relies heavily on outside help.
 
-This makes Tuvalu one of the nations most vulnerable to climate change. Rising sea levels threaten to make the country uninhabitable within this century. The government has been vocal on the international stage about climate policy, and Tuvalu has become a symbol of the human cost of global warming.
+## Palau
 
-In an unexpected economic twist, Tuvalu earns significant revenue from its internet country code: .tv. The domain is valuable to television and streaming companies worldwide, and licensing fees have provided the country with income that exceeds many of its traditional economic activities.
+Palau is a group of over 500 gorgeous islands in the Pacific, home to about 18,000 people. Its capital city is one of the smallest capitals in the world, with only 300 residents!
 
-## Nauru — 21 Square Kilometers
+Palau is famous for protecting the ocean. In 2015, it created a massive marine sanctuary, banning commercial fishing in 80 percent of its waters. It was also the very first country to ban sunscreens that contain chemicals harmful to coral reefs.
 
-The third-smallest country by area, Nauru is a single island in the central Pacific with a population of about 10,000. It has no official capital city. Government offices are located in the Yaren district, but Yaren has never been formally designated as a capital.
-
-Nauru's modern history is a cautionary tale about resource dependency. In the mid-20th century, the island was one of the richest nations per capita in the world thanks to phosphate mining. The phosphate deposits, formed over thousands of years from seabird droppings, were stripped almost entirely by the 1990s. The mining left about 80 percent of the island's surface barren and unusable. Today, Nauru struggles economically and relies heavily on Australian aid.
-
-## Palau — 459 Square Kilometers
-
-An archipelago of over 500 islands in the western Pacific, Palau has a population of about 18,000. Its capital, Ngerulmud, is one of the least populated national capitals in the world with roughly 300 residents.
-
-Palau is renowned for its marine biodiversity. The country established one of the world's largest marine sanctuaries in 2015, banning commercial fishing in 80 percent of its exclusive economic zone. The Rock Islands Southern Lagoon is a UNESCO World Heritage Site, home to over 385 species of coral and more than 500 species of fish.
-
-Despite its small size, Palau punches above its weight in environmental diplomacy. It was the first country to ban reef-toxic sunscreen and has been a leading voice in Pacific Island climate advocacy.
-
-## Why Microstates Matter
-
-It is tempting to dismiss microstates as geographic curiosities, but they play a disproportionate role in international affairs. Each has a vote in the United Nations General Assembly, the same as China or India. Many serve as testing grounds for innovative policies. Monaco pioneered urban land reclamation. Palau leads in marine conservation. Tuvalu puts a human face on climate change.
-
-Microstates also challenge the assumption that bigger is better. San Marino has outlasted empires. Liechtenstein has one of the highest standards of living on the planet. Vatican City influences the beliefs of over a billion people from an area you could walk across in 20 minutes.
-
-Size tells you remarkably little about a country's significance. That is one of geography's most important lessons.
-
-## Test Your Knowledge
-
-Think you can name all the world's microstates on a map? ExploreCapitals includes every sovereign nation in its game modes, from Russia down to Vatican City. Try Map Dash to test your ability to locate even the smallest countries, or Capital Clash to see if you can match these tiny nations with their capitals.
+## Key Takeaways
+- **Size isn't everything:** Microstates have their own governments, money, and international influence despite their tiny borders.
+- **Vatican City is the smallest:** At just 0.44 square kilometers, it fits entirely inside the city of Rome.
+- **Monaco builds its own land:** The second-smallest country is so crowded that it creates artificial land in the ocean.
+- **Liechtenstein is doubly landlocked:** It is completely surrounded by other countries that also have no oceans.
+- **Tuvalu makes money from the internet:** The country gets significant cash by selling the rights to its ".tv" internet domain.
 
 ---
 
