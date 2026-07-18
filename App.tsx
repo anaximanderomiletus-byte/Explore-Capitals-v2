@@ -1,49 +1,56 @@
-
-import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+  useParams,
+} from "react-router-dom";
 // framer-motion animations handled per-page via whileInView
-import Navigation from './components/Navigation';
-import Footer from './components/Footer';
-import CookieConsent from './components/CookieConsent';
-import { LayoutProvider, useLayout } from './context/LayoutContext';
-import { UserProvider } from './context/UserContext';
-import { LocaleProvider } from './context/LocaleContext';
-
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+import CookieConsent from "./components/CookieConsent";
+import { LayoutProvider, useLayout } from "./context/LayoutContext";
+import { UserProvider } from "./context/UserContext";
+import { LocaleProvider } from "./context/LocaleContext";
 
 // ── Home is eagerly loaded for instant first paint ─────────────────
-import Home from './pages/Home';
+import Home from "./pages/Home";
 
 // ── Navbar pages: lazy but prefetched on idle after Home mounts ────
-const Games = React.lazy(() => import('./pages/Games'));
-const GamesDashboard = React.lazy(() => import('./pages/GamesDashboard'));
-const DatabasePage = React.lazy(() => import('./pages/DatabasePage'));
-const MapPage = React.lazy(() => import('./pages/MapPage'));
-const About = React.lazy(() => import('./pages/About'));
-const Contact = React.lazy(() => import('./pages/Contact'));
-const Donate = React.lazy(() => import('./pages/Donate'));
-const CapitalQuiz = React.lazy(() => import('./pages/CapitalQuiz'));
-const MapDash = React.lazy(() => import('./pages/MapDash'));
-const FlagFrenzy = React.lazy(() => import('./pages/FlagFrenzy'));
-const KnowYourNeighbor = React.lazy(() => import('./pages/KnowYourNeighbor'));
-const PopulationPursuit = React.lazy(() => import('./pages/PopulationPursuit'));
-const GlobalDetective = React.lazy(() => import('./pages/GlobalDetective'));
-const CapitalConnection = React.lazy(() => import('./pages/CapitalConnection'));
-const RegionRoundup = React.lazy(() => import('./pages/RegionRoundup'));
-const LandmarkLegend = React.lazy(() => import('./pages/LandmarkLegend'));
-const TerritoryTitans = React.lazy(() => import('./pages/TerritoryTitans'));
-const AreaAce = React.lazy(() => import('./pages/AreaAce'));
-const CurrencyCraze = React.lazy(() => import('./pages/CurrencyCraze'));
-const LanguageLegend = React.lazy(() => import('./pages/LanguageLegend'));
-const TimeZoneTrekker = React.lazy(() => import('./pages/TimeZoneTrekker'));
-const DrivingDirection = React.lazy(() => import('./pages/DrivingDirection'));
-const CountryExploration = React.lazy(() => import('./pages/CountryExploration'));
-const CountryDetail = React.lazy(() => import('./pages/CountryDetail'));
-const Blog = React.lazy(() => import('./pages/Blog'));
-const BlogPost = React.lazy(() => import('./pages/BlogPost'));
-const Terms = React.lazy(() => import('./pages/Terms'));
-const Privacy = React.lazy(() => import('./pages/Privacy'));
-const NotFound = React.lazy(() => import('./pages/NotFound'));
-
+const Games = React.lazy(() => import("./pages/Games"));
+const GamesDashboard = React.lazy(() => import("./pages/GamesDashboard"));
+const DatabasePage = React.lazy(() => import("./pages/DatabasePage"));
+const MapPage = React.lazy(() => import("./pages/MapPage"));
+const About = React.lazy(() => import("./pages/About"));
+const Contact = React.lazy(() => import("./pages/Contact"));
+const Donate = React.lazy(() => import("./pages/Donate"));
+const CapitalQuiz = React.lazy(() => import("./pages/CapitalQuiz"));
+const MapDash = React.lazy(() => import("./pages/MapDash"));
+const FlagFrenzy = React.lazy(() => import("./pages/FlagFrenzy"));
+const KnowYourNeighbor = React.lazy(() => import("./pages/KnowYourNeighbor"));
+const PopulationPursuit = React.lazy(() => import("./pages/PopulationPursuit"));
+const GlobalDetective = React.lazy(() => import("./pages/GlobalDetective"));
+const CapitalConnection = React.lazy(() => import("./pages/CapitalConnection"));
+const RegionRoundup = React.lazy(() => import("./pages/RegionRoundup"));
+const LandmarkLegend = React.lazy(() => import("./pages/LandmarkLegend"));
+const TerritoryTitans = React.lazy(() => import("./pages/TerritoryTitans"));
+const AreaAce = React.lazy(() => import("./pages/AreaAce"));
+const CurrencyCraze = React.lazy(() => import("./pages/CurrencyCraze"));
+const LanguageLegend = React.lazy(() => import("./pages/LanguageLegend"));
+const TimeZoneTrekker = React.lazy(() => import("./pages/TimeZoneTrekker"));
+const DrivingDirection = React.lazy(() => import("./pages/DrivingDirection"));
+const CountryExploration = React.lazy(
+  () => import("./pages/CountryExploration"),
+);
+const CountryDetail = React.lazy(() => import("./pages/CountryDetail"));
+const Blog = React.lazy(() => import("./pages/Blog"));
+const BlogPost = React.lazy(() => import("./pages/BlogPost"));
+const Terms = React.lazy(() => import("./pages/Terms"));
+const Privacy = React.lazy(() => import("./pages/Privacy"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
 
 /**
  * PrefetchNavbarPages
@@ -55,14 +62,14 @@ const NotFound = React.lazy(() => import('./pages/NotFound'));
  */
 const prefetchNavbarPages = () => {
   const load = () => {
-    import('./pages/Games');
-    import('./pages/DatabasePage');
-    import('./pages/About');
-    import('./pages/Blog');
+    import("./pages/Games");
+    import("./pages/DatabasePage");
+    import("./pages/About");
+    import("./pages/Blog");
     // MapPage is heavy (Leaflet) — still prefetch but slightly delayed
-    setTimeout(() => import('./pages/MapPage'), 200);
+    setTimeout(() => import("./pages/MapPage"), 200);
   };
-  if ('requestIdleCallback' in window) {
+  if ("requestIdleCallback" in window) {
     (window as any).requestIdleCallback(load, { timeout: 3000 });
   } else {
     setTimeout(load, 1500);
@@ -82,8 +89,8 @@ const ScrollToTop: React.FC = () => {
   // Disable the browser's automatic scroll restoration so it doesn't
   // fight with our manual scrollTo on mobile (especially iOS Safari).
   useEffect(() => {
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
   }, []);
 
@@ -127,12 +134,12 @@ const NavigationCursor: React.FC = () => {
       return;
     }
 
-    document.documentElement.style.cursor = 'progress';
+    document.documentElement.style.cursor = "progress";
 
     // Auto-clear for instant navigations (cached chunks)
     // PageLoadFallback will cancel this if Suspense is active
     timeoutRef.current = setTimeout(() => {
-      document.documentElement.style.cursor = '';
+      document.documentElement.style.cursor = "";
     }, 100);
 
     return () => clearTimeout(timeoutRef.current);
@@ -143,9 +150,9 @@ const NavigationCursor: React.FC = () => {
   useEffect(() => {
     if (isPageLoading) {
       clearTimeout(timeoutRef.current);
-      document.documentElement.style.cursor = 'progress';
+      document.documentElement.style.cursor = "progress";
     } else {
-      document.documentElement.style.cursor = '';
+      document.documentElement.style.cursor = "";
     }
   }, [isPageLoading]);
 
@@ -172,7 +179,7 @@ const PageLoadFallback: React.FC = () => {
     setPageLoading(true);
 
     // If the HTML splash-screen loader is still present, don't show a second spinner
-    const htmlLoader = document.getElementById('initial-loader');
+    const htmlLoader = document.getElementById("initial-loader");
     if (htmlLoader) {
       return () => setPageLoading(false);
     }
@@ -203,7 +210,9 @@ const PageLoadFallback: React.FC = () => {
  * not before. Also dismisses the HTML splash-screen for ALL pages — no
  * individual page needs to call window.__dismissLoader.
  */
-const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PageTransition: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   useEffect(() => {
     // Dismiss the HTML splash-screen loader the moment any page is ready.
     // This runs after Suspense resolves, so all lazy-loaded pages are covered.
@@ -211,9 +220,7 @@ const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) =
   }, []);
 
   return (
-    <div className="flex-grow flex flex-col w-full page-enter">
-      {children}
-    </div>
+    <div className="flex-grow flex flex-col w-full page-enter">{children}</div>
   );
 };
 
@@ -235,9 +242,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex-grow flex flex-col w-full">
       <Suspense fallback={<PageLoadFallback />}>
-        <PageTransition key={pathname}>
-          {children}
-        </PageTransition>
+        <PageTransition key={pathname}>{children}</PageTransition>
       </Suspense>
     </div>
   );
@@ -250,20 +255,11 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
  * cuts when navigating between pages.
  */
 const PersistentBackground: React.FC = () => {
-  const { pathname } = useLocation();
-  const isMap = pathname === '/map';
-
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#0F172A]">
-      <div
-        className="absolute inset-0 transition-opacity duration-1000 ease-in-out will-change-[opacity]"
-        style={{ opacity: isMap ? 0 : 1, transform: 'translateZ(0)' }}
-      >
-        <div className="absolute top-[-15%] left-[-10%] w-[130%] h-[50%] rounded-[100%] bg-sky/[0.25] animate-aurora-1 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
-        <div className="absolute top-[25%] left-[-20%] w-[130%] h-[50%] rounded-[100%] bg-accent/[0.20] animate-aurora-2 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
-        <div className="absolute bottom-[-15%] right-[-10%] w-[130%] h-[50%] rounded-[100%] bg-secondary/[0.22] animate-aurora-3 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
-        <div className="absolute bottom-[10%] left-[10%] w-[100%] h-[40%] rounded-[100%] bg-error/[0.15] animate-aurora-1 origin-center" style={{ filter: 'blur(120px)', WebkitFilter: 'blur(120px)', transform: 'translateZ(0)' }} />
-      </div>
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-surface">
+      <div className="absolute inset-0 bg-hero-atlas opacity-60" />
+      <div className="absolute top-0 right-0 w-[45%] h-[35%] rounded-full bg-primary/[0.06] blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-[40%] h-[30%] rounded-full bg-land/[0.05] blur-3xl" />
     </div>
   );
 };
@@ -274,9 +270,9 @@ const AppContent: React.FC = () => {
 
   // Handle SPA redirect from 404.html fallback
   useEffect(() => {
-    const redirectPath = sessionStorage.getItem('spa_redirect');
+    const redirectPath = sessionStorage.getItem("spa_redirect");
     if (redirectPath) {
-      sessionStorage.removeItem('spa_redirect');
+      sessionStorage.removeItem("spa_redirect");
       navigate(redirectPath, { replace: true });
     }
   }, [navigate]);
@@ -297,43 +293,67 @@ const AppContent: React.FC = () => {
       <Navigation />
       <CookieConsent />
       <div className="flex-grow flex flex-col relative z-[1] w-full">
-            <PageWrapper>
-              <Routes location={location}>
-                <Route path="/" element={<Home />} />
-                <Route path="/games" element={<Games />} />
-                <Route path="/games/all" element={<GamesDashboard />} />
-                <Route path="/games/capital-quiz" element={<CapitalQuiz />} />
-                <Route path="/games/map-dash" element={<MapDash />} />
-                <Route path="/games/flag-frenzy" element={<FlagFrenzy />} />
-                <Route path="/games/know-your-neighbor" element={<KnowYourNeighbor />} />
-                <Route path="/games/population-pursuit" element={<PopulationPursuit />} />
-                <Route path="/games/global-detective" element={<GlobalDetective />} />
-                <Route path="/games/capital-connection" element={<CapitalConnection />} />
-                <Route path="/games/region-roundup" element={<RegionRoundup />} />
-                <Route path="/games/landmark-legend" element={<LandmarkLegend />} />
-                <Route path="/games/territory-titan" element={<LegacyTerritoryTitanRedirect />} />
-                <Route path="/games/territory-titans" element={<TerritoryTitans />} />
-                <Route path="/games/area-ace" element={<AreaAce />} />
-                <Route path="/games/currency-craze" element={<CurrencyCraze />} />
-                <Route path="/games/language-legend" element={<LanguageLegend />} />
-                <Route path="/games/time-zone-trekker" element={<TimeZoneTrekker />} />
-                <Route path="/games/driving-direction" element={<DrivingDirection />} />
-                <Route path="/database" element={<DatabasePage />} />
-                <Route path="/directory" element={<DirectoryRedirect />} />
-                <Route path="/country/:id" element={<CountryDetail />} />
-                <Route path="/map" element={<MapPage />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/donate" element={<Donate />} />
-                <Route path="/expedition/:id" element={<CountryExploration />} />
-                <Route path="/explore/:id" element={<ExploreRedirect />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </PageWrapper>
+        <PageWrapper>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/games/all" element={<GamesDashboard />} />
+            <Route path="/games/capital-quiz" element={<CapitalQuiz />} />
+            <Route path="/games/map-dash" element={<MapDash />} />
+            <Route path="/games/flag-frenzy" element={<FlagFrenzy />} />
+            <Route
+              path="/games/know-your-neighbor"
+              element={<KnowYourNeighbor />}
+            />
+            <Route
+              path="/games/population-pursuit"
+              element={<PopulationPursuit />}
+            />
+            <Route
+              path="/games/global-detective"
+              element={<GlobalDetective />}
+            />
+            <Route
+              path="/games/capital-connection"
+              element={<CapitalConnection />}
+            />
+            <Route path="/games/region-roundup" element={<RegionRoundup />} />
+            <Route path="/games/landmark-legend" element={<LandmarkLegend />} />
+            <Route
+              path="/games/territory-titan"
+              element={<LegacyTerritoryTitanRedirect />}
+            />
+            <Route
+              path="/games/territory-titans"
+              element={<TerritoryTitans />}
+            />
+            <Route path="/games/area-ace" element={<AreaAce />} />
+            <Route path="/games/currency-craze" element={<CurrencyCraze />} />
+            <Route path="/games/language-legend" element={<LanguageLegend />} />
+            <Route
+              path="/games/time-zone-trekker"
+              element={<TimeZoneTrekker />}
+            />
+            <Route
+              path="/games/driving-direction"
+              element={<DrivingDirection />}
+            />
+            <Route path="/database" element={<DatabasePage />} />
+            <Route path="/directory" element={<DirectoryRedirect />} />
+            <Route path="/country/:id" element={<CountryDetail />} />
+            <Route path="/map" element={<MapPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/expedition/:id" element={<CountryExploration />} />
+            <Route path="/explore/:id" element={<ExploreRedirect />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </PageWrapper>
       </div>
       <ConditionalFooter />
     </div>
@@ -357,7 +377,12 @@ const App: React.FC = () => {
 const ExploreRedirect: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  return <Navigate to={{ pathname: `/expedition/${id}`, search: location.search }} replace />;
+  return (
+    <Navigate
+      to={{ pathname: `/expedition/${id}`, search: location.search }}
+      replace
+    />
+  );
 };
 
 const DirectoryRedirect: React.FC = () => {
@@ -366,7 +391,12 @@ const DirectoryRedirect: React.FC = () => {
 
 const LegacyTerritoryTitanRedirect: React.FC = () => {
   const location = useLocation();
-  return <Navigate to={{ pathname: '/games/territory-titans', search: location.search }} replace />;
+  return (
+    <Navigate
+      to={{ pathname: "/games/territory-titans", search: location.search }}
+      replace
+    />
+  );
 };
 
 const ConditionalFooter: React.FC = () => {
@@ -374,7 +404,7 @@ const ConditionalFooter: React.FC = () => {
   const { isFooterHidden } = useLayout();
 
   // Always hide on the map page, but otherwise respect component-level overrides
-  const isMap = location.pathname === '/map';
+  const isMap = location.pathname === "/map";
 
   if (isMap || isFooterHidden) return null;
 

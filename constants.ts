@@ -288,7 +288,7 @@ export const GAMES: Game[] = [
   },
   {
     id: '4',
-    title: 'Know Your Neighbor',
+    title: 'Border Blitz',
     image: './png/GAMES/know-your-neighbor.png', 
     status: 'active', 
     description: 'Identify every bordering country.'
@@ -363,7 +363,7 @@ export const GAMES: Game[] = [
   },
   {
     id: '14',
-    title: 'Time Zone Trekker',
+    title: 'Time Trekker',
     image: './png/GAMES/time-zone-trekker.png',
     status: 'active',
     description: 'Match countries to their time zones.',

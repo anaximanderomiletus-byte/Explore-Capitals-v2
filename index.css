@@ -81,21 +81,21 @@
 
 /* Inter (Variable) Enhancements */
 @supports (font-variation-settings: normal) {
-  html { font-family: 'Inter', sans-serif; }
+  html { font-family: 'Karla', sans-serif; }
 }
 
 html {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background-color: #0F172A;
+  background-color: #E9EEF3;
+  color-scheme: dark;
   /* Unified height handling for iOS */
   height: 100%;
   height: 100dvh;
   height: -webkit-fill-available;
   margin: 0;
   padding: 0;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   /* Prevent horizontal overflow */
   max-width: 100%;
   width: 100%;
@@ -133,8 +133,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
-  font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
-  background-color: #0F172A;
+  font-family: 'Karla', 'Helvetica', 'Arial', sans-serif;
+  background-color: #E9EEF3;
+  color: #15202B;
   /* Unified min-height for iOS - use dvh with fallbacks */
   min-height: 100%;
   min-height: 100dvh;
@@ -151,7 +152,7 @@ body {
   padding-right: env(safe-area-inset-right, 0px);
 }
 
-/* iOS overscroll bounce: extend dark background into bounce region. */
+/* iOS overscroll bounce: extend paper background into bounce region. */
 body::before {
   content: '';
   position: fixed;
@@ -159,7 +160,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: -100vh;
-  background-color: #0F172A;
+  background-color: #E9EEF3;
   z-index: -1;
   pointer-events: none;
 }
@@ -199,7 +200,7 @@ body::before {
 
 /* Better Leaflet Popups */
 .leaflet-popup-content-wrapper {
-  border-radius: 2.5rem !important;
+  border-radius: 1rem !important;
   padding: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
@@ -208,7 +209,7 @@ body::before {
   border: none !important;
 }
 .leaflet-popup-content { margin: 0 !important; width: auto !important; }
-.leaflet-container { font-family: 'Inter', 'Helvetica', 'Arial', sans-serif !important; }
+.leaflet-container { font-family: 'Karla', 'Helvetica', 'Arial', sans-serif !important; }
 .leaflet-popup-tip-container {
   margin-top: -1px;
   z-index: 20;
@@ -219,16 +220,16 @@ body::before {
   z-index: 1500 !important;
 }
 
-/* Specific fix for Map Page popups to hide the join line */
+/* Specific fix for Map Page popups */
 .custom-popup .leaflet-popup-content-wrapper {
-  background: #0F172A !important;
+  background: #F5F8FB !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  border-radius: 1.5rem !important;
+  border-radius: 1rem !important;
   padding: 0 !important;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
-  border: none !important;
+  border: 1px solid #CCD6E0 !important;
   width: 320px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55) !important;
 }
 
 .custom-popup .leaflet-popup-content {
@@ -244,13 +245,13 @@ body::before {
 }
 
 .custom-popup .leaflet-popup-tip {
-  background: #0F172A !important;
+  background: #F5F8FB !important;
   box-shadow: none !important;
   border: none !important;
 }
 
 .leaflet-popup-tip {
-  background: #0F172A !important;
+  background: #F5F8FB !important;
   box-shadow: none !important;
   border: none !important;
 }
@@ -270,7 +271,7 @@ body::before {
 /* Visible scrollbar style for database tables */
 .scrollbar-visible {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: rgba(232, 230, 225, 0.25) transparent;
   -ms-overflow-style: auto;
 }
 
@@ -281,32 +282,26 @@ body::before {
 }
 
 .scrollbar-visible::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 4px;
   margin: 8px 0;
 }
 
 .scrollbar-visible::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(232, 230, 225, 0.2);
   border-radius: 4px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 
 .scrollbar-visible::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(232, 230, 225, 0.35);
   background-clip: content-box;
 }
 
 /* Ensure scroll containers still work with touch */
 [class*="overflow-"] {
   -webkit-overflow-scrolling: touch;
-}
-
-/* Custom Selection */
-::selection {
-  background-color: #00C2FF;
-  color: white;
 }
 
 /* ===== BACKDROP FILTER CROSS-BROWSER & PERFORMANCE ===== */
@@ -317,7 +312,6 @@ body::before {
 .backdrop-blur-2xl { -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
 .backdrop-blur-3xl { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
 
-/* Disable heavy blurs on low-power/mobile devices if they struggle */
 @media screen and (max-width: 768px) {
   .backdrop-blur-2xl, .backdrop-blur-3xl {
     -webkit-backdrop-filter: blur(12px);
@@ -325,11 +319,18 @@ body::before {
   }
 }
 
-/* ===== GAME LOBBY / FINISHED CARD — match bubble rounding ===== */
+/* Custom Selection */
+::selection {
+  background-color: #D6F0FA;
+  color: #00C2FF;
+}
+
+/* ===== GAME LOBBY / FINISHED CARD ===== */
 .game-lobby-card {
-  border-radius: 32px !important;
-  border-width: 2px !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 1rem !important;
+  border-width: 1px !important;
+  border-color: #CCD6E0 !important;
+  background: #F5F8FB !important;
 }
 
 /* ===== GAME BUBBLE — subtle lift + lock internal scroll ===== */
@@ -560,18 +561,18 @@ body::before {
   .bg-clip-text {
     background-clip: unset;
     -webkit-background-clip: unset;
-    color: #00C2FF;
+    color: #15202B;
   }
 }
 
 /* ===== SELECTION COLOR ===== */
 ::selection {
-  background-color: #77B6EA;
-  color: white;
+  background-color: #D6F0FA;
+  color: #00C2FF;
 }
 ::-moz-selection {
-  background-color: #77B6EA;
-  color: white;
+  background-color: #D6F0FA;
+  color: #00C2FF;
 }
 
 /* ===== TOUCH DEVICE & SAFARI FIXES ===== */
@@ -673,43 +674,43 @@ button, a, [role="button"], input, select, textarea, .cursor-pointer {
 }
 
 .marker-pin.territory { background: #22c55e; }
-.marker-pin.defacto { background: #EAB308; }
+.marker-pin.defacto { background: #D97706; }
 
 .custom-map-marker:hover .marker-pin {
   transform: scale(1.4);
-  background: #5ba4e5;
-  box-shadow: 0 4px 12px rgba(119, 182, 234, 0.5);
+  background: #00A8E0;
+  box-shadow: 0 4px 12px rgba(0, 194, 255, 0.45);
 }
 
 .custom-map-marker:hover .marker-pin.territory {
   background: #16a34a;
-  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
 }
 
 .custom-map-marker:hover .marker-pin.defacto {
-  background: #d97706;
-  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.5);
+  background: #b45309;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
 }
 
 .marker-active .marker-pin {
   transform: scale(1.4);
-  background: #5ba4e5;
+  background: #00A8E0;
   z-index: 1000;
 }
 
 .marker-active .marker-pin.territory { background: #16a34a; }
-.marker-active .marker-pin.defacto { background: #EAB308; }
+.marker-active .marker-pin.defacto { background: #D97706; }
 
-@-webkit-keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
-@keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(119, 182, 234, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(119, 182, 234, 0); } }
+@-webkit-keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(0, 194, 255, 0.5); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(0, 194, 255, 0); } }
+@keyframes marker-ripple { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(0, 194, 255, 0.5); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(0, 194, 255, 0); } }
 @-webkit-keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
 @keyframes marker-ripple-green { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); } }
-@-webkit-keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
-@keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); } }
+@-webkit-keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(217, 119, 6, 0); } }
+@keyframes marker-ripple-yellow { 0% { -webkit-transform: scale(1); transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.6); } 100% { -webkit-transform: scale(3); transform: scale(3); opacity: 0; box-shadow: 0 0 0 15px rgba(217, 119, 6, 0); } }
 
 .marker-active::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #00C2FF; -webkit-animation: marker-ripple 1.5s infinite; animation: marker-ripple 1.5s infinite; pointer-events: none; }
 .territory-marker.marker-active::after { background: #22c55e; -webkit-animation: marker-ripple-green 1.5s infinite; animation: marker-ripple-green 1.5s infinite; }
-.defacto-marker.marker-active::after { background: #EAB308; -webkit-animation: marker-ripple-yellow 1.5s infinite; animation: marker-ripple-yellow 1.5s infinite; }
+.defacto-marker.marker-active::after { background: #D97706; -webkit-animation: marker-ripple-yellow 1.5s infinite; animation: marker-ripple-yellow 1.5s infinite; }
 
 /* ===== ADDITIONAL SAFARI/iOS FIXES ===== */
 

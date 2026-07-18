@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0F172A" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#E9EEF3" />
+    <meta name="color-scheme" content="light" />
     <!-- PWA install prompt removed — site is a web app only, not installable -->
 
     <!-- Content Security Policy -->
@@ -74,7 +74,7 @@
             {"@type": "ListItem", "position": 1, "url": "https://explorecapitals.com/games/capital-quiz", "name": "Capital Quiz"},
             {"@type": "ListItem", "position": 2, "url": "https://explorecapitals.com/games/map-dash", "name": "Map Dash"},
             {"@type": "ListItem", "position": 3, "url": "https://explorecapitals.com/games/flag-frenzy", "name": "Flag Frenzy"},
-            {"@type": "ListItem", "position": 4, "url": "https://explorecapitals.com/games/know-your-neighbor", "name": "Know Your Neighbor"},
+            {"@type": "ListItem", "position": 4, "url": "https://explorecapitals.com/games/know-your-neighbor", "name": "Border Blitz"},
             {"@type": "ListItem", "position": 5, "url": "https://explorecapitals.com/games/population-pursuit", "name": "Population Pursuit"},
             {"@type": "ListItem", "position": 6, "url": "https://explorecapitals.com/games/global-detective", "name": "Global Detective"},
             {"@type": "ListItem", "position": 7, "url": "https://explorecapitals.com/games/capital-connection", "name": "Capital Connection"},
@@ -84,7 +84,7 @@
             {"@type": "ListItem", "position": 11, "url": "https://explorecapitals.com/games/area-ace", "name": "Area Ace"},
             {"@type": "ListItem", "position": 12, "url": "https://explorecapitals.com/games/currency-craze", "name": "Currency Craze"},
             {"@type": "ListItem", "position": 13, "url": "https://explorecapitals.com/games/language-legend", "name": "Language Legend"},
-            {"@type": "ListItem", "position": 14, "url": "https://explorecapitals.com/games/time-zone-trekker", "name": "Time Zone Trekker"},
+            {"@type": "ListItem", "position": 14, "url": "https://explorecapitals.com/games/time-zone-trekker", "name": "Time Trekker"},
             {"@type": "ListItem", "position": 15, "url": "https://explorecapitals.com/games/driving-direction", "name": "Driving Direction"}
           ]
         }
@@ -102,8 +102,7 @@
     <!-- Google Fonts: Preconnect for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load fonts directly -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
     <!-- Leaflet CSS — deferred so it doesn't block first paint on non-map pages -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" media="print" onload="this.media='all'" />
@@ -119,18 +118,17 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #0F172A;
+        background-color: #E9EEF3;
         z-index: 9999;
         transition: opacity 0.5s ease-out, visibility 0.5s;
       }
       .loader-circle {
-        width: 48px;
-        height: 48px;
-        border: 4px solid rgba(0, 194, 255, 0.1);
-        border-top: 4px solid #00C2FF;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #D6F0FA;
+        border-top: 3px solid #00C2FF;
         border-radius: 50%;
-        animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        filter: drop-shadow(0 0 10px rgba(0, 194, 255, 0.3));
+        animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       }
       @keyframes spin {
         from { transform: rotate(0deg); }
@@ -190,7 +188,7 @@
     </script>
 
 </head>
-  <body class="bg-surface-dark text-text antialiased selection:bg-primary selection:text-white">
+  <body class="bg-surface text-text antialiased selection:bg-accent-soft selection:text-primary">
     <!-- Browser detection and viewport height fix - runs immediately before React -->
     <script>
       (function() {
@@ -234,22 +232,22 @@
       <div class="loader-circle"></div>
     </div>
 
-    <div id="root" class="bg-[#0F172A] min-h-screen flex flex-col w-full">
+    <div id="root" class="bg-surface min-h-screen flex flex-col w-full">
       <!-- Fallback content for search engine crawlers and noscript -->
       <noscript>
-        <div style="background:#0F172A;color:#fff;font-family:Inter,sans-serif;padding:40px 20px;max-width:900px;margin:0 auto;">
-          <h1 style="font-size:2rem;margin-bottom:16px;">ExploreCapitals — Learn World Geography Through Interactive Games</h1>
+        <div style="background:#E9EEF3;color:#15202B;font-family:'Karla',sans-serif;padding:40px 20px;max-width:900px;margin:0 auto;">
+          <h1 style="font-size:2rem;margin-bottom:16px;font-family:Instrument Serif,sans-serif;">ExploreCapitals — Learn World Geography Through Interactive Games</h1>
           <p style="font-size:1.1rem;line-height:1.7;margin-bottom:24px;">
             Master world capitals, flags, and maps through fun, free geography games. 
             ExploreCapitals is an educational platform featuring interactive quizzes, 
             an explorable world atlas, and a comprehensive country database covering 195+ nations.
           </p>
-          <h2 style="font-size:1.4rem;margin-bottom:12px;">Geography Games</h2>
+          <h2 style="font-size:1.4rem;margin-bottom:12px;font-family:Instrument Serif,sans-serif;">Geography Games</h2>
           <ul style="line-height:2;margin-bottom:24px;">
             <li><a href="/games/capital-quiz" style="color:#00C2FF;">Capital Quiz</a> — Test your knowledge of world capitals</li>
             <li><a href="/games/flag-frenzy" style="color:#00C2FF;">Flag Frenzy</a> — Identify country flags from around the world</li>
             <li><a href="/games/map-dash" style="color:#00C2FF;">Map Dash</a> — Race to locate countries on an interactive map</li>
-            <li><a href="/games/know-your-neighbor" style="color:#00C2FF;">Know Your Neighbor</a> — Learn about bordering countries</li>
+            <li><a href="/games/know-your-neighbor" style="color:#00C2FF;">Border Blitz</a> — Learn about bordering countries</li>
             <li><a href="/games/population-pursuit" style="color:#00C2FF;">Population Pursuit</a> — Compare populations worldwide</li>
             <li><a href="/games/global-detective" style="color:#00C2FF;">Global Detective</a> — Solve geography clues</li>
             <li><a href="/games/capital-connection" style="color:#00C2FF;">Capital Connection</a> — Match capitals to countries</li>
@@ -259,10 +257,10 @@
             <li><a href="/games/area-ace" style="color:#00C2FF;">Area Ace</a> — Compare country sizes</li>
             <li><a href="/games/currency-craze" style="color:#00C2FF;">Currency Craze</a> — Match currencies to countries</li>
             <li><a href="/games/language-legend" style="color:#00C2FF;">Language Legend</a> — Identify official languages</li>
-            <li><a href="/games/time-zone-trekker" style="color:#00C2FF;">Time Zone Trekker</a> — Navigate world time zones</li>
+            <li><a href="/games/time-zone-trekker" style="color:#00C2FF;">Time Trekker</a> — Navigate world time zones</li>
             <li><a href="/games/driving-direction" style="color:#00C2FF;">Driving Direction</a> — Guess which side countries drive on</li>
           </ul>
-          <h2 style="font-size:1.4rem;margin-bottom:12px;">Explore</h2>
+          <h2 style="font-size:1.4rem;margin-bottom:12px;font-family:Instrument Serif,sans-serif;">Explore</h2>
           <ul style="line-height:2;margin-bottom:24px;">
             <li><a href="/database" style="color:#00C2FF;">Country Database</a> — Browse facts about 195+ countries</li>
             <li><a href="/map" style="color:#00C2FF;">Interactive World Map</a> — Explore the world visually</li>
@@ -363,10 +361,10 @@
             <a href="/country/united-states" style="color:#00C2FF;display:block">United States</a>
             <a href="/country/vietnam" style="color:#00C2FF;display:block">Vietnam</a>
           </div>
-          <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:24px;">
+          <p style="font-size:0.85rem;color:#737373;margin-bottom:24px;">
             <a href="/database" style="color:#00C2FF;">View all 195+ countries, 42 territories, and more →</a>
           </p>
-          <nav style="margin-top:32px;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
+          <nav style="margin-top:32px;border-top:1px solid #E5E5E5;padding-top:16px;">
             <a href="/" style="color:#00C2FF;margin-right:16px;">Home</a>
             <a href="/games" style="color:#00C2FF;margin-right:16px;">Games</a>
             <a href="/database" style="color:#00C2FF;margin-right:16px;">Database</a>

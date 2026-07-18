@@ -1,16 +1,21 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, Star, Sparkles } from 'lucide-react';
+import React, { useEffect, useState, useMemo } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, XCircle, Star, Sparkles } from "lucide-react";
 
 interface FeedbackOverlayProps {
-  type: 'correct' | 'incorrect' | null;
+  type: "correct" | "incorrect" | null;
   triggerKey?: number;
   subText?: string;
   incorrectFlagCode?: string;
 }
 
-export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerKey, subText, incorrectFlagCode }) => {
+export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
+  type,
+  triggerKey,
+  subText,
+  incorrectFlagCode,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -23,7 +28,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
     }
   }, [type, triggerKey]);
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
   const particleCount = isMobile ? 6 : 12;
   const spread = isMobile ? 160 : 350;
 
@@ -47,14 +52,14 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
           className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none overflow-hidden px-4 select-none"
-          style={{ 
-            transform: 'translateZ(0)', 
-            willChange: 'opacity',
-            position: 'fixed',
+          style={{
+            transform: "translateZ(0)",
+            willChange: "opacity",
+            position: "fixed",
             top: 0,
             left: 0,
-            width: '100vw',
-            height: '100vh'
+            width: "100vw",
+            height: "100vh",
           }}
         >
           {/* Full screen background flash */}
@@ -62,11 +67,11 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.2, 0] }}
             transition={{ duration: 0.4 }}
-            className={`absolute inset-0 ${type === 'correct' ? 'bg-accent' : 'bg-error'}`}
-            style={{ transform: 'translateZ(0)' }}
+            className={`absolute inset-0 ${type === "correct" ? "bg-primary" : "bg-error"}`}
+            style={{ transform: "translateZ(0)" }}
           />
 
-          {type === 'correct' ? (
+          {type === "correct" ? (
             <div className="relative flex flex-col items-center">
               {particleData.map((p, i) => (
                 <motion.div
@@ -79,9 +84,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                     scale: p.scale,
                     rotate: p.rotate,
                   }}
-                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                   className="absolute"
-                  style={{ transform: 'translateZ(0)' }}
+                  style={{ transform: "translateZ(0)" }}
                 >
                   {p.isStar ? (
                     <Star className="text-warning fill-warning w-4 h-4 sm:w-6 sm:h-6" />
@@ -98,11 +103,11 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   opacity: 1,
                   rotate: 0,
                 }}
-                transition={{ duration: 0.35, ease: 'easeOut' }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
                 className="relative flex flex-col items-center"
-                style={{ transform: 'translateZ(0)' }}
+                style={{ transform: "translateZ(0)" }}
               >
-                <div className="bg-accent p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(52,199,89,0.5)]">
+                <div className="bg-primary p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
                   <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 
@@ -110,9 +115,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="text-center mt-4 sm:mt-6 bg-accent px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 border-white shadow-xl"
+                  className="text-center mt-4 sm:mt-6 bg-primary px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-border shadow-premium"
                 >
-                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter pr-1">
+                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight pr-1">
                     Excellent!
                   </h2>
                 </motion.div>
@@ -129,9 +134,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                 }}
                 transition={{ duration: 0.4 }}
                 className="relative flex flex-col items-center w-full"
-                style={{ transform: 'translateZ(0)' }}
+                style={{ transform: "translateZ(0)" }}
               >
-                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-full border-[3px] sm:border-4 border-white shadow-[0_20px_50px_rgba(255,59,48,0.5)]">
+                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
                   <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 
@@ -139,9 +144,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="text-center mt-4 sm:mt-6 bg-error px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 border-white shadow-xl"
+                  className="text-center mt-4 sm:mt-6 bg-error px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-border shadow-premium"
                 >
-                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter pr-1">
+                  <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight pr-1">
                     Not Quite
                   </h2>
                 </motion.div>
@@ -150,12 +155,17 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15, type: 'spring', stiffness: 260, damping: 20 }}
+                    transition={{
+                      delay: 0.15,
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20,
+                    }}
                     className="mt-2 sm:mt-3 flex flex-col items-center w-full max-w-[90vw] sm:max-w-none"
                   >
-                    <div className="bg-[#1A1A1A] rounded-2xl sm:rounded-[2.5rem] border-2 border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] sm:shadow-[0_30px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col items-center w-full">
-                      <div className="w-full bg-white/10 py-1.5 sm:py-2 border-b border-white/10 text-center">
-                        <span className="text-white font-black uppercase tracking-[0.25em] sm:tracking-[0.4em] text-[9px] sm:text-[10px] drop-shadow-sm">
+                    <div className="bg-elevated rounded-2xl border border-border shadow-premium-hover overflow-hidden flex flex-col items-center w-full">
+                      <div className="w-full bg-surface py-1.5 sm:py-2 border-b border-border text-center">
+                        <span className="text-muted font-semibold uppercase tracking-[0.2em] text-[9px] sm:text-[10px]">
                           You Selected
                         </span>
                       </div>
@@ -170,7 +180,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
                             />
                           </div>
                         )}
-                        <span className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter italic drop-shadow-lg pr-1">
+                        <span className="text-text text-xl sm:text-2xl md:text-3xl lg:text-4xl font-display font-bold tracking-tight pr-1">
                           {subText}
                         </span>
                       </div>
@@ -185,7 +195,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ type, triggerK
     </AnimatePresence>
   );
 
-  return typeof document !== 'undefined' 
-    ? createPortal(content, document.body) 
+  return typeof document !== "undefined"
+    ? createPortal(content, document.body)
     : null;
 };

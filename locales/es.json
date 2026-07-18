@@ -62,7 +62,7 @@
   "home.whyGeo.footer": "ExploreCapitals cubre 195 naciones soberanas y 42 territorios con juegos interactivos, visitas guiadas por países, un atlas explorable y una base de datos con buscador. Ya seas estudiante preparándote para exámenes, aficionado a las trivias o viajero curioso, cada sesión fortalece tu mapa mental del mundo.",
 
   "home.exploreSection.title": "Explora",
-  "home.exploreSection.subtitle": "Domina el atlas en nuestra base de datos interactiva.",
+  "home.exploreSection.subtitle": "Mapa, base de datos e historias — el mismo mundo, distintas puertas.",
   "home.exploreSection.database": "Base de datos",
   "home.exploreSection.databaseDesc": "Busca y ordena más de 195 países por capital, población, región, idioma y moneda.",
   "home.exploreSection.browseNow": "Explorar ahora",
@@ -226,7 +226,7 @@
   "game.mapDash.description": "Encuentra el país antes de que se acabe el tiempo.",
   "game.flagFrenzy.title": "Flag Frenzy",
   "game.flagFrenzy.description": "Asocia las banderas con sus naciones.",
-  "game.knowYourNeighbor.title": "Know Your Neighbor",
+  "game.knowYourNeighbor.title": "Border Blitz",
   "game.knowYourNeighbor.description": "Identifica todos los países fronterizos.",
   "game.populationPursuit.title": "Population Pursuit",
   "game.populationPursuit.description": "¿Cuál país tiene más habitantes?",
@@ -246,7 +246,7 @@
   "game.currencyCraze.description": "Empareja países con sus monedas oficiales.",
   "game.languageLegend.title": "Language Legend",
   "game.languageLegend.description": "Identifica países por sus idiomas oficiales.",
-  "game.timeZoneTrekker.title": "Time Zone Trekker",
+  "game.timeZoneTrekker.title": "Time Trekker",
   "game.timeZoneTrekker.description": "Empareja países con sus husos horarios.",
   "game.drivingDirection.title": "Driving Direction",
   "game.drivingDirection.description": "¿Izquierda o derecha? Descubre por qué lado conducen en cada país."

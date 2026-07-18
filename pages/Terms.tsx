@@ -46,7 +46,7 @@ const Terms: React.FC = () => {
       body: (
         <>
           Personal information is not sold. See the{' '}
-          <Link to="/privacy" className="text-sky-light hover:text-white underline underline-offset-4 transition-colors">
+          <Link to="/privacy" className="text-primary hover:text-primary-hover underline underline-offset-4 transition-colors">
             Privacy Policy
           </Link>{' '}for full details.
         </>
@@ -69,7 +69,7 @@ const Terms: React.FC = () => {
       body: (
         <>
           Use the{' '}
-          <Link to="/contact" className="text-sky-light hover:text-white underline underline-offset-4 transition-colors">
+          <Link to="/contact" className="text-primary hover:text-primary-hover underline underline-offset-4 transition-colors">
             contact page
           </Link>.
         </>
@@ -92,30 +92,25 @@ const Terms: React.FC = () => {
 
         {/* Hero */}
         <RevealSection className="mb-10 md:mb-12">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-sky/20 border border-white/30 rounded-full text-[9px] font-black uppercase tracking-[0.3em] text-white mb-6">
-            <Scale size={12} className="text-sky-light" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-accent-soft border border-border rounded-xl text-[9px] font-semibold uppercase tracking-wide text-primary mb-6">
+            <Scale size={12} className="text-primary" />
             <span>Legal</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tighter uppercase leading-tight mb-5">
-            Terms of{' '}
-            <span
-              className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent] overflow-visible"
-              style={{ display: 'inline-block', paddingBottom: '0.15em', paddingRight: '0.1em' }}
-            >service</span>.
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-text tracking-tight leading-tight mb-5">
+            Terms of service.
           </h1>
-          <p className="text-base sm:text-lg text-white/60 leading-relaxed font-medium max-w-2xl mb-4">
+          <p className="text-base sm:text-lg text-muted leading-relaxed font-medium max-w-2xl mb-4">
             The rules for using ExploreCapitals.
           </p>
-          <p className="text-[11px] font-black text-white/35 uppercase tracking-[0.3em]">
+          <p className="text-[11px] font-semibold text-muted uppercase tracking-wide">
             Last updated · January 25, 2026
           </p>
         </RevealSection>
 
         {/* Intro card */}
         <RevealSection className="mb-8">
-          <div className="relative bg-gradient-to-br from-sky/[0.08] via-white/[0.03] to-accent/[0.05] border border-white/10 rounded-2xl p-6 sm:p-7 overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-52 h-52 bg-sky/10 rounded-full blur-3xl pointer-events-none" />
-            <p className="relative z-10 text-base text-white/70 leading-relaxed font-medium">
+          <div className="relative bg-elevated border border-border rounded-2xl p-6 sm:p-7 shadow-premium overflow-hidden">
+            <p className="relative z-10 text-base text-muted leading-relaxed font-medium">
               By accessing or using ExploreCapitals, you agree to the terms below.
             </p>
           </div>
@@ -127,17 +122,17 @@ const Terms: React.FC = () => {
             {sections.map((s, i) => (
               <li
                 key={s.title}
-                className="group relative bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.06] hover:border-white/10 rounded-2xl p-5 sm:p-6 transition-all"
+                className="group relative bg-elevated hover:bg-accent-soft/30 border border-border hover:border-primary/20 rounded-2xl p-5 sm:p-6 shadow-premium transition-all"
               >
                 <div className="flex items-start gap-4">
-                  <div className="shrink-0 w-9 h-9 rounded-lg bg-sky/10 border border-white/10 flex items-center justify-center text-[11px] font-black text-sky-light tabular-nums">
+                  <div className="shrink-0 w-9 h-9 rounded-lg bg-accent-soft border border-border flex items-center justify-center text-[11px] font-semibold text-primary tabular-nums">
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div className="min-w-0 flex-1 pt-0.5">
-                    <h2 className="text-sm sm:text-base font-black text-white uppercase tracking-tight mb-2">
+                    <h2 className="text-sm sm:text-base font-black text-text uppercase tracking-tight mb-2">
                       {s.title}
                     </h2>
-                    <p className="text-[14px] sm:text-[15px] text-white/60 leading-relaxed font-medium">
+                    <p className="text-[14px] sm:text-[15px] text-muted leading-relaxed font-medium">
                       {s.body}
                     </p>
                   </div>
@@ -151,9 +146,9 @@ const Terms: React.FC = () => {
         <RevealSection className="mt-10 md:mt-12">
           <Link
             to="/privacy"
-            className="group inline-flex items-center gap-2.5 px-5 py-3 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 rounded-xl text-xs font-black text-white/70 hover:text-white uppercase tracking-[0.2em] transition-all"
+            className="group inline-flex items-center gap-2.5 px-5 py-3 bg-elevated hover:bg-accent-soft border border-border hover:border-primary/25 rounded-xl text-xs font-semibold text-text uppercase tracking-wide shadow-premium transition-all"
           >
-            <Lock size={14} className="text-sky-light" />
+            <Lock size={14} className="text-primary" />
             Read the Privacy Policy
           </Link>
         </RevealSection>

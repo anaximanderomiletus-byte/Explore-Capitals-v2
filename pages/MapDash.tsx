@@ -1,32 +1,56 @@
-
-import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Timer, Trophy, ArrowLeft, Map as MapIcon, Check, X, Plus, Minus, Play } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { COUNTRIES } from '../constants';
-import Button from '../components/Button';
-import { Country } from '../types';
-import SEO from '../components/SEO';
-import { useUser } from '../context/UserContext';
-import { useLayout } from '../context/LayoutContext';
-import { getCountryCode, getFlagUrl } from '../utils/flags';
-import TimeSelector from '../components/TimeSelector';
-import GameSideAds from '../components/GameSideAds';
-import { getGameStructuredData } from '../utils/gameStructuredData';
-import { useTranslation } from '../context/LocaleContext';
-import GameNavigationButtons from '../components/GameNavigationButtons';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Timer,
+  Trophy,
+  ArrowLeft,
+  Map as MapIcon,
+  Check,
+  X,
+  Plus,
+  Minus,
+  Play,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { COUNTRIES } from "../constants";
+import Button from "../components/Button";
+import { Country } from "../types";
+import SEO from "../components/SEO";
+import { useUser } from "../context/UserContext";
+import { useLayout } from "../context/LayoutContext";
+import { getCountryCode, getFlagUrl } from "../utils/flags";
+import TimeSelector from "../components/TimeSelector";
+import GameSideAds from "../components/GameSideAds";
+import { getGameStructuredData } from "../utils/gameStructuredData";
+import { useTranslation } from "../context/LocaleContext";
+import GameNavigationButtons from "../components/GameNavigationButtons";
 
 export default function MapDash() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<"start" | "playing" | "finished">(
+    "start",
+  );
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
   const [targetCountry, setTargetCountry] = useState<Country | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [lastResult, setLastResult] = useState<'correct' | 'incorrect' | null>(null);
-  const [wrongSelectionData, setWrongSelectionData] = useState<{ name: string, flagCode: string } | null>(null);
-  const [clickPoint, setClickPoint] = useState<{ x: number, y: number } | null>(null);
+  const [lastResult, setLastResult] = useState<"correct" | "incorrect" | null>(
+    null,
+  );
+  const [wrongSelectionData, setWrongSelectionData] = useState<{
+    name: string;
+    flagCode: string;
+  } | null>(null);
+  const [clickPoint, setClickPoint] = useState<{ x: number; y: number } | null>(
+    null,
+  );
   const [correctCountries, setCorrectCountries] = useState<string[]>([]);
   const [incorrectCountries, setIncorrectCountries] = useState<string[]>([]);
   const [hasReported, setHasReported] = useState(false);
@@ -38,20 +62,20 @@ export default function MapDash() {
   useEffect(() => {
     setPageLoading(false);
     setHideFooter(true); // Hide footer on Map Dash game
-    
+
     // Lock body scroll to prevent scrolling off the map
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
-    
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+
     return () => {
       setHideFooter(false); // Show footer again when leaving
       // Restore body scroll
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
     };
   }, [setPageLoading, setHideFooter]);
 
@@ -67,10 +91,18 @@ export default function MapDash() {
   const isTransitioningRef = useRef(isTransitioning);
   const lastResultRef = useRef(lastResult);
 
-  useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
-  useEffect(() => { targetCountryRef.current = targetCountry; }, [targetCountry]);
-  useEffect(() => { isTransitioningRef.current = isTransitioning; }, [isTransitioning]);
-  useEffect(() => { lastResultRef.current = lastResult; }, [lastResult]);
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
+  useEffect(() => {
+    targetCountryRef.current = targetCountry;
+  }, [targetCountry]);
+  useEffect(() => {
+    isTransitioningRef.current = isTransitioning;
+  }, [isTransitioning]);
+  useEffect(() => {
+    lastResultRef.current = lastResult;
+  }, [lastResult]);
 
   // Clamp feedback toast so it never overflows the screen edges
   useLayoutEffect(() => {
@@ -98,18 +130,18 @@ export default function MapDash() {
 
   useEffect(() => {
     let timer: any;
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            setGameState('finished');
+            setGameState("finished");
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
     } else if (timeLeft === 0) {
-      setGameState('finished');
+      setGameState("finished");
     }
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
@@ -117,14 +149,14 @@ export default function MapDash() {
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
-    return `${m}:${String(s).padStart(2, '0')}`;
+    return `${m}:${String(s).padStart(2, "0")}`;
   };
 
   const resetAllMarkerStyles = useCallback(() => {
     markerInstancesRef.current.forEach((marker) => {
       const iconElement = marker.getElement();
       if (iconElement) {
-        iconElement.classList.remove('marker-correct', 'marker-incorrect');
+        iconElement.classList.remove("marker-correct", "marker-incorrect");
       }
     });
   }, []);
@@ -150,7 +182,7 @@ export default function MapDash() {
     setLastResult(null);
     setFeedbackKey(0);
     generateTarget();
-    setGameState('playing');
+    setGameState("playing");
     if (mapInstanceRef.current) {
       mapInstanceRef.current.invalidateSize();
       mapInstanceRef.current.flyTo([20, 0], 2.5, { duration: 1.5 });
@@ -171,7 +203,7 @@ export default function MapDash() {
       if (!L && mapRef.current && !mapInstanceRef.current) {
         // Retry if L is missing but we're ready to init
         const retryTimer = setTimeout(() => {
-          setScore(s => s); // Trigger a re-render
+          setScore((s) => s); // Trigger a re-render
         }, 500);
         return () => clearTimeout(retryTimer);
       }
@@ -187,7 +219,10 @@ export default function MapDash() {
       maxZoom: 18,
       worldCopyJump: true,
       // Allow infinite horizontal scrolling but lock vertical bounds
-      maxBounds: [[-85, -5000], [85, 5000]],
+      maxBounds: [
+        [-85, -5000],
+        [85, 5000],
+      ],
       maxBoundsViscosity: 1.0,
       preferCanvas: false,
       // Tighter tap tolerance so panning doesn't accidentally trigger marker clicks
@@ -198,61 +233,69 @@ export default function MapDash() {
       markerZoomAnimation: false,
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20 }).addTo(map);
+    L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png",
+      { subdomains: "abcd", maxZoom: 20 },
+    ).addTo(map);
 
     markersLayerRef.current = L.layerGroup().addTo(map);
     mapInstanceRef.current = map;
 
-    COUNTRIES.forEach(country => {
+    COUNTRIES.forEach((country) => {
       const icon = L.divIcon({
-        className: 'custom-map-marker mapdash-marker',
+        className: "custom-map-marker mapdash-marker",
         html: `<div class="marker-pin"></div>`,
         iconSize: [14, 14],
-        iconAnchor: [7, 7]
+        iconAnchor: [7, 7],
       });
 
       const marker = L.marker([country.lat, country.lng], { icon: icon });
       markerInstancesRef.current.set(country.id, marker);
-      
+
       // Use Leaflet's built-in click event only - it properly distinguishes
       // taps from pan/scroll gestures on mobile, preventing accidental selections
-      marker.on('click', (e: any) => {
+      marker.on("click", (e: any) => {
         if (e && e.originalEvent) {
           e.originalEvent.stopPropagation();
         }
-        if (e && typeof L.DomEvent?.stopPropagation === 'function') {
+        if (e && typeof L.DomEvent?.stopPropagation === "function") {
           L.DomEvent.stopPropagation(e);
         }
-        
+
         const currentTarget = targetCountryRef.current;
-        if (gameStateRef.current !== 'playing' || !currentTarget || isTransitioningRef.current) return;
+        if (
+          gameStateRef.current !== "playing" ||
+          !currentTarget ||
+          isTransitioningRef.current
+        )
+          return;
 
         // Reset previous feedback state immediately on click
         if (feedbackTimeoutRef.current) {
           clearTimeout(feedbackTimeoutRef.current);
           feedbackTimeoutRef.current = null;
         }
-        
+
         // Reset marker styles
         resetAllMarkerStyles();
-        
+
         const el = marker.getElement();
         const isCorrect = country.id === currentTarget.id;
-        
+
         // Use a unique ID for this specific click to force a remount of the feedback
         const clickId = performance.now();
         setFeedbackKey(clickId);
-        
+
         const containerPt = e.containerPoint || { x: 0, y: 0 };
         setClickPoint({ x: containerPt.x, y: containerPt.y });
 
         if (isCorrect) {
-          setLastResult('correct');
+          setLastResult("correct");
           setWrongSelectionData(null);
-          setScore(s => s + 50);
-          setCorrectCountries(prev => [...prev, country.id]);
+          setScore((s) => s + 50);
+          setCorrectCountries((prev) => [...prev, country.id]);
           setIsTransitioning(true);
-          if (el) el.classList.add('marker-correct');
+          if (el) el.classList.add("marker-correct");
 
           feedbackTimeoutRef.current = setTimeout(() => {
             generateTarget();
@@ -260,17 +303,17 @@ export default function MapDash() {
             feedbackTimeoutRef.current = null;
           }, 700);
         } else {
-          setLastResult('incorrect');
+          setLastResult("incorrect");
           setWrongSelectionData({
             name: country.name,
             flagCode: getCountryCode(country.flag),
           });
-          setScore(s => Math.max(0, s - 10));
-          setIncorrectCountries(prev => [...prev, country.id]);
-          if (el) el.classList.add('marker-incorrect');
-          
-          feedbackTimeoutRef.current = setTimeout(() => { 
-            if (el) el.classList.remove('marker-incorrect');
+          setScore((s) => Math.max(0, s - 10));
+          setIncorrectCountries((prev) => [...prev, country.id]);
+          if (el) el.classList.add("marker-incorrect");
+
+          feedbackTimeoutRef.current = setTimeout(() => {
+            if (el) el.classList.remove("marker-incorrect");
             setLastResult(null);
             setWrongSelectionData(null);
             feedbackTimeoutRef.current = null;
@@ -291,9 +334,9 @@ export default function MapDash() {
   }, [generateTarget]);
 
   useEffect(() => {
-    if (gameState === 'finished' && !hasReported) {
+    if (gameState === "finished" && !hasReported) {
       recordGameResult({
-        gameId: 'map-dash',
+        gameId: "map-dash",
         score,
         correctCountries,
         incorrectCountries,
@@ -301,58 +344,75 @@ export default function MapDash() {
       });
       setHasReported(true);
     }
-  }, [gameState, hasReported, recordGameResult, score, correctCountries, incorrectCountries, timeLeft, gameDuration]);
+  }, [
+    gameState,
+    hasReported,
+    recordGameResult,
+    score,
+    correctCountries,
+    incorrectCountries,
+    timeLeft,
+    gameDuration,
+  ]);
 
   return (
-    <div className="relative h-screen h-[100svh] w-full z-40 bg-surface-dark overflow-hidden font-sans">
+    <div className="relative h-screen h-[100svh] w-full z-40 bg-surface overflow-hidden font-sans">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img
+          src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`}
+          alt=""
+          className="w-full h-full object-cover opacity-10 blur-sm"
+        />
       </div>
       <SEO
         title="Map Dash - Games"
         description="Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out."
         structuredData={getGameStructuredData({
-          name: 'Map Dash',
-          slug: 'map-dash',
-          description: 'Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out.',
-          image: '/png/GAMES/map-dash.png',
+          name: "Map Dash",
+          slug: "map-dash",
+          description:
+            "Find countries on the world map as fast as you can. Test your geography skills by locating nations before time runs out.",
+          image: "/png/GAMES/map-dash.png",
         })}
       />
 
       <style>{`
-        .mapdash-marker .marker-pin {
-          transform-origin: center center;
-          transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
-        }
+ .mapdash-marker .marker-pin {
+ transform-origin: center center;
+ transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+ }
 
-        .marker-correct .marker-pin {
-          background-color: #34C759 !important;
-          border-color: rgba(255,255,255,0.8) !important;
-          box-shadow: 0 0 12px rgba(52, 199, 89, 0.5) !important;
-        }
+ .marker-correct .marker-pin {
+ background-color: #1B5E45 !important;
+ border-color: rgba(255,255,255,0.8) !important;
+ box-shadow: none !important;
+ }
 
-        .marker-incorrect .marker-pin {
-          background-color: #FF3B30 !important;
-          border-color: rgba(255,255,255,0.8) !important;
-          box-shadow: 0 0 12px rgba(239, 68, 68, 0.5) !important;
-        }
+ .marker-incorrect .marker-pin {
+ background-color: #FF3B30 !important;
+ border-color: rgba(255,255,255,0.8) !important;
+ box-shadow: none !important;
+ }
 
-        @keyframes card-shake {
-          10%, 90% { transform: translateX(-1%) translate(-50%, 0); }
-          20%, 80% { transform: translateX(1%) translate(-50%, 0); }
-          30%, 50%, 70% { transform: translateX(-2%) translate(-50%, 0); }
-          40%, 60% { transform: translateX(2%) translate(-50%, 0); }
-        }
+ @keyframes card-shake {
+ 10%, 90% { transform: translateX(-1%) translate(-50%, 0); }
+ 20%, 80% { transform: translateX(1%) translate(-50%, 0); }
+ 30%, 50%, 70% { transform: translateX(-2%) translate(-50%, 0); }
+ 40%, 60% { transform: translateX(2%) translate(-50%, 0); }
+ }
 
-        .card-shake {
-          animation: card-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-      `}</style>
+ .card-shake {
+ animation: card-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+ }
+ `}</style>
 
-      <div ref={mapRef} className="absolute inset-0 z-0 focus:outline-none bg-surface-dark" />
+      <div
+        ref={mapRef}
+        className="absolute inset-0 z-0 focus:outline-none bg-surface"
+      />
 
       <AnimatePresence mode="wait">
-      {gameState === 'playing' && (
+        {gameState === "playing" && (
           <motion.div
             key="playing"
             initial={{ opacity: 0 }}
@@ -362,21 +422,36 @@ export default function MapDash() {
           >
             {/* Back Button - positioned below nav bar */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 left-3 sm:left-4 md:left-6 z-30 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <Link to="/games/all" className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95 drop-shadow-md">
+              <Link
+                to="/games/all"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-elevated shadow-premium hover:bg-elevated-2 rounded-xl flex items-center justify-center text-text transition-all border border-border relative overflow-hidden group active:scale-95"
+              >
                 <ArrowLeft size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </Link>
             </div>
 
             {/* Score and Timer - positioned below nav bar, matching back button height */}
             <div className="absolute top-[4.5rem] sm:top-20 md:top-24 right-3 sm:right-4 md:right-6 z-30 flex gap-2 sm:gap-2.5 pointer-events-auto animate-in fade-in slide-in-from-top-4 duration-500">
-              <div className="bg-surface-dark/90 backdrop-blur-xl rounded-xl border border-white/20 h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5">
-                <Trophy size={18} className="sm:w-5 sm:h-5 text-warning flex-shrink-0" />
-                <span className="font-display font-black text-sm sm:text-base md:text-lg text-white tabular-nums relative z-10 drop-shadow-md">{score}</span>
+              <div className="bg-elevated shadow-premium rounded-xl border border-border h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5">
+                <Trophy
+                  size={18}
+                  className="sm:w-5 sm:h-5 text-warning flex-shrink-0"
+                />
+                <span className="font-display font-black text-sm sm:text-base md:text-lg text-text tabular-nums relative z-10">
+                  {score}
+                </span>
               </div>
-              
-              <div className={`rounded-xl shadow-inner h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5 transition-all duration-300 relative ${timeLeft <= 10 ? 'bg-white border-2 border-error animate-timer-panic' : 'bg-surface-dark/90 backdrop-blur-xl border-2 border-white/20'}`}>
-                <Timer size={18} className={`sm:w-5 sm:h-5 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-sky"}`} />
-                <span className={`font-display font-black text-sm sm:text-base md:text-lg tabular-nums min-w-[36px] sm:min-w-[42px] relative z-10 drop-shadow-md ${timeLeft <= 10 ? "text-error" : "text-white"}`}>
+
+              <div
+                className={`rounded-xl shadow-inner h-10 sm:h-12 px-3 sm:px-4 md:px-5 flex items-center gap-2 sm:gap-2.5 transition-all duration-300 relative ${timeLeft <= 10 ? "bg-elevated border-2 border-error animate-timer-panic" : "bg-elevated shadow-premium border border-border"}`}
+              >
+                <Timer
+                  size={18}
+                  className={`sm:w-5 sm:h-5 relative z-10 flex-shrink-0 ${timeLeft <= 10 ? "text-error" : "text-primary"}`}
+                />
+                <span
+                  className={`font-display font-black text-sm sm:text-base md:text-lg tabular-nums min-w-[36px] sm:min-w-[42px] relative z-10 ${timeLeft <= 10 ? "text-error" : "text-text"}`}
+                >
                   {formatTime(timeLeft)}
                 </span>
               </div>
@@ -384,15 +459,15 @@ export default function MapDash() {
 
             {/* Zoom Controls - hidden on mobile/tablet, visible on desktop */}
             <div className="absolute bottom-20 sm:bottom-22 md:bottom-24 right-3 sm:right-4 md:right-6 z-30 hidden lg:flex flex-col gap-1.5 sm:gap-2 pointer-events-auto animate-in fade-in slide-in-from-right-4 duration-500">
-              <button 
+              <button
                 onClick={handleZoomIn}
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-elevated shadow-premium hover:bg-elevated-2 rounded-xl flex items-center justify-center text-text transition-all border border-border relative overflow-hidden group active:scale-95"
               >
                 <Plus size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </button>
-              <button 
+              <button
                 onClick={handleZoomOut}
-                className="w-9 h-9 sm:w-10 sm:h-10 bg-surface-dark/90 backdrop-blur-xl hover:bg-surface-dark rounded-xl flex items-center justify-center text-white transition-all border border-white/20 relative overflow-hidden group active:scale-95"
+                className="w-9 h-9 sm:w-10 sm:h-10 bg-elevated shadow-premium hover:bg-elevated-2 rounded-xl flex items-center justify-center text-text transition-all border border-border relative overflow-hidden group active:scale-95"
               >
                 <Minus size={18} className="sm:w-5 sm:h-5 relative z-10" />
               </button>
@@ -402,16 +477,20 @@ export default function MapDash() {
             {targetCountry && (
               <div
                 key={`${targetCountry.id}-${feedbackKey}`}
-                className={`absolute bottom-4 sm:bottom-5 md:bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transform transition-all duration-300 ${lastResult === 'incorrect' ? 'card-shake' : ''}`}
+                className={`absolute bottom-4 sm:bottom-5 md:bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none transform transition-all duration-300 ${lastResult === "incorrect" ? "card-shake" : ""}`}
               >
                 <div
-                  className={`pointer-events-auto backdrop-blur-2xl rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
-                    ${lastResult === 'correct' ? 'bg-accent border-2 border-accent shadow-[0_8px_32px_rgba(52,199,89,0.4)]' :
-                      lastResult === 'incorrect' ? 'bg-error border-2 border-error shadow-[0_8px_32px_rgba(255,59,48,0.4)]' :
-                      'bg-surface-dark/90 border-2 border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'}`}
+                  className={`pointer-events-auto rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
+ ${
+   lastResult === "correct"
+     ? "bg-primary border-2 border-primary text-white shadow-premium"
+     : lastResult === "incorrect"
+       ? "bg-error border-2 border-error text-white shadow-premium"
+       : "bg-elevated shadow-premium border border-border shadow-premium"
+ }`}
                 >
                   {/* Glossy top edge */}
-                  <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                  <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
 
                   {/* Flag */}
                   <div className="w-10 h-7 sm:w-12 sm:h-8 flex items-center justify-center relative shrink-0">
@@ -424,57 +503,86 @@ export default function MapDash() {
 
                   {/* Text */}
                   <div className="flex flex-col relative z-10">
-                    <p className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] leading-none mb-1 ${lastResult ? 'text-white/80' : 'text-sky-light'}`}>
+                    <p
+                      className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] leading-none mb-1 ${lastResult ? "text-white/80" : "text-primary"}`}
+                    >
                       FIND
                     </p>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-display font-black text-white leading-none tracking-tighter uppercase drop-shadow-lg whitespace-nowrap">{targetCountry.name}</h2>
+                    <h2 className={`text-lg sm:text-xl md:text-2xl font-display font-black leading-none tracking-tighter uppercase whitespace-nowrap ${lastResult ? "text-white" : "text-text"}`}>
+                      {targetCountry.name}
+                    </h2>
                   </div>
                 </div>
               </div>
             )}
           </motion.div>
-      )}
+        )}
 
-      {gameState === 'start' && (
+        {gameState === "start" && (
           <motion.div
             key="start"
             initial={false}
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
             className="absolute inset-0 z-[2000] flex px-3 sm:px-4 py-16 overflow-y-auto"
-            style={{ background: '#0F172A' }}
+            style={{ background: "#E9EEF3" }}
           >
             {/* Blurred game thumbnail — matches every other game lobby */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-              <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+              <img
+                src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`}
+                alt=""
+                className="w-full h-full object-cover opacity-10 blur-sm"
+              />
             </div>
 
             {/* Background Decor — matches other game lobbies */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-3xl opacity-80" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-3xl opacity-60" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-accent-soft rounded-full blur-3xl opacity-80" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-primary/5 rounded-full blur-3xl opacity-60" />
             </div>
 
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
-              
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
-                <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-white/30 relative overflow-hidden">
-                  <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="Map Dash" className="w-full h-full object-cover" />
+              <div className="game-lobby-card w-full bg-elevated rounded-2xl p-8 sm:p-12 text-center border border-border shadow-premium overflow-hidden group relative">
+                <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border border-border relative overflow-hidden">
+                  <img
+                    src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`}
+                    alt="Map Dash"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <h1 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Map Dash</h1>
-                <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Find the nations on the map.</p>
-                <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
+                <h1 className="text-4xl sm:text-5xl font-display font-black text-text mb-2 uppercase tracking-tighter">
+                  Map Dash
+                </h1>
+                <p className="text-muted text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">
+                  Find the nations on the map.
+                </p>
+                <div className="mb-6">
+                  <TimeSelector
+                    value={gameDuration}
+                    onChange={setGameDuration}
+                  />
+                </div>
                 <div className="block w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                  <Button
+                    onClick={startGame}
+                    size="lg"
+                    className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
+                  >
+                    START{" "}
+                    <Play
+                      className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]"
+                      fill="currentColor"
+                    />
+                  </Button>
                 </div>
-              <GameNavigationButtons />
+                <GameNavigationButtons />
               </div>
             </div>
           </motion.div>
-      )}
+        )}
 
-
-        {gameState === 'finished' && (
+        {gameState === "finished" && (
           <motion.div
             key="finished"
             initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
@@ -482,50 +590,69 @@ export default function MapDash() {
               opacity: [0, 1, 1, 1, 1],
               scale: [0.3, 1.15, 0.95, 1.05, 1],
               y: [-300, 20, -15, 5, 0],
-              rotate: [-8, 4, -3, 1, 0]
+              rotate: [-8, 4, -3, 1, 0],
             }}
             transition={{
               duration: 0.7,
               times: [0, 0.45, 0.65, 0.85, 1],
-              ease: "easeOut"
+              ease: "easeOut",
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
             className="absolute inset-0 z-[2000] flex px-3 sm:px-4 py-16 overflow-y-auto"
-            style={{ background: '#0F172A' }}
+            style={{ background: "#E9EEF3" }}
           >
             {/* Blurred game thumbnail — matches every other game lobby */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-              <img src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+              <img
+                src={`${import.meta.env.BASE_URL}png/GAMES/map-dash.png`}
+                alt=""
+                className="w-full h-full object-cover opacity-10 blur-sm"
+              />
             </div>
 
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/15 rounded-full blur-3xl opacity-80" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-sky/5 rounded-full blur-3xl opacity-60" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-accent-soft rounded-full blur-3xl opacity-80" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-primary/5 rounded-full blur-3xl opacity-60" />
             </div>
 
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
-              
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-3xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
-                <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
-                  <Trophy size={36} className="relative z-10 drop-shadow-lg" />
+              <div className="game-lobby-card w-full bg-elevated rounded-2xl p-8 sm:p-12 text-center border border-border shadow-premium overflow-hidden group">
+                <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-border relative overflow-hidden">
+                  <Trophy size={36} className="relative z-10" />
                 </div>
-                <h2 className="text-4xl sm:text-6xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
-                <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
-                <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
+                <h2 className="text-4xl sm:text-6xl font-display font-black text-text mb-4 uppercase tracking-tighter">
+                  FINISHED!
+                </h2>
+                <p className="text-muted mb-6 text-[10px] font-black uppercase tracking-[0.2em]">
+                  {t("game.finalScore")}
+                </p>
+                <div className="text-7xl font-display font-black text-text mb-8 tabular-nums tracking-tighter">
+                  {score}
+                </div>
                 <div className="block w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">{t('game.playAgain')} <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
+                  <Button
+                    onClick={startGame}
+                    size="lg"
+                    className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
+                  >
+                    {t("game.playAgain")}{" "}
+                    <Play
+                      className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]"
+                      fill="currentColor"
+                    />
+                  </Button>
                 </div>
                 <GameNavigationButtons />
               </div>
             </div>
           </motion.div>
-      )}
+        )}
       </AnimatePresence>
       {/* Inline feedback toast - compact, doesn't block the map */}
       <AnimatePresence>
-        {lastResult && gameState === 'playing' && (
+        {lastResult && gameState === "playing" && (
           <motion.div
             ref={feedbackRef}
             key={`feedback-${feedbackKey}`}
@@ -534,28 +661,45 @@ export default function MapDash() {
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="absolute z-[9999] pointer-events-none"
-            style={clickPoint
-              ? { left: `${clickPoint.x}px`, top: `${Math.max(10, clickPoint.y - 60)}px` }
-              : { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+            style={
+              clickPoint
+                ? {
+                    left: `${clickPoint.x}px`,
+                    top: `${Math.max(10, clickPoint.y - 60)}px`,
+                  }
+                : {
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }
+            }
           >
             <div className="flex flex-col items-center">
-              <div className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl backdrop-blur-xl shadow-lg ${
-                lastResult === 'correct'
-                  ? 'bg-accent/90 shadow-accent/30'
-                  : 'bg-error/90 shadow-error/30'
-              }`}>
-                {lastResult === 'correct' ? (
-                  <Check size={18} className="text-white shrink-0" strokeWidth={3} />
+              <div
+                className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl shadow-lg ${
+                  lastResult === "correct"
+                    ? "bg-primary shadow-accent/30"
+                    : "bg-error/90 shadow-error/30"
+                }`}
+              >
+                {lastResult === "correct" ? (
+                  <Check
+                    size={18}
+                    className="text-text shrink-0"
+                    strokeWidth={3}
+                  />
                 ) : (
-                  <X size={18} className="text-white shrink-0" strokeWidth={3} />
+                  <X size={18} className="text-text shrink-0" strokeWidth={3} />
                 )}
-                <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
-                  {lastResult === 'correct' ? t('game.correct') : t('game.incorrect')}
+                <span className="text-text font-display font-black text-sm sm:text-base uppercase tracking-wide">
+                  {lastResult === "correct"
+                    ? t("game.correct")
+                    : t("game.incorrect")}
                 </span>
-                {lastResult === 'incorrect' && wrongSelectionData && (
+                {lastResult === "incorrect" && wrongSelectionData && (
                   <>
-                    <span className="text-white/50 font-black text-xs">•</span>
-                    <span className="text-white/80 font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
+                    <span className="text-muted font-black text-xs">•</span>
+                    <span className="text-text font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
                       {wrongSelectionData.name}
                     </span>
                   </>
@@ -565,11 +709,12 @@ export default function MapDash() {
               <div
                 className="w-0 h-0 -mt-[1px]"
                 style={{
-                  borderLeft: '8px solid transparent',
-                  borderRight: '8px solid transparent',
-                  borderTop: lastResult === 'correct'
-                    ? '10px solid rgba(52, 199, 89, 0.9)'
-                    : '10px solid rgba(255, 59, 48, 0.9)',
+                  borderLeft: "8px solid transparent",
+                  borderRight: "8px solid transparent",
+                  borderTop:
+                    lastResult === "correct"
+                      ? "10px solid rgba(52, 199, 89, 0.9)"
+                      : "10px solid rgba(255, 59, 48, 0.9)",
                 }}
               />
             </div>

@@ -310,7 +310,6 @@ function navHtml() {
   return `<nav class="blog-nav">
   <div class="blog-nav-inner">
     <a href="/" class="blog-logo">
-      <img src="/png/STYLE/explorecapitals-globe-favicon-new.png" alt="ExploreCapitals" width="28" height="28" style="filter: drop-shadow(0 0 2px rgba(255,255,255,0.4));" />
       <span>Explore<span class="blog-logo-accent">Capitals</span></span>
     </a>
     <div class="blog-nav-links">
@@ -353,9 +352,8 @@ function getStyles() {
 
     .blog-nav { position: sticky; top: 0; z-index: 100; background: rgba(15,23,42,0.85); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.75rem 1rem; }
     .blog-nav-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .blog-logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 900; font-size: 1.1rem; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: -0.03em; }
-    .blog-logo img { width: 28px; height: 28px; }
-    .blog-logo-accent { background: linear-gradient(135deg,#00C2FF,#007AFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .blog-logo { display: inline-flex; align-items: baseline; font-family: "Instrument Serif", Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.35rem; color: #15202B; text-decoration: none; letter-spacing: -0.02em; text-transform: none; }
+    .blog-logo-accent { font-style: normal; color: #00C2FF; background: none; -webkit-text-fill-color: #00C2FF; }
     .blog-nav-links { display: flex; gap: 1.25rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; }
     .blog-nav-links a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.15s; }
     .blog-nav-links a:hover, .blog-nav-active { color: #00C2FF !important; }

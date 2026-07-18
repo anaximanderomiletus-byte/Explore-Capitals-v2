@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * RevealSection — lightweight wrapper.
@@ -10,12 +10,8 @@ const RevealSection: React.FC<{
   children: React.ReactNode;
   className?: string;
   delay?: number;
-}> = ({ children, className = '' }) => {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  );
+}> = ({ children, className = "" }) => {
+  return <div className={className}>{children}</div>;
 };
 
 export default RevealSection;

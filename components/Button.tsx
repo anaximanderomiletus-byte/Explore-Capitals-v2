@@ -1,126 +1,65 @@
-
-import React from 'react';
+import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'accent' | 'danger' | 'premium';
-  size?: 'sm' | 'md' | 'lg';
+  variant?:
+    "primary" | "secondary" | "outline" | "accent" | "danger" | "premium";
+  size?: "sm" | "md" | "lg";
   isFlat?: boolean;
   as?: any;
 }
 
-// Inject global shing animation styles once
-const shingStyleId = 'button-shing-styles';
-if (typeof document !== 'undefined' && !document.getElementById(shingStyleId)) {
-  const styleEl = document.createElement('style');
-  styleEl.id = shingStyleId;
-  styleEl.textContent = `
-    @keyframes shingGlare {
-      0% {
-        transform: translateX(-150%) skewX(-20deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-      }
-      80% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(400%) skewX(-20deg);
-        opacity: 0;
-      }
-    }
-    .shing-container .shing-glare {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 40%;
-      background: linear-gradient(
-        90deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.1) 20%, 
-        rgba(255,255,255,0.95) 50%, 
-        rgba(255,255,255,0.1) 80%, 
-        transparent 100%
-      );
-      transform: translateX(-150%) skewX(-20deg);
-      opacity: 0;
-      pointer-events: none;
-    }
-    @media (hover: hover) and (pointer: fine) {
-      .shing-btn:hover .shing-glare {
-        animation: shingGlare 0.5s ease-out forwards;
-      }
-    }
-  `;
-  document.head.appendChild(styleEl);
-}
-
-const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
+const Button: React.FC<ButtonProps> = ({
+  children,
+  variant = "primary",
+  size = "md",
   isFlat = false,
-  className = '', 
-  as: Component = 'button',
-  ...props 
+  className = "",
+  as: Component = "button",
+  ...props
 }) => {
-  // Check if a text color is already provided in className to avoid conflicts
-  const hasTextColor = className.includes('text-');
-  // Check if a custom text size is provided so we don't override it with the default
-  const hasTextSize = /(?:^|\s)(?:sm:|md:|lg:|xl:|2xl:)?!?text-(?:xs|sm|base|lg|xl|[2-9]xl|\[)/.test(className);
+  const hasTextColor = className.includes("text-");
+  const hasTextSize =
+    /(?:^|\s)(?:sm:|md:|lg:|xl:|2xl:)?!?text-(?:xs|sm|base|lg|xl|[2-9]xl|\[)/.test(
+      className,
+    );
 
-  // Cross-browser compatible base styles with smooth hover transition (300ms)
-  // Added active states and touch-manipulation for better mobile touch feedback
-  const baseStyles = "inline-flex items-center justify-center font-display font-bold transition-all duration-300 ease-out rounded-full outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 disabled:opacity-50 disabled:cursor-not-allowed relative select-none [-webkit-appearance:none] [appearance:none] [-webkit-tap-highlight-color:transparent] overflow-hidden active:scale-[0.98] active:brightness-95 touch-manipulation cursor-pointer";
-  
+  const baseStyles =
+    "inline-flex items-center justify-center font-sans font-semibold tracking-tight transition-all duration-200 ease-out rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50 disabled:cursor-not-allowed relative select-none [-webkit-appearance:none] [appearance:none] [-webkit-tap-highlight-color:transparent] overflow-hidden active:scale-[0.98] touch-manipulation cursor-pointer";
+
   const variants = {
-    primary: isFlat 
-      ? `bg-sky hover:brightness-110 active:brightness-95 text-white` 
-      : `bg-gel-blue backdrop-blur-2xl hover:brightness-110 hover:shadow-[0_12px_28px_rgba(0,0,0,0.15)] before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
+    primary: isFlat
+      ? `bg-primary hover:bg-primary-hover active:bg-primary-hover text-text`
+      : `bg-primary hover:bg-primary-hover text-text shadow-premium`,
     accent: isFlat
-      ? `bg-[#22c55e] hover:brightness-110 active:brightness-95 text-white`
-      : `bg-[#22c55e]/60 backdrop-blur-2xl hover:bg-[#22c55e]/80 hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/70`,
+      ? `bg-accent-soft hover:bg-primary/20 active:bg-primary/25 text-primary`
+      : `bg-accent-soft hover:bg-primary/20 text-primary border border-primary/25`,
     danger: isFlat
       ? `bg-error hover:brightness-110 active:brightness-95 text-white`
-      : `bg-error/80 backdrop-blur-2xl hover:brightness-110 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-white/60`,
+      : `bg-error hover:brightness-110 text-white`,
     secondary: isFlat
-      ? `bg-white/10 backdrop-blur-xl border-2 border-white/20 hover:bg-white/20 hover:brightness-110 ${hasTextColor ? '' : 'text-white'}`
-      : `bg-white/20 backdrop-blur-2xl border-2 border-white/80 hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
-    outline: `bg-white/20 backdrop-blur-3xl border-4 border-white hover:bg-white/30 hover:brightness-105 before:absolute before:inset-0 before:bg-glossy-gradient before:opacity-40 before:z-0 ${hasTextColor ? '' : 'text-white'} after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0`,
+      ? `bg-transparent border border-border hover:bg-elevated-2 text-text`
+      : `bg-elevated border border-border hover:border-primary/40 hover:bg-elevated-2 text-text`,
+    outline: `bg-transparent border border-primary hover:bg-primary hover:text-text transition-colors ${hasTextColor ? "" : "text-primary"}`,
     premium: isFlat
-      ? `bg-amber-500 hover:brightness-110 active:brightness-95 text-white`
-      : `bg-gel-gold backdrop-blur-2xl hover:brightness-110 hover:shadow-[0_12px_28px_rgba(217,119,6,0.3)] before:absolute before:inset-0 before:bg-white/10 before:pointer-events-none before:z-0 text-white after:absolute after:inset-0 after:bg-[linear-gradient(180deg,rgba(255,255,255,0.6)_0%,rgba(255,255,255,0)_50%)] after:pointer-events-none after:z-0 border-2 border-amber-300/60`,
+      ? `bg-text hover:bg-text/90 active:bg-text/85 text-elevated-2`
+      : `bg-text hover:bg-text/90 text-elevated-2 shadow-premium`,
   };
 
-  // Sizes with minimum touch targets (44px) for mobile
-  // Text sizes are only applied if no custom text size is provided via className
   const sizes = {
-    sm: `px-5 py-2 ${hasTextSize ? '' : 'text-sm'} min-h-[44px]`,
-    md: `px-6 sm:px-8 py-3 ${hasTextSize ? '' : 'text-sm sm:text-base'} min-h-[44px]`,
-    lg: `px-8 sm:px-10 py-3.5 sm:py-4 ${hasTextSize ? '' : 'text-base sm:text-lg'} min-h-[48px]`,
+    sm: `px-4 py-2.5 ${hasTextSize ? "" : "text-sm"} min-h-[44px]`,
+    md: `px-5 sm:px-6 py-2.5 ${hasTextSize ? "" : "text-sm sm:text-base"} min-h-[44px] sm:min-h-[48px]`,
+    lg: `px-6 sm:px-8 py-3 ${hasTextSize ? "" : "text-base sm:text-lg"} min-h-[48px] sm:min-h-[52px]`,
   };
-
-  const showShing = (variant === 'primary' || variant === 'premium') && !isFlat;
-  const shingClass = showShing ? 'shing-btn' : '';
 
   return (
-    <Component 
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${shingClass} ${className}`}
-      style={{ WebkitTapHighlightColor: 'transparent' }}
+    <Component
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      style={{ WebkitTapHighlightColor: "transparent" }}
       {...props}
     >
-      {/* Shing/glare animation layer - Only for primary Frutiger Aero buttons */}
-      {showShing && (
-        <span 
-          className="shing-container absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-full"
-          aria-hidden="true"
-        >
-          <span className="shing-glare" />
-        </span>
-      )}
-      <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        {children}
+      </span>
     </Component>
   );
 };

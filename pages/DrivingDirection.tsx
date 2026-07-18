@@ -1,31 +1,45 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Timer, Trophy, ArrowLeft, Play, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { COUNTRIES } from '../constants';
-import Button from '../components/Button';
-import { Country } from '../types';
-import SEO from '../components/SEO';
-import { useLayout } from '../context/LayoutContext';
-import { useUser } from '../context/UserContext';
-import { getFlagUrl } from '../utils/flags';
-import TimeSelector from '../components/TimeSelector';
-import GameSideAds from '../components/GameSideAds';
-import { getGameStructuredData } from '../utils/gameStructuredData';
-import { useTranslation } from '../context/LocaleContext';
-import GameNavigationButtons from '../components/GameNavigationButtons';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Timer,
+  Trophy,
+  ArrowLeft,
+  Play,
+  Crown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { COUNTRIES } from "../constants";
+import Button from "../components/Button";
+import { Country } from "../types";
+import SEO from "../components/SEO";
+import { useLayout } from "../context/LayoutContext";
+import { useUser } from "../context/UserContext";
+import { getFlagUrl } from "../utils/flags";
+import TimeSelector from "../components/TimeSelector";
+import GameSideAds from "../components/GameSideAds";
+import { getGameStructuredData } from "../utils/gameStructuredData";
+import { useTranslation } from "../context/LocaleContext";
+import GameNavigationButtons from "../components/GameNavigationButtons";
 
 export default function DrivingDirection() {
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState<'start' | 'preparing' | 'playing' | 'finished'>('start');
+  const [gameState, setGameState] = useState<
+    "start" | "preparing" | "playing" | "finished"
+  >("start");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameDuration, setGameDuration] = useState(60);
   const [currentCountry, setCurrentCountry] = useState<Country | null>(null);
-  const [previousCountryId, setPreviousCountryId] = useState<string | null>(null);
-  const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [previousCountryId, setPreviousCountryId] = useState<string | null>(
+    null,
+  );
+  const [result, setResult] = useState<"correct" | "incorrect" | null>(null);
   const [feedbackKey, setFeedbackKey] = useState(0);
-  const [selectedSide, setSelectedSide] = useState<'Left' | 'Right' | null>(null);
+  const [selectedSide, setSelectedSide] = useState<"Left" | "Right" | null>(
+    null,
+  );
   const [imgError, setImgError] = useState(false);
   const [hasReported, setHasReported] = useState(false);
   const { recordGameResult } = useUser();
@@ -34,7 +48,9 @@ export default function DrivingDirection() {
 
   // Filter countries that have driveSide data
   const countriesWithDriveSide = useMemo(() => {
-    return COUNTRIES.filter(c => c.driveSide === 'Left' || c.driveSide === 'Right');
+    return COUNTRIES.filter(
+      (c) => c.driveSide === "Left" || c.driveSide === "Right",
+    );
   }, []);
 
   useEffect(() => {
@@ -43,12 +59,12 @@ export default function DrivingDirection() {
 
   useEffect(() => {
     let timer: any;
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
     } else if (timeLeft === 0) {
-      setGameState('finished');
+      setGameState("finished");
     }
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
@@ -56,13 +72,13 @@ export default function DrivingDirection() {
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
-    return `${m}:${String(s).padStart(2, '0')}`;
+    return `${m}:${String(s).padStart(2, "0")}`;
   };
 
   useEffect(() => {
-    if (gameState === 'finished' && !hasReported) {
+    if (gameState === "finished" && !hasReported) {
       recordGameResult({
-        gameId: 'driving-direction',
+        gameId: "driving-direction",
         score,
         durationSeconds: gameDuration - timeLeft,
       });
@@ -74,16 +90,17 @@ export default function DrivingDirection() {
     setResult(null);
     setSelectedSide(null);
     setImgError(false);
-    
+
     // Filter out the previous country to avoid back-to-back duplicates
-    const availableCountries = previousCountryId 
-      ? countriesWithDriveSide.filter(c => c.id !== previousCountryId)
+    const availableCountries = previousCountryId
+      ? countriesWithDriveSide.filter((c) => c.id !== previousCountryId)
       : countriesWithDriveSide;
-    
-    const country = availableCountries[Math.floor(Math.random() * availableCountries.length)];
+
+    const country =
+      availableCountries[Math.floor(Math.random() * availableCountries.length)];
     const countryFlagUrl = getFlagUrl(country.flag);
     const currentFlagImg = new Image();
-    currentFlagImg.decoding = 'async';
+    currentFlagImg.decoding = "async";
     currentFlagImg.src = countryFlagUrl;
 
     setPreviousCountryId(country.id);
@@ -92,12 +109,12 @@ export default function DrivingDirection() {
     // Warm one more flag so the following round is likely already cached.
     const nextIdx = Math.floor(Math.random() * countriesWithDriveSide.length);
     const img = new Image();
-    img.decoding = 'async';
+    img.decoding = "async";
     img.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
   }, [countriesWithDriveSide, previousCountryId]);
 
   const startGame = async () => {
-    setGameState('preparing');
+    setGameState("preparing");
     setScore(0);
     setTimeLeft(gameDuration);
     setHasReported(false);
@@ -106,8 +123,11 @@ export default function DrivingDirection() {
     setPreviousCountryId(null);
 
     // Pick first country and await flag load before showing gameplay
-    const country = countriesWithDriveSide[Math.floor(Math.random() * countriesWithDriveSide.length)];
-    await new Promise<void>(resolve => {
+    const country =
+      countriesWithDriveSide[
+        Math.floor(Math.random() * countriesWithDriveSide.length)
+      ];
+    await new Promise<void>((resolve) => {
       const img = new Image();
       img.src = getFlagUrl(country.flag);
       img.onload = () => resolve();
@@ -124,31 +144,35 @@ export default function DrivingDirection() {
     const nextImg = new Image();
     nextImg.src = getFlagUrl(countriesWithDriveSide[nextIdx].flag);
 
-    setGameState('playing');
+    setGameState("playing");
   };
 
-  const handleChoice = (side: 'Left' | 'Right') => {
+  const handleChoice = (side: "Left" | "Right") => {
     if (result || !currentCountry) return;
-    
+
     setSelectedSide(side);
     const isCorrect = side === currentCountry.driveSide;
-    
-    setResult(isCorrect ? 'correct' : 'incorrect');
-    setFeedbackKey(prev => prev + 1);
-    if (isCorrect) setScore(s => s + 10);
-    
+
+    setResult(isCorrect ? "correct" : "incorrect");
+    setFeedbackKey((prev) => prev + 1);
+    if (isCorrect) setScore((s) => s + 10);
+
     setTimeout(generateRound, 700);
   };
 
-  const currentFlagUrl = currentCountry ? getFlagUrl(currentCountry.flag) : '';
+  const currentFlagUrl = currentCountry ? getFlagUrl(currentCountry.flag) : "";
 
   return (
-    <div className="h-screen h-[100svh] bg-surface-dark font-sans relative overflow-hidden">
+    <div className="h-screen h-[100svh] bg-surface font-sans relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="" className="w-full h-full object-cover opacity-10 blur-sm" />
+        <img
+          src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`}
+          alt=""
+          className="w-full h-full object-cover opacity-10 blur-sm"
+        />
       </div>
       <AnimatePresence mode="wait">
-        {gameState === 'start' && (
+        {gameState === "start" && (
           <motion.div
             key="start"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -160,41 +184,61 @@ export default function DrivingDirection() {
               title="Driving Direction - Premium Game"
               description="Guess which side of the road countries drive on! A premium geography game."
               structuredData={getGameStructuredData({
-                name: 'Driving Direction',
-                slug: 'driving-direction',
-                description: 'Guess which side of the road countries drive on! A premium geography game.',
-                image: '/png/GAMES/driving-direction.png',
+                name: "Driving Direction",
+                slug: "driving-direction",
+                description:
+                  "Guess which side of the road countries drive on! A premium geography game.",
+                image: "/png/GAMES/driving-direction.png",
               })}
             />
-            
+
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-sky/20 rounded-full blur-3xl opacity-60" />
+              <div className="absolute top-[-20%] left-[-10%] w-[100%] h-[100%] bg-accent-soft rounded-full blur-3xl opacity-60" />
               <div className="absolute bottom-[-10%] right-[-10%] w-[80%] h-[80%] bg-amber-500/10 rounded-full blur-3xl opacity-40" />
             </div>
 
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
-            
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group relative">
-              
-              <div className="w-24 h-24 rounded-2xl mx-auto mb-8 border-2 border-amber-400/80 shadow-[0_0_20px_rgba(251,191,36,0.3)] relative overflow-hidden">
-                <img src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`} alt="Driving Direction" className="w-full h-full object-cover" />
+              <div className="game-lobby-card w-full bg-elevated rounded-2xl p-8 sm:p-12 text-center border border-border shadow-premium overflow-hidden group relative">
+                <div className="w-24 h-24 rounded-xl mx-auto mb-8 border border-border shadow-sm relative overflow-hidden bg-accent-soft">
+                  <img
+                    src={`${import.meta.env.BASE_URL}png/GAMES/driving-direction.png`}
+                    alt="Driving Direction"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-display font-black text-text mb-2 uppercase tracking-tighter">
+                  Driving Direction
+                </h2>
+                <p className="text-muted text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">
+                  Left or Right side of the road?
+                </p>
+                <div className="mb-6">
+                  <TimeSelector
+                    value={gameDuration}
+                    onChange={setGameDuration}
+                  />
+                </div>
+                <div className="block w-full">
+                  <Button
+                    onClick={startGame}
+                    size="lg"
+                    className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
+                  >
+                    START{" "}
+                    <Play
+                      className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]"
+                      fill="currentColor"
+                    />
+                  </Button>
+                </div>
+                <GameNavigationButtons />
               </div>
-              <h2 className="text-4xl sm:text-5xl font-display font-black text-white mb-2 uppercase tracking-tighter drop-shadow-md">Driving Direction</h2>
-              <p className="text-white/70 text-[10px] mb-6 font-bold uppercase tracking-[0.2em] leading-relaxed h-8 sm:h-auto flex items-center justify-center">Left or Right side of the road?</p>
-              <div className="mb-6"><TimeSelector value={gameDuration} onChange={setGameDuration} /></div>
-              <div className="block w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">
-                  START <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" />
-                </Button>
-              </div>
-              <GameNavigationButtons />
-            </div>
             </div>
           </motion.div>
         )}
 
-        {gameState === 'preparing' && (
+        {gameState === "preparing" && (
           <motion.div
             key="preparing"
             initial={{ opacity: 0 }}
@@ -203,15 +247,15 @@ export default function DrivingDirection() {
             className="h-full flex items-center justify-center px-3 sm:px-4 py-16"
           >
             <div className="flex flex-col items-center gap-6">
-              <div className="w-10 h-10 border-[3px] border-white/20 border-t-sky rounded-full animate-spin" />
-              <div className="text-white/60 font-display font-black text-sm uppercase tracking-[0.2em]">
+              <div className="w-10 h-10 border-[3px] border-border border-t-sky rounded-full animate-spin" />
+              <div className="text-muted font-display font-black text-sm uppercase tracking-[0.2em]">
                 Loading
               </div>
             </div>
           </motion.div>
         )}
 
-        {gameState === 'playing' && currentCountry && (
+        {gameState === "playing" && currentCountry && (
           <motion.div
             key="playing"
             initial={{ opacity: 0 }}
@@ -219,176 +263,234 @@ export default function DrivingDirection() {
             exit={{ opacity: 0, y: -20 }}
             className="game-playing h-full flex flex-col px-3 md:px-4 pt-4 md:pt-16 pb-2 md:pb-6 overflow-y-auto overflow-x-hidden"
           >
-            <SEO title="Driving Direction - Playing" description="Which side of the road do they drive on?" />
-            
+            <SEO
+              title="Driving Direction - Playing"
+              description="Which side of the road do they drive on?"
+            />
+
             {/* Background Decor */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-sky/10 rounded-full blur-3xl" />
+              <div className="absolute top-[10%] right-[10%] w-[60%] h-[60%] bg-accent-soft rounded-full blur-3xl" />
               <div className="absolute bottom-[10%] left-[10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-3xl" />
             </div>
 
             {/* Top Bar */}
-            <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-white/10 backdrop-blur-3xl overflow-hidden relative z-10 rounded-[32px] border-2 border-white/20">
-  <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/10 z-20">
-    <Link to="/games/all" className="p-1 sm:p-2 text-white/50 hover:text-white transition-colors shrink-0">
-      <ArrowLeft size={24} />
-    </Link>
-    <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-      <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-white uppercase tracking-[0.15em] sm:tracking-[0.3em] drop-shadow-md truncate max-w-full text-center">Driving Direction</h2>
-    </div>
-    <div className="w-[32px] sm:w-[40px] shrink-0" />
-  </div>
-  <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
-
-              
-              {/* Points and Timer */}
-              <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
-                <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
-                  <Trophy size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-warning drop-shadow-md relative z-10" />
-                  <span className="font-display font-black text-lg sm:text-xl md:text-2xl text-white tabular-nums drop-shadow-sm relative z-10">{score}</span>
+            <div className="game-bubble flex-1 max-w-5xl mx-auto w-full flex flex-col min-h-0 bg-elevated shadow-premium overflow-hidden relative z-10 rounded-2xl border border-border">
+              <div className="game-top-bar w-full flex shrink-0 items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-border z-20">
+                <Link
+                  to="/games/all"
+                  className="p-1 sm:p-2 text-muted hover:text-primary transition-colors shrink-0"
+                >
+                  <ArrowLeft size={24} />
+                </Link>
+                <div className="flex-1 flex flex-col items-center justify-center min-w-0">
+                  <h2 className="text-[12px] sm:text-[14px] md:text-[16px] font-black text-text uppercase tracking-[0.15em] sm:tracking-[0.3em] truncate max-w-full text-center">
+                    Driving Direction
+                  </h2>
                 </div>
-                <div className={`flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? 'bg-red-500/10 border-2 border-error animate-timer-panic' : 'bg-sky/25 text-white border-2 border-white/30'}`}>
-                  <div className={`relative z-10 ${timeLeft < 10 ? 'text-error' : 'text-sky-light'}`}><Timer size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" /></div>
-                  <span className={`font-display font-black text-lg sm:text-xl md:text-2xl tabular-nums min-w-[36px] sm:min-w-[42px] md:min-w-[48px] relative z-10 drop-shadow-sm ${timeLeft < 10 ? 'text-error' : 'text-white'}`}>{formatTime(timeLeft)}</span>
-                </div>
+                <div className="w-[32px] sm:w-[40px] shrink-0" />
               </div>
-
-              <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
-                {/* Question + Flag — centered on mobile */}
-                <div className="flex-1 flex flex-col items-center justify-end md:justify-center md:flex-none">
-                  {/* Question Text */}
-                  <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
-                    <p className="text-sky-light font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">Which side of the road does</p>
-                    <h2 className="text-white font-display font-black text-2xl md:text-3xl uppercase tracking-tighter drop-shadow-lg">{currentCountry.name}</h2>
-                    <p className="text-sky-light font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">drive on?</p>
+              <div className="game-card-content flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-2 sm:p-3 md:p-6 relative z-10">
+                {/* Points and Timer */}
+                <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3 md:mb-4 relative z-20 shrink-0">
+                  <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner bg-warning/20 border border-warning/40 relative shrink-0">
+                    <Trophy
+                      size={18}
+                      className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-warning relative z-10"
+                    />
+                    <span className="font-display font-black text-lg sm:text-xl md:text-2xl text-text tabular-nums relative z-10">
+                      {score}
+                    </span>
                   </div>
-
-                  {/* Country Flag */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentCountry.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.05 }}
-                      transition={{ duration: 0.25 }}
-                      style={{ willChange: 'transform, opacity' }}
-                      className="w-full min-h-[96px] sm:min-h-[120px] md:min-h-[147px] flex items-center justify-center mb-4 md:mb-6"
+                  <div
+                    className={`flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 md:px-4 md:py-2 rounded-xl shadow-inner transition-all duration-300 relative shrink-0 ${timeLeft < 10 ? "bg-red-500/10 border-2 border-error animate-timer-panic" : "bg-accent-soft text-text border border-border"}`}
+                  >
+                    <div
+                      className={`relative z-10 ${timeLeft < 10 ? "text-error" : "text-primary"}`}
                     >
-                      <div className={`w-[min(52vw,180px)] md:w-[220px] aspect-[3/2] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden transition-all duration-300 ${result ? 'scale-90' : 'scale-100'}`}>
-                        {!imgError ? (
-                          <img 
-                            src={currentFlagUrl}
-                            alt={`${currentCountry.name} flag`}
-                            loading="eager"
-                            decoding="async"
-                            fetchPriority="high"
-                            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                            onError={() => setImgError(true)}
-                          />
-                        ) : (
-                          <img 
-                            src={currentFlagUrl}
-                            alt={`${currentCountry.name} flag fallback`}
-                            loading="eager"
-                            decoding="async"
-                            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.3)]"
-                          />
-                        )}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                      <Timer
+                        size={18}
+                        className="sm:w-5 sm:h-5 md:w-6 md:h-6"
+                      />
+                    </div>
+                    <span
+                      className={`font-display font-black text-lg sm:text-xl md:text-2xl tabular-nums min-w-[36px] sm:min-w-[42px] md:min-w-[48px] relative z-10 ${timeLeft < 10 ? "text-error" : "text-text"}`}
+                    >
+                      {formatTime(timeLeft)}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Choice Buttons */}
-                <div className="flex-1 flex items-start justify-center md:items-center pt-6 md:pt-0">
-                  <div className="w-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-2xl mx-auto">
-                    {(['Left', 'Right'] as const).map((side) => {
-                      const isCorrect = currentCountry.driveSide === side;
-                      const isSelected = selectedSide === side;
-                      const isWrong = isSelected && !isCorrect;
-                      
-                      let cardStyle = side === 'Left'
-                        ? "bg-blue-500/20 border border-blue-500/40 active:bg-blue-500/30 active:border-blue-400/60"
-                        : "bg-red-500/20 border border-red-500/40 active:bg-red-500/30 active:border-red-400/60";
-                      let iconColor = side === 'Left' ? "text-blue-400" : "text-red-400";
-                      let textColor = side === 'Left' ? "text-blue-300" : "text-red-300";
-                      
-                      if (result) {
-                        if (isCorrect) {
-                          cardStyle = "bg-accent/60 border-2 border-accent";
-                          iconColor = "text-white";
-                          textColor = "text-white";
-                        } else if (isSelected) {
-                          cardStyle = "bg-red-500/60 border-2 border-red-500";
-                          iconColor = "text-white";
-                          textColor = "text-white";
-                        } else {
-                          cardStyle = "bg-black/20 border-white/5 opacity-30";
-                          iconColor = "text-white/20";
-                          textColor = "text-white/20";
-                        }
-                      }
+                <div className="flex-1 flex flex-col px-0 md:px-2 relative z-10">
+                  {/* Question + Flag — centered on mobile */}
+                  <div className="flex-1 flex flex-col items-center justify-end md:justify-center md:flex-none">
+                    {/* Question Text */}
+                    <div className="flex flex-col items-center justify-center mb-3 md:mb-4 shrink-0">
+                      <p className="text-primary font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">
+                        Which side of the road does
+                      </p>
+                      <h2 className="text-text font-display font-black text-2xl md:text-3xl uppercase tracking-tighter">
+                        {currentCountry.name}
+                      </h2>
+                      <p className="text-primary font-black text-[11px] md:text-[9px] uppercase tracking-[0.4em] opacity-80">
+                        drive on?
+                      </p>
+                    </div>
 
-                      return (
-                        <button
-                          key={side}
-                          onClick={() => handleChoice(side)}
-                          disabled={!!result}
-                          className={`min-h-[80px] sm:min-h-[100px] md:min-h-[180px] relative rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? 'animate-shake' : ''}`}
-                          style={{ WebkitTapHighlightColor: 'transparent' }}
+                    {/* Country Flag */}
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentCountry.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.05 }}
+                        transition={{ duration: 0.25 }}
+                        style={{ willChange: "transform, opacity" }}
+                        className="w-full min-h-[96px] sm:min-h-[120px] md:min-h-[147px] flex items-center justify-center mb-4 md:mb-6"
+                      >
+                        <div
+                          className={`w-[min(52vw,180px)] md:w-[220px] aspect-[3/2] rounded-xl bg-surface border border-border flex items-center justify-center overflow-hidden transition-all duration-300 ${result ? "scale-90" : "scale-100"}`}
                         >
-                          <div className={`mb-2 md:mb-4 transition-colors duration-300 ${iconColor}`}>
-                            {side === 'Left' ? <ChevronLeft size={48} className="md:w-16 md:h-16" /> : <ChevronRight size={48} className="md:w-16 md:h-16" />}
-                          </div>
-                          <h3 className={`text-lg md:text-2xl font-display font-black uppercase tracking-tighter transition-colors duration-300 ${textColor}`}>
-                            {side}
-                          </h3>
-                        </button>
-                      );
-                    })}
+                          {!imgError ? (
+                            <img
+                              src={currentFlagUrl}
+                              alt={`${currentCountry.name} flag`}
+                              loading="eager"
+                              decoding="async"
+                              fetchPriority="high"
+                              className="w-full h-full object-contain filter"
+                              onError={() => setImgError(true)}
+                            />
+                          ) : (
+                            <img
+                              src={currentFlagUrl}
+                              alt={`${currentCountry.name} flag fallback`}
+                              loading="eager"
+                              decoding="async"
+                              className="w-full h-full object-contain filter"
+                            />
+                          )}
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Choice Buttons */}
+                  <div className="flex-1 flex items-start justify-center md:items-center pt-6 md:pt-0">
+                    <div className="w-full grid grid-cols-2 gap-3 md:gap-5 max-w-xl md:max-w-2xl mx-auto">
+                      {(["Left", "Right"] as const).map((side) => {
+                        const isCorrect = currentCountry.driveSide === side;
+                        const isSelected = selectedSide === side;
+                        const isWrong = isSelected && !isCorrect;
+
+                        let cardStyle =
+                          "bg-elevated border border-border text-text active:bg-accent-soft active:border-primary/40";
+                        let iconColor = "text-primary";
+                        let textColor = "text-text";
+
+                        if (result) {
+                          if (isCorrect) {
+                            cardStyle = "bg-primary border-2 border-primary text-white";
+                            iconColor = "text-white";
+                            textColor = "text-white";
+                          } else if (isSelected) {
+                            cardStyle = "bg-error border-2 border-error text-white";
+                            iconColor = "text-white";
+                            textColor = "text-white";
+                          } else {
+                            cardStyle = "bg-surface border-border opacity-40";
+                            iconColor = "text-muted";
+                            textColor = "text-muted";
+                          }
+                        }
+
+                        return (
+                          <button
+                            key={side}
+                            onClick={() => handleChoice(side)}
+                            disabled={!!result}
+                            className={`min-h-[80px] sm:min-h-[100px] md:min-h-[180px] relative rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? "animate-shake" : ""}`}
+                            style={{ WebkitTapHighlightColor: "transparent" }}
+                          >
+                            <div
+                              className={`mb-2 md:mb-4 transition-colors duration-300 ${iconColor}`}
+                            >
+                              {side === "Left" ? (
+                                <ChevronLeft
+                                  size={48}
+                                  className="md:w-16 md:h-16"
+                                />
+                              ) : (
+                                <ChevronRight
+                                  size={48}
+                                  className="md:w-16 md:h-16"
+                                />
+                              )}
+                            </div>
+                            <h3
+                              className={`text-lg md:text-2xl font-display font-black uppercase tracking-tighter transition-colors duration-300 ${textColor}`}
+                            >
+                              {side}
+                            </h3>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
-            
-  </div>
-</div>
-            
+            </div>
           </motion.div>
         )}
 
-        {gameState === 'finished' && (
+        {gameState === "finished" && (
           <motion.div
             key="finished"
             initial={{ opacity: 0, scale: 0.3, y: -300, rotate: -8 }}
-            animate={{ 
+            animate={{
               opacity: [0, 1, 1, 1, 1],
               scale: [0.3, 1.15, 0.95, 1.05, 1],
               y: [-300, 20, -15, 5, 0],
-              rotate: [-8, 4, -3, 1, 0]
+              rotate: [-8, 4, -3, 1, 0],
             }}
-            transition={{ 
+            transition={{
               duration: 0.7,
               times: [0, 0.45, 0.65, 0.85, 1],
-              ease: "easeOut"
+              ease: "easeOut",
             }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
             className="h-full flex px-3 sm:px-4 pt-4 pb-16 sm:py-16 overflow-y-auto"
           >
             <GameSideAds />
             <div className="mx-auto mt-6 md:mt-16 mb-auto md:my-auto flex flex-col items-center gap-4 relative z-10 w-full max-w-2xl">
-            
-            <div className="game-lobby-card w-full bg-white/20 backdrop-blur-3xl rounded-2xl p-8 sm:p-12 text-center border-2 border-white/40 overflow-hidden group">
-              <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-white/40 relative overflow-hidden">
-                <Trophy size={36} className="relative z-10 drop-shadow-lg" />
-              </div>
-              <h2 className="text-4xl sm:text-6xl font-display font-black text-white mb-4 uppercase tracking-tighter drop-shadow-md">FINISHED!</h2>
-              <p className="text-white/60 mb-6 text-[10px] font-black uppercase tracking-[0.2em] drop-shadow-sm">{t('game.finalScore')}</p>
-              <div className="text-7xl font-display font-black text-white mb-8 tabular-nums tracking-tighter">{score}</div>
-              <div className="block w-full">
-                <Button onClick={startGame} size="lg" className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto">{t('game.playAgain')} <Play className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]" fill="currentColor" /></Button>
-              </div>
+              <div className="game-lobby-card w-full bg-elevated rounded-2xl p-8 sm:p-12 text-center border border-border shadow-premium overflow-hidden group">
+                <div className="w-20 h-20 bg-warning/30 rounded-full flex items-center justify-center mx-auto mb-6 text-warning border border-border relative overflow-hidden">
+                  <Trophy size={36} className="relative z-10" />
+                </div>
+                <h2 className="text-4xl sm:text-6xl font-display font-black text-text mb-4 uppercase tracking-tighter">
+                  FINISHED!
+                </h2>
+                <p className="text-muted mb-6 text-[10px] font-black uppercase tracking-[0.2em]">
+                  {t("game.finalScore")}
+                </p>
+                <div className="text-7xl font-display font-black text-text mb-8 tabular-nums tracking-tighter">
+                  {score}
+                </div>
+                <div className="block w-full">
+                  <Button
+                    onClick={startGame}
+                    size="lg"
+                    className="w-[80vw] max-w-[384px] aspect-[4.8] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-black p-0 flex items-center justify-center mx-auto"
+                  >
+                    {t("game.playAgain")}{" "}
+                    <Play
+                      className="ml-2 w-[min(7.5vw,36px)] h-[min(7.5vw,36px)]"
+                      fill="currentColor"
+                    />
+                  </Button>
+                </div>
                 <GameNavigationButtons />
-            </div>
+              </div>
             </div>
           </motion.div>
         )}

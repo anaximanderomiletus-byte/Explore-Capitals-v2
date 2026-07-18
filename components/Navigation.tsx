@@ -1,24 +1,43 @@
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { useLayout } from "../context/LayoutContext";
+import { useTranslation } from "../context/LocaleContext";
+import BrandMark from "./BrandMark";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, Smartphone, X } from 'lucide-react';
-import { useLayout } from '../context/LayoutContext';
-import { useTranslation } from '../context/LocaleContext';
-
-// Sliding active indicator for nav links
-const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]; isOverMap: boolean }> = ({ navLinks, isOverMap }) => {
+const ActiveNavIndicator: React.FC<{
+  navLinks: { path: string; label: string }[];
+}> = ({ navLinks }) => {
   const location = useLocation();
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [indicatorStyle, setIndicatorStyle] = useState({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
 
   const updateIndicator = useCallback(() => {
-    // Match the same way isActive does: exact for "/", startsWith for others
-    const activeLink = navLinks.reduce((found: HTMLElement | null, link) => {
-      if (found) return found;
-      const matches = link.path === '/'
-        ? location.pathname === '/'
-        : location.pathname.startsWith(link.path);
-      return matches ? (document.querySelector(`[data-nav-link="${link.path}"]`) as HTMLElement | null) : null;
-    }, null as HTMLElement | null);
+    const activeLink = navLinks.reduce(
+      (found: HTMLElement | null, link) => {
+        if (found) return found;
+        const matches =
+          link.path === "/"
+            ? location.pathname === "/"
+            : location.pathname.startsWith(link.path);
+        return matches
+          ? (document.querySelector(
+              `[data-nav-link="${link.path}"]`,
+            ) as HTMLElement | null)
+          : null;
+      },
+      null as HTMLElement | null,
+    );
     if (activeLink) {
       const parent = activeLink.parentElement;
       if (parent) {
@@ -31,27 +50,27 @@ const ActiveNavIndicator: React.FC<{ navLinks: { path: string; label: string }[]
         });
       }
     } else {
-      setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
     }
-  }, [location.pathname]);
+  }, [location.pathname, navLinks]);
 
   useLayoutEffect(() => {
     requestAnimationFrame(updateIndicator);
   }, [updateIndicator]);
 
   useEffect(() => {
-    window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
   }, [updateIndicator]);
 
   return (
     <div
-      className={`absolute -bottom-1.5 h-0.5 rounded-full transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOverMap ? 'bg-primary' : 'bg-sky-light'}`}
+      className="absolute -bottom-1.5 h-0.5 rounded-full bg-primary transition-all duration-250 ease-[cubic-bezier(0.4,0,0.2,1)]"
       style={{
         left: indicatorStyle.left,
         width: indicatorStyle.width,
         opacity: indicatorStyle.opacity,
-        transform: 'translateZ(0)',
+        transform: "translateZ(0)",
       }}
     />
   );
@@ -67,20 +86,17 @@ const Navigation: React.FC = () => {
   const { scrollThreshold } = useLayout();
   const { t } = useTranslation();
 
-  const isMapPage = location.pathname === '/map';
-  const isOverMap = isMapPage || location.pathname === '/games/map-dash';
-
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       const prevOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = prevOverflow; };
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
     }
   }, [isMobileMenuOpen]);
 
@@ -91,8 +107,10 @@ const Navigation: React.FC = () => {
       rafId = requestAnimationFrame(() => {
         rafId = 0;
         const currentScrollY = window.scrollY;
+        const goingDown = currentScrollY > lastScrollY.current;
 
-        if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        // Only auto-hide after a clear scroll, and never on tiny pages
+        if (goingDown && currentScrollY > 120) {
           setIsVisible(false);
         } else {
           setIsVisible(true);
@@ -105,159 +123,138 @@ const Navigation: React.FC = () => {
 
     handleScroll();
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [scrollThreshold]);
 
+  // Close drawer on resize to desktop nav
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (mq.matches) setIsMobileMenuOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   const navLinks = [
-    { path: '/', label: t('nav.home') },
-    { path: '/database', label: t('nav.database') },
-    { path: '/games', label: t('nav.games') },
-    { path: '/map', label: t('nav.map') },
-    { path: '/blog', label: t('nav.blog') },
+    { path: "/", label: t("nav.home") },
+    { path: "/games", label: t("nav.games") },
+    { path: "/map", label: t("nav.map") },
+    { path: "/database", label: t("nav.database") },
+    { path: "/blog", label: t("nav.blog") },
   ];
 
   const isActive = (path: string) =>
-    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
+    path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(path);
 
-  let navClasses = "bg-transparent pb-4";
-  let textColorClass = "text-white";
+  const navClasses = isScrolled
+    ? "bg-elevated/95 backdrop-blur-md pb-2.5 border-b border-border shadow-sm"
+    : "bg-transparent pb-3 sm:pb-4";
 
-  if (isOverMap) {
-    textColorClass = "text-[#1A1C1E]";
-    navClasses = isScrolled
-      ? "bg-white/70 md:bg-white/20 backdrop-blur-xl pb-2.5 shadow-sm"
-      : "bg-transparent pb-4";
-  } else {
-    textColorClass = "text-white";
-    navClasses = isScrolled
-      ? "bg-surface-dark/30 backdrop-blur-xl pb-2.5 shadow-lg"
-      : "bg-transparent pb-4";
-  }
-
-  const navVisualPaddingTop = isScrolled ? '0.625rem' : '1rem';
+  const navVisualPaddingTop = isScrolled ? "0.5rem" : "0.75rem";
 
   return (
     <>
-    <nav
-      className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      } ${navClasses}`}
-      style={{ paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})` }}
-    >
-      <div className="w-full px-4 sm:px-6 md:px-10 lg:px-12 flex justify-between items-center whitespace-nowrap" style={{ paddingLeft: 'max(env(safe-area-inset-left, 16px), 16px)', paddingRight: 'max(env(safe-area-inset-right, 16px), 16px)' }}>
-        {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <img src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`} alt="ExploreCapitals Logo" className="w-7 h-7 object-contain shrink-0 drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]" />
-            <span className={`font-display font-black text-xl tracking-tighter transition-colors duration-500 ${textColorClass} uppercase drop-shadow-[0_5px_15px_rgba(0,0,0,0.3)] shrink-0 hidden sm:inline`}>
-              Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
-            </span>
-          </Link>
-        </div>
-
-        {/* Desktop Nav Links — lg+ only */}
-        <div className="hidden lg:flex items-center gap-3 sm:gap-6">
-          <div className="flex items-center gap-4 sm:gap-8 relative">
-            {navLinks.map((link) => {
-              const active = isActive(link.path);
-              const activeColor = isOverMap ? 'text-primary' : 'text-sky-light';
-
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  data-nav-link={link.path}
-                  className={`font-black text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-[color,opacity] duration-75 relative group/link whitespace-nowrap will-change-[opacity] ${
-                    active
-                      ? activeColor
-                      : `${textColorClass} opacity-60 hover:opacity-100 ${isOverMap ? 'hover:text-primary' : ''}`
-                  }`}
-                  style={{ transform: 'translateZ(0)' }}
-                >
-                  {link.label}
-                  <div
-                    className={`absolute -bottom-1.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out ${
-                      active
-                        ? 'scale-x-0'
-                        : `scale-x-0 group-hover/link:scale-x-100 ${isOverMap ? 'bg-primary/40' : 'bg-sky-light/50'}`
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-            <ActiveNavIndicator navLinks={navLinks} isOverMap={isOverMap} />
-          </div>
-          <div className={`flex items-center gap-2 shrink-0 border-l pl-5 text-[10px] font-black uppercase tracking-[0.15em] ${isOverMap ? 'text-[#1A1C1E]/50 border-[#1A1C1E]/20' : 'text-white/40 border-white/10'}`}>
-            <Smartphone size={14} />
-            <span>{t('nav.appSoon')}</span>
-          </div>
-        </div>
-
-        {/* Hamburger — mobile/tablet only */}
-        <button
-          type="button"
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Open menu"
-          className={`lg:hidden ${textColorClass} p-2 -mr-2 transition-opacity hover:opacity-70`}
-        >
-          <Menu size={26} strokeWidth={2.5} />
-        </button>
-      </div>
-    </nav>
-
-    {/* Mobile/Tablet Drawer */}
-    <div
-      className={`fixed inset-0 z-[2500] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
-      aria-hidden={!isMobileMenuOpen}
-    >
-      {/* Backdrop */}
-      <div
-        className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ease-out ${
-          isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      />
-      {/* Panel */}
-      <div
-        className={`absolute top-0 right-0 bottom-0 w-full max-w-sm bg-[#0F172A] border-l border-white/10 flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-          isMobileMenuOpen ? 'translate-x-0 shadow-[-20px_0_60px_rgba(0,0,0,0.5)]' : 'translate-x-full shadow-none'
-        }`}
+      <nav
+        className={`fixed w-full z-[2000] transition-[transform,background-color,padding,box-shadow] duration-300 ease-out ${
+          isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
+        } ${navClasses}`}
         style={{
-          paddingTop: `calc(env(safe-area-inset-top, 0px) + 1rem)`,
+          paddingTop: `calc(env(safe-area-inset-top, 0px) + ${navVisualPaddingTop})`,
         }}
       >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 pb-6 border-b border-white/10">
-            <Link
-              to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2"
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}png/STYLE/explorecapitals-globe-favicon-new.png`}
-                alt="ExploreCapitals"
-                className="w-7 h-7 object-contain drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]"
-              />
-              <span className="font-display font-black text-lg tracking-tighter text-white uppercase">
-                Explore<span className="bg-clip-text bg-gel-blue [-webkit-text-fill-color:transparent]">Capitals</span>
-              </span>
-            </Link>
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 flex justify-between items-center gap-3">
+          <BrandMark
+            size="sm"
+            showWordmark
+            className="min-h-[44px]"
+          />
+
+          <div className="hidden lg:flex items-center gap-5 xl:gap-8">
+            <div className="flex items-center gap-5 xl:gap-7 relative">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    data-nav-link={link.path}
+                    className={`font-semibold text-xs uppercase tracking-[0.12em] transition-colors duration-75 relative group/link whitespace-nowrap py-2 ${
+                      active ? "text-primary" : "text-muted hover:text-text"
+                    }`}
+                    style={{ transform: "translateZ(0)" }}
+                  >
+                    {link.label}
+                    <div
+                      className={`absolute -bottom-0.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out bg-primary/40 ${
+                        active
+                          ? "scale-x-0"
+                          : "scale-x-0 group-hover/link:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+              <ActiveNavIndicator navLinks={navLinks} />
+            </div>
+            <LanguageSwitcher variant="navbar" />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={isMobileMenuOpen}
+            className="lg:hidden text-text p-2.5 -mr-1.5 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-opacity hover:opacity-70"
+          >
+            <Menu size={24} strokeWidth={2} />
+          </button>
+        </div>
+      </nav>
+
+      <div
+        className={`fixed inset-0 z-[2500] lg:hidden ${isMobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+        aria-hidden={!isMobileMenuOpen}
+      >
+        <div
+          className={`absolute inset-0 bg-text/35 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+          className={`absolute top-0 right-0 bottom-0 w-full max-w-[min(100%,22rem)] sm:max-w-sm bg-elevated border-l border-border flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+            isMobileMenuOpen
+              ? "translate-x-0 shadow-premium-hover"
+              : "translate-x-full shadow-none"
+          }`}
+          style={{
+            paddingTop: `calc(env(safe-area-inset-top, 0px) + 0.75rem)`,
+          }}
+        >
+          <div className="flex items-center justify-between px-5 sm:px-6 pb-5 border-b border-border gap-3">
+            <BrandMark size="md" onClick={() => setIsMobileMenuOpen(false)} />
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(false)}
               aria-label="Close menu"
-              className="text-white p-2 -mr-2 transition-opacity hover:opacity-70"
+              className="text-text p-2.5 -mr-1.5 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-opacity hover:opacity-70"
             >
-              <X size={26} strokeWidth={2.5} />
+              <X size={24} strokeWidth={2} />
             </button>
           </div>
 
-          {/* Links */}
-          <div className="flex flex-col p-4 gap-1 flex-1">
+          <nav className="flex flex-col p-3 sm:p-4 gap-0.5 flex-1 overflow-y-auto">
             {navLinks.map((link) => {
               const active = isActive(link.path);
               return (
@@ -265,31 +262,29 @@ const Navigation: React.FC = () => {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-4 py-4 rounded-xl font-black text-sm uppercase tracking-[0.25em] transition-colors ${
+                  className={`block px-4 py-3.5 min-h-[48px] rounded-xl font-semibold text-sm uppercase tracking-[0.12em] transition-colors ${
                     active
-                      ? 'bg-sky/15 text-sky-light border border-sky/30'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white border border-transparent'
+                      ? "bg-accent-soft text-primary"
+                      : "text-muted hover:bg-surface hover:text-text"
                   }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
-          </div>
+          </nav>
 
-          {/* Footer */}
-          <div 
-            className="mt-auto px-6 pt-6 border-t border-white/10"
-            style={{ paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1.5rem)` }}
+          <div
+            className="mt-auto px-5 sm:px-6 pt-5 border-t border-border"
+            style={{
+              paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 1.25rem)`,
+            }}
           >
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-white/40">
-              <Smartphone size={14} />
-              <span>{t('nav.appSoon')}</span>
-            </div>
+            <LanguageSwitcher variant="mobile" />
           </div>
+        </div>
       </div>
-    </div>
-  </>
+    </>
   );
 };
 

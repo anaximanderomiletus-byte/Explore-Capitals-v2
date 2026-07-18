@@ -62,7 +62,7 @@
   "home.whyGeo.footer": "ExploreCapitals couvre 195 nations souveraines et 42 territoires avec des jeux interactifs, des visites guidées par pays, un atlas explorable et une base de données interrogeable. Que vous soyez étudiant préparant des examens, passionné de culture générale ou voyageur curieux, chaque session renforce votre carte mentale du monde.",
 
   "home.exploreSection.title": "Explorer",
-  "home.exploreSection.subtitle": "Maîtrisez l'atlas dans notre base de données interactive.",
+  "home.exploreSection.subtitle": "Carte, base de données et articles — un même monde, plusieurs portes.",
   "home.exploreSection.database": "Base de données",
   "home.exploreSection.databaseDesc": "Recherchez et triez plus de 195 pays par capitale, population, région, langue et devise.",
   "home.exploreSection.browseNow": "Parcourir",
@@ -226,7 +226,7 @@
   "game.mapDash.description": "Trouvez le pays avant la fin du temps.",
   "game.flagFrenzy.title": "Flag Frenzy",
   "game.flagFrenzy.description": "Associez les drapeaux à leurs nations.",
-  "game.knowYourNeighbor.title": "Know Your Neighbor",
+  "game.knowYourNeighbor.title": "Border Blitz",
   "game.knowYourNeighbor.description": "Identifiez tous les pays frontaliers.",
   "game.populationPursuit.title": "Population Pursuit",
   "game.populationPursuit.description": "Quel pays a le plus d'habitants ?",
@@ -246,7 +246,7 @@
   "game.currencyCraze.description": "Associez les pays à leurs devises officielles.",
   "game.languageLegend.title": "Language Legend",
   "game.languageLegend.description": "Identifiez les pays par leurs langues officielles.",
-  "game.timeZoneTrekker.title": "Time Zone Trekker",
+  "game.timeZoneTrekker.title": "Time Trekker",
   "game.timeZoneTrekker.description": "Associez les pays à leurs fuseaux horaires.",
   "game.drivingDirection.title": "Driving Direction",
   "game.drivingDirection.description": "Gauche ou droite ? Découvrez de quel côté on conduit dans chaque pays."
