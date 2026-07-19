@@ -153,11 +153,17 @@ const Navigation: React.FC = () => {
       ? location.pathname === "/"
       : location.pathname.startsWith(path);
 
+  // Transparent over hero; solid only after scroll
   const navClasses = isScrolled
     ? "bg-elevated/95 backdrop-blur-md pb-2.5 border-b border-border shadow-sm"
     : "bg-transparent pb-3 sm:pb-4";
 
   const navVisualPaddingTop = isScrolled ? "0.5rem" : "0.75rem";
+
+  // Soft thin highlight so ink stays readable on the globe without a nav background
+  const overHeroReadable = !isScrolled
+    ? "[text-shadow:0_0.5px_1px_rgba(233,238,243,0.55)]"
+    : "";
 
   return (
     <>
@@ -173,11 +179,11 @@ const Navigation: React.FC = () => {
           <BrandMark
             size="sm"
             showWordmark
-            className="min-h-[44px]"
+            className={`min-h-[44px] ${overHeroReadable}`}
           />
 
-          <div className="hidden lg:flex items-center gap-5 xl:gap-8">
-            <div className="flex items-center gap-5 xl:gap-7 relative">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+            <div className={`flex items-center gap-5 xl:gap-7 relative ${overHeroReadable}`}>
               {navLinks.map((link) => {
                 const active = isActive(link.path);
 
@@ -187,13 +193,13 @@ const Navigation: React.FC = () => {
                     to={link.path}
                     data-nav-link={link.path}
                     className={`font-semibold text-xs uppercase tracking-[0.12em] transition-colors duration-75 relative group/link whitespace-nowrap py-2 ${
-                      active ? "text-primary" : "text-muted hover:text-text"
+                      active ? "text-primary" : "text-text hover:text-text/80"
                     }`}
                     style={{ transform: "translateZ(0)" }}
                   >
                     {link.label}
                     <div
-                      className={`absolute -bottom-0.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out bg-primary/40 ${
+                      className={`absolute -bottom-0.5 left-0 right-0 h-0.5 origin-center transition-transform duration-150 ease-out bg-primary/50 ${
                         active
                           ? "scale-x-0"
                           : "scale-x-0 group-hover/link:scale-x-100"
@@ -204,7 +210,6 @@ const Navigation: React.FC = () => {
               })}
               <ActiveNavIndicator navLinks={navLinks} />
             </div>
-            <LanguageSwitcher variant="navbar" />
           </div>
 
           <button
@@ -212,7 +217,7 @@ const Navigation: React.FC = () => {
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Open menu"
             aria-expanded={isMobileMenuOpen}
-            className="lg:hidden text-text p-2.5 -mr-1.5 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-opacity hover:opacity-70"
+            className={`lg:hidden text-text p-2.5 -mr-1.5 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-opacity hover:opacity-70 ${overHeroReadable}`}
           >
             <Menu size={24} strokeWidth={2} />
           </button>

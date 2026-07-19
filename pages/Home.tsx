@@ -94,39 +94,32 @@ export default function Home() {
       />
 
       <main className="relative w-full overflow-x-hidden">
-        {/* Hero */}
-        <section
-          className="relative flex flex-col justify-end sm:justify-center overflow-hidden
-            min-h-[100svh] min-h-[100dvh]"
-        >
+        {/* Hero — full-bleed, vertically centered (standard mobile + desktop) */}
+        <section className="relative flex flex-col justify-center overflow-hidden min-h-[100svh] min-h-[100dvh]">
           <div className="absolute inset-0" aria-hidden>
             <img
               src="/png/STYLE/realistic-globe.png"
               alt=""
               className="absolute inset-0 w-full h-full object-cover
-                object-[72%_40%] sm:object-[65%_38%] md:object-[58%_38%] lg:object-[center_38%]
-                scale-[1.08] sm:scale-[1.04] md:scale-[1.02]"
+                object-[68%_36%] sm:object-[65%_38%] md:object-[58%_38%] lg:object-[center_38%]
+                scale-[1.06] sm:scale-[1.04] md:scale-[1.02]"
               fetchPriority="high"
             />
-            {/* Mobile: heavy left/bottom wash so type stays readable over the globe */}
-            <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/85 to-surface/40 sm:hidden" />
-            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-surface/20 sm:hidden" />
-            {/* Tablet+ */}
-            <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-surface via-surface/80 to-transparent" />
-            <div className="absolute inset-0 hidden sm:block bg-gradient-to-t from-surface via-transparent to-surface/25" />
+            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/85 to-surface/25 sm:via-surface/80 sm:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-surface/40 sm:from-surface sm:to-surface/25" />
           </div>
 
           <div
             className={`${shell} relative z-10
-              pt-[max(6.5rem,calc(env(safe-area-inset-top,0px)+5.5rem))]
-              pb-[max(2.5rem,calc(env(safe-area-inset-bottom,0px)+2rem))]
-              sm:pt-32 sm:pb-20 md:pb-24`}
+              pt-[max(5.5rem,calc(env(safe-area-inset-top,0px)+4.5rem))]
+              pb-[max(2rem,calc(env(safe-area-inset-bottom,0px)+1.5rem))]
+              sm:pt-28 sm:pb-20 md:pb-24`}
           >
             <motion.h1
               className="font-display italic font-normal tracking-tight text-text leading-[1.05]
-                text-[clamp(2.5rem,11vw,3.5rem)]
+                text-[clamp(2.5rem,10.5vw,3.5rem)]
                 sm:text-6xl md:text-7xl lg:text-[5.25rem] xl:text-[5.75rem]
-                max-w-[14ch] sm:max-w-none mb-4 sm:mb-5 md:mb-6"
+                max-w-[12ch] sm:max-w-none mb-4 sm:mb-5 md:mb-6"
               {...heroFade(0)}
             >
               Explore
@@ -144,7 +137,7 @@ export default function Home() {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full sm:w-auto max-w-md sm:max-w-none"
+              className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full sm:w-auto max-w-sm sm:max-w-none"
               {...heroFade(0.14)}
             >
               <Button

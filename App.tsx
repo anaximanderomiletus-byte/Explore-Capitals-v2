@@ -12,6 +12,7 @@ import {
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import CookieConsent from "./components/CookieConsent";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 import { LayoutProvider, useLayout } from "./context/LayoutContext";
 import { UserProvider } from "./context/UserContext";
 import { LocaleProvider } from "./context/LocaleContext";
@@ -291,6 +292,7 @@ const AppContent: React.FC = () => {
       <ScrollToTop />
       <NavigationCursor />
       <Navigation />
+      <LanguageSwitcher variant="floating" />
       <CookieConsent />
       <div className="flex-grow flex flex-col relative z-[1] w-full">
         <PageWrapper>
