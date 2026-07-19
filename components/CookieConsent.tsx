@@ -280,7 +280,7 @@ const CookieConsent: React.FC = () => {
 
                   <button
                     onClick={saveCustomPreferences}
-                    className="w-full bg-primary hover:bg-primary-hover text-white font-semibold text-sm py-2.5 px-5 rounded-xl transition-all"
+                    className="w-full bg-primary hover:bg-primary-hover text-text font-semibold text-sm py-2.5 px-5 rounded-xl transition-all"
                   >
                     Save Preferences
                   </button>

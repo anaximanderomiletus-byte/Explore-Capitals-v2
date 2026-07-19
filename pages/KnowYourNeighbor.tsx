@@ -392,7 +392,7 @@ export default function KnowYourNeighbor() {
                           if (roundResult) {
                             if (isActualNeighbor && isSelected) {
                               stateClasses =
-                                "border-2 border-primary text-white";
+                                "border-2 border-success text-white";
                             } else if (isActualNeighbor && !isSelected) {
                               stateClasses =
                                 "border-2 border-warning text-white";
@@ -435,17 +435,17 @@ export default function KnowYourNeighbor() {
 
                                   {/* 3. Correct Result Overlay */}
                                   <div
-                                    className={`absolute inset-0 bg-primary transition-opacity duration-200 ${roundResult && isActualNeighbor && isSelected ? "opacity-100" : "opacity-0"}`}
+                                    className={`absolute inset-0 feedback-correct transition-opacity duration-200 ${roundResult && isActualNeighbor && isSelected ? "opacity-100" : "opacity-0"}`}
                                   />
 
-                                  {/* 4. Missed Result Overlay (Orange) */}
+                                  {/* 4. Missed neighbor — yellow */}
                                   <div
-                                    className={`absolute inset-0 bg-warning/60 transition-opacity duration-200 ${roundResult && isActualNeighbor && !isSelected ? "opacity-100" : "opacity-0"}`}
+                                    className={`absolute inset-0 bg-warning transition-opacity duration-200 ${roundResult && isActualNeighbor && !isSelected ? "opacity-100" : "opacity-0"}`}
                                   />
 
                                   {/* 5. Incorrect Result Overlay (Red) */}
                                   <div
-                                    className={`absolute inset-0 bg-error transition-opacity duration-200 ${roundResult && isSelected && !isActualNeighbor ? "opacity-100" : "opacity-0"}`}
+                                    className={`absolute inset-0 feedback-incorrect transition-opacity duration-200 ${roundResult && isSelected && !isActualNeighbor ? "opacity-100" : "opacity-0"}`}
                                   />
 
                                   {/* 6. Ghost/Dimmed Result Overlay */}
@@ -468,7 +468,7 @@ export default function KnowYourNeighbor() {
                       <div className="h-px w-full bg-accent-soft mb-2" />
                       {roundResult ? (
                         <div
-                          className={`p-5 md:p-8 rounded-full border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === "correct" ? "bg-primary border-primary text-white" : "bg-error border-error text-white"}`}
+                          className={`p-5 md:p-8 rounded-full border flex items-center justify-center gap-3 font-black uppercase tracking-widest relative overflow-hidden animate-in zoom-in-95 duration-300 ${roundResult === "correct" ? "feedback-correct" : "feedback-incorrect"}`}
                         >
                           <span className="text-base md:text-xl relative z-10">
                             {feedback}
@@ -478,7 +478,7 @@ export default function KnowYourNeighbor() {
                         <button
                           onClick={submitAnswer}
                           disabled={selectedOptions.length === 0}
-                          className={`w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-display font-black rounded-full transition-all duration-200 select-none ${selectedOptions.length > 0 ? "bg-primary border-2 border-primary text-white hover:bg-primary-hover active:scale-[0.98] cursor-pointer" : "bg-surface border border-border text-muted cursor-not-allowed"}`}
+                          className={`w-full aspect-[6] sm:aspect-[7] md:aspect-[8] min-h-[56px] md:min-h-[80px] text-[clamp(18px,7.5vw,30px)] uppercase tracking-widest font-display font-black rounded-full transition-all duration-200 select-none ${selectedOptions.length > 0 ? "bg-primary text-text hover:bg-primary-hover active:bg-primary-press active:scale-[0.98] cursor-pointer" : "bg-surface border border-border text-muted cursor-not-allowed"}`}
                           style={{ WebkitTapHighlightColor: "transparent" }}
                         >
                           Submit

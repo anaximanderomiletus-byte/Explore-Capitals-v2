@@ -67,7 +67,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 0.2, 0] }}
             transition={{ duration: 0.4 }}
-            className={`absolute inset-0 ${type === "correct" ? "bg-primary" : "bg-error"}`}
+            className={`absolute inset-0 ${type === "correct" ? "feedback-correct" : "feedback-incorrect"}`}
             style={{ transform: "translateZ(0)" }}
           />
 
@@ -107,7 +107,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
                 className="relative flex flex-col items-center"
                 style={{ transform: "translateZ(0)" }}
               >
-                <div className="bg-primary p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
+                <div className="feedback-correct p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
                   <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 
@@ -115,7 +115,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="text-center mt-4 sm:mt-6 bg-primary px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-border shadow-premium"
+                  className="text-center mt-4 sm:mt-6 feedback-correct px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-white/40 shadow-premium"
                 >
                   <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight pr-1">
                     Excellent!
@@ -136,7 +136,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
                 className="relative flex flex-col items-center w-full"
                 style={{ transform: "translateZ(0)" }}
               >
-                <div className="bg-error p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
+                <div className="feedback-incorrect p-5 sm:p-6 md:p-8 rounded-2xl border-2 border-white shadow-premium-hover">
                   <XCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
                 </div>
 
@@ -144,7 +144,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="text-center mt-4 sm:mt-6 bg-error px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-border shadow-premium"
+                  className="text-center mt-4 sm:mt-6 feedback-incorrect px-5 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl border border-white/40 shadow-premium"
                 >
                   <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight pr-1">
                     Not Quite

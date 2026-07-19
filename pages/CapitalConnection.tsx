@@ -76,12 +76,22 @@ export default function CapitalConnection() {
 
   // Refs to avoid stale closures in setTimeout callbacks
   const selectedIdsRef = useRef<string[]>([]);
+  const cardsRef = useRef<GameCard[]>([]);
   const boardGeneratingRef = useRef(false);
+  const isProcessingRef = useRef(false);
 
-  // Keep ref in sync with state
+  // Keep refs in sync with state
   useEffect(() => {
     selectedIdsRef.current = selectedIds;
   }, [selectedIds]);
+
+  useEffect(() => {
+    cardsRef.current = cards;
+  }, [cards]);
+
+  useEffect(() => {
+    isProcessingRef.current = isProcessing;
+  }, [isProcessing]);
 
   useEffect(() => {
     setPageLoading(false);
@@ -125,60 +135,67 @@ export default function CapitalConnection() {
     boardGeneratingRef.current = true;
     setIsProcessing(true);
 
-    const roundCountries = shuffleArray(COUNTRIES).slice(0, 6);
-    const IMAGES = await getStaticImages();
-    const newCards: GameCard[] = [];
+    try {
+      const roundCountries = shuffleArray(COUNTRIES).slice(0, 6);
+      const IMAGES = await getStaticImages();
+      const newCards: GameCard[] = [];
 
-    roundCountries.forEach((country) => {
-      // Country Card
-      newCards.push({
-        id: `country-${country.id}`,
-        label: country.name,
-        type: "country",
-        countryId: country.id,
-        isMatched: false,
-        isSelected: false,
-        isWrong: false,
-        isCorrect: false,
-        flagCode: getCountryCode(country.flag),
+      roundCountries.forEach((country) => {
+        // Country Card
+        newCards.push({
+          id: `country-${country.id}`,
+          label: country.name,
+          type: "country",
+          countryId: country.id,
+          isMatched: false,
+          isSelected: false,
+          isWrong: false,
+          isCorrect: false,
+          flagCode: getCountryCode(country.flag),
+        });
+
+        // Capital Card
+        newCards.push({
+          id: `capital-${country.id}`,
+          label: country.capital,
+          type: "capital",
+          countryId: country.id,
+          isMatched: false,
+          isSelected: false,
+          isWrong: false,
+          isCorrect: false,
+          capitalImage: IMAGES[country.name] || IMAGES[country.capital],
+        });
       });
 
-      // Capital Card
-      newCards.push({
-        id: `capital-${country.id}`,
-        label: country.capital,
-        type: "capital",
-        countryId: country.id,
-        isMatched: false,
-        isSelected: false,
-        isWrong: false,
-        isCorrect: false,
-        capitalImage: IMAGES[country.name] || IMAGES[country.capital],
-      });
-    });
+      // We shuffle Capitals and Countries SEPARATELY so they appear in random order in their columns
+      const capitals = shuffleArray(
+        newCards.filter((c) => c.type === "capital"),
+      );
+      const countries = shuffleArray(
+        newCards.filter((c) => c.type === "country"),
+      );
 
-    // We shuffle Capitals and Countries SEPARATELY so they appear in random order in their columns
-    const capitals = shuffleArray(newCards.filter((c) => c.type === "capital"));
-    const countries = shuffleArray(
-      newCards.filter((c) => c.type === "country"),
-    );
+      // Combine them back into a single array for state, but keeping them grouped is fine
+      // since we filter by type in the render method anyway.
+      const combined = [...capitals, ...countries];
 
-    // Combine them back into a single array for state, but keeping them grouped is fine
-    // since we filter by type in the render method anyway.
-    const combined = [...capitals, ...countries];
+      await preloadImages([
+        ...combined.map((c) =>
+          c.flagCode ? `/flags/${c.flagCode}.png` : undefined,
+        ),
+        ...combined.map((c) => c.capitalImage),
+      ]);
 
-    await preloadImages([
-      ...combined.map((c) =>
-        c.flagCode ? `/flags/${c.flagCode}.png` : undefined,
-      ),
-      ...combined.map((c) => c.capitalImage),
-    ]);
-
-    setCards(combined);
-    setSelectedIds([]);
-    selectedIdsRef.current = [];
-    setIsProcessing(false);
-    boardGeneratingRef.current = false;
+      setCards(combined);
+      cardsRef.current = combined;
+      setSelectedIds([]);
+      selectedIdsRef.current = [];
+    } finally {
+      isProcessingRef.current = false;
+      setIsProcessing(false);
+      boardGeneratingRef.current = false;
+    }
   }, []);
 
   const startGame = useCallback(async () => {
@@ -196,110 +213,127 @@ export default function CapitalConnection() {
   const handleCardClick = useCallback(
     (cardId: string) => {
       // Block clicks during processing or board generation
-      if (isProcessing || boardGeneratingRef.current || gameState !== "playing")
+      if (
+        isProcessingRef.current ||
+        boardGeneratingRef.current ||
+        gameState !== "playing"
+      ) {
         return;
+      }
 
-      setCards((prevCards) => {
-        const clickedCard = prevCards.find((c) => c.id === cardId);
-        if (!clickedCard || clickedCard.isMatched || clickedCard.isSelected)
-          return prevCards;
+      const currentCards = cardsRef.current;
+      const clickedCard = currentCards.find((c) => c.id === cardId);
+      if (!clickedCard || clickedCard.isMatched || clickedCard.isSelected) {
+        return;
+      }
+      if (selectedIdsRef.current.includes(cardId)) {
+        return;
+      }
 
-        const newCards = prevCards.map((c) =>
-          c.id === cardId ? { ...c, isSelected: true } : c,
+      const newSelectedIds = [...selectedIdsRef.current, cardId];
+      selectedIdsRef.current = newSelectedIds;
+      setSelectedIds(newSelectedIds);
+      setCards((prev) =>
+        prev.map((c) => (c.id === cardId ? { ...c, isSelected: true } : c)),
+      );
+
+      if (newSelectedIds.length < 2) {
+        return;
+      }
+
+      // Two cards selected — resolve match outside of any state updater
+      isProcessingRef.current = true;
+      setIsProcessing(true);
+
+      const card1 = currentCards.find((c) => c.id === newSelectedIds[0]);
+      const card2 =
+        cardId === newSelectedIds[1]
+          ? clickedCard
+          : currentCards.find((c) => c.id === newSelectedIds[1]);
+
+      if (!card1 || !card2) {
+        selectedIdsRef.current = [];
+        setSelectedIds([]);
+        setCards((prev) =>
+          prev.map((c) => ({ ...c, isSelected: false, isWrong: false })),
         );
-        // Use ref for current selectedIds to avoid stale closure
-        const currentSelectedIds = selectedIdsRef.current;
-        const newSelectedIds = [...currentSelectedIds, cardId];
+        isProcessingRef.current = false;
+        setIsProcessing(false);
+        return;
+      }
 
-        if (newSelectedIds.length === 2) {
-          setIsProcessing(true);
-          const card1 = newCards.find((c) => c.id === newSelectedIds[0])!;
-          const card2 = newCards.find((c) => c.id === newSelectedIds[1])!;
+      const id1 = card1.id;
+      const id2 = card2.id;
+      const isMatch = card1.countryId === card2.countryId;
 
-          if (card1.countryId === card2.countryId) {
-            // CORRECT MATCH - trigger pop animation first
-            setScore((s) => s + 10);
+      if (isMatch) {
+        setScore((s) => s + 10);
+        setFeedback("correct");
+        setFeedbackKey((f) => f + 1);
 
-            // Show correct feedback immediately
-            setFeedback("correct");
-            setFeedbackKey((f) => f + 1);
+        const willCompleteGrid = currentCards.every(
+          (c) => c.isMatched || c.id === id1 || c.id === id2,
+        );
 
-            // Check if this match completes the grid (all other cards already matched)
-            const willCompleteGrid = newCards.every(
-              (c) => c.isMatched || c.id === card1.id || c.id === card2.id,
-            );
+        window.setTimeout(() => {
+          setCards((finalCards) =>
+            finalCards.map((c) =>
+              c.id === id1 || c.id === id2
+                ? { ...c, isCorrect: true, isSelected: false }
+                : c,
+            ),
+          );
+        }, 50);
 
-            // Immediately show correct animation
-            setTimeout(() => {
-              setCards((finalCards) =>
-                finalCards.map((c) =>
-                  c.id === card1.id || c.id === card2.id
-                    ? { ...c, isCorrect: true, isSelected: false }
-                    : c,
-                ),
-              );
-            }, 50);
+        window.setTimeout(() => {
+          setCards((finalCards) =>
+            finalCards.map((c) =>
+              c.id === id1 || c.id === id2
+                ? { ...c, isMatched: true, isCorrect: false }
+                : c,
+            ),
+          );
 
-            // Then transition to matched state after animation completes
-            setTimeout(() => {
-              setCards((finalCards) =>
-                finalCards.map((c) =>
-                  c.id === card1.id || c.id === card2.id
-                    ? { ...c, isMatched: true, isCorrect: false }
-                    : c,
-                ),
-              );
+          selectedIdsRef.current = [];
+          setSelectedIds([]);
 
-              // Clear selection state
-              setSelectedIds([]);
-              selectedIdsRef.current = [];
-
-              if (willCompleteGrid) {
-                // Keep isProcessing true — generateBoard will release it when done
-                setTimeout(() => {
-                  generateBoard();
-                }, 400);
-              } else {
-                setIsProcessing(false);
-              }
-            }, 450);
+          if (willCompleteGrid) {
+            window.setTimeout(() => {
+              generateBoard();
+            }, 400);
           } else {
-            // INCORRECT MATCH - show feedback popup and visual shake
-            setFeedback("incorrect");
-            setFeedbackKey((f) => f + 1);
-
-            setTimeout(() => {
-              setCards((finalCards) =>
-                finalCards.map((c) =>
-                  c.id === card1.id || c.id === card2.id
-                    ? { ...c, isWrong: true }
-                    : c,
-                ),
-              );
-            }, 100);
-
-            setTimeout(() => {
-              setCards((finalCards) =>
-                finalCards.map((c) =>
-                  c.id === card1.id || c.id === card2.id
-                    ? { ...c, isSelected: false, isWrong: false }
-                    : c,
-                ),
-              );
-              setIsProcessing(false);
-              setSelectedIds([]);
-              selectedIdsRef.current = [];
-            }, 800);
+            isProcessingRef.current = false;
+            setIsProcessing(false);
           }
-        } else {
-          setSelectedIds(newSelectedIds);
-          selectedIdsRef.current = newSelectedIds;
-        }
+        }, 450);
+      } else {
+        setFeedback("incorrect");
+        setFeedbackKey((f) => f + 1);
 
-        return newCards;
-      });
+        window.setTimeout(() => {
+          setCards((finalCards) =>
+            finalCards.map((c) =>
+              c.id === id1 || c.id === id2 ? { ...c, isWrong: true } : c,
+            ),
+          );
+        }, 100);
+
+        window.setTimeout(() => {
+          setCards((finalCards) =>
+            finalCards.map((c) =>
+              c.id === id1 || c.id === id2
+                ? { ...c, isSelected: false, isWrong: false }
+                : c,
+            ),
+          );
+          selectedIdsRef.current = [];
+          setSelectedIds([]);
+          isProcessingRef.current = false;
+          setIsProcessing(false);
+        }, 800);
+      }
     },
-    [isProcessing, gameState, generateBoard],
+    [gameState, generateBoard],
   );
 
   return (
@@ -579,19 +613,19 @@ const Card = React.memo(
     let textStyle = "text-text";
 
     if (card.isMatched) {
-      stateStyle = "border-primary/20 cursor-default";
+      stateStyle = "border-border cursor-default";
       overlayStyle = "bg-text/70";
       textStyle = "text-muted";
     } else if (card.isCorrect) {
-      stateStyle = "border-primary";
-      overlayStyle = "bg-primary";
+      stateStyle = "border-success";
+      overlayStyle = "feedback-correct";
       animationClass = "animate-correct-pop";
-      textStyle = "text-text";
+      textStyle = "text-white";
     } else if (card.isWrong) {
       stateStyle = "border-error";
-      overlayStyle = "bg-error";
+      overlayStyle = "feedback-incorrect";
       animationClass = "animate-shake";
-      textStyle = "text-text";
+      textStyle = "text-white";
     } else if (card.isSelected) {
       stateStyle = "border-sky";
       overlayStyle = "bg-primary/70";
@@ -601,6 +635,16 @@ const Card = React.memo(
     return (
       <div
         onClick={!card.isMatched && !card.isCorrect ? onClick : undefined}
+        onKeyDown={(e) => {
+          if (
+            (e.key === "Enter" || e.key === " ") &&
+            !card.isMatched &&
+            !card.isCorrect
+          ) {
+            e.preventDefault();
+            onClick();
+          }
+        }}
         role="button"
         tabIndex={!card.isMatched && !card.isCorrect ? 0 : -1}
         className={`relative block w-full h-full min-h-0 rounded-xl transition-all duration-200 border-2 overflow-hidden group ${stateStyle} ${animationClass} outline-none focus:outline-none focus:ring-0 ${!card.isMatched && !card.isCorrect ? "cursor-pointer" : "cursor-default pointer-events-none"}`}
@@ -620,7 +664,7 @@ const Card = React.memo(
             className="absolute inset-0 w-full h-full object-cover transition-all duration-500 scale-[1.02] z-0 pointer-events-none opacity-80 rounded-[10px]"
           />
         ) : (
-          <div className="absolute inset-0 w-full h-full bg-blue-800 transition-all duration-500 z-0 pointer-events-none rounded-[10px]" />
+          <div className="absolute inset-0 w-full h-full bg-surface transition-all duration-500 z-0 pointer-events-none rounded-[10px]" />
         )}
 
         {/* Overlay */}
@@ -645,7 +689,13 @@ const Card = React.memo(
             ) : (
               <Building2
                 size={20}
-                className={`md:w-6 md:h-6 ${card.isMatched ? "text-muted" : "text-primary"}`}
+                className={`md:w-6 md:h-6 ${
+                  card.isCorrect || card.isWrong
+                    ? "text-white"
+                    : card.isMatched
+                      ? "text-muted"
+                      : "text-primary"
+                }`}
               />
             )}
           </div>
@@ -660,3 +710,4 @@ const Card = React.memo(
     );
   },
 );
+

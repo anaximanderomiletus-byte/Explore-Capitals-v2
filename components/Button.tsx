@@ -28,8 +28,8 @@ const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     primary: isFlat
-      ? `bg-primary hover:bg-primary-hover active:bg-primary-hover text-text`
-      : `bg-primary hover:bg-primary-hover text-text shadow-premium`,
+      ? `bg-primary hover:bg-primary-hover active:bg-primary-press text-text`
+      : `bg-primary hover:bg-primary-hover active:bg-primary-press text-text shadow-[0_12px_32px_rgba(21,32,43,0.08)]`,
     accent: isFlat
       ? `bg-accent-soft hover:bg-primary/20 active:bg-primary/25 text-primary`
       : `bg-accent-soft hover:bg-primary/20 text-primary border border-primary/25`,

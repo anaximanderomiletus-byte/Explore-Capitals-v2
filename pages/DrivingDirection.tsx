@@ -157,7 +157,7 @@ export default function DrivingDirection() {
     setFeedbackKey((prev) => prev + 1);
     if (isCorrect) setScore((s) => s + 10);
 
-    setTimeout(generateRound, 700);
+    setTimeout(generateRound, 900);
   };
 
   const currentFlagUrl = currentCountry ? getFlagUrl(currentCountry.flag) : "";
@@ -348,9 +348,7 @@ export default function DrivingDirection() {
                         style={{ willChange: "transform, opacity" }}
                         className="w-full min-h-[96px] sm:min-h-[120px] md:min-h-[147px] flex items-center justify-center mb-4 md:mb-6"
                       >
-                        <div
-                          className={`w-[min(52vw,180px)] md:w-[220px] aspect-[3/2] rounded-xl bg-surface border border-border flex items-center justify-center overflow-hidden transition-all duration-300 ${result ? "scale-90" : "scale-100"}`}
-                        >
+                        <div className="w-[min(52vw,180px)] md:w-[220px] aspect-[3/2] flex items-center justify-center transition-all duration-300">
                           {!imgError ? (
                             <img
                               src={currentFlagUrl}
@@ -358,7 +356,7 @@ export default function DrivingDirection() {
                               loading="eager"
                               decoding="async"
                               fetchPriority="high"
-                              className="w-full h-full object-contain filter"
+                              className={`w-full h-full object-contain ${result ? "scale-90" : "scale-100"} transition-transform duration-300`}
                               onError={() => setImgError(true)}
                             />
                           ) : (
@@ -367,7 +365,7 @@ export default function DrivingDirection() {
                               alt={`${currentCountry.name} flag fallback`}
                               loading="eager"
                               decoding="async"
-                              className="w-full h-full object-contain filter"
+                              className={`w-full h-full object-contain ${result ? "scale-90" : "scale-100"} transition-transform duration-300`}
                             />
                           )}
                         </div>
@@ -390,11 +388,11 @@ export default function DrivingDirection() {
 
                         if (result) {
                           if (isCorrect) {
-                            cardStyle = "bg-primary border-2 border-primary text-white";
+                            cardStyle = "feedback-correct border-2 shadow-premium";
                             iconColor = "text-white";
                             textColor = "text-white";
                           } else if (isSelected) {
-                            cardStyle = "bg-error border-2 border-error text-white";
+                            cardStyle = "feedback-incorrect border-2 shadow-premium";
                             iconColor = "text-white";
                             textColor = "text-white";
                           } else {

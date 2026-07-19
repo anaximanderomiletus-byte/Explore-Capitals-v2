@@ -155,7 +155,7 @@ export default function AreaAce() {
     if (isCorrect) setScore((s) => s + 10);
 
     // Snappier transition to next round
-    setTimeout(generateRound, 700);
+    setTimeout(generateRound, 900);
   };
 
   return (
@@ -329,31 +329,31 @@ export default function AreaAce() {
                         const areaOther = (other as any).numericArea;
                         const isWinner = areaCurrent >= areaOther;
                         const isA = idx === 0;
-                        const hasError = isA ? imgErrorA : imgErrorB;
                         const setHasError = isA ? setImgErrorA : setImgErrorB;
                         const isSelected = selectedId === country.id;
                         const isWrong = isSelected && !isWinner;
 
-                        // No hover styles on mobile - prevents "pre-highlighted" sticky hover on touch devices
                         let cardStyle =
-                          "border border-border active:border-primary/40";
-                        let overlayStyle =
-                          "bg-text/45 hover:bg-text/35 active:bg-text/30";
-                        let titleStyle = "text-text";
+                          "bg-elevated border border-border text-text active:border-primary/40 active:bg-accent-soft";
+                        let metaStyle = "text-muted";
+                        let valueStyle = "text-text";
 
                         if (result) {
                           if (isWinner) {
-                            cardStyle = "border-2 border-primary z-20";
-                            overlayStyle = "bg-primary";
-                            titleStyle = "text-white";
+                            cardStyle =
+                              "feedback-correct border-2 shadow-premium";
+                            metaStyle = "text-white/80";
+                            valueStyle = "text-white";
                           } else if (isSelected) {
-                            cardStyle = "border-2 border-error z-10";
-                            overlayStyle = "bg-error";
-                            titleStyle = "text-white";
+                            cardStyle =
+                              "feedback-incorrect border-2 shadow-premium";
+                            metaStyle = "text-white/80";
+                            valueStyle = "text-white";
                           } else {
-                            cardStyle = "border border-border opacity-30 z-0 ";
-                            overlayStyle = "bg-text/60";
-                            titleStyle = "text-white/70";
+                            cardStyle =
+                              "bg-surface border border-border text-muted opacity-40";
+                            metaStyle = "text-muted";
+                            valueStyle = "text-muted";
                           }
                         }
 
@@ -361,67 +361,35 @@ export default function AreaAce() {
                           <div
                             key={country.id}
                             onClick={() => handleChoice(country)}
-                            className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[border-color,opacity,transform] duration-300 cursor-pointer group overflow-hidden ${cardStyle} ${isWrong ? "animate-shake" : ""}`}
+                            className={`min-h-[160px] md:min-h-[320px] relative rounded-2xl flex flex-col transition-[background-color,border-color,opacity,transform] duration-300 cursor-pointer overflow-hidden ${cardStyle} ${isWrong ? "animate-shake" : ""}`}
                             style={{ WebkitTapHighlightColor: "transparent" }}
                           >
-                            {/* Background Flag */}
-                            <div className="absolute inset-0 z-0">
+                            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-3 md:p-6 gap-2 md:gap-4">
                               <img
                                 src={getFlagUrl(country.flag)}
                                 alt={`${country.name} flag`}
-                                className="w-full h-full object-cover"
+                                className={`w-full max-w-[88px] md:max-w-[200px] aspect-[3/2] object-contain ${result && !isWinner ? "opacity-50" : "opacity-100"}`}
+                                onError={() => setHasError(true)}
                               />
-                            </div>
 
-                            {/* Overlay */}
-                            <div
-                              className={`absolute inset-0 z-0 transition-all duration-300 ${overlayStyle}`}
-                            />
-
-                            {/* Content Container */}
-                            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-2 md:p-6">
-                              {/* Small Flag (OG View) */}
-                              <div className="mb-2 md:mb-4 flex items-center justify-center relative w-full min-h-[50px] md:min-h-[140px]">
-                                {!hasError ? (
-                                  <div className="w-full max-w-[80px] md:max-w-[200px] aspect-[3/2] flex items-center justify-center">
-                                    <img
-                                      src={getFlagUrl(country.flag)}
-                                      alt={`${country.name} flag`}
-                                      className={`w-full h-full object-contain filter transition-opacity duration-500 ${result && !isWinner ? "opacity-40" : "opacity-100"}`}
-                                      onError={() => setHasError(true)}
-                                    />
-                                  </div>
-                                ) : (
-                                  <div
-                                    className={`w-full max-w-[80px] md:max-w-[160px] aspect-[3/2] ${result && !isWinner ? "opacity-40" : "opacity-100"}`}
-                                  >
-                                    <img
-                                      src={getFlagUrl(country.flag)}
-                                      alt={`${country.name} flag fallback`}
-                                      className="w-full h-full object-contain filter"
-                                    />
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Country name */}
-                              <h3
-                                className={`text-xs sm:text-sm md:text-3xl font-display font-black leading-tight uppercase tracking-tighter transition-all duration-500 text-center w-full px-1 ${titleStyle}`}
-                              >
+                              <h3 className="text-xs sm:text-sm md:text-3xl font-display font-black leading-tight uppercase tracking-tighter text-center w-full px-1">
                                 {country.name}
                               </h3>
 
-                              {/* Area info - always reserves space, revealed with opacity */}
                               <div
-                                className={`text-center w-full mt-2 md:mt-4 transition-opacity duration-500 ease-out ${result ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                                className={`text-center w-full transition-opacity duration-300 ease-out ${result ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                               >
-                                <div className="h-px w-6 md:w-16 bg-text/20 mx-auto mb-1 md:mb-3" />
+                                <div
+                                  className={`h-px w-6 md:w-16 mx-auto mb-1 md:mb-3 ${result && (isWinner || isSelected) ? "bg-white/30" : "bg-border"}`}
+                                />
                                 <div className="flex flex-col items-center gap-0.5">
-                                  <span className="text-text uppercase font-black text-[7px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans">
+                                  <span
+                                    className={`uppercase font-black text-[7px] md:text-xs tracking-[0.2em] md:tracking-[0.3em] mb-0.5 font-sans ${metaStyle}`}
+                                  >
                                     AREA (km²)
                                   </span>
                                   <div
-                                    className={`text-sm sm:text-base md:text-4xl font-display font-black tracking-tighter tabular-nums ${isWinner ? "text-text" : "text-text"}`}
+                                    className={`text-sm sm:text-base md:text-4xl font-display font-black tracking-tighter tabular-nums ${valueStyle}`}
                                   >
                                     {country.area}
                                   </div>

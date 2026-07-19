@@ -104,7 +104,7 @@ export default function MapDash() {
     lastResultRef.current = lastResult;
   }, [lastResult]);
 
-  // Clamp feedback toast so it never overflows the screen edges
+  // Anchor feedback toast above the click, clamped inside the map frame
   useLayoutEffect(() => {
     const el = feedbackRef.current;
     if (!el || !clickPoint || !lastResult) return;
@@ -117,15 +117,21 @@ export default function MapDash() {
     const elW = el.offsetWidth;
     const elH = el.offsetHeight;
     const pad = 12;
+    const gap = 10; // space between toast bottom and click point
 
+    // Prefer centered above the click; fall back below if near the top
     let left = clickPoint.x - elW / 2;
-    let top = clickPoint.y - 60;
+    let top = clickPoint.y - elH - gap;
+    if (top < pad) {
+      top = clickPoint.y + gap;
+    }
 
     left = Math.max(pad, Math.min(left, parentW - elW - pad));
     top = Math.max(pad, Math.min(top, parentH - elH - pad));
 
     el.style.left = `${left}px`;
     el.style.top = `${top}px`;
+    el.style.transform = "none";
   }, [clickPoint, feedbackKey, lastResult]);
 
   useEffect(() => {
@@ -383,15 +389,15 @@ export default function MapDash() {
  }
 
  .marker-correct .marker-pin {
- background-color: #1B5E45 !important;
- border-color: rgba(255,255,255,0.8) !important;
- box-shadow: none !important;
+ background-color: #34C759 !important;
+ border-color: #2DB84E !important;
+ box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.35) !important;
  }
 
  .marker-incorrect .marker-pin {
  background-color: #FF3B30 !important;
- border-color: rgba(255,255,255,0.8) !important;
- box-shadow: none !important;
+ border-color: #E0342B !important;
+ box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.35) !important;
  }
 
  @keyframes card-shake {
@@ -483,9 +489,9 @@ export default function MapDash() {
                   className={`pointer-events-auto rounded-2xl px-5 py-3.5 sm:px-6 sm:py-4 relative transition-all duration-200 overflow-hidden flex items-center gap-3.5 sm:gap-4
  ${
    lastResult === "correct"
-     ? "bg-primary border-2 border-primary text-white shadow-premium"
+     ? "feedback-correct border-2 shadow-premium"
      : lastResult === "incorrect"
-       ? "bg-error border-2 border-error text-white shadow-premium"
+       ? "feedback-incorrect border-2 shadow-premium"
        : "bg-elevated shadow-premium border border-border shadow-premium"
  }`}
                 >
@@ -650,22 +656,23 @@ export default function MapDash() {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Inline feedback toast - compact, doesn't block the map */}
+      {/* Inline feedback toast — anchored to the clicked marker */}
       <AnimatePresence>
         {lastResult && gameState === "playing" && (
           <motion.div
             ref={feedbackRef}
             key={`feedback-${feedbackKey}`}
-            initial={{ opacity: 0, y: -20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
             className="absolute z-[9999] pointer-events-none"
             style={
               clickPoint
                 ? {
-                    left: `${clickPoint.x}px`,
-                    top: `${Math.max(10, clickPoint.y - 60)}px`,
+                    left: clickPoint.x,
+                    top: Math.max(12, clickPoint.y - 10),
+                    transform: "translate(-50%, -100%)",
                   }
                 : {
                     top: "50%",
@@ -674,50 +681,56 @@ export default function MapDash() {
                   }
             }
           >
-            <div className="flex flex-col items-center">
+            <motion.div
+              initial={{ scale: 0.92 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.96 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="flex flex-col items-center"
+            >
               <div
                 className={`flex items-center gap-2.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl shadow-lg ${
                   lastResult === "correct"
-                    ? "bg-primary shadow-accent/30"
-                    : "bg-error/90 shadow-error/30"
+                    ? "feedback-correct"
+                    : "feedback-incorrect"
                 }`}
               >
                 {lastResult === "correct" ? (
                   <Check
                     size={18}
-                    className="text-text shrink-0"
+                    className="text-white shrink-0"
                     strokeWidth={3}
                   />
                 ) : (
-                  <X size={18} className="text-text shrink-0" strokeWidth={3} />
+                  <X size={18} className="text-white shrink-0" strokeWidth={3} />
                 )}
-                <span className="text-text font-display font-black text-sm sm:text-base uppercase tracking-wide">
+                <span className="text-white font-display font-black text-sm sm:text-base uppercase tracking-wide">
                   {lastResult === "correct"
                     ? t("game.correct")
                     : t("game.incorrect")}
                 </span>
                 {lastResult === "incorrect" && wrongSelectionData && (
                   <>
-                    <span className="text-muted font-black text-xs">•</span>
-                    <span className="text-text font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
+                    <span className="text-white/70 font-black text-xs">•</span>
+                    <span className="text-white font-bold text-xs sm:text-sm uppercase tracking-tight truncate max-w-[120px] sm:max-w-[160px]">
                       {wrongSelectionData.name}
                     </span>
                   </>
                 )}
               </div>
-              {/* Pin triangle pointing down */}
+              {/* Pin triangle — same solid red/green as the toast + marker */}
               <div
-                className="w-0 h-0 -mt-[1px]"
+                className="w-0 h-0 -mt-px"
                 style={{
                   borderLeft: "8px solid transparent",
                   borderRight: "8px solid transparent",
                   borderTop:
                     lastResult === "correct"
-                      ? "10px solid rgba(52, 199, 89, 0.9)"
-                      : "10px solid rgba(255, 59, 48, 0.9)",
+                      ? "10px solid #34C759"
+                      : "10px solid #FF3B30",
                 }}
               />
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

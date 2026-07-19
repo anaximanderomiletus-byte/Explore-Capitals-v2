@@ -1209,17 +1209,17 @@ const CountryExploration: React.FC = () => {
                             if (isSelected) {
                               if (isCorrect) {
                                 stateStyles =
-                                  "bg-primary border border-primary text-white ";
+                                  "feedback-correct border ";
                               } else {
                                 stateStyles =
-                                  "bg-error border border-error text-white ";
+                                  "feedback-incorrect border ";
                               }
                             } else if (
                               selectedOption &&
                               option === currentQuestion.answer
                             ) {
                               stateStyles =
-                                "bg-accent-soft border-2 border-primary/80 text-text ";
+                                "feedback-correct border-2 ";
                             } else if (selectedOption) {
                               stateStyles =
                                 "opacity-20 grayscale border-2 border-border bg-transparent scale-95 blur-[2px]";

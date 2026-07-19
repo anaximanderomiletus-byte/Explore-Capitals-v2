@@ -143,7 +143,7 @@ export default function Home() {
               <Button
                 onClick={playRandom}
                 size="lg"
-                className="gap-2 !text-text w-full sm:w-auto justify-center"
+                className="gap-2 w-full sm:w-auto justify-center"
               >
                 <Play size={18} fill="currentColor" />
                 {t("home.hero.play")}

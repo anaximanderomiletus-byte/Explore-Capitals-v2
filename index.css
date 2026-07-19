@@ -662,15 +662,53 @@ button, a, [role="button"], input, select, textarea, .cursor-pointer {
 }
 
 .marker-pin {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   background: #00C2FF;
   border: 2px solid #FFFFFF;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
+}
+
+/* Hard answer feedback — solid green/red fill, white text (never pale/white bubbles) */
+.feedback-correct {
+  background-color: #34C759 !important;
+  border-color: #34C759 !important;
+  color: #FFFFFF !important;
+}
+.feedback-incorrect {
+  background-color: #FF3B30 !important;
+  border-color: #FF3B30 !important;
+  color: #FFFFFF !important;
+}
+
+/* Map Dash result pins — full green/red, no white ring washing them out */
+.marker-correct .marker-pin,
+.mapdash-marker.marker-correct .marker-pin {
+  background: #34C759 !important;
+  border-color: #2DB84E !important;
+  box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.35) !important;
+  transform: scale(1.35);
+}
+.marker-incorrect .marker-pin,
+.mapdash-marker.marker-incorrect .marker-pin {
+  background: #FF3B30 !important;
+  border-color: #E0342B !important;
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.35) !important;
+  transform: scale(1.35);
+}
+.custom-map-marker.marker-correct:hover .marker-pin {
+  background: #34C759 !important;
+  border-color: #2DB84E !important;
+  box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.45) !important;
+}
+.custom-map-marker.marker-incorrect:hover .marker-pin {
+  background: #FF3B30 !important;
+  border-color: #E0342B !important;
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.45) !important;
 }
 
 .marker-pin.territory { background: #22c55e; }

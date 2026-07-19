@@ -337,15 +337,15 @@ export default function CapitalQuiz() {
                         if (selectedAnswer) {
                           if (isCorrect)
                             stateStyles =
-                              "bg-primary border-2 border-primary text-white";
+                              "feedback-correct border-2";
                           else if (isSelected)
                             stateStyles =
-                              "bg-error border-2 border-error text-white";
+                              "feedback-incorrect border-2";
                           else if (
                             option.capital === currentQuestion.country.capital
                           )
                             stateStyles =
-                              "bg-primary/15 border-2 border-primary text-primary";
+                              "feedback-correct border-2";
                           else
                             stateStyles =
                               "bg-surface border border-border text-muted opacity-40";
