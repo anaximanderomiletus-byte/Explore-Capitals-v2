@@ -22,7 +22,48 @@ const Privacy: React.FC = () => {
 
   const sections: Section[] = [
     {
-      title: "What we collect",
+      title: "The iOS app",
+      body: (
+        <div className="space-y-3">
+          <p>
+            The ExploreCapitals iOS app follows a stricter standard than this
+            website: it is{" "}
+            <span className="font-black text-text">
+              local-first, with zero third-party SDKs
+            </span>{" "}
+            — no analytics, no ad frameworks, and no tracking of any kind.
+          </p>
+          <p>
+            <span className="font-black text-text">On your device.</span> Your
+            progress, card collection, match record, favorites, explorer name,
+            and passport photo are stored locally. The app is fully functional
+            without an account and without a network connection.
+          </p>
+          <p>
+            <span className="font-black text-text">Optional iCloud sync.</span>{" "}
+            If you choose Sign in with Apple, progress syncs through your own
+            private iCloud database (Apple CloudKit). That container belongs to
+            your Apple account — we cannot read it. Sign in with Apple shares
+            only the name and email you approve.
+          </p>
+          <p>
+            <span className="font-black text-text">Network use.</span> The app
+            fetches landmark and tour photographs from our own server as
+            ordinary web requests, with no account identifiers attached. Game
+            Center and purchases, if used, are handled by Apple under Apple's
+            privacy terms. Notifications are local-only and opt-in; there is no
+            remote push.
+          </p>
+          <p>
+            The app never sells or shares your data, runs ads, embeds analytics
+            or tracking SDKs, sends remote push notifications, or requires an
+            account to play.
+          </p>
+        </div>
+      ),
+    },
+    {
+      title: "What we collect on the website",
       body: (
         <div className="space-y-3">
           <p>
@@ -41,10 +82,13 @@ const Privacy: React.FC = () => {
       ),
     },
     {
-      title: "Cookies & tracking",
+      title: "Cookies & tracking on the website",
       body: (
         <div className="space-y-3">
-          <p>Cookies used on the site:</p>
+          <p>
+            Cookies used on the site (the iOS app uses none of these — see
+            section 01):
+          </p>
           <ul className="space-y-2 pl-0">
             <li>
               <span className="font-black text-text">Essential —</span> required
@@ -63,7 +107,7 @@ const Privacy: React.FC = () => {
       ),
     },
     {
-      title: "Third-party services",
+      title: "Third-party services on the website",
       body: (
         <div className="space-y-3">
           <p>
@@ -110,8 +154,8 @@ const Privacy: React.FC = () => {
       body: (
         <div className="space-y-3">
           <p>
-            Personal information is not sold. Data is shared only in these
-            cases:
+            Personal information is not sold — on either surface. Website data
+            is shared only in these cases (the iOS app shares nothing):
           </p>
           <ul className="space-y-2 pl-0">
             <li>
@@ -215,7 +259,7 @@ const Privacy: React.FC = () => {
             sold.
           </p>
           <p className="text-[11px] font-semibold text-muted uppercase tracking-wide">
-            Last updated · February 2, 2026
+            Last updated · July 31, 2026
           </p>
         </RevealSection>
 
@@ -224,8 +268,15 @@ const Privacy: React.FC = () => {
           <div className="relative bg-elevated border border-border rounded-2xl p-6 sm:p-7 shadow-premium overflow-hidden">
             <p className="relative z-10 text-base text-muted leading-relaxed font-medium">
               This policy explains how ExploreCapitals ("we," "our," or "us")
-              collects, uses, and safeguards information at{" "}
-              <span className="text-text font-black">explorecapitals.com</span>.
+              collects, uses, and safeguards information across{" "}
+              <span className="text-text font-black">explorecapitals.com</span>{" "}
+              and the{" "}
+              <span className="text-text font-black">
+                ExploreCapitals iOS app
+              </span>
+              . The two are different by design: the website is ad-supported,
+              while the iOS app is local-first and ships with no ads, no
+              analytics, and no trackers at all.
             </p>
           </div>
         </RevealSection>
